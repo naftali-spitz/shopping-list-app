@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Apple, Download, History, Milk, Moon, PackagePlus, Plus, Search, Sandwich, ShoppingCart, Sparkles, Sun, Trash2, X } from "lucide-react";
+import { LoadingScreen } from "@/components/loading-screen";
 
 type Product = { id: string; name: string; usageCount: number };
 type Category = { id: string; name: string; icon: "dairy" | "fruit" | "bakery" | "general"; products: Product[] };
@@ -18,6 +19,7 @@ const initialCategories: Category[] = [
 const makeId = (value: string) => `${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`;
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [shoppingList, setShoppingList] = useState<string[]>(["Milk", "Bread"]);
@@ -29,6 +31,11 @@ export default function Home() {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newProductName, setNewProductName] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsLoading(false), 1800);
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     const savedCategories = localStorage.getItem("futurecart-categories");
@@ -87,7 +94,7 @@ export default function Home() {
   const exportDoc = () => {
     if (!shoppingList.length) return;
     const createdAt = new Date().toISOString();
-    const html = `<html><head><meta charset="utf-8" /></head><body style="font-family:Arial;padding:32px"><h1>Shopping List</h1><p>${new Date(createdAt).toLocaleString()}</p><ul>${shoppingList.map((item) => `<li>☐ ${item}</li>`).join("")}</ul></body></html>`;
+    const html = `<html><head><meta charset="utf-8" /></head><body style="font-family:Arial;padding:32px;background:#050816;color:#fff"><h1>FutureCart Shopping List</h1><p>${new Date(createdAt).toLocaleString()}</p><ul>${shoppingList.map((item) => `<li style="margin-bottom:8px">☐ ${item}</li>`).join("")}</ul></body></html>`;
     const blob = new Blob([html], { type: "application/msword" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -98,6 +105,10 @@ export default function Home() {
     setHistory((prev) => [{ id: createdAt, createdAt, items: shoppingList }, ...prev]);
     setShoppingList([]);
   };
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <main className={`relative min-h-screen overflow-hidden pb-40 transition-all duration-500 ${backgroundClass}`}>
@@ -115,8 +126,8 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button onClick={() => setSoundOn(!soundOn)} className="rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-sm transition hover:bg-white/20">Sound {soundOn ? "On" : "Off"}</button>
-            <button onClick={() => setHistoryOpen(true)} className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20" aria-label="Open history"><History size={18} /></button>
-            <button onClick={() => setDarkMode(!darkMode)} className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20" aria-label="Toggle theme">{darkMode ? <Sun size={18} /> : <Moon size={18} />}</button>
+            <button onClick={() => setHistoryOpen(true)} className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"><History size={18} /></button>
+            <button onClick={() => setDarkMode(!darkMode)} className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20">{darkMode ? <Sun size={18} /> : <Moon size={18} />}</button>
             <button onClick={exportDoc} className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm transition hover:bg-cyan-400/20">Export List</button>
           </div>
         </header>
@@ -137,7 +148,7 @@ export default function Home() {
                 <motion.div key={category.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.06 }} whileHover={{ scale: 1.03 }} className={`group relative overflow-hidden rounded-3xl border p-6 backdrop-blur-xl ${cardClass}`}>
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10 opacity-0 transition duration-500 group-hover:opacity-100" />
                   <div className="relative z-10">
-                    <div className="mb-4 flex items-start justify-between"><div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10"><Icon className="text-cyan-300" /></div><button onClick={() => setCategories((prev) => prev.filter((item) => item.id !== category.id))} className="rounded-2xl bg-red-500/10 p-2 text-red-300 opacity-70 transition hover:opacity-100" aria-label="Remove category"><Trash2 size={16} /></button></div>
+                    <div className="mb-4 flex items-start justify-between"><div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10"><Icon className="text-cyan-300" /></div><button onClick={() => setCategories((prev) => prev.filter((item) => item.id !== category.id))} className="rounded-2xl bg-red-500/10 p-2 text-red-300 opacity-70 transition hover:opacity-100"><Trash2 size={16} /></button></div>
                     <h3 className="text-2xl font-semibold">{category.name}</h3>
                     <div className="mt-4 flex flex-wrap gap-2">{category.products.slice(0, 3).map((product) => <span key={product.id} className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-sm opacity-70">{product.name}</span>)}</div>
                     <button onClick={() => { setSelectedCategoryId(category.id); setSearchTerm(""); }} className="mt-6 w-full rounded-2xl bg-white/10 py-3 text-sm transition hover:bg-white/20">Open Category</button>
@@ -151,7 +162,7 @@ export default function Home() {
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fixed inset-x-4 bottom-4 z-20 mx-auto h-fit max-w-[420px] rounded-3xl border border-white/10 bg-black/55 p-5 text-white shadow-2xl backdrop-blur-xl sm:inset-x-auto sm:right-6 sm:w-[360px]">
         <div className="flex items-center justify-between"><h2 className="text-xl font-semibold">Shopping List</h2><div className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-300">{shoppingList.length} Items</div></div>
-        <div className="mt-4 max-h-[260px] space-y-3 overflow-auto pr-2"><AnimatePresence initial={false}>{shoppingList.length === 0 && <p className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/60">Your active list is empty. Pick a category to start.</p>}{shoppingList.map((item) => <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} key={item} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3"><span>{item}</span><button onClick={() => toggleItem(item)} className="rounded-full bg-red-500/20 p-1 text-red-300" aria-label={`Remove ${item}`}><X size={14} /></button></motion.div>)}</AnimatePresence></div>
+        <div className="mt-4 max-h-[260px] space-y-3 overflow-auto pr-2"><AnimatePresence initial={false}>{shoppingList.length === 0 && <p className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/60">Your active list is empty. Pick a category to start.</p>}{shoppingList.map((item) => <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} key={item} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3"><span>{item}</span><button onClick={() => toggleItem(item)} className="rounded-full bg-red-500/20 p-1 text-red-300"><X size={14} /></button></motion.div>)}</AnimatePresence></div>
         <button onClick={exportDoc} disabled={!shoppingList.length} className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-400 py-3 font-medium text-black transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-40"><Download size={18} />Export DOC</button>
       </motion.div>
 
