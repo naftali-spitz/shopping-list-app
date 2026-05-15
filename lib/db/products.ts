@@ -7,6 +7,13 @@ export async function createProduct(categoryId: string, name: string) {
   });
 }
 
+export async function updateProduct(productId: string, name: string) {
+  return supabase
+    .from("products")
+    .update({ name })
+    .eq("id", productId);
+}
+
 export async function deleteProduct(productId: string) {
   return supabase.from("products").delete().eq("id", productId);
 }
