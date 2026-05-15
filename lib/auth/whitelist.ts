@@ -1,6 +1,6 @@
 export const allowedEmails = [
-  "your@email.com",
-  "wife@email.com",
+  "0012ab@gmail.com",
+  "sbspitz@gmail.com",
 ];
 
 export function isAllowedEmail(email?: string | null) {
