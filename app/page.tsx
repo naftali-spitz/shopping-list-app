@@ -15,6 +15,7 @@ import { TopBar } from "@/components/top-bar";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
+import { updateCategory } from "@/lib/db/categories";
 import { exportShoppingDoc } from "@/lib/export-doc";
 import {
   loadHistory,
@@ -40,6 +41,7 @@ export default function Home() {
     categories,
     setCategories,
     loading: categoriesLoading,
+    refreshCategories,
   } = useSharedCategories(initialCategories);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -216,19 +218,14 @@ export default function Home() {
     });
   };
 
-  const saveCategoryEdit = () => {
+  const saveCategoryEdit = async () => {
     if (!editingCategoryId || !editingCategoryName.trim()) return;
 
-    setCategories((prev) =>
-      prev.map((category) =>
-        category.id === editingCategoryId
-          ? {
-              ...category,
-              name: editingCategoryName,
-            }
-          : category
-      )
-    );
+    await updateCategory(editingCategoryId, {
+      name: editingCategoryName,
+    });
+
+    await refreshCategories();
 
     setEditingCategoryId(null);
     setEditingCategoryName("");
