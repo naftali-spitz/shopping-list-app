@@ -1,3 +1,5 @@
+import htmlDocx from "html-docx-js/dist/html-docx";
+
 export function exportShoppingDoc(items: string[]) {
   if (!items.length) {
     return null;
@@ -74,16 +76,14 @@ export function exportShoppingDoc(items: string[]) {
     </html>
   `;
 
-  const blob = new Blob([html], {
-    type: "application/msword;charset=utf-8",
-  });
+  const blob = htmlDocx.asBlob(html);
 
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = `shopping-list-${createdAt.slice(0, 10)}.doc`;
+  link.download = `shopping-list-${createdAt.slice(0, 10)}.docx`;
   link.click();
 
   URL.revokeObjectURL(url);
