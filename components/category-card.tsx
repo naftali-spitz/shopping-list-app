@@ -1,13 +1,42 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trash2, Milk, Apple, Sandwich, PackagePlus } from "lucide-react";
+import {
+  Apple,
+  Baby,
+  Beef,
+  Coffee,
+  Cookie,
+  Droplets,
+  Egg,
+  HeartHandshake,
+  Milk,
+  PackagePlus,
+  Sandwich,
+  ShoppingCart,
+  Soup,
+  Sparkles,
+  Trash2,
+  UtensilsCrossed,
+  Wheat,
+} from "lucide-react";
 import { Category } from "@/types/shopping";
 
 const iconMap = {
   dairy: Milk,
   fruit: Apple,
   bakery: Sandwich,
+  meat: Beef,
+  eggs: Egg,
+  grains: Wheat,
+  cans: Soup,
+  spices: UtensilsCrossed,
+  sauces: Droplets,
+  drinks: Coffee,
+  snacks: Cookie,
+  cleaning: Sparkles,
+  baby: Baby,
+  beauty: HeartHandshake,
   general: PackagePlus,
 };
 
@@ -26,7 +55,8 @@ export function CategoryCard({
   onOpen,
   onDelete,
 }: CategoryCardProps) {
-  const Icon = iconMap[category.icon];
+  const Icon =
+    iconMap[category.icon as keyof typeof iconMap] || ShoppingCart;
 
   return (
     <motion.div
