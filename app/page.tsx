@@ -10,18 +10,17 @@ import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
+import { useSession } from "@/hooks/use-session";
+import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
 import { exportShoppingDoc } from "@/lib/export-doc";
 import {
-  loadCategories,
   loadHistory,
   loadShoppingList,
-  saveCategories,
   saveHistory,
   saveShoppingList,
 } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
-import { useSession } from "@/hooks/use-session";
 
 const initialCategories: Category[] = [
   {
@@ -68,8 +67,13 @@ const makeId = (value: string) =>
 export default function Home() {
   const { session, loading } = useSession();
 
+  const {
+    categories,
+    setCategories,
+    loading: categoriesLoading,
+  } = useSharedCategories(initialCategories);
+
   const [isLoading, setIsLoading] = useState(true);
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
   );
@@ -86,18 +90,15 @@ export default function Home() {
   useEffect(() => {
     const timeout = setTimeout(() => setIsLoading(false), 1200);
 
-    const savedCategories = loadCategories();
     const savedList = loadShoppingList();
     const savedHistory = loadHistory();
 
-    if (savedCategories) setCategories(savedCategories);
     if (savedList) setShoppingList(savedList);
     if (savedHistory) setHistory(savedHistory);
 
     return () => clearTimeout(timeout);
   }, []);
 
-  useEffect(() => saveCategories(categories), [categories]);
   useEffect(() => saveShoppingList(shoppingList), [shoppingList]);
   useEffect(() => saveHistory(history), [history]);
 
@@ -222,7 +223,7 @@ export default function Home() {
     setShoppingList([]);
   };
 
-  if (loading || isLoading) {
+  if (loading || isLoading || categoriesLoading) {
     return <LoadingScreen />;
   }
 
