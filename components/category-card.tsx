@@ -12,11 +12,11 @@ import {
   HeartHandshake,
   Milk,
   PackagePlus,
+  Pencil,
   Sandwich,
   ShoppingCart,
   Soup,
   Sparkles,
-  Trash2,
   UtensilsCrossed,
   Wheat,
 } from "lucide-react";
@@ -77,9 +77,9 @@ export function CategoryCard({
 
           <button
             onClick={onDelete}
-            className="rounded-2xl bg-red-500/10 p-2 text-red-300 opacity-70 transition hover:opacity-100"
+            className="rounded-2xl bg-cyan-500/10 p-2 text-cyan-300 opacity-70 transition hover:opacity-100"
           >
-            <Trash2 size={16} />
+            <Pencil size={16} />
           </button>
         </div>
 
@@ -100,7 +100,7 @@ export function CategoryCard({
           onClick={onOpen}
           className="mt-6 w-full rounded-2xl bg-white/10 py-3 text-sm transition hover:bg-white/20"
         >
-          Open Category
+          פתח קטגוריה
         </button>
       </div>
     </motion.div>
