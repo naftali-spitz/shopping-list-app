@@ -38,6 +38,16 @@ export async function createCategory(
   });
 }
 
+export async function updateCategory(
+  categoryId: string,
+  updates: Partial<Pick<Category, "name" | "icon">>
+) {
+  return supabase
+    .from("categories")
+    .update(updates)
+    .eq("id", categoryId);
+}
+
 export async function deleteCategory(categoryId: string) {
   return supabase.from("categories").delete().eq("id", categoryId);
 }
