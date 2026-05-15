@@ -6,6 +6,7 @@ import { AnimatedBackground } from "@/components/animated-background";
 import { AuthButton } from "@/components/auth-button";
 import { CategoryCard } from "@/components/category-card";
 import { CategoryModal } from "@/components/category-modal";
+import { EditCategoryModal } from "@/components/edit-category-modal";
 import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
@@ -22,44 +23,7 @@ import {
 } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
 
-const initialCategories: Category[] = [
-  {
-    id: "dairy",
-    name: "Dairy",
-    icon: "dairy",
-    products: ["Milk", "Cheese", "Butter", "Yogurt", "Cottage Cheese"].map(
-      (name, index) => ({
-        id: name.toLowerCase().replaceAll(" ", "-"),
-        name,
-        usageCount: 12 - index,
-      })
-    ),
-  },
-  {
-    id: "fruits",
-    name: "Fruits",
-    icon: "fruit",
-    products: ["Bananas", "Apples", "Strawberries", "Mango", "Grapes"].map(
-      (name, index) => ({
-        id: name.toLowerCase().replaceAll(" ", "-"),
-        name,
-        usageCount: 10 - index,
-      })
-    ),
-  },
-  {
-    id: "bakery",
-    name: "Bakery",
-    icon: "bakery",
-    products: ["Bread", "Bagels", "Croissants", "Pita", "Buns"].map(
-      (name, index) => ({
-        id: name.toLowerCase().replaceAll(" ", "-"),
-        name,
-        usageCount: 14 - index,
-      })
-    ),
-  },
-];
+const initialCategories: Category[] = [];
 
 const makeId = (value: string) =>
   `${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`;
@@ -77,7 +41,11 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
   );
-  const [shoppingList, setShoppingList] = useState<string[]>(["Milk", "Bread"]);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(
+    null
+  );
+  const [editingCategoryName, setEditingCategoryName] = useState("");
+  const [shoppingList, setShoppingList] = useState<string[]>([]);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [darkMode, setDarkMode] = useState(true);
   const [soundOn, setSoundOn] = useState(false);
@@ -104,6 +72,9 @@ export default function Home() {
 
   const selectedCategory =
     categories.find((category) => category.id === selectedCategoryId) ?? null;
+
+  const editingCategory =
+    categories.find((category) => category.id === editingCategoryId) ?? null;
 
   const backgroundClass = darkMode
     ? "bg-[#050816] text-white"
@@ -192,6 +163,10 @@ export default function Home() {
   const removeProduct = (productId: string) => {
     if (!selectedCategory) return;
 
+    const confirmed = window.confirm("Delete this product?");
+
+    if (!confirmed) return;
+
     setCategories((prev) =>
       prev.map((category) =>
         category.id === selectedCategory.id
@@ -204,6 +179,41 @@ export default function Home() {
           : category
       )
     );
+  };
+
+  const saveCategoryEdit = () => {
+    if (!editingCategoryId || !editingCategoryName.trim()) return;
+
+    setCategories((prev) =>
+      prev.map((category) =>
+        category.id === editingCategoryId
+          ? {
+              ...category,
+              name: editingCategoryName,
+            }
+          : category
+      )
+    );
+
+    setEditingCategoryId(null);
+    setEditingCategoryName("");
+  };
+
+  const deleteCategory = () => {
+    if (!editingCategoryId) return;
+
+    const confirmed = window.confirm(
+      "Delete this category and all products?"
+    );
+
+    if (!confirmed) return;
+
+    setCategories((prev) =>
+      prev.filter((category) => category.id !== editingCategoryId)
+    );
+
+    setEditingCategoryId(null);
+    setEditingCategoryName("");
   };
 
   const exportDoc = () => {
@@ -247,6 +257,7 @@ export default function Home() {
 
   return (
     <main
+      dir="rtl"
       className={`relative min-h-screen overflow-hidden pb-40 transition-all duration-500 ${backgroundClass}`}
     >
       <AnimatedBackground />
@@ -266,7 +277,7 @@ export default function Home() {
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <Sparkles className="text-cyan-300" />
-              <h2 className="text-3xl font-bold">Choose Categories</h2>
+              <h2 className="text-3xl font-bold">בחר קטגוריה</h2>
             </div>
 
             <div
@@ -276,7 +287,7 @@ export default function Home() {
                 value={newCategoryName}
                 onChange={(event) => setNewCategoryName(event.target.value)}
                 onKeyDown={(event) => event.key === "Enter" && addCategory()}
-                placeholder="Add category"
+                placeholder="הוסף קטגוריה"
                 className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
               />
 
@@ -284,7 +295,7 @@ export default function Home() {
                 onClick={addCategory}
                 className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
               >
-                Add
+                הוסף
               </button>
             </div>
           </div>
@@ -300,11 +311,10 @@ export default function Home() {
                   setSelectedCategoryId(category.id);
                   setSearchTerm("");
                 }}
-                onDelete={() =>
-                  setCategories((prev) =>
-                    prev.filter((item) => item.id !== category.id)
-                  )
-                }
+                onDelete={() => {
+                  setEditingCategoryId(category.id);
+                  setEditingCategoryName(category.name);
+                }}
               />
             ))}
           </div>
@@ -331,6 +341,19 @@ export default function Home() {
         onNewProductChange={setNewProductName}
         onAddProduct={addProduct}
         onRemoveProduct={removeProduct}
+      />
+
+      <EditCategoryModal
+        category={editingCategory}
+        open={Boolean(editingCategory)}
+        value={editingCategoryName}
+        onClose={() => {
+          setEditingCategoryId(null);
+          setEditingCategoryName("");
+        }}
+        onChange={setEditingCategoryName}
+        onSave={saveCategoryEdit}
+        onDelete={deleteCategory}
       />
 
       <HistoryModal
