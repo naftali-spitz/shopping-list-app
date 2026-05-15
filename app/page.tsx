@@ -6,6 +6,7 @@ import { AnimatedBackground } from "@/components/animated-background";
 import { AuthButton } from "@/components/auth-button";
 import { CategoryCard } from "@/components/category-card";
 import { CategoryModal } from "@/components/category-modal";
+import { ConfirmModal } from "@/components/confirm-modal";
 import { EditCategoryModal } from "@/components/edit-category-modal";
 import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
@@ -28,6 +29,10 @@ const initialCategories: Category[] = [];
 const makeId = (value: string) =>
   `${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`;
 
+type PendingDelete =
+  | { type: "category"; id: string; name: string; productCount: number }
+  | { type: "product"; id: string; name: string };
+
 export default function Home() {
   const { session, loading } = useSession();
 
@@ -45,6 +50,7 @@ export default function Home() {
     null
   );
   const [editingCategoryName, setEditingCategoryName] = useState("");
+  const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [shoppingList, setShoppingList] = useState<string[]>([]);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [darkMode, setDarkMode] = useState(true);
@@ -97,6 +103,16 @@ export default function Home() {
           : b.usageCount - a.usageCount
       );
   }, [searchTerm, selectedCategory, sortMode]);
+
+  const confirmTitle =
+    pendingDelete?.type === "category" ? "מחיקת קטגוריה?" : "מחיקת מוצר?";
+
+  const confirmDescription =
+    pendingDelete?.type === "category"
+      ? `הקטגוריה "${pendingDelete.name}" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`
+      : pendingDelete?.type === "product"
+        ? `המוצר "${pendingDelete.name}" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`
+        : "";
 
   const playSound = () => {
     if (!soundOn) return;
@@ -163,22 +179,15 @@ export default function Home() {
   const removeProduct = (productId: string) => {
     if (!selectedCategory) return;
 
-    const confirmed = window.confirm("Delete this product?");
+    const product = selectedCategory.products.find((item) => item.id === productId);
 
-    if (!confirmed) return;
+    if (!product) return;
 
-    setCategories((prev) =>
-      prev.map((category) =>
-        category.id === selectedCategory.id
-          ? {
-              ...category,
-              products: category.products.filter(
-                (product) => product.id !== productId
-              ),
-            }
-          : category
-      )
-    );
+    setPendingDelete({
+      type: "product",
+      id: productId,
+      name: product.name,
+    });
   };
 
   const saveCategoryEdit = () => {
@@ -200,20 +209,48 @@ export default function Home() {
   };
 
   const deleteCategory = () => {
-    if (!editingCategoryId) return;
+    if (!editingCategory) return;
 
-    const confirmed = window.confirm(
-      "Delete this category and all products?"
-    );
+    setPendingDelete({
+      type: "category",
+      id: editingCategory.id,
+      name: editingCategory.name,
+      productCount: editingCategory.products.length,
+    });
+  };
 
-    if (!confirmed) return;
+  const confirmDelete = () => {
+    if (!pendingDelete) return;
 
-    setCategories((prev) =>
-      prev.filter((category) => category.id !== editingCategoryId)
-    );
+    if (pendingDelete.type === "product") {
+      setCategories((prev) =>
+        prev.map((category) =>
+          category.id === selectedCategoryId
+            ? {
+                ...category,
+                products: category.products.filter(
+                  (product) => product.id !== pendingDelete.id
+                ),
+              }
+            : category
+        )
+      );
+    }
 
-    setEditingCategoryId(null);
-    setEditingCategoryName("");
+    if (pendingDelete.type === "category") {
+      setCategories((prev) =>
+        prev.filter((category) => category.id !== pendingDelete.id)
+      );
+
+      if (selectedCategoryId === pendingDelete.id) {
+        setSelectedCategoryId(null);
+      }
+
+      setEditingCategoryId(null);
+      setEditingCategoryName("");
+    }
+
+    setPendingDelete(null);
   };
 
   const exportDoc = () => {
@@ -354,6 +391,16 @@ export default function Home() {
         onChange={setEditingCategoryName}
         onSave={saveCategoryEdit}
         onDelete={deleteCategory}
+      />
+
+      <ConfirmModal
+        open={Boolean(pendingDelete)}
+        title={confirmTitle}
+        description={confirmDescription}
+        confirmText="מחק"
+        cancelText="ביטול"
+        onConfirm={confirmDelete}
+        onCancel={() => setPendingDelete(null)}
       />
 
       <HistoryModal
