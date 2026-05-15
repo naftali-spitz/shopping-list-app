@@ -221,9 +221,13 @@ export default function Home() {
   const saveCategoryEdit = async () => {
     if (!editingCategoryId || !editingCategoryName.trim()) return;
 
-    await updateCategory(editingCategoryId, {
+    const { error } = await updateCategory(editingCategoryId, {
       name: editingCategoryName,
     });
+
+    if (error) {
+      return;
+    }
 
     await refreshCategories();
 
@@ -316,166 +320,8 @@ export default function Home() {
   }
 
   return (
-    <main
-      dir="rtl"
-      className={`relative min-h-screen overflow-hidden pb-40 transition-all duration-500 ${backgroundClass}`}
-    >
+    <main dir="rtl" className={`relative min-h-screen overflow-hidden pb-40 transition-all duration-500 ${backgroundClass}`}>
       <AnimatedBackground />
-
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
-        <TopBar
-          darkMode={darkMode}
-          soundOn={soundOn}
-          cardClass={cardClass}
-          onToggleSound={() => setSoundOn((value) => !value)}
-          onToggleTheme={() => setDarkMode((value) => !value)}
-          onExport={exportDoc}
-          onOpenHistory={() => setHistoryOpen(true)}
-        />
-
-        <section className="mt-8">
-          <div
-            className={`relative rounded-3xl border p-4 backdrop-blur-xl ${cardClass}`}
-          >
-            <div className="flex items-center gap-3">
-              <Search className="text-cyan-400" size={22} />
-
-              <input
-                value={globalSearch}
-                onChange={(event) => setGlobalSearch(event.target.value)}
-                placeholder="חיפוש מהיר להוספה לרשימה..."
-                className="w-full bg-transparent text-lg outline-none placeholder:text-slate-400"
-              />
-            </div>
-
-            {globalResults.length > 0 && (
-              <div className="mt-4 space-y-2">
-                {globalResults.map((product) => (
-                  <button
-                    key={product.id}
-                    onClick={() => quickAddItem(product.name)}
-                    className="flex w-full items-center justify-between rounded-2xl border border-black/5 bg-white/60 px-4 py-3 text-right transition hover:scale-[1.01] hover:bg-cyan-50 dark:border-white/10 dark:bg-white/5"
-                  >
-                    <div>
-                      <div className="font-medium">{product.name}</div>
-
-                      <div className="text-sm opacity-60">
-                        {product.categoryName}
-                      </div>
-                    </div>
-
-                    <div className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-600">
-                      הוסף
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-
-        <section className="mt-10">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Sparkles className="text-cyan-300" />
-              <h2 className="text-3xl font-bold">בחר קטגוריה</h2>
-            </div>
-
-            <div
-              className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}
-            >
-              <input
-                value={newCategoryName}
-                onChange={(event) => setNewCategoryName(event.target.value)}
-                onKeyDown={(event) => event.key === "Enter" && addCategory()}
-                placeholder="הוסף קטגוריה"
-                className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
-              />
-
-              <button
-                onClick={addCategory}
-                className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
-              >
-                הוסף
-              </button>
-            </div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {categories.map((category, index) => (
-              <CategoryCard
-                key={category.id}
-                category={category}
-                index={index}
-                cardClass={cardClass}
-                onOpen={() => {
-                  setSelectedCategoryId(category.id);
-                  setSearchTerm("");
-                }}
-                onDelete={() => {
-                  setEditingCategoryId(category.id);
-                  setEditingCategoryName(category.name);
-                }}
-              />
-            ))}
-          </div>
-        </section>
-      </div>
-
-      <ShoppingDrawer
-        items={shoppingList}
-        onRemove={toggleItem}
-        onExport={exportDoc}
-      />
-
-      <CategoryModal
-        category={selectedCategory}
-        shoppingList={shoppingList}
-        searchTerm={searchTerm}
-        sortMode={sortMode}
-        newProductName={newProductName}
-        products={sortedProducts}
-        onClose={() => setSelectedCategoryId(null)}
-        onToggleItem={toggleItem}
-        onSearchChange={setSearchTerm}
-        onSortChange={setSortMode}
-        onNewProductChange={setNewProductName}
-        onAddProduct={addProduct}
-        onRemoveProduct={removeProduct}
-      />
-
-      <EditCategoryModal
-        category={editingCategory}
-        open={Boolean(editingCategory)}
-        value={editingCategoryName}
-        onClose={() => {
-          setEditingCategoryId(null);
-          setEditingCategoryName("");
-        }}
-        onChange={setEditingCategoryName}
-        onSave={saveCategoryEdit}
-        onDelete={deleteCategory}
-      />
-
-      <ConfirmModal
-        open={Boolean(pendingDelete)}
-        title={confirmTitle}
-        description={confirmDescription}
-        confirmText="מחק"
-        cancelText="ביטול"
-        onConfirm={confirmDelete}
-        onCancel={() => setPendingDelete(null)}
-      />
-
-      <HistoryModal
-        open={historyOpen}
-        history={history}
-        onClose={() => setHistoryOpen(false)}
-        onLoad={(items) => {
-          setShoppingList(items);
-          setHistoryOpen(false);
-        }}
-      />
     </main>
   );
 }
