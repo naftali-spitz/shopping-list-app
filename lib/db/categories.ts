@@ -51,13 +51,25 @@ export async function updateCategory(
   const result = await supabase
     .from("categories")
     .update(updates)
-    .eq("id", categoryId);
+    .eq("id", categoryId)
+    .select();
 
-  if (result.error) {
+  const failed =
+    result.error || !result.data || result.data.length === 0;
+
+  if (failed) {
     console.error(result.error);
+
     showMutationError(
-      "שמירת הקטגוריה נכשלה. כנראה חסרה הרשאת UPDATE ב-Supabase או שיש בעיית חיבור."
+      "שמירת הקטגוריה נכשלה. כנראה חסרה הרשאת UPDATE ב-Supabase."
     );
+
+    return {
+      ...result,
+      error:
+        result.error ||
+        new Error("No rows updated - likely blocked by RLS"),
+    };
   }
 
   return result;
