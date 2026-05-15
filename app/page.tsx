@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 import { AnimatedBackground } from "@/components/animated-background";
 import { AuthButton } from "@/components/auth-button";
 import { CategoryCard } from "@/components/category-card";
@@ -53,10 +53,11 @@ export default function Home() {
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [shoppingList, setShoppingList] = useState<string[]>([]);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const [sortMode, setSortMode] = useState<"az" | "popular">("popular");
   const [searchTerm, setSearchTerm] = useState("");
+  const [globalSearch, setGlobalSearch] = useState("");
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newProductName, setNewProductName] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -81,6 +82,22 @@ export default function Home() {
 
   const editingCategory =
     categories.find((category) => category.id === editingCategoryId) ?? null;
+
+  const globalResults = useMemo(() => {
+    if (!globalSearch.trim()) return [];
+
+    return categories
+      .flatMap((category) =>
+        category.products.map((product) => ({
+          ...product,
+          categoryName: category.name,
+        }))
+      )
+      .filter((product) =>
+        product.name.toLowerCase().includes(globalSearch.toLowerCase())
+      )
+      .slice(0, 8);
+  }, [categories, globalSearch]);
 
   const backgroundClass = darkMode
     ? "bg-[#050816] text-white"
@@ -130,6 +147,15 @@ export default function Home() {
     setShoppingList((prev) =>
       prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
     );
+  };
+
+  const quickAddItem = (item: string) => {
+    if (shoppingList.includes(item)) return;
+
+    playSound();
+
+    setShoppingList((prev) => [...prev, item]);
+    setGlobalSearch("");
   };
 
   const addCategory = () => {
@@ -309,6 +335,47 @@ export default function Home() {
           onExport={exportDoc}
           onOpenHistory={() => setHistoryOpen(true)}
         />
+
+        <section className="mt-8">
+          <div
+            className={`relative rounded-3xl border p-4 backdrop-blur-xl ${cardClass}`}
+          >
+            <div className="flex items-center gap-3">
+              <Search className="text-cyan-400" size={22} />
+
+              <input
+                value={globalSearch}
+                onChange={(event) => setGlobalSearch(event.target.value)}
+                placeholder="חיפוש מהיר להוספה לרשימה..."
+                className="w-full bg-transparent text-lg outline-none placeholder:text-slate-400"
+              />
+            </div>
+
+            {globalResults.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {globalResults.map((product) => (
+                  <button
+                    key={product.id}
+                    onClick={() => quickAddItem(product.name)}
+                    className="flex w-full items-center justify-between rounded-2xl border border-black/5 bg-white/60 px-4 py-3 text-right transition hover:scale-[1.01] hover:bg-cyan-50 dark:border-white/10 dark:bg-white/5"
+                  >
+                    <div>
+                      <div className="font-medium">{product.name}</div>
+
+                      <div className="text-sm opacity-60">
+                        {product.categoryName}
+                      </div>
+                    </div>
+
+                    <div className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-600">
+                      הוסף
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
 
         <section className="mt-10">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
