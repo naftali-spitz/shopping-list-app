@@ -3,12 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { AnimatedBackground } from "@/components/animated-background";
+import { AuthButton } from "@/components/auth-button";
 import { CategoryCard } from "@/components/category-card";
 import { CategoryModal } from "@/components/category-modal";
 import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
+import { isAllowedEmail } from "@/lib/auth/whitelist";
 import { exportShoppingDoc } from "@/lib/export-doc";
 import {
   loadCategories,
@@ -19,6 +21,7 @@ import {
   saveShoppingList,
 } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
+import { useSession } from "@/hooks/use-session";
 
 const initialCategories: Category[] = [
   {
@@ -63,6 +66,8 @@ const makeId = (value: string) =>
   `${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`;
 
 export default function Home() {
+  const { session, loading } = useSession();
+
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
@@ -217,8 +222,26 @@ export default function Home() {
     setShoppingList([]);
   };
 
-  if (isLoading) {
+  if (loading || isLoading) {
     return <LoadingScreen />;
+  }
+
+  if (!session) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#050816]">
+        <AuthButton />
+      </main>
+    );
+  }
+
+  const email = session.user.email;
+
+  if (!isAllowedEmail(email)) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
+        Access denied
+      </main>
+    );
   }
 
   return (
