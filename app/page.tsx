@@ -221,9 +221,13 @@ export default function Home() {
   const saveCategoryEdit = async () => {
     if (!editingCategoryId || !editingCategoryName.trim()) return;
 
-    await updateCategory(editingCategoryId, {
+    const { error } = await updateCategory(editingCategoryId, {
       name: editingCategoryName,
     });
+
+    if (error) {
+      return;
+    }
 
     await refreshCategories();
 
