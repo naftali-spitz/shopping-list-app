@@ -1,6 +1,12 @@
 import { supabase } from "@/lib/supabase";
 import { Category } from "@/types/shopping";
 
+function showMutationError(message: string) {
+  if (typeof window !== "undefined") {
+    window.alert(message);
+  }
+}
+
 export async function fetchCategories(
   householdId: string
 ): Promise<Category[]> {
@@ -42,10 +48,19 @@ export async function updateCategory(
   categoryId: string,
   updates: Partial<Pick<Category, "name" | "icon">>
 ) {
-  return supabase
+  const result = await supabase
     .from("categories")
     .update(updates)
     .eq("id", categoryId);
+
+  if (result.error) {
+    console.error(result.error);
+    showMutationError(
+      "שמירת הקטגוריה נכשלה. כנראה חסרה הרשאת UPDATE ב-Supabase או שיש בעיית חיבור."
+    );
+  }
+
+  return result;
 }
 
 export async function deleteCategory(categoryId: string) {
