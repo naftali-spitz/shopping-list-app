@@ -280,8 +280,8 @@ export default function Home() {
     setPendingDelete(null);
   };
 
-  const exportDoc = () => {
-    const createdAt = exportShoppingDoc(shoppingList);
+  const exportDoc = async () => {
+    const createdAt = await exportShoppingDoc(shoppingList);
 
     if (!createdAt) return;
 
