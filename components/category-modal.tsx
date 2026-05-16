@@ -145,11 +145,11 @@ export function CategoryModal({
                     </button>
 
                     <button
-  onClick={() => onEditProduct(product)}
-  className="rounded-xl p-2 transition hover:bg-white/10"
->
-  ✏️
-</button>
+                      onClick={() => onRemoveProduct(product.id)}
+                      className="rounded-full bg-red-500/10 p-2 text-red-300"
+                    >
+                      <Trash2 size={15} />
+                    </button>
                   </motion.div>
                 );
               })}
