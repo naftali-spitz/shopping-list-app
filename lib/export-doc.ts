@@ -1,5 +1,3 @@
-import * as htmlDocx from "html-docx-js";
-
 export function exportShoppingDoc(items: string[]) {
   if (!items.length) {
     return null;
@@ -13,9 +11,21 @@ export function exportShoppingDoc(items: string[]) {
   }).format(new Date(createdAt));
 
   const html = `
-    <html dir="rtl">
+    <html dir="rtl" xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:w="urn:schemas-microsoft-com:office:word"
+          xmlns="http://www.w3.org/TR/REC-html40">
       <head>
         <meta charset="utf-8" />
+
+        <!--[if gte mso 9]>
+        <xml>
+          <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+          </w:WordDocument>
+        </xml>
+        <![endif]-->
 
         <style>
           body {
@@ -76,14 +86,16 @@ export function exportShoppingDoc(items: string[]) {
     </html>
   `;
 
-  const blob = htmlDocx.asBlob(html);
+  const blob = new Blob([html], {
+    type: "application/msword;charset=utf-8",
+  });
 
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = `shopping-list-${createdAt.slice(0, 10)}.docx`;
+  link.download = `shopping-list-${createdAt.slice(0, 10)}.doc`;
   link.click();
 
   URL.revokeObjectURL(url);
