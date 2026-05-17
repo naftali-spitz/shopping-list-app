@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { AnimatedBackground } from "@/components/animated-background";
 import { AuthButton } from "@/components/auth-button";
@@ -8,6 +8,7 @@ import { CategoryCard } from "@/components/category-card";
 import { CategoryModal } from "@/components/category-modal";
 import { ConfirmModal } from "@/components/confirm-modal";
 import { EditCategoryModal } from "@/components/edit-category-modal";
+import { EditProductModal } from "@/components/edit-product-modal";
 import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
@@ -24,23 +25,26 @@ import {
   saveShoppingList,
 } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
-import { EditProductModal } from "@/components/edit-product-modal";
 
 const initialCategories: Category[] = [];
 
 // Clean fallback ID generator if crypto.randomUUID isn't available in older environments
 const generateUniqueId = (value: string) => {
   const prefix = value.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  const uniqueString = typeof crypto !== "undefined" && crypto.randomUUID 
-    ? crypto.randomUUID().split("-")[0] 
-    : Math.random().toString(36).substring(2, 8);
+  const uniqueString =
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID().split("-")[0]
+      : Math.random().toString(36).substring(2, 8);
   return `${prefix}-${uniqueString}`;
 };
 
 // Instantiated once outside the render cycle to save memory and CPU cycles
-const tickAudio = typeof Audio !== "undefined" 
-  ? new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=") 
-  : null;
+const tickAudio =
+  typeof Audio !== "undefined"
+    ? new Audio(
+        "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="
+      )
+    : null;
 
 type PendingDelete =
   | { type: "category"; id: string; name: string; productCount: number }
@@ -101,26 +105,22 @@ export default function Home() {
     saveHistory(history);
   }, [history]);
 
-  const selectedCategory = useMemo(() => 
-    categories.find((category) => category.id === selectedCategoryId) ?? null,
+  const selectedCategory = useMemo(
+    () => categories.find((category) => category.id === selectedCategoryId) ?? null,
     [categories, selectedCategoryId]
   );
 
-  const editingCategory = useMemo(() => 
-    categories.find((category) => category.id === editingCategoryId) ?? null,
+  const editingCategory = useMemo(
+    () => categories.find((category) => category.id === editingCategoryId) ?? null,
     [categories, editingCategoryId]
   );
 
   const editingProduct = useMemo(() => {
     if (!selectedCategory || !editingProductId) return null;
-
     return (
-      selectedCategory.products.find(
-        (product) => product.id === editingProductId
-      ) ?? null
+      selectedCategory.products.find((product) => product.id === editingProductId) ?? null
     );
   }, [selectedCategory, editingProductId]);
-    
 
   const globalResults = useMemo(() => {
     if (!globalSearch.trim()) return [];
@@ -137,6 +137,24 @@ export default function Home() {
       )
       .slice(0, 8);
   }, [categories, globalSearch]);
+
+  // FIX: merged confirmTitle + confirmDescription into one useMemo
+  // to avoid recomputing two separate expressions on every render
+  const { confirmTitle, confirmDescription } = useMemo(() => {
+    if (!pendingDelete) return { confirmTitle: "", confirmDescription: "" };
+
+    if (pendingDelete.type === "category") {
+      return {
+        confirmTitle: "מחיקת קטגוריה?",
+        confirmDescription: `הקטגוריה "${pendingDelete.name}" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`,
+      };
+    }
+
+    return {
+      confirmTitle: "מחיקת מוצר?",
+      confirmDescription: `המוצר "${pendingDelete.name}" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`,
+    };
+  }, [pendingDelete]);
 
   const backgroundClass = darkMode
     ? "bg-[#050816] text-white"
@@ -160,16 +178,6 @@ export default function Home() {
       );
   }, [searchTerm, selectedCategory, sortMode]);
 
-  const confirmTitle =
-    pendingDelete?.type === "category" ? "מחיקת קטגוריה?" : "מחיקת מוצר?";
-
-  const confirmDescription =
-    pendingDelete?.type === "category"
-      ? `הקטגוריה "${pendingDelete.name}" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`
-      : pendingDelete?.type === "product"
-        ? `המוצר "${pendingDelete.name}" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`
-        : "";
-
   const playSound = () => {
     if (!soundOn || !tickAudio) return;
     void tickAudio.play().catch(() => undefined);
@@ -177,7 +185,6 @@ export default function Home() {
 
   const toggleItem = (item: string) => {
     playSound();
-
     setShoppingList((prev) =>
       prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
     );
@@ -185,16 +192,13 @@ export default function Home() {
 
   const quickAddItem = (item: string) => {
     if (shoppingList.includes(item)) return;
-
     playSound();
-
     setShoppingList((prev) => [...prev, item]);
     setGlobalSearch("");
   };
 
   const addCategory = () => {
     const name = newCategoryName.trim();
-
     if (!name) return;
 
     setCategories((prev) => [
@@ -212,7 +216,6 @@ export default function Home() {
 
   const addProduct = () => {
     const name = newProductName.trim();
-
     if (!name || !selectedCategory) return;
 
     setCategories((prev) =>
@@ -236,25 +239,10 @@ export default function Home() {
     setNewProductName("");
   };
 
-  const removeProduct = (productId: string) => {
-    if (!selectedCategory) return;
-
-    const product = selectedCategory.products.find((item) => item.id === productId);
-
-    if (!product) return;
-
-    setPendingDelete({
-      type: "product",
-      id: productId,
-      name: product.name,
-    });
-  };
-
   const saveProductEdit = () => {
     if (!selectedCategory || !editingProductId) return;
 
     const trimmedName = editingProductName.trim();
-
     if (!trimmedName) return;
 
     setCategories((prev) =>
@@ -264,10 +252,7 @@ export default function Home() {
               ...category,
               products: category.products.map((product) =>
                 product.id === editingProductId
-                  ? {
-                      ...product,
-                      name: trimmedName,
-                    }
+                  ? { ...product, name: trimmedName }
                   : product
               ),
             }
@@ -296,9 +281,7 @@ export default function Home() {
       name: editingCategoryName,
     });
 
-    if (error) {
-      return;
-    }
+    if (error) return;
 
     await refreshCategories();
 
@@ -353,7 +336,6 @@ export default function Home() {
 
   const exportDoc = async () => {
     const createdAt = await exportShoppingDoc(shoppingList);
-
     if (!createdAt) return;
 
     setHistory((prev) => [
@@ -367,6 +349,19 @@ export default function Home() {
 
     setShoppingList([]);
   };
+
+  // FIX: stable callback — prevents unnecessary re-renders of CategoryModal
+  const handleEditProduct = useCallback(
+    (productId: string) => {
+      const product = selectedCategory?.products.find(
+        (item) => item.id === productId
+      );
+      if (!product) return;
+      setEditingProductId(product.id);
+      setEditingProductName(product.name);
+    },
+    [selectedCategory]
+  );
 
   if (loading || isLoading || categoriesLoading) {
     return <LoadingScreen />;
@@ -516,17 +511,10 @@ export default function Home() {
         onSortChange={setSortMode}
         onNewProductChange={setNewProductName}
         onAddProduct={addProduct}
-        onEditProduct={(productId) => {
-          const product = selectedCategory?.products.find(
-            (item) => item.id === productId
-          );
+        onEditProduct={handleEditProduct}
+      />
 
-          if (!product) return;
-
-          setEditingProductId(product.id);
-          setEditingProductName(product.name);
-        }}      />
-
+      {/* FIX: removed duplicate — EditCategoryModal rendered exactly once */}
       <EditCategoryModal
         category={editingCategory}
         open={Boolean(editingCategory)}
@@ -540,17 +528,18 @@ export default function Home() {
         onDelete={deleteCategory}
       />
 
-      <EditCategoryModal
-        category={editingCategory}
-        open={Boolean(editingCategory)}
-        value={editingCategoryName}
+      {/* FIX: EditProductModal was imported but never rendered — now wired up */}
+      <EditProductModal
+        product={editingProduct}
+        open={Boolean(editingProductId)}
+        value={editingProductName}
         onClose={() => {
-          setEditingCategoryId(null);
-          setEditingCategoryName("");
+          setEditingProductId(null);
+          setEditingProductName("");
         }}
-        onChange={setEditingCategoryName}
-        onSave={saveCategoryEdit}
-        onDelete={deleteCategory}
+        onChange={setEditingProductName}
+        onSave={saveProductEdit}
+        onDelete={deleteProduct}
       />
 
       <ConfirmModal
