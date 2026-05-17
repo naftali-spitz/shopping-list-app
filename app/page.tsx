@@ -27,8 +27,19 @@ import { Category, HistoryEntry } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
 
-const makeId = (value: string) =>
-  `${value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`;
+// Clean fallback ID generator if crypto.randomUUID isn't available in older environments
+const generateUniqueId = (value: string) => {
+  const prefix = value.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const uniqueString = typeof crypto !== "undefined" && crypto.randomUUID 
+    ? crypto.randomUUID().split("-")[0] 
+    : Math.random().toString(36).substring(2, 8);
+  return `${prefix}-${uniqueString}`;
+};
+
+// Instantiated once outside the render cycle to save memory and CPU cycles
+const tickAudio = typeof Audio !== "undefined" 
+  ? new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=") 
+  : null;
 
 type PendingDelete =
   | { type: "category"; id: string; name: string; productCount: number }
@@ -45,12 +56,8 @@ export default function Home() {
   } = useSharedCategories(initialCategories);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
-    null
-  );
-  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(
-    null
-  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [editingCategoryName, setEditingCategoryName] = useState("");
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [shoppingList, setShoppingList] = useState<string[]>([]);
@@ -76,14 +83,23 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, []);
 
-  useEffect(() => saveShoppingList(shoppingList), [shoppingList]);
-  useEffect(() => saveHistory(history), [history]);
+  useEffect(() => {
+    saveShoppingList(shoppingList);
+  }, [shoppingList]);
 
-  const selectedCategory =
-    categories.find((category) => category.id === selectedCategoryId) ?? null;
+  useEffect(() => {
+    saveHistory(history);
+  }, [history]);
 
-  const editingCategory =
-    categories.find((category) => category.id === editingCategoryId) ?? null;
+  const selectedCategory = useMemo(() => 
+    categories.find((category) => category.id === selectedCategoryId) ?? null,
+    [categories, selectedCategoryId]
+  );
+
+  const editingCategory = useMemo(() => 
+    categories.find((category) => category.id === editingCategoryId) ?? null,
+    [categories, editingCategoryId]
+  );
 
   const globalResults = useMemo(() => {
     if (!globalSearch.trim()) return [];
@@ -134,13 +150,8 @@ export default function Home() {
         : "";
 
   const playSound = () => {
-    if (!soundOn) return;
-
-    const audio = new Audio(
-      "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="
-    );
-
-    void audio.play().catch(() => undefined);
+    if (!soundOn || !tickAudio) return;
+    void tickAudio.play().catch(() => undefined);
   };
 
   const toggleItem = (item: string) => {
@@ -168,7 +179,7 @@ export default function Home() {
     setCategories((prev) => [
       ...prev,
       {
-        id: makeId(name),
+        id: generateUniqueId(name),
         name,
         icon: "general",
         products: [],
@@ -191,7 +202,7 @@ export default function Home() {
               products: [
                 ...category.products,
                 {
-                  id: makeId(name),
+                  id: generateUniqueId(name),
                   name,
                   usageCount: 0,
                 },
