@@ -24,6 +24,7 @@ import {
   saveShoppingList,
 } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
+import { EditProductModal } from "@/components/edit-product-modal";
 
 const initialCategories: Category[] = [];
 
