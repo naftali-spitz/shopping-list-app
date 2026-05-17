@@ -42,6 +42,7 @@ export function EditProductModal({
           >
             <div className="mb-6">
               <h2 className="text-2xl font-bold">עריכת מוצר</h2>
+
               <p className="mt-2 text-sm text-white/60">
                 ערוך או מחק מוצר בצורה בטוחה.
               </p>
