@@ -60,6 +60,8 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [editingCategoryName, setEditingCategoryName] = useState("");
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
+  const [editingProductName, setEditingProductName] = useState("");
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [shoppingList, setShoppingList] = useState<string[]>([]);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -73,13 +75,20 @@ export default function Home() {
   const [historyOpen, setHistoryOpen] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsLoading(false), 1200);
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
 
-    const savedList = loadShoppingList();
-    const savedHistory = loadHistory();
+      const savedList = loadShoppingList();
+      const savedHistory = loadHistory();
 
-    if (savedList) setShoppingList(savedList);
-    if (savedHistory) setHistory(savedHistory);
+      if (savedList) {
+        setShoppingList(savedList);
+      }
+
+      if (savedHistory) {
+        setHistory(savedHistory);
+      }
+    }, 0);
 
     return () => clearTimeout(timeout);
   }, []);
@@ -101,6 +110,17 @@ export default function Home() {
     categories.find((category) => category.id === editingCategoryId) ?? null,
     [categories, editingCategoryId]
   );
+
+  const editingProduct = useMemo(() => {
+    if (!selectedCategory || !editingProductId) return null;
+
+    return (
+      selectedCategory.products.find(
+        (product) => product.id === editingProductId
+      ) ?? null
+    );
+  }, [selectedCategory, editingProductId]);
+    
 
   const globalResults = useMemo(() => {
     if (!globalSearch.trim()) return [];
@@ -227,6 +247,45 @@ export default function Home() {
       type: "product",
       id: productId,
       name: product.name,
+    });
+  };
+
+  const saveProductEdit = () => {
+    if (!selectedCategory || !editingProductId) return;
+
+    const trimmedName = editingProductName.trim();
+
+    if (!trimmedName) return;
+
+    setCategories((prev) =>
+      prev.map((category) =>
+        category.id === selectedCategory.id
+          ? {
+              ...category,
+              products: category.products.map((product) =>
+                product.id === editingProductId
+                  ? {
+                      ...product,
+                      name: trimmedName,
+                    }
+                  : product
+              ),
+            }
+          : category
+      )
+    );
+
+    setEditingProductId(null);
+    setEditingProductName("");
+  };
+
+  const deleteProduct = () => {
+    if (!editingProduct) return;
+
+    setPendingDelete({
+      type: "product",
+      id: editingProduct.id,
+      name: editingProduct.name,
     });
   };
 
@@ -457,7 +516,28 @@ export default function Home() {
         onSortChange={setSortMode}
         onNewProductChange={setNewProductName}
         onAddProduct={addProduct}
-        onRemoveProduct={removeProduct}
+        onEditProduct={(productId) => {
+          const product = selectedCategory?.products.find(
+            (item) => item.id === productId
+          );
+
+          if (!product) return;
+
+          setEditingProductId(product.id);
+          setEditingProductName(product.name);
+        }}      />
+
+      <EditCategoryModal
+        category={editingCategory}
+        open={Boolean(editingCategory)}
+        value={editingCategoryName}
+        onClose={() => {
+          setEditingCategoryId(null);
+          setEditingCategoryName("");
+        }}
+        onChange={setEditingCategoryName}
+        onSave={saveCategoryEdit}
+        onDelete={deleteCategory}
       />
 
       <EditCategoryModal
