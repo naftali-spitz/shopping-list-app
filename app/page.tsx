@@ -16,7 +16,11 @@ import { TopBar } from "@/components/top-bar";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
-import { updateCategory } from "@/lib/db/categories";
+import {
+  deleteCategory as deleteCategoryFromDb,
+  updateCategory,
+} from "@/lib/db/categories";
+import { deleteProduct as deleteProductFromDb } from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
 import {
   loadHistory,
@@ -300,10 +304,11 @@ export default function Home() {
     });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!pendingDelete) return;
 
     if (pendingDelete.type === "product") {
+      // Optimistically update UI
       setCategories((prev) =>
         prev.map((category) =>
           category.id === selectedCategoryId
@@ -316,9 +321,13 @@ export default function Home() {
             : category
         )
       );
+
+      // Products are their own table — delete by product id directly
+      await deleteProductFromDb(pendingDelete.id);
     }
 
     if (pendingDelete.type === "category") {
+      // Optimistically update UI
       setCategories((prev) =>
         prev.filter((category) => category.id !== pendingDelete.id)
       );
@@ -329,8 +338,12 @@ export default function Home() {
 
       setEditingCategoryId(null);
       setEditingCategoryName("");
+
+      // deleteCategoryFromDb aliased to avoid conflict with local deleteCategory handler
+      await deleteCategoryFromDb(pendingDelete.id);
     }
 
+    await refreshCategories();
     setPendingDelete(null);
   };
 
