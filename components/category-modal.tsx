@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Search, Trash2, X } from "lucide-react";
+import { Edit2, Plus, Search, X } from "lucide-react";
 import { Category } from "@/types/shopping";
 
 type CategoryModalProps = {
@@ -17,7 +17,7 @@ type CategoryModalProps = {
   onSortChange: (value: "az" | "popular") => void;
   onNewProductChange: (value: string) => void;
   onAddProduct: () => void;
-  onRemoveProduct: (id: string) => void;
+  onEditProduct: (id: string) => void;
 };
 
 export function CategoryModal({
@@ -33,7 +33,7 @@ export function CategoryModal({
   onSortChange,
   onNewProductChange,
   onAddProduct,
-  onRemoveProduct,
+  onEditProduct,
 }: CategoryModalProps) {
   return (
     <AnimatePresence>
@@ -145,10 +145,10 @@ export function CategoryModal({
                     </button>
 
                     <button
-                      onClick={() => onRemoveProduct(product.id)}
-                      className="rounded-full bg-red-500/10 p-2 text-red-300"
+                      onClick={() => onEditProduct(product.id)}
+                      className="rounded-full bg-cyan-400/10 p-2 text-cyan-300"
                     >
-                      <Trash2 size={15} />
+                      <Edit2 size={15} />
                     </button>
                   </motion.div>
                 );
