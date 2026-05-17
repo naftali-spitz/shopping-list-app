@@ -65,8 +65,11 @@ export function CategoryCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
       whileHover={{ scale: 1.03 }}
-      className={`group relative overflow-hidden rounded-3xl border p-6 backdrop-blur-xl ${cardClass}`}
+      whileTap={{ scale: 0.98 }}
+      onClick={onOpen}
+      className={`group relative overflow-hidden rounded-3xl border p-6 backdrop-blur-xl cursor-pointer text-right ${cardClass}`}
     >
+      {/* Hover Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10 opacity-0 transition duration-500 group-hover:opacity-100" />
 
       <div className="relative z-10">
@@ -76,8 +79,11 @@ export function CategoryCard({
           </div>
 
           <button
-            onClick={onDelete}
-            className="rounded-2xl bg-cyan-500/10 p-2 text-cyan-300 opacity-70 transition hover:opacity-100"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevents the card's onClick (onOpen) from firing when editing
+              onDelete();
+            }}
+            className="rounded-2xl bg-cyan-500/10 p-2 text-cyan-300 opacity-70 transition hover:opacity-100 relative z-20"
           >
             <Pencil size={16} />
           </button>
@@ -94,14 +100,10 @@ export function CategoryCard({
               {product.name}
             </span>
           ))}
+          {category.products.length === 0 && (
+            <span className="text-sm opacity-40">אין מוצרים בקטגוריה</span>
+          )}
         </div>
-
-        <button
-          onClick={onOpen}
-          className="mt-6 w-full rounded-2xl bg-white/10 py-3 text-sm transition hover:bg-white/20"
-        >
-          פתח קטגוריה
-        </button>
       </div>
     </motion.div>
   );
