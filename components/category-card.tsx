@@ -59,7 +59,7 @@ export function CategoryCard({
     iconMap[category.icon as keyof typeof iconMap] || ShoppingCart;
 
   return (
-    <motion.div
+    <motion.button
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,10 @@ export function CategoryCard({
           </div>
 
           <button
-            onClick={onDelete}
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete();
+            }}
             className="rounded-2xl bg-cyan-500/10 p-2 text-cyan-300 opacity-70 transition hover:opacity-100"
           >
             <Pencil size={16} />
@@ -96,13 +99,7 @@ export function CategoryCard({
           ))}
         </div>
 
-        <button
-          onClick={onOpen}
-          className="mt-6 w-full rounded-2xl bg-white/10 py-3 text-sm transition hover:bg-white/20"
-        >
-          פתח קטגוריה
-        </button>
       </div>
-    </motion.div>
+    </motion.button>
   );
 }

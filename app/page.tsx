@@ -36,6 +36,7 @@ type PendingDelete =
 
 export default function Home() {
   const { session, loading } = useSession();
+  const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 
   const {
     categories,
@@ -301,7 +302,7 @@ export default function Home() {
     return <LoadingScreen />;
   }
 
-  if (!session) {
+  if (!session && !DEV_MODE) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050816]">
         <AuthButton />
@@ -309,9 +310,9 @@ export default function Home() {
     );
   }
 
-  const email = session.user.email;
+  const email = session?.user?.email || "dev@local.dev";
 
-  if (!isAllowedEmail(email)) {
+  if (!DEV_MODE && !isAllowedEmail(email)) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
         Access denied
