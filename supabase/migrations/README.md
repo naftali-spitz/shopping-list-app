@@ -1,0 +1,1 @@
+Supabase RLS migrations for shopping-list-app.
