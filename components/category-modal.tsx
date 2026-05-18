@@ -49,17 +49,16 @@ export function CategoryModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="max-h-[92vh] w-full max-w-xl overflow-auto rounded-[32px] border border-white/10 bg-[#0b1020]/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8"
+            className="max-h-[92vh] w-full max-w-xl flex flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#0b1020]/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8"
           >
-            <div className="flex items-start justify-between gap-4">
+            {/* Header — never scrolls */}
+            <div className="flex items-start justify-between gap-4 shrink-0">
               <div>
                 <h2 className="text-3xl font-bold">{category.name}</h2>
-
                 <p className="mt-2 text-sm text-white/60">
                   Sort, add, remove, and choose products.
                 </p>
               </div>
-
               <button
                 onClick={onClose}
                 className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20"
@@ -68,23 +67,20 @@ export function CategoryModal({
               </button>
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            {/* Controls — never scroll */}
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row shrink-0">
               <div className="flex flex-1 items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4">
                 <Search size={16} className="opacity-50" />
-
                 <input
                   value={searchTerm}
-                  onChange={(event) => onSearchChange(event.target.value)}
+                  onChange={(e) => onSearchChange(e.target.value)}
                   placeholder="Search products"
                   className="w-full bg-transparent py-3 text-sm outline-none placeholder:text-white/40"
                 />
               </div>
-
               <select
                 value={sortMode}
-                onChange={(event) =>
-                  onSortChange(event.target.value as "az" | "popular")
-                }
+                onChange={(e) => onSortChange(e.target.value as "az" | "popular")}
                 className="rounded-2xl border border-white/10 bg-[#10172a] px-4 py-3 text-sm outline-none"
               >
                 <option value="popular">Most chosen</option>
@@ -92,17 +88,14 @@ export function CategoryModal({
               </select>
             </div>
 
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 flex gap-2 shrink-0">
               <input
                 value={newProductName}
-                onChange={(event) => onNewProductChange(event.target.value)}
-                onKeyDown={(event) =>
-                  event.key === "Enter" && onAddProduct()
-                }
+                onChange={(e) => onNewProductChange(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && onAddProduct()}
                 placeholder="Add product"
                 className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/40"
               />
-
               <button
                 onClick={onAddProduct}
                 className="rounded-2xl bg-cyan-400 px-4 py-3 font-medium text-black"
@@ -111,10 +104,10 @@ export function CategoryModal({
               </button>
             </div>
 
-            <div className="mt-8 space-y-3">
+            {/* FIX: products list is the only thing that scrolls, with a polished thin scrollbar */}
+            <div className="mt-8 flex-1 overflow-y-auto space-y-3 pr-1 modal-scrollbar">
               {products.map((product, index) => {
                 const selected = shoppingList.includes(product.name);
-
                 return (
                   <motion.div
                     key={product.id}
@@ -136,9 +129,7 @@ export function CategoryModal({
                           selected ? "bg-cyan-300" : "bg-white/20"
                         }`}
                       />
-
                       <span>{product.name}</span>
-
                       <span className="ml-auto pr-3 text-xs text-white/40">
                         {product.usageCount}x
                       </span>

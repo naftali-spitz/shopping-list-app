@@ -44,6 +44,7 @@ type CategoryCardProps = {
   category: Category;
   index: number;
   cardClass: string;
+  darkMode: boolean;
   onOpen: () => void;
   onDelete: () => void;
 };
@@ -52,11 +53,19 @@ export function CategoryCard({
   category,
   index,
   cardClass,
+  darkMode,
   onOpen,
   onDelete,
 }: CategoryCardProps) {
   const Icon =
     iconMap[category.icon as keyof typeof iconMap] || ShoppingCart;
+
+  // FIX: icon and edit button use mode-aware colours
+  const iconColor = darkMode ? "text-cyan-300" : "text-cyan-600";
+  const iconBg    = darkMode ? "bg-white/10"   : "bg-cyan-100";
+  const editBg    = darkMode
+    ? "bg-cyan-500/10 text-cyan-300"
+    : "bg-cyan-100 text-cyan-700";
 
   return (
     <motion.div
@@ -69,21 +78,22 @@ export function CategoryCard({
       onClick={onOpen}
       className={`group relative overflow-hidden rounded-3xl border p-6 backdrop-blur-xl cursor-pointer text-right ${cardClass}`}
     >
-      {/* Hover Background Gradient */}
+      {/* Hover background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10 opacity-0 transition duration-500 group-hover:opacity-100" />
 
       <div className="relative z-10">
-        <div className="mb-4 flex items-start justify-between">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
-            <Icon className="text-cyan-300" />
+        {/* FIX: items-center so the pencil button is vertically aligned with the icon */}
+        <div className="mb-4 flex items-center justify-between">
+          <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${iconBg}`}>
+            <Icon className={iconColor} />
           </div>
 
           <button
             onClick={(e) => {
-              e.stopPropagation(); // Prevents the card's onClick (onOpen) from firing when editing
+              e.stopPropagation();
               onDelete();
             }}
-            className="rounded-2xl bg-cyan-500/10 p-2 text-cyan-300 opacity-70 transition hover:opacity-100 relative z-20"
+            className={`rounded-2xl p-2 opacity-70 transition hover:opacity-100 relative z-20 ${editBg}`}
           >
             <Pencil size={16} />
           </button>
@@ -95,7 +105,11 @@ export function CategoryCard({
           {category.products.slice(0, 3).map((product) => (
             <span
               key={product.id}
-              className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-sm opacity-70"
+              className={`rounded-full border px-3 py-1 text-sm opacity-70 ${
+                darkMode
+                  ? "border-white/10 bg-black/20"
+                  : "border-slate-200 bg-slate-100"
+              }`}
             >
               {product.name}
             </span>

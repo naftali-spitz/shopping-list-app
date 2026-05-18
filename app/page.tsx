@@ -16,11 +16,17 @@ import { TopBar } from "@/components/top-bar";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
+import { HOUSEHOLD_ID } from "@/lib/constants";
 import {
+  createCategory,
   deleteCategory as deleteCategoryFromDb,
   updateCategory,
 } from "@/lib/db/categories";
-import { deleteProduct as deleteProductFromDb } from "@/lib/db/products";
+import {
+  createProduct,
+  deleteProduct as deleteProductFromDb,
+  updateProduct,
+} from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
 import {
   loadHistory,
@@ -32,17 +38,6 @@ import { Category, HistoryEntry } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
 
-// Clean fallback ID generator if crypto.randomUUID isn't available in older environments
-const generateUniqueId = (value: string) => {
-  const prefix = value.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  const uniqueString =
-    typeof crypto !== "undefined" && crypto.randomUUID
-      ? crypto.randomUUID().split("-")[0]
-      : Math.random().toString(36).substring(2, 8);
-  return `${prefix}-${uniqueString}`;
-};
-
-// Instantiated once outside the render cycle to save memory and CPU cycles
 const tickAudio =
   typeof Audio !== "undefined"
     ? new Audio(
@@ -82,103 +77,87 @@ export default function Home() {
   const [newProductName, setNewProductName] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
 
+  // Scroll lock whenever any modal is open
+  const anyModalOpen =
+    Boolean(selectedCategoryId) ||
+    Boolean(editingCategoryId) ||
+    Boolean(editingProductId) ||
+    Boolean(pendingDelete) ||
+    historyOpen;
+
+  useEffect(() => {
+    if (anyModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [anyModalOpen]);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsLoading(false);
-
       const savedList = loadShoppingList();
       const savedHistory = loadHistory();
-
-      if (savedList) {
-        setShoppingList(savedList);
-      }
-
-      if (savedHistory) {
-        setHistory(savedHistory);
-      }
+      if (savedList) setShoppingList(savedList);
+      if (savedHistory) setHistory(savedHistory);
     }, 0);
-
     return () => clearTimeout(timeout);
   }, []);
 
-  useEffect(() => {
-    saveShoppingList(shoppingList);
-  }, [shoppingList]);
-
-  useEffect(() => {
-    saveHistory(history);
-  }, [history]);
+  useEffect(() => { saveShoppingList(shoppingList); }, [shoppingList]);
+  useEffect(() => { saveHistory(history); }, [history]);
 
   const selectedCategory = useMemo(
-    () => categories.find((category) => category.id === selectedCategoryId) ?? null,
+    () => categories.find((c) => c.id === selectedCategoryId) ?? null,
     [categories, selectedCategoryId]
   );
 
   const editingCategory = useMemo(
-    () => categories.find((category) => category.id === editingCategoryId) ?? null,
+    () => categories.find((c) => c.id === editingCategoryId) ?? null,
     [categories, editingCategoryId]
   );
 
   const editingProduct = useMemo(() => {
     if (!selectedCategory || !editingProductId) return null;
-    return (
-      selectedCategory.products.find((product) => product.id === editingProductId) ?? null
-    );
+    return selectedCategory.products.find((p) => p.id === editingProductId) ?? null;
   }, [selectedCategory, editingProductId]);
 
   const globalResults = useMemo(() => {
     if (!globalSearch.trim()) return [];
-
     return categories
-      .flatMap((category) =>
-        category.products.map((product) => ({
-          ...product,
-          categoryName: category.name,
-        }))
-      )
-      .filter((product) =>
-        product.name.toLowerCase().includes(globalSearch.toLowerCase())
-      )
+      .flatMap((c) => c.products.map((p) => ({ ...p, categoryName: c.name })))
+      .filter((p) => p.name.toLowerCase().includes(globalSearch.toLowerCase()))
       .slice(0, 8);
   }, [categories, globalSearch]);
 
-  // FIX: merged confirmTitle + confirmDescription into one useMemo
-  // to avoid recomputing two separate expressions on every render
   const { confirmTitle, confirmDescription } = useMemo(() => {
     if (!pendingDelete) return { confirmTitle: "", confirmDescription: "" };
-
     if (pendingDelete.type === "category") {
       return {
         confirmTitle: "מחיקת קטגוריה?",
         confirmDescription: `הקטגוריה "${pendingDelete.name}" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`,
       };
     }
-
     return {
       confirmTitle: "מחיקת מוצר?",
       confirmDescription: `המוצר "${pendingDelete.name}" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`,
     };
   }, [pendingDelete]);
 
-  const backgroundClass = darkMode
-    ? "bg-[#050816] text-white"
-    : "bg-[#f3f7ff] text-slate-950";
-
+  const backgroundClass = darkMode ? "bg-[#050816] text-white" : "bg-[#f3f7ff] text-slate-950";
   const cardClass = darkMode
     ? "border-white/10 bg-white/5"
     : "border-slate-950/10 bg-white/70 text-slate-950";
 
   const sortedProducts = useMemo(() => {
     if (!selectedCategory) return [];
-
     return [...selectedCategory.products]
-      .filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
       .sort((a, b) =>
-        sortMode === "az"
-          ? a.name.localeCompare(b.name)
-          : b.usageCount - a.usageCount
+        sortMode === "az" ? a.name.localeCompare(b.name) : b.usageCount - a.usageCount
       );
   }, [searchTerm, selectedCategory, sortMode]);
 
@@ -201,101 +180,66 @@ export default function Home() {
     setGlobalSearch("");
   };
 
-  const addCategory = () => {
+  // FIX: persist to Supabase, then refresh to get the real DB-generated ID
+  const addCategory = async () => {
     const name = newCategoryName.trim();
     if (!name) return;
-
-    setCategories((prev) => [
-      ...prev,
-      {
-        id: generateUniqueId(name),
-        name,
-        icon: "general",
-        products: [],
-      },
-    ]);
-
     setNewCategoryName("");
+
+    const { error } = await createCategory(HOUSEHOLD_ID, { name, icon: "general" });
+    if (error) {
+      console.error("Failed to create category:", error);
+      return;
+    }
+    await refreshCategories();
   };
 
-  const addProduct = () => {
+  // FIX: persist to Supabase, then refresh to get the real DB-generated ID
+  const addProduct = async () => {
     const name = newProductName.trim();
     if (!name || !selectedCategory) return;
-
-    setCategories((prev) =>
-      prev.map((category) =>
-        category.id === selectedCategory.id
-          ? {
-              ...category,
-              products: [
-                ...category.products,
-                {
-                  id: generateUniqueId(name),
-                  name,
-                  usageCount: 0,
-                },
-              ],
-            }
-          : category
-      )
-    );
-
     setNewProductName("");
+
+    const { error } = await createProduct(selectedCategory.id, name);
+    if (error) {
+      console.error("Failed to create product:", error);
+      return;
+    }
+    await refreshCategories();
   };
 
-  const saveProductEdit = () => {
+  // FIX: persist the rename to Supabase
+  const saveProductEdit = async () => {
     if (!selectedCategory || !editingProductId) return;
-
     const trimmedName = editingProductName.trim();
     if (!trimmedName) return;
 
-    setCategories((prev) =>
-      prev.map((category) =>
-        category.id === selectedCategory.id
-          ? {
-              ...category,
-              products: category.products.map((product) =>
-                product.id === editingProductId
-                  ? { ...product, name: trimmedName }
-                  : product
-              ),
-            }
-          : category
-      )
-    );
-
     setEditingProductId(null);
     setEditingProductName("");
+
+    const { error } = await updateProduct(editingProductId, trimmedName);
+    if (error) {
+      console.error("Failed to update product:", error);
+    }
+    await refreshCategories();
   };
 
   const deleteProduct = () => {
     if (!editingProduct) return;
-
-    setPendingDelete({
-      type: "product",
-      id: editingProduct.id,
-      name: editingProduct.name,
-    });
+    setPendingDelete({ type: "product", id: editingProduct.id, name: editingProduct.name });
   };
 
   const saveCategoryEdit = async () => {
     if (!editingCategoryId || !editingCategoryName.trim()) return;
-
-    const { error } = await updateCategory(editingCategoryId, {
-      name: editingCategoryName,
-    });
-
+    const { error } = await updateCategory(editingCategoryId, { name: editingCategoryName });
     if (error) return;
-
     await refreshCategories();
-
     setEditingCategoryId(null);
     setEditingCategoryName("");
   };
 
   const deleteCategory = () => {
     if (!editingCategory) return;
-
     setPendingDelete({
       type: "category",
       id: editingCategory.id,
@@ -308,67 +252,53 @@ export default function Home() {
     if (!pendingDelete) return;
 
     if (pendingDelete.type === "product") {
-      // Optimistically update UI
+      // Optimistic UI update
       setCategories((prev) =>
-        prev.map((category) =>
-          category.id === selectedCategoryId
-            ? {
-                ...category,
-                products: category.products.filter(
-                  (product) => product.id !== pendingDelete.id
-                ),
-              }
-            : category
+        prev.map((c) =>
+          c.id === selectedCategoryId
+            ? { ...c, products: c.products.filter((p) => p.id !== pendingDelete.id) }
+            : c
         )
       );
+      // Close modals before async work so they can never re-open
+      setEditingProductId(null);
+      setEditingProductName("");
+      setPendingDelete(null);
 
-      // Products are their own table — delete by product id directly
-      await deleteProductFromDb(pendingDelete.id);
+      const { error } = await deleteProductFromDb(pendingDelete.id);
+      if (error) {
+        console.error("Failed to delete product:", error);
+        await refreshCategories(); // revert optimistic update
+      }
+      return;
     }
 
     if (pendingDelete.type === "category") {
-      // Optimistically update UI
-      setCategories((prev) =>
-        prev.filter((category) => category.id !== pendingDelete.id)
-      );
-
-      if (selectedCategoryId === pendingDelete.id) {
-        setSelectedCategoryId(null);
-      }
-
+      // Optimistic UI update
+      setCategories((prev) => prev.filter((c) => c.id !== pendingDelete.id));
+      if (selectedCategoryId === pendingDelete.id) setSelectedCategoryId(null);
       setEditingCategoryId(null);
       setEditingCategoryName("");
+      setPendingDelete(null);
 
-      // deleteCategoryFromDb aliased to avoid conflict with local deleteCategory handler
-      await deleteCategoryFromDb(pendingDelete.id);
+      const { error } = await deleteCategoryFromDb(pendingDelete.id);
+      if (error) {
+        console.error("Failed to delete category:", error);
+        await refreshCategories(); // revert optimistic update
+      }
     }
-
-    await refreshCategories();
-    setPendingDelete(null);
   };
 
   const exportDoc = async () => {
     const createdAt = await exportShoppingDoc(shoppingList);
     if (!createdAt) return;
-
-    setHistory((prev) => [
-      {
-        id: createdAt,
-        createdAt,
-        items: shoppingList,
-      },
-      ...prev,
-    ]);
-
+    setHistory((prev) => [{ id: createdAt, createdAt, items: shoppingList }, ...prev]);
     setShoppingList([]);
   };
 
-  // FIX: stable callback — prevents unnecessary re-renders of CategoryModal
   const handleEditProduct = useCallback(
     (productId: string) => {
-      const product = selectedCategory?.products.find(
-        (item) => item.id === productId
-      );
+      const product = selectedCategory?.products.find((p) => p.id === productId);
       if (!product) return;
       setEditingProductId(product.id);
       setEditingProductName(product.name);
@@ -376,9 +306,7 @@ export default function Home() {
     [selectedCategory]
   );
 
-  if (loading || isLoading || categoriesLoading) {
-    return <LoadingScreen />;
-  }
+  if (loading || isLoading || categoriesLoading) return <LoadingScreen />;
 
   if (!session) {
     return (
@@ -388,9 +316,7 @@ export default function Home() {
     );
   }
 
-  const email = session.user.email;
-
-  if (!isAllowedEmail(email)) {
+  if (!isAllowedEmail(session.user.email)) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
         Access denied
@@ -410,22 +336,19 @@ export default function Home() {
           darkMode={darkMode}
           soundOn={soundOn}
           cardClass={cardClass}
-          onToggleSound={() => setSoundOn((value) => !value)}
-          onToggleTheme={() => setDarkMode((value) => !value)}
+          onToggleSound={() => setSoundOn((v) => !v)}
+          onToggleTheme={() => setDarkMode((v) => !v)}
           onExport={exportDoc}
           onOpenHistory={() => setHistoryOpen(true)}
         />
 
         <section className="mt-8">
-          <div
-            className={`relative rounded-3xl border p-4 backdrop-blur-xl ${cardClass}`}
-          >
+          <div className={`relative rounded-3xl border p-4 backdrop-blur-xl ${cardClass}`}>
             <div className="flex items-center gap-3">
               <Search className="text-cyan-400" size={22} />
-
               <input
                 value={globalSearch}
-                onChange={(event) => setGlobalSearch(event.target.value)}
+                onChange={(e) => setGlobalSearch(e.target.value)}
                 placeholder="חיפוש מהיר להוספה לרשימה..."
                 className="w-full bg-transparent text-lg outline-none placeholder:text-slate-400"
               />
@@ -441,12 +364,8 @@ export default function Home() {
                   >
                     <div>
                       <div className="font-medium">{product.name}</div>
-
-                      <div className="text-sm opacity-60">
-                        {product.categoryName}
-                      </div>
+                      <div className="text-sm opacity-60">{product.categoryName}</div>
                     </div>
-
                     <div className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-600">
                       הוסף
                     </div>
@@ -464,17 +383,14 @@ export default function Home() {
               <h2 className="text-3xl font-bold">בחר קטגוריה</h2>
             </div>
 
-            <div
-              className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}
-            >
+            <div className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}>
               <input
                 value={newCategoryName}
-                onChange={(event) => setNewCategoryName(event.target.value)}
-                onKeyDown={(event) => event.key === "Enter" && addCategory()}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addCategory()}
                 placeholder="הוסף קטגוריה"
                 className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
               />
-
               <button
                 onClick={addCategory}
                 className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
@@ -491,6 +407,7 @@ export default function Home() {
                 category={category}
                 index={index}
                 cardClass={cardClass}
+                darkMode={darkMode}
                 onOpen={() => {
                   setSelectedCategoryId(category.id);
                   setSearchTerm("");
@@ -505,11 +422,7 @@ export default function Home() {
         </section>
       </div>
 
-      <ShoppingDrawer
-        items={shoppingList}
-        onRemove={toggleItem}
-        onExport={exportDoc}
-      />
+      <ShoppingDrawer items={shoppingList} onRemove={toggleItem} onExport={exportDoc} />
 
       <CategoryModal
         category={selectedCategory}
@@ -527,29 +440,21 @@ export default function Home() {
         onEditProduct={handleEditProduct}
       />
 
-      {/* FIX: removed duplicate — EditCategoryModal rendered exactly once */}
       <EditCategoryModal
         category={editingCategory}
         open={Boolean(editingCategory)}
         value={editingCategoryName}
-        onClose={() => {
-          setEditingCategoryId(null);
-          setEditingCategoryName("");
-        }}
+        onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }}
         onChange={setEditingCategoryName}
         onSave={saveCategoryEdit}
         onDelete={deleteCategory}
       />
 
-      {/* FIX: EditProductModal was imported but never rendered — now wired up */}
       <EditProductModal
         product={editingProduct}
         open={Boolean(editingProductId)}
         value={editingProductName}
-        onClose={() => {
-          setEditingProductId(null);
-          setEditingProductName("");
-        }}
+        onClose={() => { setEditingProductId(null); setEditingProductName(""); }}
         onChange={setEditingProductName}
         onSave={saveProductEdit}
         onDelete={deleteProduct}
@@ -569,10 +474,7 @@ export default function Home() {
         open={historyOpen}
         history={history}
         onClose={() => setHistoryOpen(false)}
-        onLoad={(items) => {
-          setShoppingList(items);
-          setHistoryOpen(false);
-        }}
+        onLoad={(items) => { setShoppingList(items); setHistoryOpen(false); }}
       />
     </main>
   );
