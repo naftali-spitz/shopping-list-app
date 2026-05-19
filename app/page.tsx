@@ -108,8 +108,13 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, []);
 
-  useEffect(() => { saveShoppingList(shoppingList); }, [shoppingList]);
-  useEffect(() => { saveHistory(history); }, [history]);
+  useEffect(() => {
+    saveShoppingList(shoppingList);
+  }, [shoppingList]);
+
+  useEffect(() => {
+    saveHistory(history);
+  }, [history]);
 
   const selectedCategory = useMemo(
     () => categories.find((c) => c.id === selectedCategoryId) ?? null,
@@ -123,11 +128,13 @@ export default function Home() {
 
   const editingProduct = useMemo(() => {
     if (!selectedCategory || !editingProductId) return null;
+
     return selectedCategory.products.find((p) => p.id === editingProductId) ?? null;
   }, [selectedCategory, editingProductId]);
 
   const globalResults = useMemo(() => {
     if (!globalSearch.trim()) return [];
+
     return categories
       .flatMap((c) => c.products.map((p) => ({ ...p, categoryName: c.name })))
       .filter((p) => p.name.toLowerCase().includes(globalSearch.toLowerCase()))
@@ -135,85 +142,112 @@ export default function Home() {
   }, [categories, globalSearch]);
 
   const { confirmTitle, confirmDescription } = useMemo(() => {
-    if (!pendingDelete) return { confirmTitle: "", confirmDescription: "" };
+    if (!pendingDelete) {
+      return {
+        confirmTitle: "",
+        confirmDescription: "",
+      };
+    }
+
     if (pendingDelete.type === "category") {
       return {
         confirmTitle: "מחיקת קטגוריה?",
         confirmDescription: `הקטגוריה "${pendingDelete.name}" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`,
       };
     }
+
     return {
       confirmTitle: "מחיקת מוצר?",
       confirmDescription: `המוצר "${pendingDelete.name}" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`,
     };
   }, [pendingDelete]);
 
-  const backgroundClass = darkMode ? "bg-[#050816] text-white" : "bg-[#f3f7ff] text-slate-950";
+  const backgroundClass = darkMode
+    ? "bg-[#050816] text-white"
+    : "bg-[#f3f7ff] text-slate-950";
+
   const cardClass = darkMode
     ? "border-white/10 bg-white/5"
     : "border-slate-950/10 bg-white/70 text-slate-950";
 
   const sortedProducts = useMemo(() => {
     if (!selectedCategory) return [];
+
     return [...selectedCategory.products]
       .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
       .sort((a, b) =>
-        sortMode === "az" ? a.name.localeCompare(b.name) : b.usageCount - a.usageCount
+        sortMode === "az"
+          ? a.name.localeCompare(b.name)
+          : b.usageCount - a.usageCount
       );
   }, [searchTerm, selectedCategory, sortMode]);
 
   const playSound = () => {
     if (!soundOn || !tickAudio) return;
+
     void tickAudio.play().catch(() => undefined);
   };
 
   const toggleItem = (item: string) => {
     playSound();
+
     setShoppingList((prev) =>
-      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+      prev.includes(item)
+        ? prev.filter((i) => i !== item)
+        : [...prev, item]
     );
   };
 
   const quickAddItem = (item: string) => {
     if (shoppingList.includes(item)) return;
+
     playSound();
     setShoppingList((prev) => [...prev, item]);
     setGlobalSearch("");
   };
 
-  // FIX: persist to Supabase, then refresh to get the real DB-generated ID
   const addCategory = async () => {
     const name = newCategoryName.trim();
+
     if (!name) return;
+
     setNewCategoryName("");
 
-    const { error } = await createCategory(HOUSEHOLD_ID, { name, icon: "general" });
+    const { error } = await createCategory(HOUSEHOLD_ID, {
+      name,
+      icon: "general",
+    });
+
     if (error) {
       console.error("Failed to create category:", error);
       return;
     }
+
     await refreshCategories();
   };
 
-  // FIX: persist to Supabase, then refresh to get the real DB-generated ID
   const addProduct = async () => {
     const name = newProductName.trim();
+
     if (!name || !selectedCategory) return;
+
     setNewProductName("");
 
     const { error } = await createProduct(selectedCategory.id, name);
+
     if (error) {
       console.error("Failed to create product:", error);
       return;
     }
+
     await refreshCategories();
   };
 
-  // FIX: persist the rename + category update to Supabase
   const saveProductEdit = async () => {
     if (!editingProductId || !editingProductCategoryId) return;
 
     const trimmedName = editingProductName.trim();
+
     if (!trimmedName) return;
 
     setEditingProductId(null);
@@ -235,13 +269,23 @@ export default function Home() {
 
   const deleteProduct = () => {
     if (!editingProduct) return;
-    setPendingDelete({ type: "product", id: editingProduct.id, name: editingProduct.name });
+
+    setPendingDelete({
+      type: "product",
+      id: editingProduct.id,
+      name: editingProduct.name,
+    });
   };
 
   const saveCategoryEdit = async () => {
     if (!editingCategoryId || !editingCategoryName.trim()) return;
-    const { error } = await updateCategory(editingCategoryId, { name: editingCategoryName });
+
+    const { error } = await updateCategory(editingCategoryId, {
+      name: editingCategoryName,
+    });
+
     if (error) return;
+
     await refreshCategories();
     setEditingCategoryId(null);
     setEditingCategoryName("");
@@ -249,6 +293,7 @@ export default function Home() {
 
   const deleteCategory = () => {
     if (!editingCategory) return;
+
     setPendingDelete({
       type: "category",
       id: editingCategory.id,
@@ -261,63 +306,89 @@ export default function Home() {
     if (!pendingDelete) return;
 
     if (pendingDelete.type === "product") {
-      // Optimistic UI update
       setCategories((prev) =>
         prev.map((c) =>
           c.id === selectedCategoryId
-            ? { ...c, products: c.products.filter((p) => p.id !== pendingDelete.id) }
+            ? {
+                ...c,
+                products: c.products.filter((p) => p.id !== pendingDelete.id),
+              }
             : c
         )
       );
-      // Close modals before async work so they can never re-open
+
       setEditingProductId(null);
       setEditingProductName("");
       setEditingProductCategoryId(null);
       setPendingDelete(null);
 
       const { error } = await deleteProductFromDb(pendingDelete.id);
+
       if (error) {
         console.error("Failed to delete product:", error);
-        await refreshCategories(); // revert optimistic update
+        await refreshCategories();
       }
+
       return;
     }
 
     if (pendingDelete.type === "category") {
-      // Optimistic UI update
-      setCategories((prev) => prev.filter((c) => c.id !== pendingDelete.id));
-      if (selectedCategoryId === pendingDelete.id) setSelectedCategoryId(null);
+      setCategories((prev) =>
+        prev.filter((c) => c.id !== pendingDelete.id)
+      );
+
+      if (selectedCategoryId === pendingDelete.id) {
+        setSelectedCategoryId(null);
+      }
+
       setEditingCategoryId(null);
       setEditingCategoryName("");
       setPendingDelete(null);
 
       const { error } = await deleteCategoryFromDb(pendingDelete.id);
+
       if (error) {
         console.error("Failed to delete category:", error);
-        await refreshCategories(); // revert optimistic update
+        await refreshCategories();
       }
     }
   };
 
   const exportDoc = async () => {
     const createdAt = await exportShoppingDoc(shoppingList);
+
     if (!createdAt) return;
-    setHistory((prev) => [{ id: createdAt, createdAt, items: shoppingList }, ...prev]);
+
+    setHistory((prev) => [
+      {
+        id: createdAt,
+        createdAt,
+        items: shoppingList,
+      },
+      ...prev,
+    ]);
+
     setShoppingList([]);
   };
 
   const handleEditProduct = useCallback(
     (productId: string) => {
-      const product = selectedCategory?.products.find((p) => p.id === productId);
+      const product = selectedCategory?.products.find(
+        (p) => p.id === productId
+      );
+
       if (!product) return;
+
       setEditingProductId(product.id);
       setEditingProductName(product.name);
-      setEditingProductCategoryId(selectedCategory.id);
+      setEditingProductCategoryId(product.category_id);
     },
     [selectedCategory]
   );
 
-  if (loading || isLoading || categoriesLoading) return <LoadingScreen />;
+  if (loading || isLoading || categoriesLoading) {
+    return <LoadingScreen />;
+  }
 
   if (!session) {
     return (
@@ -354,9 +425,12 @@ export default function Home() {
         />
 
         <section className="mt-8">
-          <div className={`relative rounded-3xl border p-4 backdrop-blur-xl ${cardClass}`}>
+          <div
+            className={`relative rounded-3xl border p-4 backdrop-blur-xl ${cardClass}`}
+          >
             <div className="flex items-center gap-3">
               <Search className="text-cyan-400" size={22} />
+
               <input
                 value={globalSearch}
                 onChange={(e) => setGlobalSearch(e.target.value)}
@@ -375,8 +449,11 @@ export default function Home() {
                   >
                     <div>
                       <div className="font-medium">{product.name}</div>
-                      <div className="text-sm opacity-60">{product.categoryName}</div>
+                      <div className="text-sm opacity-60">
+                        {product.categoryName}
+                      </div>
                     </div>
+
                     <div className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-600">
                       הוסף
                     </div>
@@ -394,7 +471,9 @@ export default function Home() {
               <h2 className="text-3xl font-bold">בחר קטגוריה</h2>
             </div>
 
-            <div className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}>
+            <div
+              className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}
+            >
               <input
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
@@ -402,6 +481,7 @@ export default function Home() {
                 placeholder="הוסף קטגוריה"
                 className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
               />
+
               <button
                 onClick={addCategory}
                 className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
@@ -433,7 +513,11 @@ export default function Home() {
         </section>
       </div>
 
-      <ShoppingDrawer items={shoppingList} onRemove={toggleItem} onExport={exportDoc} />
+      <ShoppingDrawer
+        items={shoppingList}
+        onRemove={toggleItem}
+        onExport={exportDoc}
+      />
 
       <CategoryModal
         category={selectedCategory}
@@ -455,7 +539,10 @@ export default function Home() {
         category={editingCategory}
         open={Boolean(editingCategory)}
         value={editingCategoryName}
-        onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }}
+        onClose={() => {
+          setEditingCategoryId(null);
+          setEditingCategoryName("");
+        }}
         onChange={setEditingCategoryName}
         onSave={saveCategoryEdit}
         onDelete={deleteCategory}
@@ -492,7 +579,10 @@ export default function Home() {
         open={historyOpen}
         history={history}
         onClose={() => setHistoryOpen(false)}
-        onLoad={(items) => { setShoppingList(items); setHistoryOpen(false); }}
+        onLoad={(items) => {
+          setShoppingList(items);
+          setHistoryOpen(false);
+        }}
       />
     </main>
   );
