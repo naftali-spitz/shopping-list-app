@@ -7,20 +7,26 @@ type Product = Category["products"][number];
 
 type EditProductModalProps = {
   product: Product | null;
+  categories: Category[];
+  selectedCategoryId: string | null;
   open: boolean;
   value: string;
   onClose: () => void;
   onChange: (value: string) => void;
+  onCategoryChange: (value: string) => void;
   onSave: () => void;
   onDelete: () => void;
 };
 
 export function EditProductModal({
   product,
+  categories,
+  selectedCategoryId,
   open,
   value,
   onClose,
   onChange,
+  onCategoryChange,
   onSave,
   onDelete,
 }: EditProductModalProps) {
@@ -48,14 +54,36 @@ export function EditProductModal({
               </p>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm text-white/70">שם מוצר</label>
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-sm text-white/70">שם מוצר</label>
 
-              <input
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition focus:border-cyan-400"
-              />
+                <input
+                  value={value}
+                  onChange={(event) => onChange(event.target.value)}
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition focus:border-cyan-400"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-white/70">קטגוריה</label>
+
+                <select
+                  value={selectedCategoryId ?? ""}
+                  onChange={(event) => onCategoryChange(event.target.value)}
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition focus:border-cyan-400"
+                >
+                  {categories.map((category) => (
+                    <option
+                      key={category.id}
+                      value={category.id}
+                      className="bg-[#0d1328]"
+                    >
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="mt-8 flex items-center justify-between gap-3">
