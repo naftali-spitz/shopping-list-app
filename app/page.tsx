@@ -65,6 +65,7 @@ export default function Home() {
   const [editingCategoryName, setEditingCategoryName] = useState("");
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [editingProductName, setEditingProductName] = useState("");
+  const [editingProductCategoryId, setEditingProductCategoryId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [shoppingList, setShoppingList] = useState<string[]>([]);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -208,19 +209,27 @@ export default function Home() {
     await refreshCategories();
   };
 
-  // FIX: persist the rename to Supabase
+  // FIX: persist the rename + category update to Supabase
   const saveProductEdit = async () => {
-    if (!selectedCategory || !editingProductId) return;
+    if (!editingProductId || !editingProductCategoryId) return;
+
     const trimmedName = editingProductName.trim();
     if (!trimmedName) return;
 
     setEditingProductId(null);
     setEditingProductName("");
+    setEditingProductCategoryId(null);
 
-    const { error } = await updateProduct(editingProductId, trimmedName);
+    const { error } = await updateProduct(
+      editingProductId,
+      trimmedName,
+      editingProductCategoryId
+    );
+
     if (error) {
       console.error("Failed to update product:", error);
     }
+
     await refreshCategories();
   };
 
@@ -263,6 +272,7 @@ export default function Home() {
       // Close modals before async work so they can never re-open
       setEditingProductId(null);
       setEditingProductName("");
+      setEditingProductCategoryId(null);
       setPendingDelete(null);
 
       const { error } = await deleteProductFromDb(pendingDelete.id);
@@ -302,6 +312,7 @@ export default function Home() {
       if (!product) return;
       setEditingProductId(product.id);
       setEditingProductName(product.name);
+      setEditingProductCategoryId(selectedCategory.id);
     },
     [selectedCategory]
   );
@@ -452,10 +463,17 @@ export default function Home() {
 
       <EditProductModal
         product={editingProduct}
+        categories={categories}
+        selectedCategoryId={editingProductCategoryId}
         open={Boolean(editingProductId)}
         value={editingProductName}
-        onClose={() => { setEditingProductId(null); setEditingProductName(""); }}
+        onClose={() => {
+          setEditingProductId(null);
+          setEditingProductName("");
+          setEditingProductCategoryId(null);
+        }}
         onChange={setEditingProductName}
+        onCategoryChange={setEditingProductCategoryId}
         onSave={saveProductEdit}
         onDelete={deleteProduct}
       />
