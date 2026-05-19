@@ -7,10 +7,17 @@ export async function createProduct(categoryId: string, name: string) {
   });
 }
 
-export async function updateProduct(productId: string, name: string) {
+export async function updateProduct(
+  productId: string,
+  name: string,
+  categoryId: string
+) {
   return supabase
     .from("products")
-    .update({ name })
+    .update({
+      name,
+      category_id: categoryId,
+    })
     .eq("id", productId);
 }
 
