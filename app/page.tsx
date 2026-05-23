@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { AnimatedBackground } from "@/components/animated-background";
 import { AuthButton } from "@/components/auth-button";
@@ -13,21 +13,11 @@ import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
+import { useCategoryProductActions } from "@/hooks/use-category-product-actions";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
-import { HOUSEHOLD_ID } from "@/lib/constants";
-import {
-  createCategory,
-  deleteCategory as deleteCategoryFromDb,
-  updateCategory,
-} from "@/lib/db/categories";
-import {
-  createProduct,
-  deleteProduct as deleteProductFromDb,
-  updateProduct,
-} from "@/lib/db/products";
 import { Category } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
@@ -51,7 +41,6 @@ export default function Home() {
     history,
     isLoading,
     quickAddItem,
-    setHistory,
     setShoppingList,
     shoppingList,
     soundOn,
@@ -97,17 +86,6 @@ export default function Home() {
     () => categories.find((c) => c.id === selectedCategoryId) ?? null,
     [categories, selectedCategoryId]
   );
-
-  const editingCategory = useMemo(
-    () => categories.find((c) => c.id === editingCategoryId) ?? null,
-    [categories, editingCategoryId]
-  );
-
-  const editingProduct = useMemo(() => {
-    if (!selectedCategory || !editingProductId) return null;
-
-    return selectedCategory.products.find((p) => p.id === editingProductId) ?? null;
-  }, [selectedCategory, editingProductId]);
 
   const globalResults = useMemo(() => {
     if (!globalSearch.trim()) return [];
@@ -159,168 +137,39 @@ export default function Home() {
       );
   }, [searchTerm, selectedCategory, sortMode]);
 
-  const addCategory = async () => {
-    const name = newCategoryName.trim();
-
-    if (!name) return;
-
-    setNewCategoryName("");
-
-    const { error } = await createCategory(HOUSEHOLD_ID, {
-      name,
-      icon: "general",
-    });
-
-    if (error) {
-      console.error("Failed to create category:", error);
-      return;
-    }
-
-    await refreshCategories();
-  };
-
-  const addProduct = async () => {
-    const name = newProductName.trim();
-
-    if (!name || !selectedCategory) return;
-
-    setNewProductName("");
-
-    const { error } = await createProduct(selectedCategory.id, name);
-
-    if (error) {
-      console.error("Failed to create product:", error);
-      return;
-    }
-
-    await refreshCategories();
-  };
-
-  const saveProductEdit = async () => {
-    if (!editingProductId || !editingProductCategoryId) return;
-
-    const trimmedName = editingProductName.trim();
-
-    if (!trimmedName) return;
-
-    setEditingProductId(null);
-    setEditingProductName("");
-    setEditingProductCategoryId(null);
-
-    const { error } = await updateProduct(
-      editingProductId,
-      trimmedName,
-      editingProductCategoryId
-    );
-
-    if (error) {
-      console.error("Failed to update product:", error);
-    }
-
-    await refreshCategories();
-  };
-
-  const deleteProduct = () => {
-    if (!editingProduct) return;
-
-    setPendingDelete({
-      type: "product",
-      id: editingProduct.id,
-      name: editingProduct.name,
-    });
-  };
-
-  const saveCategoryEdit = async () => {
-    if (!editingCategoryId || !editingCategoryName.trim()) return;
-
-    const { error } = await updateCategory(editingCategoryId, {
-      name: editingCategoryName,
-    });
-
-    if (error) return;
-
-    await refreshCategories();
-    setEditingCategoryId(null);
-    setEditingCategoryName("");
-  };
-
-  const deleteCategory = () => {
-    if (!editingCategory) return;
-
-    setPendingDelete({
-      type: "category",
-      id: editingCategory.id,
-      name: editingCategory.name,
-      productCount: editingCategory.products.length,
-    });
-  };
-
-  const confirmDelete = async () => {
-    if (!pendingDelete) return;
-
-    if (pendingDelete.type === "product") {
-      setCategories((prev) =>
-        prev.map((c) =>
-          c.id === selectedCategoryId
-            ? {
-                ...c,
-                products: c.products.filter((p) => p.id !== pendingDelete.id),
-              }
-            : c
-        )
-      );
-
-      setEditingProductId(null);
-      setEditingProductName("");
-      setEditingProductCategoryId(null);
-      setPendingDelete(null);
-
-      const { error } = await deleteProductFromDb(pendingDelete.id);
-
-      if (error) {
-        console.error("Failed to delete product:", error);
-        await refreshCategories();
-      }
-
-      return;
-    }
-
-    if (pendingDelete.type === "category") {
-      setCategories((prev) =>
-        prev.filter((c) => c.id !== pendingDelete.id)
-      );
-
-      if (selectedCategoryId === pendingDelete.id) {
-        setSelectedCategoryId(null);
-      }
-
-      setEditingCategoryId(null);
-      setEditingCategoryName("");
-      setPendingDelete(null);
-
-      const { error } = await deleteCategoryFromDb(pendingDelete.id);
-
-      if (error) {
-        console.error("Failed to delete category:", error);
-        await refreshCategories();
-      }
-    }
-  };
-
-  const handleEditProduct = useCallback(
-    (productId: string) => {
-      const product = selectedCategory?.products.find(
-        (p) => p.id === productId
-      );
-
-      if (!product) return;
-
-      setEditingProductId(product.id);
-      setEditingProductName(product.name);
-      setEditingProductCategoryId(product.category_id);
-    },
-    [selectedCategory]
-  );
+  const {
+    addCategory,
+    addProduct,
+    confirmDelete,
+    deleteCategory,
+    deleteProduct,
+    editingCategory,
+    editingProduct,
+    handleEditProduct,
+    saveCategoryEdit,
+    saveProductEdit,
+  } = useCategoryProductActions({
+    categories,
+    selectedCategory,
+    selectedCategoryId,
+    editingCategoryId,
+    editingCategoryName,
+    editingProductId,
+    editingProductName,
+    editingProductCategoryId,
+    pendingDelete,
+    refreshCategories,
+    setCategories,
+    setEditingCategoryId,
+    setEditingCategoryName,
+    setEditingProductId,
+    setEditingProductName,
+    setEditingProductCategoryId,
+    setPendingDelete,
+    setSelectedCategoryId,
+    setNewCategoryName,
+    setNewProductName,
+  });
 
   if (loading || isLoading || categoriesLoading) {
     return <LoadingScreen />;
@@ -416,13 +265,15 @@ export default function Home() {
               <input
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addCategory()}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && addCategory(newCategoryName)
+                }
                 placeholder="הוסף קטגוריה"
                 className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
               />
 
               <button
-                onClick={addCategory}
+                onClick={() => addCategory(newCategoryName)}
                 className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
               >
                 הוסף
@@ -470,7 +321,7 @@ export default function Home() {
         onSearchChange={setSearchTerm}
         onSortChange={setSortMode}
         onNewProductChange={setNewProductName}
-        onAddProduct={addProduct}
+        onAddProduct={() => addProduct(newProductName)}
         onEditProduct={handleEditProduct}
       />
 
