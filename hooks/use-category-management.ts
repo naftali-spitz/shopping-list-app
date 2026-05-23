@@ -41,17 +41,16 @@ export function useCategoryManagement({
   const [editingProductCategoryId, setEditingProductCategoryId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
 
-  const selectedCategory = categories.find(
-    (category) => category.id === selectedCategoryId
-  );
+  const selectedCategory =
+    categories.find((category) => category.id === selectedCategoryId) ?? null;
 
-  const editingCategory = categories.find(
-    (category) => category.id === editingCategoryId
-  );
+  const editingCategory =
+    categories.find((category) => category.id === editingCategoryId) ?? null;
 
-  const editingProduct = selectedCategory?.products.find(
-    (product) => product.id === editingProductId
-  );
+  const editingProduct =
+    selectedCategory?.products.find(
+      (product) => product.id === editingProductId
+    ) ?? null;
 
   const addCategory = useCallback(async () => {
     const name = newCategoryName.trim();
