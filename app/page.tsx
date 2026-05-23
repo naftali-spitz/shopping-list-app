@@ -13,7 +13,7 @@ import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
-import { useCategoryProductActions } from "@/hooks/use-category-product-actions";
+import { useCategoryManagement } from "@/hooks/use-category-management";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
@@ -21,10 +21,6 @@ import { isAllowedEmail } from "@/lib/auth/whitelist";
 import { Category } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
-
-type PendingDelete =
-  | { type: "category"; id: string; name: string; productCount: number }
-  | { type: "product"; id: string; name: string };
 
 export default function Home() {
   const { session, loading } = useSession();
@@ -49,19 +45,46 @@ export default function Home() {
   } = useShoppingState();
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
-  const [editingCategoryName, setEditingCategoryName] = useState("");
-  const [editingProductId, setEditingProductId] = useState<string | null>(null);
-  const [editingProductName, setEditingProductName] = useState("");
-  const [editingProductCategoryId, setEditingProductCategoryId] = useState<string | null>(null);
-  const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const [darkMode, setDarkMode] = useState(false);
   const [sortMode, setSortMode] = useState<"az" | "popular">("popular");
   const [searchTerm, setSearchTerm] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
-  const [newCategoryName, setNewCategoryName] = useState("");
-  const [newProductName, setNewProductName] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
+
+  const {
+    addCategory,
+    addProduct,
+    confirmDelete,
+    deleteCategory,
+    deleteProduct,
+    editingCategory,
+    editingCategoryId,
+    editingCategoryName,
+    editingProduct,
+    editingProductCategoryId,
+    editingProductId,
+    editingProductName,
+    handleEditProduct,
+    newCategoryName,
+    newProductName,
+    pendingDelete,
+    saveCategoryEdit,
+    saveProductEdit,
+    setEditingCategoryId,
+    setEditingCategoryName,
+    setEditingProductCategoryId,
+    setEditingProductId,
+    setEditingProductName,
+    setNewCategoryName,
+    setNewProductName,
+    setPendingDelete,
+  } = useCategoryManagement({
+    categories,
+    selectedCategoryId,
+    refreshCategories,
+    setCategories,
+    setSelectedCategoryId,
+  });
 
   const anyModalOpen =
     Boolean(selectedCategoryId) ||
@@ -136,40 +159,6 @@ export default function Home() {
           : b.usageCount - a.usageCount
       );
   }, [searchTerm, selectedCategory, sortMode]);
-
-  const {
-    addCategory,
-    addProduct,
-    confirmDelete,
-    deleteCategory,
-    deleteProduct,
-    editingCategory,
-    editingProduct,
-    handleEditProduct,
-    saveCategoryEdit,
-    saveProductEdit,
-  } = useCategoryProductActions({
-    categories,
-    selectedCategory,
-    selectedCategoryId,
-    editingCategoryId,
-    editingCategoryName,
-    editingProductId,
-    editingProductName,
-    editingProductCategoryId,
-    pendingDelete,
-    refreshCategories,
-    setCategories,
-    setEditingCategoryId,
-    setEditingCategoryName,
-    setEditingProductId,
-    setEditingProductName,
-    setEditingProductCategoryId,
-    setPendingDelete,
-    setSelectedCategoryId,
-    setNewCategoryName,
-    setNewProductName,
-  });
 
   if (loading || isLoading || categoriesLoading) {
     return <LoadingScreen />;
@@ -265,15 +254,13 @@ export default function Home() {
               <input
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && addCategory(newCategoryName)
-                }
+                onKeyDown={(e) => e.key === "Enter" && addCategory()}
                 placeholder="הוסף קטגוריה"
                 className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
               />
 
               <button
-                onClick={() => addCategory(newCategoryName)}
+                onClick={addCategory}
                 className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
               >
                 הוסף
@@ -321,7 +308,7 @@ export default function Home() {
         onSearchChange={setSearchTerm}
         onSortChange={setSortMode}
         onNewProductChange={setNewProductName}
-        onAddProduct={() => addProduct(newProductName)}
+        onAddProduct={addProduct}
         onEditProduct={handleEditProduct}
       />
 
