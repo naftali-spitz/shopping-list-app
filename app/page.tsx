@@ -15,6 +15,7 @@ import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
+import { useShoppingState } from "@/hooks/use-shopping-state";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
 import { HOUSEHOLD_ID } from "@/lib/constants";
 import {
@@ -27,23 +28,9 @@ import {
   deleteProduct as deleteProductFromDb,
   updateProduct,
 } from "@/lib/db/products";
-import { exportShoppingDoc } from "@/lib/export-doc";
-import {
-  loadHistory,
-  loadShoppingList,
-  saveHistory,
-  saveShoppingList,
-} from "@/lib/storage";
-import { Category, HistoryEntry } from "@/types/shopping";
+import { Category } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
-
-const tickAudio =
-  typeof Audio !== "undefined"
-    ? new Audio(
-        "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="
-      )
-    : null;
 
 type PendingDelete =
   | { type: "category"; id: string; name: string; productCount: number }
@@ -59,7 +46,19 @@ export default function Home() {
     refreshCategories,
   } = useSharedCategories(initialCategories);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    exportDoc,
+    history,
+    isLoading,
+    quickAddItem,
+    setHistory,
+    setShoppingList,
+    shoppingList,
+    soundOn,
+    setSoundOn,
+    toggleItem,
+  } = useShoppingState();
+
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [editingCategoryName, setEditingCategoryName] = useState("");
@@ -67,10 +66,7 @@ export default function Home() {
   const [editingProductName, setEditingProductName] = useState("");
   const [editingProductCategoryId, setEditingProductCategoryId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
-  const [shoppingList, setShoppingList] = useState<string[]>([]);
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [darkMode, setDarkMode] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
   const [sortMode, setSortMode] = useState<"az" | "popular">("popular");
   const [searchTerm, setSearchTerm] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
@@ -78,7 +74,6 @@ export default function Home() {
   const [newProductName, setNewProductName] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
 
-  // Scroll lock whenever any modal is open
   const anyModalOpen =
     Boolean(selectedCategoryId) ||
     Boolean(editingCategoryId) ||
@@ -92,29 +87,11 @@ export default function Home() {
     } else {
       document.body.style.overflow = "";
     }
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [anyModalOpen]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-      const savedList = loadShoppingList();
-      const savedHistory = loadHistory();
-      if (savedList) setShoppingList(savedList);
-      if (savedHistory) setHistory(savedHistory);
-    }, 0);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    saveShoppingList(shoppingList);
-  }, [shoppingList]);
-
-  useEffect(() => {
-    saveHistory(history);
-  }, [history]);
 
   const selectedCategory = useMemo(
     () => categories.find((c) => c.id === selectedCategoryId) ?? null,
@@ -152,13 +129,13 @@ export default function Home() {
     if (pendingDelete.type === "category") {
       return {
         confirmTitle: "מחיקת קטגוריה?",
-        confirmDescription: `הקטגוריה "${pendingDelete.name}" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`,
+        confirmDescription: `הקטגוריה \"${pendingDelete.name}\" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`,
       };
     }
 
     return {
       confirmTitle: "מחיקת מוצר?",
-      confirmDescription: `המוצר "${pendingDelete.name}" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`,
+      confirmDescription: `המוצר \"${pendingDelete.name}\" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`,
     };
   }, [pendingDelete]);
 
@@ -181,30 +158,6 @@ export default function Home() {
           : b.usageCount - a.usageCount
       );
   }, [searchTerm, selectedCategory, sortMode]);
-
-  const playSound = () => {
-    if (!soundOn || !tickAudio) return;
-
-    void tickAudio.play().catch(() => undefined);
-  };
-
-  const toggleItem = (item: string) => {
-    playSound();
-
-    setShoppingList((prev) =>
-      prev.includes(item)
-        ? prev.filter((i) => i !== item)
-        : [...prev, item]
-    );
-  };
-
-  const quickAddItem = (item: string) => {
-    if (shoppingList.includes(item)) return;
-
-    playSound();
-    setShoppingList((prev) => [...prev, item]);
-    setGlobalSearch("");
-  };
 
   const addCategory = async () => {
     const name = newCategoryName.trim();
@@ -354,23 +307,6 @@ export default function Home() {
     }
   };
 
-  const exportDoc = async () => {
-    const createdAt = await exportShoppingDoc(shoppingList);
-
-    if (!createdAt) return;
-
-    setHistory((prev) => [
-      {
-        id: createdAt,
-        createdAt,
-        items: shoppingList,
-      },
-      ...prev,
-    ]);
-
-    setShoppingList([]);
-  };
-
   const handleEditProduct = useCallback(
     (productId: string) => {
       const product = selectedCategory?.products.find(
@@ -444,7 +380,10 @@ export default function Home() {
                 {globalResults.map((product) => (
                   <button
                     key={product.id}
-                    onClick={() => quickAddItem(product.name)}
+                    onClick={() => {
+                      quickAddItem(product.name);
+                      setGlobalSearch("");
+                    }}
                     className="flex w-full items-center justify-between rounded-2xl border border-black/5 bg-white/60 px-4 py-3 text-right transition hover:scale-[1.01] hover:bg-cyan-50 dark:border-white/10 dark:bg-white/5"
                   >
                     <div>
