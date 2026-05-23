@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Search, Sparkles } from "lucide-react";
 import { AnimatedBackground } from "@/components/animated-background";
 import { AuthButton } from "@/components/auth-button";
-import { CategoryCard } from "@/components/category-card";
+import { CategoriesSection } from "@/components/categories-section";
 import { CategoryModal } from "@/components/category-modal";
 import { ConfirmModal } from "@/components/confirm-modal";
 import { EditCategoryModal } from "@/components/edit-category-modal";
 import { EditProductModal } from "@/components/edit-product-modal";
+import { GlobalSearchSection } from "@/components/global-search-section";
 import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
@@ -198,96 +198,33 @@ export default function Home() {
           onOpenHistory={() => setHistoryOpen(true)}
         />
 
-        <section className="mt-8">
-          <div
-            className={`relative rounded-3xl border p-4 backdrop-blur-xl ${cardClass}`}
-          >
-            <div className="flex items-center gap-3">
-              <Search className="text-cyan-400" size={22} />
+        <GlobalSearchSection
+          cardClass={cardClass}
+          globalSearch={globalSearch}
+          globalResults={globalResults}
+          onGlobalSearchChange={setGlobalSearch}
+          onQuickAdd={(item) => {
+            quickAddItem(item);
+            setGlobalSearch("");
+          }}
+        />
 
-              <input
-                value={globalSearch}
-                onChange={(e) => setGlobalSearch(e.target.value)}
-                placeholder="חיפוש מהיר להוספה לרשימה..."
-                className="w-full bg-transparent text-lg outline-none placeholder:text-slate-400"
-              />
-            </div>
-
-            {globalResults.length > 0 && (
-              <div className="mt-4 space-y-2">
-                {globalResults.map((product) => (
-                  <button
-                    key={product.id}
-                    onClick={() => {
-                      quickAddItem(product.name);
-                      setGlobalSearch("");
-                    }}
-                    className="flex w-full items-center justify-between rounded-2xl border border-black/5 bg-white/60 px-4 py-3 text-right transition hover:scale-[1.01] hover:bg-cyan-50 dark:border-white/10 dark:bg-white/5"
-                  >
-                    <div>
-                      <div className="font-medium">{product.name}</div>
-                      <div className="text-sm opacity-60">
-                        {product.categoryName}
-                      </div>
-                    </div>
-
-                    <div className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-600">
-                      הוסף
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-
-        <section className="mt-10">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Sparkles className="text-cyan-300" />
-              <h2 className="text-3xl font-bold">בחר קטגוריה</h2>
-            </div>
-
-            <div
-              className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}
-            >
-              <input
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addCategory()}
-                placeholder="הוסף קטגוריה"
-                className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
-              />
-
-              <button
-                onClick={addCategory}
-                className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
-              >
-                הוסף
-              </button>
-            </div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {categories.map((category, index) => (
-              <CategoryCard
-                key={category.id}
-                category={category}
-                index={index}
-                cardClass={cardClass}
-                darkMode={darkMode}
-                onOpen={() => {
-                  setSelectedCategoryId(category.id);
-                  setSearchTerm("");
-                }}
-                onDelete={() => {
-                  setEditingCategoryId(category.id);
-                  setEditingCategoryName(category.name);
-                }}
-              />
-            ))}
-          </div>
-        </section>
+        <CategoriesSection
+          cardClass={cardClass}
+          categories={categories}
+          darkMode={darkMode}
+          newCategoryName={newCategoryName}
+          onAddCategory={addCategory}
+          onCategoryNameChange={setNewCategoryName}
+          onDeleteCategory={(categoryId, categoryName) => {
+            setEditingCategoryId(categoryId);
+            setEditingCategoryName(categoryName);
+          }}
+          onOpenCategory={(categoryId) => {
+            setSelectedCategoryId(categoryId);
+            setSearchTerm("");
+          }}
+        />
       </div>
 
       <ShoppingDrawer
