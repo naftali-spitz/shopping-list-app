@@ -18,6 +18,7 @@ import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
+import { supabase } from "@/lib/supabase";
 import { Category } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
@@ -164,6 +165,14 @@ export default function Home() {
       );
   }, [searchTerm, selectedCategory, sortMode]);
 
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   if (loading || isLoading || categoriesLoading) {
     return <LoadingScreen />;
   }
@@ -200,6 +209,7 @@ export default function Home() {
           onToggleTheme={() => setDarkMode((v) => !v)}
           onExport={exportDoc}
           onOpenHistory={() => setHistoryOpen(true)}
+          onLogout={() => void handleLogout()}
         />
 
         <GlobalSearchSection
