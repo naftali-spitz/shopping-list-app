@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { exportShoppingList } from "@/lib/db/history";
+import {
+  exportShoppingList,
+  fetchHistory,
+} from "@/lib/db/history";
+import { HOUSEHOLD_ID } from "@/lib/constants";
 import { updateProductChecked } from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
-import { loadHistory, saveHistory } from "@/lib/storage";
+import { saveHistory } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
 
 const tickAudio =
@@ -29,17 +33,27 @@ export function useShoppingState({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
+    const loadInitialData = async () => {
+      const { data } = await fetchHistory(HOUSEHOLD_ID);
 
-      const savedHistory = loadHistory();
-
-      if (savedHistory) {
-        setHistory(savedHistory);
+      if (data) {
+        setHistory(
+          data.map((entry: any) => ({
+            id: entry.id,
+            createdAt: entry.exported_at,
+            items: Array.isArray(entry.items)
+              ? entry.items.map((item: any) =>
+                  typeof item === "string" ? item : item.name
+                )
+              : [],
+          }))
+        );
       }
-    }, 0);
 
-    return () => clearTimeout(timeout);
+      setIsLoading(false);
+    };
+
+    void loadInitialData();
   }, []);
 
   useEffect(() => {
