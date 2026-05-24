@@ -3,6 +3,7 @@ export type Product = {
   name: string;
   usageCount: number;
   category_id: string;
+  checked: boolean;
 };
 
 export type Category = {
