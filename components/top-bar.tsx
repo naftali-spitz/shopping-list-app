@@ -1,7 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { History, ShoppingCart, Sun, Moon } from "lucide-react";
+import {
+  History,
+  LogOut,
+  ShoppingCart,
+  Sun,
+  Moon,
+} from "lucide-react";
 
 type TopBarProps = {
   darkMode: boolean;
@@ -10,6 +16,7 @@ type TopBarProps = {
   onToggleSound: () => void;
   onExport: () => void;
   onOpenHistory: () => void;
+  onLogout: () => void;
   cardClass: string;
 };
 
@@ -20,6 +27,7 @@ export function TopBar({
   onToggleSound,
   onExport,
   onOpenHistory,
+  onLogout,
   cardClass,
 }: TopBarProps) {
   return (
@@ -62,6 +70,14 @@ export function TopBar({
           className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"
         >
           {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+
+        <button
+          onClick={onLogout}
+          className="flex items-center gap-2 rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-2 text-sm transition hover:bg-red-400/20"
+        >
+          <LogOut size={16} />
+          Logout
         </button>
 
         <button
