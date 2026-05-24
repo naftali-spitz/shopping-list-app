@@ -43,12 +43,14 @@ export function useShoppingState({
     saveHistory(history);
   }, [history]);
 
-  const shoppingProducts = useMemo(
-    () =>
-      categories.flatMap((category) =>
-        category.products.filter((product) => product.checked)
-      ),
+  const allProducts = useMemo(
+    () => categories.flatMap((category) => category.products),
     [categories]
+  );
+
+  const shoppingProducts = useMemo(
+    () => allProducts.filter((product) => product.checked),
+    [allProducts]
   );
 
   const shoppingList = useMemo(
@@ -64,7 +66,7 @@ export function useShoppingState({
 
   const toggleItem = useCallback(
     async (item: string) => {
-      const product = shoppingProducts.find((p) => p.name === item);
+      const product = allProducts.find((p) => p.name === item);
 
       if (!product) return;
 
@@ -82,14 +84,12 @@ export function useShoppingState({
 
       await refreshCategories();
     },
-    [playSound, refreshCategories, shoppingProducts]
+    [allProducts, playSound, refreshCategories]
   );
 
   const quickAddItem = useCallback(
     async (item: string) => {
-      const product = categories
-        .flatMap((category) => category.products)
-        .find((p) => p.name === item);
+      const product = allProducts.find((p) => p.name === item);
 
       if (!product || product.checked) {
         return;
@@ -106,13 +106,11 @@ export function useShoppingState({
 
       await refreshCategories();
     },
-    [categories, playSound, refreshCategories]
+    [allProducts, playSound, refreshCategories]
   );
 
   const setShoppingList = useCallback(
     async (items: string[]) => {
-      const allProducts = categories.flatMap((category) => category.products);
-
       await Promise.all(
         allProducts.map((product) =>
           updateProductChecked(product.id, items.includes(product.name))
@@ -121,7 +119,7 @@ export function useShoppingState({
 
       await refreshCategories();
     },
-    [categories, refreshCategories]
+    [allProducts, refreshCategories]
   );
 
   const exportDoc = useCallback(async () => {
