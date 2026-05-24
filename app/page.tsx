@@ -45,6 +45,7 @@ export default function Home() {
   } = useShoppingState({
     categories,
     refreshCategories,
+    setCategories,
   });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
