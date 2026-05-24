@@ -24,3 +24,12 @@ export async function exportShoppingList() {
     p_household_id: HOUSEHOLD_ID,
   });
 }
+
+export async function addProductsToShoppingList(
+  productNames: string[]
+) {
+  return supabase.rpc("add_products_to_shopping_list", {
+    p_household_id: HOUSEHOLD_ID,
+    p_product_names: productNames,
+  });
+}
