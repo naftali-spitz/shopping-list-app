@@ -1,13 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { updateProductChecked } from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
-import {
-  loadHistory,
-  loadShoppingList,
-  saveHistory,
-  saveShoppingList,
-} from "@/lib/storage";
-import { HistoryEntry } from "@/types/shopping";
+import { loadHistory, saveHistory } from "@/lib/storage";
+import { Category, HistoryEntry } from "@/types/shopping";
 
 const tickAudio =
   typeof Audio !== "undefined"
@@ -16,8 +12,15 @@ const tickAudio =
       )
     : null;
 
-export function useShoppingState() {
-  const [shoppingList, setShoppingList] = useState<string[]>([]);
+type UseShoppingStateProps = {
+  categories: Category[];
+  refreshCategories: () => Promise<void>;
+};
+
+export function useShoppingState({
+  categories,
+  refreshCategories,
+}: UseShoppingStateProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [soundOn, setSoundOn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,12 +29,7 @@ export function useShoppingState() {
     const timeout = setTimeout(() => {
       setIsLoading(false);
 
-      const savedList = loadShoppingList();
       const savedHistory = loadHistory();
-
-      if (savedList) {
-        setShoppingList(savedList);
-      }
 
       if (savedHistory) {
         setHistory(savedHistory);
@@ -42,12 +40,21 @@ export function useShoppingState() {
   }, []);
 
   useEffect(() => {
-    saveShoppingList(shoppingList);
-  }, [shoppingList]);
-
-  useEffect(() => {
     saveHistory(history);
   }, [history]);
+
+  const shoppingProducts = useMemo(
+    () =>
+      categories.flatMap((category) =>
+        category.products.filter((product) => product.checked)
+      ),
+    [categories]
+  );
+
+  const shoppingList = useMemo(
+    () => shoppingProducts.map((product) => product.name),
+    [shoppingProducts]
+  );
 
   const playSound = useCallback(() => {
     if (!soundOn || !tickAudio) return;
@@ -56,30 +63,65 @@ export function useShoppingState() {
   }, [soundOn]);
 
   const toggleItem = useCallback(
-    (item: string) => {
+    async (item: string) => {
+      const product = shoppingProducts.find((p) => p.name === item);
+
+      if (!product) return;
+
       playSound();
 
-      setShoppingList((prev) =>
-        prev.includes(item)
-          ? prev.filter((i) => i !== item)
-          : [...prev, item]
+      const { error } = await updateProductChecked(
+        product.id,
+        !product.checked
       );
+
+      if (error) {
+        console.error("Failed to toggle product:", error);
+        return;
+      }
+
+      await refreshCategories();
     },
-    [playSound]
+    [playSound, refreshCategories, shoppingProducts]
   );
 
   const quickAddItem = useCallback(
-    (item: string) => {
-      setShoppingList((prev) => {
-        if (prev.includes(item)) {
-          return prev;
-        }
+    async (item: string) => {
+      const product = categories
+        .flatMap((category) => category.products)
+        .find((p) => p.name === item);
 
-        playSound();
-        return [...prev, item];
-      });
+      if (!product || product.checked) {
+        return;
+      }
+
+      playSound();
+
+      const { error } = await updateProductChecked(product.id, true);
+
+      if (error) {
+        console.error("Failed to add product:", error);
+        return;
+      }
+
+      await refreshCategories();
     },
-    [playSound]
+    [categories, playSound, refreshCategories]
+  );
+
+  const setShoppingList = useCallback(
+    async (items: string[]) => {
+      const allProducts = categories.flatMap((category) => category.products);
+
+      await Promise.all(
+        allProducts.map((product) =>
+          updateProductChecked(product.id, items.includes(product.name))
+        )
+      );
+
+      await refreshCategories();
+    },
+    [categories, refreshCategories]
   );
 
   const exportDoc = useCallback(async () => {
@@ -98,10 +140,16 @@ export function useShoppingState() {
       ...prev,
     ]);
 
-    setShoppingList([]);
+    await Promise.all(
+      shoppingProducts.map((product) =>
+        updateProductChecked(product.id, false)
+      )
+    );
+
+    await refreshCategories();
 
     return true;
-  }, [shoppingList]);
+  }, [refreshCategories, shoppingList, shoppingProducts]);
 
   return {
     exportDoc,
