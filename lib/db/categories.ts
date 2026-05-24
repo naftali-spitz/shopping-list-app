@@ -29,6 +29,8 @@ export async function fetchCategories(
       id: product.id,
       name: product.name,
       usageCount: product.usage_count || 0,
+      category_id: product.category_id,
+      checked: Boolean(product.checked),
     })),
   }));
 }
