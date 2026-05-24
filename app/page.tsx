@@ -42,7 +42,10 @@ export default function Home() {
     soundOn,
     setSoundOn,
     toggleItem,
-  } = useShoppingState();
+  } = useShoppingState({
+    categories,
+    refreshCategories,
+  });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [darkMode, setDarkMode] = useState(false);
@@ -204,7 +207,7 @@ export default function Home() {
           globalResults={globalResults}
           onGlobalSearchChange={setGlobalSearch}
           onQuickAdd={(item) => {
-            quickAddItem(item);
+            void quickAddItem(item);
             setGlobalSearch("");
           }}
         />
@@ -214,7 +217,7 @@ export default function Home() {
           categories={categories}
           darkMode={darkMode}
           newCategoryName={newCategoryName}
-          onAddCategory={addCategory}
+          onAddCategory={() => void addCategory()}
           onCategoryNameChange={setNewCategoryName}
           onDeleteCategory={(categoryId, categoryName) => {
             setEditingCategoryId(categoryId);
@@ -229,8 +232,8 @@ export default function Home() {
 
       <ShoppingDrawer
         items={shoppingList}
-        onRemove={toggleItem}
-        onExport={exportDoc}
+        onRemove={(item) => void toggleItem(item)}
+        onExport={() => void exportDoc()}
       />
 
       <CategoryModal
@@ -241,11 +244,11 @@ export default function Home() {
         newProductName={newProductName}
         products={sortedProducts}
         onClose={() => setSelectedCategoryId(null)}
-        onToggleItem={toggleItem}
+        onToggleItem={(item) => void toggleItem(item)}
         onSearchChange={setSearchTerm}
         onSortChange={setSortMode}
         onNewProductChange={setNewProductName}
-        onAddProduct={addProduct}
+        onAddProduct={() => void addProduct()}
         onEditProduct={handleEditProduct}
       />
 
@@ -258,7 +261,7 @@ export default function Home() {
           setEditingCategoryName("");
         }}
         onChange={setEditingCategoryName}
-        onSave={saveCategoryEdit}
+        onSave={() => void saveCategoryEdit()}
         onDelete={deleteCategory}
       />
 
@@ -275,7 +278,7 @@ export default function Home() {
         }}
         onChange={setEditingProductName}
         onCategoryChange={setEditingProductCategoryId}
-        onSave={saveProductEdit}
+        onSave={() => void saveProductEdit()}
         onDelete={deleteProduct}
       />
 
@@ -285,7 +288,7 @@ export default function Home() {
         description={confirmDescription}
         confirmText="מחק"
         cancelText="ביטול"
-        onConfirm={confirmDelete}
+        onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDelete(null)}
       />
 
@@ -294,7 +297,7 @@ export default function Home() {
         history={history}
         onClose={() => setHistoryOpen(false)}
         onLoad={(items) => {
-          setShoppingList(items);
+          void setShoppingList(items);
           setHistoryOpen(false);
         }}
       />
