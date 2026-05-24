@@ -15,11 +15,13 @@ const tickAudio =
 type UseShoppingStateProps = {
   categories: Category[];
   refreshCategories: () => Promise<void>;
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 };
 
 export function useShoppingState({
   categories,
   refreshCategories,
+  setCategories,
 }: UseShoppingStateProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [soundOn, setSoundOn] = useState(false);
@@ -64,6 +66,25 @@ export function useShoppingState({
     void tickAudio.play().catch(() => undefined);
   }, [soundOn]);
 
+  const optimisticToggle = useCallback(
+    (productId: string, checked: boolean) => {
+      setCategories((prev) =>
+        prev.map((category) => ({
+          ...category,
+          products: category.products.map((product) =>
+            product.id === productId
+              ? {
+                  ...product,
+                  checked,
+                }
+              : product
+          ),
+        }))
+      );
+    },
+    [setCategories]
+  );
+
   const toggleItem = useCallback(
     async (item: string) => {
       const product = allProducts.find((p) => p.name === item);
@@ -72,6 +93,8 @@ export function useShoppingState({
 
       playSound();
 
+      optimisticToggle(product.id, !product.checked);
+
       const { error } = await updateProductChecked(
         product.id,
         !product.checked
@@ -79,12 +102,13 @@ export function useShoppingState({
 
       if (error) {
         console.error("Failed to toggle product:", error);
-        return;
-      }
 
-      await refreshCategories();
+        optimisticToggle(product.id, product.checked);
+
+        await refreshCategories();
+      }
     },
-    [allProducts, playSound, refreshCategories]
+    [allProducts, optimisticToggle, playSound, refreshCategories]
   );
 
   const quickAddItem = useCallback(
@@ -97,29 +121,66 @@ export function useShoppingState({
 
       playSound();
 
+      optimisticToggle(product.id, true);
+
       const { error } = await updateProductChecked(product.id, true);
 
       if (error) {
         console.error("Failed to add product:", error);
-        return;
-      }
 
-      await refreshCategories();
+        optimisticToggle(product.id, false);
+
+        await refreshCategories();
+      }
     },
-    [allProducts, playSound, refreshCategories]
+    [allProducts, optimisticToggle, playSound, refreshCategories]
   );
 
   const setShoppingList = useCallback(
     async (items: string[]) => {
-      await Promise.all(
+      const previousProducts = allProducts;
+
+      setCategories((prev) =>
+        prev.map((category) => ({
+          ...category,
+          products: category.products.map((product) => ({
+            ...product,
+            checked: items.includes(product.name),
+          })),
+        }))
+      );
+
+      const results = await Promise.all(
         allProducts.map((product) =>
           updateProductChecked(product.id, items.includes(product.name))
         )
       );
 
-      await refreshCategories();
+      const hasError = results.some((result) => result.error);
+
+      if (hasError) {
+        setCategories((prev) =>
+          prev.map((category) => ({
+            ...category,
+            products: category.products.map((product) => {
+              const previous = previousProducts.find(
+                (p) => p.id === product.id
+              );
+
+              return previous
+                ? {
+                    ...product,
+                    checked: previous.checked,
+                  }
+                : product;
+            }),
+          }))
+        );
+
+        await refreshCategories();
+      }
     },
-    [allProducts, refreshCategories]
+    [allProducts, refreshCategories, setCategories]
   );
 
   const exportDoc = useCallback(async () => {
@@ -138,16 +199,35 @@ export function useShoppingState({
       ...prev,
     ]);
 
-    await Promise.all(
+    setCategories((prev) =>
+      prev.map((category) => ({
+        ...category,
+        products: category.products.map((product) => ({
+          ...product,
+          checked: false,
+        })),
+      }))
+    );
+
+    const results = await Promise.all(
       shoppingProducts.map((product) =>
         updateProductChecked(product.id, false)
       )
     );
 
-    await refreshCategories();
+    const hasError = results.some((result) => result.error);
+
+    if (hasError) {
+      await refreshCategories();
+    }
 
     return true;
-  }, [refreshCategories, shoppingList, shoppingProducts]);
+  }, [
+    refreshCategories,
+    setCategories,
+    shoppingList,
+    shoppingProducts,
+  ]);
 
   return {
     exportDoc,
