@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
+  addProductsToShoppingList,
   exportShoppingList,
   fetchHistory,
 } from "@/lib/db/history";
@@ -160,20 +161,17 @@ export function useShoppingState({
           ...category,
           products: category.products.map((product) => ({
             ...product,
-            checked: items.includes(product.name),
+            checked:
+              product.checked || items.includes(product.name),
           })),
         }))
       );
 
-      const results = await Promise.all(
-        allProducts.map((product) =>
-          updateProductChecked(product.id, items.includes(product.name))
-        )
-      );
+      const { error } = await addProductsToShoppingList(items);
 
-      const hasError = results.some((result) => result.error);
+      if (error) {
+        console.error("Failed to restore shopping list:", error);
 
-      if (hasError) {
         setCategories((prev) =>
           prev.map((category) => ({
             ...category,
