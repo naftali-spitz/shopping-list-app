@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { exportShoppingList } from "@/lib/db/history";
 import { updateProductChecked } from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
 import { loadHistory, saveHistory } from "@/lib/storage";
@@ -184,20 +185,7 @@ export function useShoppingState({
   );
 
   const exportDoc = useCallback(async () => {
-    const createdAt = await exportShoppingDoc(shoppingList);
-
-    if (!createdAt) {
-      return false;
-    }
-
-    setHistory((prev) => [
-      {
-        id: createdAt,
-        createdAt,
-        items: shoppingList,
-      },
-      ...prev,
-    ]);
+    const previousProducts = allProducts;
 
     setCategories((prev) =>
       prev.map((category) => ({
@@ -209,24 +197,53 @@ export function useShoppingState({
       }))
     );
 
-    const results = await Promise.all(
-      shoppingProducts.map((product) =>
-        updateProductChecked(product.id, false)
-      )
-    );
+    const { error } = await exportShoppingList();
 
-    const hasError = results.some((result) => result.error);
+    if (error) {
+      console.error("Failed to export shopping list:", error);
 
-    if (hasError) {
+      setCategories((prev) =>
+        prev.map((category) => ({
+          ...category,
+          products: category.products.map((product) => {
+            const previous = previousProducts.find(
+              (p) => p.id === product.id
+            );
+
+            return previous
+              ? {
+                  ...product,
+                  checked: previous.checked,
+                }
+              : product;
+          }),
+        }))
+      );
+
       await refreshCategories();
+
+      return false;
+    }
+
+    const createdAt = await exportShoppingDoc(shoppingList);
+
+    if (createdAt) {
+      setHistory((prev) => [
+        {
+          id: createdAt,
+          createdAt,
+          items: shoppingList,
+        },
+        ...prev,
+      ]);
     }
 
     return true;
   }, [
+    allProducts,
     refreshCategories,
     setCategories,
     shoppingList,
-    shoppingProducts,
   ]);
 
   return {
