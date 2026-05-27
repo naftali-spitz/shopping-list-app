@@ -6,7 +6,10 @@ import {
   fetchHistory,
 } from "@/lib/db/history";
 import { HOUSEHOLD_ID } from "@/lib/constants";
-import { updateProductChecked } from "@/lib/db/products";
+import {
+  updateProductChecked,
+  updateProductQuantity,
+} from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
 import { saveHistory } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
@@ -101,6 +104,25 @@ export function useShoppingState({
     [setCategories]
   );
 
+  const optimisticQuantity = useCallback(
+    (productId: string, quantity: number) => {
+      setCategories((prev) =>
+        prev.map((category) => ({
+          ...category,
+          products: category.products.map((product) =>
+            product.id === productId
+              ? {
+                  ...product,
+                  quantity,
+                }
+              : product
+          ),
+        }))
+      );
+    },
+    [setCategories]
+  );
+
   const toggleItem = useCallback(
     async (item: string) => {
       const product = allProducts.find((p) => p.name === item);
@@ -125,6 +147,71 @@ export function useShoppingState({
       }
     },
     [allProducts, optimisticToggle, playSound, refreshCategories]
+  );
+
+  const removeProductFromShoppingList = useCallback(
+    async (productId: string) => {
+      const product = allProducts.find((p) => p.id === productId);
+
+      if (!product || !product.checked) return;
+
+      playSound();
+      optimisticToggle(product.id, false);
+
+      const { error } = await updateProductChecked(product.id, false);
+
+      if (error) {
+        console.error("Failed to remove product from shopping list:", error);
+        optimisticToggle(product.id, true);
+        await refreshCategories();
+      }
+    },
+    [allProducts, optimisticToggle, playSound, refreshCategories]
+  );
+
+  const setProductQuantity = useCallback(
+    async (productId: string, quantity: number) => {
+      const product = allProducts.find((p) => p.id === productId);
+
+      if (!product) return;
+
+      const nextQuantity = Math.max(1, quantity);
+
+      if (nextQuantity === product.quantity) return;
+
+      optimisticQuantity(product.id, nextQuantity);
+
+      const { error } = await updateProductQuantity(product.id, nextQuantity);
+
+      if (error) {
+        console.error("Failed to update product quantity:", error);
+        optimisticQuantity(product.id, product.quantity);
+        await refreshCategories();
+      }
+    },
+    [allProducts, optimisticQuantity, refreshCategories]
+  );
+
+  const increaseQuantity = useCallback(
+    (productId: string) => {
+      const product = allProducts.find((p) => p.id === productId);
+
+      if (!product) return;
+
+      void setProductQuantity(product.id, product.quantity + 1);
+    },
+    [allProducts, setProductQuantity]
+  );
+
+  const decreaseQuantity = useCallback(
+    (productId: string) => {
+      const product = allProducts.find((p) => p.id === productId);
+
+      if (!product || product.quantity <= 1) return;
+
+      void setProductQuantity(product.id, product.quantity - 1);
+    },
+    [allProducts, setProductQuantity]
   );
 
   const quickAddItem = useCallback(
@@ -259,13 +346,17 @@ export function useShoppingState({
   ]);
 
   return {
+    decreaseQuantity,
     exportDoc,
     history,
+    increaseQuantity,
     isLoading,
     quickAddItem,
+    removeProductFromShoppingList,
     setHistory,
     setShoppingList,
     shoppingList,
+    shoppingProducts,
     soundOn,
     setSoundOn,
     toggleItem,
