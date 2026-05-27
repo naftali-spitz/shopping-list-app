@@ -4,6 +4,7 @@ export type Product = {
   usageCount: number;
   category_id: string;
   checked: boolean;
+  quantity: number;
 };
 
 export type Category = {
