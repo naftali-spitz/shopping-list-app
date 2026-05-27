@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Edit2, Plus, Search, X } from "lucide-react";
+import { Edit2, GripVertical, Plus, Search, X } from "lucide-react";
 import { Category } from "@/types/shopping";
 
 type ProductSortMode = "az" | "popular" | "custom";
@@ -37,6 +37,9 @@ export function CategoryModal({
   onAddProduct,
   onEditProduct,
 }: CategoryModalProps) {
+  const showDragHandle = sortMode === "custom";
+  const canReorder = showDragHandle && !searchTerm.trim();
+
   return (
     <AnimatePresence>
       {category && (
@@ -91,6 +94,12 @@ export function CategoryModal({
               </select>
             </div>
 
+            {showDragHandle && !canReorder && (
+              <p className="mt-3 shrink-0 text-xs text-amber-200/80">
+                Clear search to reorder products.
+              </p>
+            )}
+
             <div className="mt-4 flex gap-2 shrink-0">
               <input
                 value={newProductName}
@@ -117,12 +126,28 @@ export function CategoryModal({
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.03 }}
-                    className={`flex items-center justify-between rounded-2xl border px-4 py-3 transition ${
+                    className={`flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 transition ${
                       selected
                         ? "border-cyan-400 bg-cyan-400/10"
                         : "border-white/10 bg-white/5 hover:bg-white/10"
                     }`}
                   >
+                    {showDragHandle && (
+                      <button
+                        type="button"
+                        disabled={!canReorder}
+                        aria-label="Reorder product"
+                        title={canReorder ? "Drag to reorder" : "Clear search to reorder"}
+                        className={`rounded-full p-2 transition ${
+                          canReorder
+                            ? "cursor-grab bg-white/10 text-white/60 active:cursor-grabbing hover:bg-white/20 hover:text-white"
+                            : "cursor-not-allowed bg-white/5 text-white/20"
+                        }`}
+                      >
+                        <GripVertical size={16} />
+                      </button>
+                    )}
+
                     <button
                       onClick={() => onToggleItem(product.name)}
                       className="flex flex-1 items-center gap-3 text-left"
