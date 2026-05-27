@@ -5,6 +5,7 @@ export type Product = {
   category_id: string;
   checked: boolean;
   quantity: number;
+  displayOrder: number | null;
 };
 
 export type Category = {
