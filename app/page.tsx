@@ -34,12 +34,16 @@ export default function Home() {
   } = useSharedCategories(initialCategories);
 
   const {
+    decreaseQuantity,
     exportDoc,
     history,
+    increaseQuantity,
     isLoading,
     quickAddItem,
+    removeProductFromShoppingList,
     setShoppingList,
     shoppingList,
+    shoppingProducts,
     soundOn,
     setSoundOn,
     toggleItem,
@@ -242,8 +246,12 @@ export default function Home() {
       </div>
 
       <ShoppingDrawer
-        items={shoppingList}
-        onRemove={(item) => void toggleItem(item)}
+        items={shoppingProducts}
+        onRemove={(productId) =>
+          void removeProductFromShoppingList(productId)
+        }
+        onIncreaseQuantity={(productId) => increaseQuantity(productId)}
+        onDecreaseQuantity={(productId) => decreaseQuantity(productId)}
         onExport={() => void exportDoc()}
       />
 
