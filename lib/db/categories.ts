@@ -32,6 +32,7 @@ export async function fetchCategories(
       category_id: product.category_id,
       checked: Boolean(product.checked),
       quantity: Number(product.quantity || 1),
+      displayOrder: product.display_order ?? null,
     })),
   }));
 }
