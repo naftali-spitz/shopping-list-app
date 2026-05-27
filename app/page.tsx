@@ -22,6 +22,7 @@ import { supabase } from "@/lib/supabase";
 import { Category } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
+type ProductSortMode = "az" | "popular" | "custom";
 
 export default function Home() {
   const { session, loading } = useSession();
@@ -55,7 +56,7 @@ export default function Home() {
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [darkMode, setDarkMode] = useState(false);
-  const [sortMode, setSortMode] = useState<"az" | "popular">("popular");
+  const [sortMode, setSortMode] = useState<ProductSortMode>("popular");
   const [searchTerm, setSearchTerm] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -162,11 +163,24 @@ export default function Home() {
 
     return [...selectedCategory.products]
       .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      .sort((a, b) =>
-        sortMode === "az"
-          ? a.name.localeCompare(b.name)
-          : b.usageCount - a.usageCount
-      );
+      .sort((a, b) => {
+        if (sortMode === "az") {
+          return a.name.localeCompare(b.name);
+        }
+
+        if (sortMode === "custom") {
+          const aOrder = a.displayOrder ?? Number.MAX_SAFE_INTEGER;
+          const bOrder = b.displayOrder ?? Number.MAX_SAFE_INTEGER;
+
+          if (aOrder !== bOrder) {
+            return aOrder - bOrder;
+          }
+
+          return a.name.localeCompare(b.name);
+        }
+
+        return b.usageCount - a.usageCount || a.name.localeCompare(b.name);
+      });
   }, [searchTerm, selectedCategory, sortMode]);
 
   const handleLogout = async () => {
