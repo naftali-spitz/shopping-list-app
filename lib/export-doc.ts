@@ -1,4 +1,8 @@
-export async function exportShoppingDoc(items: string[]) {
+import { Product } from "@/types/shopping";
+
+type ExportItem = Pick<Product, "name" | "quantity">;
+
+export async function exportShoppingDoc(items: ExportItem[]) {
   if (!items.length) {
     return null;
   }
@@ -10,7 +14,12 @@ export async function exportShoppingDoc(items: string[]) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ items }),
+    body: JSON.stringify({
+      items: items.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+      })),
+    }),
   });
 
   if (!response.ok) {
