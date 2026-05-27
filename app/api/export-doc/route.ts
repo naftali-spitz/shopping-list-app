@@ -7,10 +7,17 @@ import {
   TextRun,
 } from "docx";
 
+type ExportItem =
+  | string
+  | {
+      name: string;
+      quantity?: number;
+    };
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const items: string[] = body.items ?? [];
+    const items: ExportItem[] = body.items ?? [];
 
     if (!items.length) {
       return NextResponse.json(
@@ -52,21 +59,26 @@ export async function POST(request: Request) {
                 }),
               ],
             }),
-            ...items.map(
-              (item) =>
-                new Paragraph({
-                  bidirectional: true,
-                  spacing: {
-                    after: 180,
-                  },
-                  children: [
-                    new TextRun({
-                      text: `☐ ${item}`,
-                      size: 26,
-                    }),
-                  ],
-                })
-            ),
+            ...items.map((item) => {
+              const name = typeof item === "string" ? item : item.name;
+              const quantity =
+                typeof item === "string" ? 1 : Number(item.quantity || 1);
+
+              const quantitySuffix = quantity > 1 ? ` ×${quantity}` : "";
+
+              return new Paragraph({
+                bidirectional: true,
+                spacing: {
+                  after: 180,
+                },
+                children: [
+                  new TextRun({
+                    text: `☐ ${name}${quantitySuffix}`,
+                    size: 26,
+                  }),
+                ],
+              });
+            }),
           ],
         },
       ],
