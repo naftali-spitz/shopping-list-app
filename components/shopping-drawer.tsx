@@ -2,17 +2,22 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Download, ShoppingCart, X } from "lucide-react";
+import { Download, Minus, Plus, ShoppingCart, X } from "lucide-react";
+import { Product } from "@/types/shopping";
 
 type ShoppingDrawerProps = {
-  items: string[];
-  onRemove: (item: string) => void;
+  items: Product[];
+  onRemove: (productId: string) => void;
+  onIncreaseQuantity: (productId: string) => void;
+  onDecreaseQuantity: (productId: string) => void;
   onExport: () => void;
 };
 
 export function ShoppingDrawer({
   items,
   onRemove,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
   onExport,
 }: ShoppingDrawerProps) {
   const [open, setOpen] = useState(false);
@@ -32,6 +37,8 @@ export function ShoppingDrawer({
         <DrawerContent
           items={items}
           onRemove={onRemove}
+          onIncreaseQuantity={onIncreaseQuantity}
+          onDecreaseQuantity={onDecreaseQuantity}
           onExport={onExport}
         />
       </div>
@@ -70,7 +77,12 @@ export function ShoppingDrawer({
                 </button>
               </div>
 
-              <DrawerList items={items} onRemove={onRemove} />
+              <DrawerList
+                items={items}
+                onRemove={onRemove}
+                onIncreaseQuantity={onIncreaseQuantity}
+                onDecreaseQuantity={onDecreaseQuantity}
+              />
 
               <button
                 onClick={onExport}
@@ -93,6 +105,8 @@ type DrawerContentProps = ShoppingDrawerProps;
 function DrawerContent({
   items,
   onRemove,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
   onExport,
 }: DrawerContentProps) {
   return (
@@ -110,7 +124,12 @@ function DrawerContent({
         </div>
       </div>
 
-      <DrawerList items={items} onRemove={onRemove} />
+      <DrawerList
+        items={items}
+        onRemove={onRemove}
+        onIncreaseQuantity={onIncreaseQuantity}
+        onDecreaseQuantity={onDecreaseQuantity}
+      />
 
       <button
         onClick={onExport}
@@ -125,11 +144,18 @@ function DrawerContent({
 }
 
 type DrawerListProps = {
-  items: string[];
-  onRemove: (item: string) => void;
+  items: Product[];
+  onRemove: (productId: string) => void;
+  onIncreaseQuantity: (productId: string) => void;
+  onDecreaseQuantity: (productId: string) => void;
 };
 
-function DrawerList({ items, onRemove }: DrawerListProps) {
+function DrawerList({
+  items,
+  onRemove,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
+}: DrawerListProps) {
   return (
     <div className="mt-4 max-h-[260px] space-y-3 overflow-auto pr-2">
       <AnimatePresence initial={false}>
@@ -139,25 +165,55 @@ function DrawerList({ items, onRemove }: DrawerListProps) {
           </p>
         )}
 
-        {items.map((item) => (
-          <motion.div
-            layout
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            key={item}
-            className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3"
-          >
-            <span>{item}</span>
+        {items.map((item) => {
+          const canDecrease = item.quantity > 1;
 
-            <button
-              onClick={() => onRemove(item)}
-              className="rounded-full bg-red-500/20 p-1 text-red-300"
+          return (
+            <motion.div
+              layout
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              key={item.id}
+              className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/20 px-3 py-3"
             >
-              <X size={14} />
-            </button>
-          </motion.div>
-        ))}
+              <button
+                onClick={() => onRemove(item.id)}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-red-300 transition hover:bg-red-500/30"
+                aria-label={`Remove ${item.name}`}
+              >
+                <X size={14} />
+              </button>
+
+              <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                {item.name}
+              </span>
+
+              <div className="flex shrink-0 items-center rounded-full border border-white/10 bg-white/5 p-1">
+                <button
+                  onClick={() => onDecreaseQuantity(item.id)}
+                  disabled={!canDecrease}
+                  className="flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35"
+                  aria-label={`Decrease ${item.name}`}
+                >
+                  <Minus size={14} />
+                </button>
+
+                <span className="min-w-8 text-center text-sm font-semibold tabular-nums">
+                  {item.quantity}
+                </span>
+
+                <button
+                  onClick={() => onIncreaseQuantity(item.id)}
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-400 text-black transition hover:scale-105"
+                  aria-label={`Increase ${item.name}`}
+                >
+                  <Plus size={14} />
+                </button>
+              </div>
+            </motion.div>
+          );
+        })}
       </AnimatePresence>
     </div>
   );
