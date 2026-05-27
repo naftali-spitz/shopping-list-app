@@ -4,17 +4,19 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Edit2, Plus, Search, X } from "lucide-react";
 import { Category } from "@/types/shopping";
 
+type ProductSortMode = "az" | "popular" | "custom";
+
 type CategoryModalProps = {
   category: Category | null;
   shoppingList: string[];
   searchTerm: string;
-  sortMode: "az" | "popular";
+  sortMode: ProductSortMode;
   newProductName: string;
   products: Category["products"];
   onClose: () => void;
   onToggleItem: (item: string) => void;
   onSearchChange: (value: string) => void;
-  onSortChange: (value: "az" | "popular") => void;
+  onSortChange: (value: ProductSortMode) => void;
   onNewProductChange: (value: string) => void;
   onAddProduct: () => void;
   onEditProduct: (id: string) => void;
@@ -80,11 +82,12 @@ export function CategoryModal({
               </div>
               <select
                 value={sortMode}
-                onChange={(e) => onSortChange(e.target.value as "az" | "popular")}
+                onChange={(e) => onSortChange(e.target.value as ProductSortMode)}
                 className="rounded-2xl border border-white/10 bg-[#10172a] px-4 py-3 text-sm outline-none"
               >
                 <option value="popular">Most chosen</option>
                 <option value="az">A-Z</option>
+                <option value="custom">Custom</option>
               </select>
             </div>
 
