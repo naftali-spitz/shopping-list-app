@@ -46,9 +46,17 @@ export function useShoppingState({
             id: entry.id,
             createdAt: entry.exported_at,
             items: Array.isArray(entry.items)
-              ? entry.items.map((item: any) =>
-                  typeof item === "string" ? item : item.name
-                )
+              ? entry.items.map((item: any) => {
+                  if (typeof item === "string") {
+                    return item;
+                  }
+
+                  const quantity = Number(item.quantity || 1);
+
+                  return quantity > 1
+                    ? `${item.name} ×${quantity}`
+                    : item.name;
+                })
               : [],
           }))
         );
@@ -324,14 +332,18 @@ export function useShoppingState({
       return false;
     }
 
-    const createdAt = await exportShoppingDoc(shoppingList);
+    const createdAt = await exportShoppingDoc(shoppingProducts);
 
     if (createdAt) {
       setHistory((prev) => [
         {
           id: createdAt,
           createdAt,
-          items: shoppingList,
+          items: shoppingProducts.map((product) =>
+            product.quantity > 1
+              ? `${product.name} ×${product.quantity}`
+              : product.name
+          ),
         },
         ...prev,
       ]);
@@ -342,7 +354,7 @@ export function useShoppingState({
     allProducts,
     refreshCategories,
     setCategories,
-    shoppingList,
+    shoppingProducts,
   ]);
 
   return {
