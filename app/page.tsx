@@ -81,6 +81,7 @@ export default function Home() {
 
   const {
     decreaseQuantity,
+    deleteHistoryEntry,
     exportDoc,
     history,
     increaseQuantity,
@@ -485,6 +486,7 @@ export default function Home() {
           void setShoppingList(items);
           setHistoryOpen(false);
         }}
+        onDelete={(historyId) => void deleteHistoryEntry(historyId)}
       />
     </main>
   );
