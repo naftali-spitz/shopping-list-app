@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, Reorder, useDragControls } from "framer-motion";
 import { Edit2, GripVertical, Plus, Search, X } from "lucide-react";
 import { Category, Product } from "@/types/shopping";
@@ -21,6 +21,7 @@ type CategoryModalProps = {
   onNewProductChange: (value: string) => void;
   onAddProduct: () => void;
   onEditProduct: (id: string) => void;
+  onCustomOrderChange: (products: Product[], movedProductId: string) => void;
 };
 
 type ProductRowProps = {
@@ -31,6 +32,8 @@ type ProductRowProps = {
   canReorder: boolean;
   onToggleItem: (item: string) => void;
   onEditProduct: (id: string) => void;
+  onDragStart: (id: string) => void;
+  onDragEnd: () => void;
 };
 
 function ProductRow({
@@ -41,6 +44,8 @@ function ProductRow({
   canReorder,
   onToggleItem,
   onEditProduct,
+  onDragStart,
+  onDragEnd,
 }: ProductRowProps) {
   const dragControls = useDragControls();
 
@@ -105,6 +110,8 @@ function ProductRow({
         value={product}
         dragListener={false}
         dragControls={dragControls}
+        onDragStart={() => onDragStart(product.id)}
+        onDragEnd={onDragEnd}
         className={className}
       >
         {rowContent}
@@ -138,15 +145,33 @@ export function CategoryModal({
   onNewProductChange,
   onAddProduct,
   onEditProduct,
+  onCustomOrderChange,
 }: CategoryModalProps) {
   const [reorderedProducts, setReorderedProducts] = useState(products);
+  const latestOrderRef = useRef(products);
+  const movedProductIdRef = useRef<string | null>(null);
   const showDragHandle = sortMode === "custom";
   const canReorder = showDragHandle && !searchTerm.trim();
   const visibleProducts = canReorder ? reorderedProducts : products;
 
   useEffect(() => {
     setReorderedProducts(products);
+    latestOrderRef.current = products;
   }, [products]);
+
+  const handleReorder = (nextProducts: Product[]) => {
+    latestOrderRef.current = nextProducts;
+    setReorderedProducts(nextProducts);
+  };
+
+  const handleDragEnd = () => {
+    const movedProductId = movedProductIdRef.current;
+
+    if (!movedProductId) return;
+
+    movedProductIdRef.current = null;
+    onCustomOrderChange(latestOrderRef.current, movedProductId);
+  };
 
   return (
     <AnimatePresence>
@@ -230,7 +255,7 @@ export function CategoryModal({
                 as="div"
                 axis="y"
                 values={reorderedProducts}
-                onReorder={setReorderedProducts}
+                onReorder={handleReorder}
                 className="mt-8 flex-1 overflow-y-auto space-y-3 pr-1 modal-scrollbar"
               >
                 {visibleProducts.map((product, index) => (
@@ -243,6 +268,10 @@ export function CategoryModal({
                     canReorder={canReorder}
                     onToggleItem={onToggleItem}
                     onEditProduct={onEditProduct}
+                    onDragStart={(id) => {
+                      movedProductIdRef.current = id;
+                    }}
+                    onDragEnd={handleDragEnd}
                   />
                 ))}
               </Reorder.Group>
@@ -258,6 +287,8 @@ export function CategoryModal({
                     canReorder={canReorder}
                     onToggleItem={onToggleItem}
                     onEditProduct={onEditProduct}
+                    onDragStart={() => undefined}
+                    onDragEnd={() => undefined}
                   />
                 ))}
               </div>
