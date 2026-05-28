@@ -18,11 +18,55 @@ import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
 import { isAllowedEmail } from "@/lib/auth/whitelist";
+import {
+  updateProductDisplayOrder,
+  updateProductDisplayOrders,
+} from "@/lib/db/products";
 import { supabase } from "@/lib/supabase";
-import { Category } from "@/types/shopping";
+import { Category, Product } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
+const ORDER_STEP = 100;
+
 type ProductSortMode = "az" | "popular" | "custom";
+
+function getNewDisplayOrder(
+  previousProduct: Product | null,
+  nextProduct: Product | null
+) {
+  if (previousProduct && previousProduct.displayOrder === null) return null;
+  if (nextProduct && nextProduct.displayOrder === null) return null;
+
+  const previousOrder = previousProduct?.displayOrder ?? null;
+  const nextOrder = nextProduct?.displayOrder ?? null;
+
+  if (previousOrder === null && nextOrder === null) {
+    return ORDER_STEP;
+  }
+
+  if (previousOrder === null) {
+    return nextOrder! - ORDER_STEP;
+  }
+
+  if (nextOrder === null) {
+    return previousOrder + ORDER_STEP;
+  }
+
+  const gap = nextOrder - previousOrder;
+
+  if (gap > 1) {
+    return Math.floor((previousOrder + nextOrder) / 2);
+  }
+
+  return null;
+}
+
+function buildBalancedDisplayOrder(products: Product[]) {
+  return products.map((product, index) => ({
+    id: product.id,
+    displayOrder: (index + 1) * ORDER_STEP,
+  }));
+}
 
 export default function Home() {
   const { session, loading } = useSession();
@@ -183,6 +227,79 @@ export default function Home() {
       });
   }, [searchTerm, selectedCategory, sortMode]);
 
+  const handleCustomOrderChange = async (
+    productsInFinalOrder: Product[],
+    movedProductId: string
+  ) => {
+    if (!selectedCategoryId) return;
+
+    const movedIndex = productsInFinalOrder.findIndex(
+      (product) => product.id === movedProductId
+    );
+
+    if (movedIndex === -1) return;
+
+    const previousProduct = productsInFinalOrder[movedIndex - 1] ?? null;
+    const nextProduct = productsInFinalOrder[movedIndex + 1] ?? null;
+    const newDisplayOrder = getNewDisplayOrder(previousProduct, nextProduct);
+
+    if (newDisplayOrder !== null) {
+      setCategories((prev) =>
+        prev.map((category) =>
+          category.id === selectedCategoryId
+            ? {
+                ...category,
+                products: category.products.map((product) =>
+                  product.id === movedProductId
+                    ? { ...product, displayOrder: newDisplayOrder }
+                    : product
+                ),
+              }
+            : category
+        )
+      );
+
+      const { error } = await updateProductDisplayOrder(
+        movedProductId,
+        newDisplayOrder
+      );
+
+      if (error) {
+        console.error("Failed to update custom product order:", error);
+        await refreshCategories();
+      }
+
+      return;
+    }
+
+    const balancedUpdates = buildBalancedDisplayOrder(productsInFinalOrder);
+    const orderByProductId = new Map(
+      balancedUpdates.map((update) => [update.id, update.displayOrder])
+    );
+
+    setCategories((prev) =>
+      prev.map((category) =>
+        category.id === selectedCategoryId
+          ? {
+              ...category,
+              products: category.products.map((product) => ({
+                ...product,
+                displayOrder:
+                  orderByProductId.get(product.id) ?? product.displayOrder,
+              })),
+            }
+          : category
+      )
+    );
+
+    const { error } = await updateProductDisplayOrders(balancedUpdates);
+
+    if (error) {
+      console.error("Failed to rebalance custom product order:", error);
+      await refreshCategories();
+    }
+  };
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
 
@@ -283,6 +400,9 @@ export default function Home() {
         onNewProductChange={setNewProductName}
         onAddProduct={() => void addProduct()}
         onEditProduct={handleEditProduct}
+        onCustomOrderChange={(productsInFinalOrder, movedProductId) =>
+          void handleCustomOrderChange(productsInFinalOrder, movedProductId)
+        }
       />
 
       <EditCategoryModal
