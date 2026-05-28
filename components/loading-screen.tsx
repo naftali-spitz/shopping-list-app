@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShoppingCart } from "lucide-react";
 
 export function LoadingScreen() {
   return (
@@ -13,23 +13,23 @@ export function LoadingScreen() {
       <div className="relative flex flex-col items-center gap-6">
         <motion.div
           animate={{
-            rotate: 360,
+            rotate: [0, -4, 4, 0],
             scale: [1, 1.08, 1],
           }}
           transition={{
-            rotate: {
-              duration: 8,
-              repeat: Infinity,
-              ease: "linear",
-            },
-            scale: {
-              duration: 2,
-              repeat: Infinity,
-            },
+            duration: 2.4,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
-          className="flex h-24 w-24 items-center justify-center rounded-[28px] border border-cyan-400/20 bg-cyan-400/10 backdrop-blur-xl"
+          className="relative flex h-28 w-28 items-center justify-center rounded-[32px] border border-cyan-400/20 bg-cyan-400/10 shadow-[0_0_40px_rgba(34,211,238,0.28)] backdrop-blur-xl"
         >
-          <ShoppingCart className="h-10 w-10 text-cyan-300" />
+          <Image
+            src="/futurecart-icon.svg"
+            alt="FutureCart"
+            fill
+            priority
+            className="rounded-[32px] object-cover"
+          />
         </motion.div>
 
         <div className="text-center">
