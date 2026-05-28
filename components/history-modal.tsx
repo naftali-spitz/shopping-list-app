@@ -132,11 +132,22 @@ export function HistoryModal({
                 {history.map((entry) => (
                   <div
                     key={entry.id}
-                    className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-2 transition hover:bg-white/10"
+                    className="group relative rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
                   >
                     <button
+                      type="button"
+                      onClick={() => void deleteEntry(entry)}
+                      disabled={deletingHistoryId === entry.id}
+                      className="absolute left-3 top-3 rounded-full bg-white/10 p-1.5 text-white/55 transition hover:bg-red-500/20 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-50"
+                      aria-label="Delete history list"
+                      title="Delete history list"
+                    >
+                      <X size={15} />
+                    </button>
+
+                    <button
                       onClick={() => setSelectedEntry(entry)}
-                      className="flex-1 p-2 text-left"
+                      className="w-full pr-2 text-left"
                     >
                       <div className="font-medium">
                         {new Date(entry.createdAt).toLocaleString()}
@@ -145,17 +156,6 @@ export function HistoryModal({
                       <div className="mt-1 text-sm text-white/50">
                         {entry.items.length} items · Tap to preview
                       </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => void deleteEntry(entry)}
-                      disabled={deletingHistoryId === entry.id}
-                      className="rounded-2xl bg-red-500/10 p-3 text-red-300 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
-                      aria-label="Delete history list"
-                      title="Delete history list"
-                    >
-                      <Trash2 size={17} />
                     </button>
                   </div>
                 ))}
