@@ -129,6 +129,10 @@ export function useShoppingState({
     void playTickSound().catch(() => undefined);
   }, [soundOn]);
 
+  const previewSound = useCallback(() => {
+    void playTickSound().catch(() => undefined);
+  }, []);
+
   const optimisticToggle = useCallback(
     (productId: string, checked: boolean) => {
       setCategories((prev) =>
@@ -405,6 +409,8 @@ export function useShoppingState({
     history,
     increaseQuantity,
     isLoading,
+    playSound,
+    previewSound,
     quickAddItem,
     removeProductFromShoppingList,
     setHistory,
