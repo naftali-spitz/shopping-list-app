@@ -139,22 +139,22 @@ export function HistoryModal({
                 {history.map((entry) => (
                   <div
                     key={entry.id}
-                    className="group relative rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
+                    className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3 transition hover:bg-white/10"
                   >
                     <button
                       type="button"
                       onClick={() => requestDeleteEntry(entry)}
                       disabled={deletingHistoryId === entry.id}
-                      className="absolute left-3 top-3 rounded-full bg-white/10 p-1.5 text-white/55 transition hover:bg-red-500/20 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-red-400/25 bg-red-500/15 text-red-200 transition hover:bg-red-500/25 disabled:cursor-not-allowed disabled:opacity-50"
                       aria-label="Delete history list"
                       title="Delete history list"
                     >
-                      <X size={15} />
+                      <X size={19} />
                     </button>
 
                     <button
                       onClick={() => setSelectedEntry(entry)}
-                      className="w-full pr-2 text-left"
+                      className="min-w-0 flex-1 p-1 text-right"
                     >
                       <div className="font-medium">
                         {new Date(entry.createdAt).toLocaleString()}
