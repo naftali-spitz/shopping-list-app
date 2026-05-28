@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { History, Menu, ShoppingCart } from "lucide-react";
+import { History, Menu } from "lucide-react";
 
 type TopBarProps = {
   onOpenHistory: () => void;
@@ -20,10 +21,16 @@ export function TopBar({
     >
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <motion.div
-          whileHover={{ rotate: -8, scale: 1.08 }}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-400/20 sm:h-12 sm:w-12"
+          whileHover={{ rotate: -4, scale: 1.06 }}
+          className="relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl shadow-[0_0_22px_rgba(34,211,238,0.22)] sm:h-12 sm:w-12"
         >
-          <ShoppingCart className="text-cyan-300" size={22} />
+          <Image
+            src="/futurecart-icon.svg"
+            alt="FutureCart"
+            fill
+            priority
+            className="object-cover"
+          />
         </motion.div>
 
         <div className="min-w-0">
