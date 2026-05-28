@@ -85,6 +85,8 @@ export default function Home() {
     history,
     increaseQuantity,
     isLoading,
+    playSound,
+    previewSound,
     quickAddItem,
     removeProductFromShoppingList,
     setShoppingList,
@@ -341,8 +343,14 @@ export default function Home() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
         <TopBar
           cardClass={cardClass}
-          onOpenHistory={() => setHistoryOpen(true)}
-          onOpenProfile={() => setProfileOpen(true)}
+          onOpenHistory={() => {
+            playSound();
+            setHistoryOpen(true);
+          }}
+          onOpenProfile={() => {
+            playSound();
+            setProfileOpen(true);
+          }}
         />
 
         <GlobalSearchSection
@@ -368,6 +376,7 @@ export default function Home() {
             setEditingCategoryName(categoryName);
           }}
           onOpenCategory={(categoryId) => {
+            playSound();
             setSelectedCategoryId(categoryId);
             setSearchTerm("");
           }}
@@ -449,9 +458,23 @@ export default function Home() {
         darkMode={darkMode}
         soundOn={soundOn}
         onClose={() => setProfileOpen(false)}
-        onToggleTheme={() => setDarkMode((v) => !v)}
-        onToggleSound={() => setSoundOn((v) => !v)}
-        onLogout={() => void handleLogout()}
+        onToggleTheme={() => {
+          playSound();
+          setDarkMode((v) => !v);
+        }}
+        onToggleSound={() => {
+          if (soundOn) {
+            playSound();
+          } else {
+            previewSound();
+          }
+
+          setSoundOn((v) => !v);
+        }}
+        onLogout={() => {
+          playSound();
+          void handleLogout();
+        }}
       />
 
       <HistoryModal
