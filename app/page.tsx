@@ -11,6 +11,7 @@ import { EditProductModal } from "@/components/edit-product-modal";
 import { GlobalSearchSection } from "@/components/global-search-section";
 import { HistoryModal } from "@/components/history-modal";
 import { LoadingScreen } from "@/components/loading-screen";
+import { ProfileSettingsModal } from "@/components/profile-settings-modal";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
 import { useCategoryManagement } from "@/hooks/use-category-management";
@@ -104,6 +105,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const {
     addCategory,
@@ -145,7 +147,8 @@ export default function Home() {
     Boolean(editingCategoryId) ||
     Boolean(editingProductId) ||
     Boolean(pendingDelete) ||
-    historyOpen;
+    historyOpen ||
+    profileOpen;
 
   useEffect(() => {
     if (anyModalOpen) {
@@ -338,13 +341,10 @@ export default function Home() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
         <TopBar
           darkMode={darkMode}
-          soundOn={soundOn}
           cardClass={cardClass}
-          onToggleSound={() => setSoundOn((v) => !v)}
           onToggleTheme={() => setDarkMode((v) => !v)}
-          onExport={exportDoc}
           onOpenHistory={() => setHistoryOpen(true)}
-          onLogout={() => void handleLogout()}
+          onOpenProfile={() => setProfileOpen(true)}
         />
 
         <GlobalSearchSection
@@ -443,6 +443,15 @@ export default function Home() {
         cancelText="ביטול"
         onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDelete(null)}
+      />
+
+      <ProfileSettingsModal
+        open={profileOpen}
+        email={session.user.email}
+        soundOn={soundOn}
+        onClose={() => setProfileOpen(false)}
+        onToggleSound={() => setSoundOn((v) => !v)}
+        onLogout={() => void handleLogout()}
       />
 
       <HistoryModal
