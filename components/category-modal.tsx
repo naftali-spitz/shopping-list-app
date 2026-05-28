@@ -33,6 +33,7 @@ type ProductRowProps = {
   onToggleItem: (item: string) => void;
   onEditProduct: (id: string) => void;
   onDragStart: (id: string) => void;
+  onDragMove: (pointerY: number) => void;
   onDragEnd: () => void;
 };
 
@@ -45,6 +46,7 @@ function ProductRow({
   onToggleItem,
   onEditProduct,
   onDragStart,
+  onDragMove,
   onDragEnd,
 }: ProductRowProps) {
   const dragControls = useDragControls();
@@ -110,6 +112,7 @@ function ProductRow({
         dragListener={false}
         dragControls={dragControls}
         onDragStart={() => onDragStart(product.id)}
+        onDrag={(_, info) => onDragMove(info.point.y)}
         onDragEnd={onDragEnd}
         layout
         whileDrag={{ scale: 1.02, zIndex: 20 }}
@@ -152,14 +155,65 @@ export function CategoryModal({
   const [reorderedProducts, setReorderedProducts] = useState(products);
   const latestOrderRef = useRef(products);
   const movedProductIdRef = useRef<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const dragPointerYRef = useRef<number | null>(null);
+  const autoScrollFrameRef = useRef<number | null>(null);
   const showDragHandle = sortMode === "custom";
   const canReorder = showDragHandle && !searchTerm.trim();
   const visibleProducts = canReorder ? reorderedProducts : products;
+
+  const stopAutoScroll = () => {
+    if (autoScrollFrameRef.current !== null && typeof window !== "undefined") {
+      window.cancelAnimationFrame(autoScrollFrameRef.current);
+    }
+
+    autoScrollFrameRef.current = null;
+    dragPointerYRef.current = null;
+  };
+
+  const runAutoScroll = () => {
+    const container = scrollContainerRef.current;
+    const pointerY = dragPointerYRef.current;
+
+    if (!container || pointerY === null || typeof window === "undefined") {
+      autoScrollFrameRef.current = null;
+      return;
+    }
+
+    const rect = container.getBoundingClientRect();
+    const edgeSize = 88;
+    const maxSpeed = 16;
+    let scrollDelta = 0;
+
+    if (pointerY < rect.top + edgeSize) {
+      const intensity = Math.min(1, Math.max(0, (rect.top + edgeSize - pointerY) / edgeSize));
+      scrollDelta = -Math.ceil(intensity * maxSpeed);
+    } else if (pointerY > rect.bottom - edgeSize) {
+      const intensity = Math.min(1, Math.max(0, (pointerY - (rect.bottom - edgeSize)) / edgeSize));
+      scrollDelta = Math.ceil(intensity * maxSpeed);
+    }
+
+    if (scrollDelta !== 0) {
+      container.scrollTop += scrollDelta;
+    }
+
+    autoScrollFrameRef.current = window.requestAnimationFrame(runAutoScroll);
+  };
+
+  const handleDragMove = (pointerY: number) => {
+    dragPointerYRef.current = pointerY;
+
+    if (autoScrollFrameRef.current === null && typeof window !== "undefined") {
+      autoScrollFrameRef.current = window.requestAnimationFrame(runAutoScroll);
+    }
+  };
 
   useEffect(() => {
     setReorderedProducts(products);
     latestOrderRef.current = products;
   }, [products]);
+
+  useEffect(() => stopAutoScroll, []);
 
   const handleReorder = (nextProductIds: string[]) => {
     const productsById = new Map(
@@ -176,6 +230,8 @@ export function CategoryModal({
   };
 
   const handleDragEnd = () => {
+    stopAutoScroll();
+
     const movedProductId = movedProductIdRef.current;
 
     if (!movedProductId) return;
@@ -260,9 +316,10 @@ export function CategoryModal({
               </button>
             </div>
 
-            {/* FIX: products list is the only thing that scrolls, with a polished thin scrollbar */}
+            {/* Products list is the only thing that scrolls. During drag, it auto-scrolls near the top/bottom edges. */}
             {canReorder ? (
               <Reorder.Group
+                ref={scrollContainerRef}
                 as="div"
                 axis="y"
                 values={reorderedProducts.map((product) => product.id)}
@@ -282,6 +339,7 @@ export function CategoryModal({
                     onDragStart={(id) => {
                       movedProductIdRef.current = id;
                     }}
+                    onDragMove={handleDragMove}
                     onDragEnd={handleDragEnd}
                   />
                 ))}
@@ -299,6 +357,7 @@ export function CategoryModal({
                     onToggleItem={onToggleItem}
                     onEditProduct={onEditProduct}
                     onDragStart={() => undefined}
+                    onDragMove={() => undefined}
                     onDragEnd={() => undefined}
                   />
                 ))}
