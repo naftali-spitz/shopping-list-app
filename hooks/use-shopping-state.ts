@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   addProductsToShoppingList,
+  deleteShoppingHistoryEntry,
   exportShoppingList,
   fetchHistory,
 } from "@/lib/db/history";
@@ -392,6 +393,28 @@ export function useShoppingState({
     [allProducts, playSound, refreshCategories, setCategories]
   );
 
+  const deleteHistoryEntry = useCallback(
+    async (historyId: string) => {
+      const previousHistory = history;
+
+      playSound();
+      setHistory((prev) => prev.filter((entry) => entry.id !== historyId));
+
+      const { error } = await deleteShoppingHistoryEntry(historyId);
+
+      if (error) {
+        console.error("Failed to delete history entry:", error);
+        setHistory(previousHistory);
+        await refreshCategories();
+        return false;
+      }
+
+      await refreshCategories();
+      return true;
+    },
+    [history, playSound, refreshCategories]
+  );
+
   const exportDoc = useCallback(async () => {
     const previousProducts = allProducts;
 
@@ -463,6 +486,7 @@ export function useShoppingState({
 
   return {
     decreaseQuantity,
+    deleteHistoryEntry,
     exportDoc,
     history,
     increaseQuantity,
