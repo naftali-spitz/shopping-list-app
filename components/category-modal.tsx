@@ -1,8 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, Reorder, useDragControls } from "framer-motion";
 import { Edit2, GripVertical, Plus, Search, X } from "lucide-react";
-import { Category } from "@/types/shopping";
+import { Category, Product } from "@/types/shopping";
 
 type ProductSortMode = "az" | "popular" | "custom";
 
@@ -22,6 +23,107 @@ type CategoryModalProps = {
   onEditProduct: (id: string) => void;
 };
 
+type ProductRowProps = {
+  product: Product;
+  selected: boolean;
+  index: number;
+  showDragHandle: boolean;
+  canReorder: boolean;
+  onToggleItem: (item: string) => void;
+  onEditProduct: (id: string) => void;
+};
+
+function ProductRow({
+  product,
+  selected,
+  index,
+  showDragHandle,
+  canReorder,
+  onToggleItem,
+  onEditProduct,
+}: ProductRowProps) {
+  const dragControls = useDragControls();
+
+  const rowContent = (
+    <>
+      {showDragHandle && (
+        <button
+          type="button"
+          disabled={!canReorder}
+          aria-label="Reorder product"
+          title={canReorder ? "Drag to reorder" : "Clear search to reorder"}
+          onPointerDown={(event) => {
+            if (!canReorder) return;
+
+            event.preventDefault();
+            dragControls.start(event);
+          }}
+          className={`rounded-full p-2 transition ${
+            canReorder
+              ? "cursor-grab touch-none bg-white/10 text-white/60 active:cursor-grabbing hover:bg-white/20 hover:text-white"
+              : "cursor-not-allowed bg-white/5 text-white/20"
+          }`}
+        >
+          <GripVertical size={16} />
+        </button>
+      )}
+
+      <button
+        onClick={() => onToggleItem(product.name)}
+        className="flex flex-1 items-center gap-3 text-left"
+      >
+        <div
+          className={`h-4 w-4 rounded-full ${
+            selected ? "bg-cyan-300" : "bg-white/20"
+          }`}
+        />
+        <span>{product.name}</span>
+        <span className="ml-auto pr-3 text-xs text-white/40">
+          {product.usageCount}x
+        </span>
+      </button>
+
+      <button
+        onClick={() => onEditProduct(product.id)}
+        className="rounded-full bg-cyan-400/10 p-2 text-cyan-300"
+      >
+        <Edit2 size={15} />
+      </button>
+    </>
+  );
+
+  const className = `flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 transition ${
+    selected
+      ? "border-cyan-400 bg-cyan-400/10"
+      : "border-white/10 bg-white/5 hover:bg-white/10"
+  }`;
+
+  if (canReorder) {
+    return (
+      <Reorder.Item
+        as="div"
+        value={product}
+        dragListener={false}
+        dragControls={dragControls}
+        className={className}
+      >
+        {rowContent}
+      </Reorder.Item>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03 }}
+      className={className}
+    >
+      {rowContent}
+    </motion.div>
+  );
+}
+
 export function CategoryModal({
   category,
   shoppingList,
@@ -37,8 +139,14 @@ export function CategoryModal({
   onAddProduct,
   onEditProduct,
 }: CategoryModalProps) {
+  const [reorderedProducts, setReorderedProducts] = useState(products);
   const showDragHandle = sortMode === "custom";
   const canReorder = showDragHandle && !searchTerm.trim();
+  const visibleProducts = canReorder ? reorderedProducts : products;
+
+  useEffect(() => {
+    setReorderedProducts(products);
+  }, [products]);
 
   return (
     <AnimatePresence>
@@ -117,62 +225,43 @@ export function CategoryModal({
             </div>
 
             {/* FIX: products list is the only thing that scrolls, with a polished thin scrollbar */}
-            <div className="mt-8 flex-1 overflow-y-auto space-y-3 pr-1 modal-scrollbar">
-              {products.map((product, index) => {
-                const selected = shoppingList.includes(product.name);
-                return (
-                  <motion.div
+            {canReorder ? (
+              <Reorder.Group
+                as="div"
+                axis="y"
+                values={reorderedProducts}
+                onReorder={setReorderedProducts}
+                className="mt-8 flex-1 overflow-y-auto space-y-3 pr-1 modal-scrollbar"
+              >
+                {visibleProducts.map((product, index) => (
+                  <ProductRow
                     key={product.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.03 }}
-                    className={`flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 transition ${
-                      selected
-                        ? "border-cyan-400 bg-cyan-400/10"
-                        : "border-white/10 bg-white/5 hover:bg-white/10"
-                    }`}
-                  >
-                    {showDragHandle && (
-                      <button
-                        type="button"
-                        disabled={!canReorder}
-                        aria-label="Reorder product"
-                        title={canReorder ? "Drag to reorder" : "Clear search to reorder"}
-                        className={`rounded-full p-2 transition ${
-                          canReorder
-                            ? "cursor-grab bg-white/10 text-white/60 active:cursor-grabbing hover:bg-white/20 hover:text-white"
-                            : "cursor-not-allowed bg-white/5 text-white/20"
-                        }`}
-                      >
-                        <GripVertical size={16} />
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => onToggleItem(product.name)}
-                      className="flex flex-1 items-center gap-3 text-left"
-                    >
-                      <div
-                        className={`h-4 w-4 rounded-full ${
-                          selected ? "bg-cyan-300" : "bg-white/20"
-                        }`}
-                      />
-                      <span>{product.name}</span>
-                      <span className="ml-auto pr-3 text-xs text-white/40">
-                        {product.usageCount}x
-                      </span>
-                    </button>
-
-                    <button
-                      onClick={() => onEditProduct(product.id)}
-                      className="rounded-full bg-cyan-400/10 p-2 text-cyan-300"
-                    >
-                      <Edit2 size={15} />
-                    </button>
-                  </motion.div>
-                );
-              })}
-            </div>
+                    product={product}
+                    selected={shoppingList.includes(product.name)}
+                    index={index}
+                    showDragHandle={showDragHandle}
+                    canReorder={canReorder}
+                    onToggleItem={onToggleItem}
+                    onEditProduct={onEditProduct}
+                  />
+                ))}
+              </Reorder.Group>
+            ) : (
+              <div className="mt-8 flex-1 overflow-y-auto space-y-3 pr-1 modal-scrollbar">
+                {visibleProducts.map((product, index) => (
+                  <ProductRow
+                    key={product.id}
+                    product={product}
+                    selected={shoppingList.includes(product.name)}
+                    index={index}
+                    showDragHandle={showDragHandle}
+                    canReorder={canReorder}
+                    onToggleItem={onToggleItem}
+                    onEditProduct={onEditProduct}
+                  />
+                ))}
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}
