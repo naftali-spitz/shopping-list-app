@@ -14,12 +14,48 @@ import { exportShoppingDoc } from "@/lib/export-doc";
 import { saveHistory } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
 
-const tickAudio =
-  typeof Audio !== "undefined"
-    ? new Audio(
-        "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="
-      )
-    : null;
+let audioContext: AudioContext | null = null;
+
+function getAudioContext() {
+  if (typeof window === "undefined") return null;
+
+  const AudioContextConstructor =
+    window.AudioContext || (window as any).webkitAudioContext;
+
+  if (!AudioContextConstructor) return null;
+
+  audioContext ??= new AudioContextConstructor();
+
+  return audioContext;
+}
+
+async function playTickSound() {
+  const context = getAudioContext();
+
+  if (!context) return;
+
+  if (context.state === "suspended") {
+    await context.resume();
+  }
+
+  const now = context.currentTime;
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(880, now);
+  oscillator.frequency.exponentialRampToValueAtTime(1320, now + 0.04);
+
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+
+  oscillator.start(now);
+  oscillator.stop(now + 0.1);
+}
 
 type UseShoppingStateProps = {
   categories: Category[];
@@ -88,9 +124,9 @@ export function useShoppingState({
   );
 
   const playSound = useCallback(() => {
-    if (!soundOn || !tickAudio) return;
+    if (!soundOn) return;
 
-    void tickAudio.play().catch(() => undefined);
+    void playTickSound().catch(() => undefined);
   }, [soundOn]);
 
   const optimisticToggle = useCallback(
