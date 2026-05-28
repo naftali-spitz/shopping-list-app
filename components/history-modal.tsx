@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, RotateCcw, X } from "lucide-react";
+import { Check, RotateCcw, Trash2, X } from "lucide-react";
 import { HistoryEntry } from "@/types/shopping";
 
 type HistoryModalProps = {
@@ -10,6 +10,7 @@ type HistoryModalProps = {
   history: HistoryEntry[];
   onClose: () => void;
   onLoad: (items: string[]) => void;
+  onDelete: (historyId: string) => void | Promise<void>;
 };
 
 export function HistoryModal({
@@ -17,9 +18,11 @@ export function HistoryModal({
   history,
   onClose,
   onLoad,
+  onDelete,
 }: HistoryModalProps) {
   const [selectedEntry, setSelectedEntry] = useState<HistoryEntry | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [deletingHistoryId, setDeletingHistoryId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!selectedEntry) {
@@ -29,6 +32,19 @@ export function HistoryModal({
 
     setSelectedItems(selectedEntry.items);
   }, [selectedEntry]);
+
+  useEffect(() => {
+    if (!selectedEntry) return;
+
+    const freshEntry = history.find((entry) => entry.id === selectedEntry.id);
+
+    if (!freshEntry) {
+      setSelectedEntry(null);
+      return;
+    }
+
+    setSelectedEntry(freshEntry);
+  }, [history, selectedEntry]);
 
   const allSelected = useMemo(() => {
     if (!selectedEntry) return false;
@@ -47,9 +63,27 @@ export function HistoryModal({
   const toggleAll = () => {
     if (!selectedEntry) return;
 
-    setSelectedItems(
-      allSelected ? [] : selectedEntry.items
+    setSelectedItems(allSelected ? [] : selectedEntry.items);
+  };
+
+  const deleteEntry = async (entry: HistoryEntry) => {
+    const confirmed = window.confirm(
+      "Delete this exported history list? Product counts will be recalculated from the remaining history."
     );
+
+    if (!confirmed) return;
+
+    setDeletingHistoryId(entry.id);
+
+    try {
+      await onDelete(entry.id);
+
+      if (selectedEntry?.id === entry.id) {
+        setSelectedEntry(null);
+      }
+    } finally {
+      setDeletingHistoryId(null);
+    }
   };
 
   return (
@@ -96,19 +130,34 @@ export function HistoryModal({
                 )}
 
                 {history.map((entry) => (
-                  <button
+                  <div
                     key={entry.id}
-                    onClick={() => setSelectedEntry(entry)}
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-left transition hover:bg-white/10"
+                    className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-2 transition hover:bg-white/10"
                   >
-                    <div className="font-medium">
-                      {new Date(entry.createdAt).toLocaleString()}
-                    </div>
+                    <button
+                      onClick={() => setSelectedEntry(entry)}
+                      className="flex-1 p-2 text-left"
+                    >
+                      <div className="font-medium">
+                        {new Date(entry.createdAt).toLocaleString()}
+                      </div>
 
-                    <div className="mt-1 text-sm text-white/50">
-                      {entry.items.length} items · Tap to preview
-                    </div>
-                  </button>
+                      <div className="mt-1 text-sm text-white/50">
+                        {entry.items.length} items · Tap to preview
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => void deleteEntry(entry)}
+                      disabled={deletingHistoryId === entry.id}
+                      className="rounded-2xl bg-red-500/10 p-3 text-red-300 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                      aria-label="Delete history list"
+                      title="Delete history list"
+                    >
+                      <Trash2 size={17} />
+                    </button>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -162,12 +211,21 @@ export function HistoryModal({
                   })}
                 </div>
 
-                <div className="mt-6 flex gap-3">
+                <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <button
                     onClick={() => setSelectedEntry(null)}
-                    className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10"
+                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10"
                   >
                     Back
+                  </button>
+
+                  <button
+                    onClick={() => void deleteEntry(selectedEntry)}
+                    disabled={deletingHistoryId === selectedEntry.id}
+                    className="flex items-center justify-center gap-2 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-red-200 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Trash2 size={18} />
+                    Delete
                   </button>
 
                   <button
@@ -177,7 +235,7 @@ export function HistoryModal({
                       onClose();
                     }}
                     disabled={selectedItems.length === 0}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-4 py-3 font-medium text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-4 py-3 font-medium text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <RotateCcw size={18} />
                     Add Selected
