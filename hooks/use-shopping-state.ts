@@ -39,22 +39,80 @@ async function playTickSound() {
   }
 
   const now = context.currentTime;
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
+  const masterGain = context.createGain();
+  const delay = context.createDelay();
+  const feedback = context.createGain();
+  const echoGain = context.createGain();
+  const highPass = context.createBiquadFilter();
 
-  oscillator.type = "sine";
-  oscillator.frequency.setValueAtTime(880, now);
-  oscillator.frequency.exponentialRampToValueAtTime(1320, now + 0.04);
+  masterGain.gain.setValueAtTime(0.0001, now);
+  masterGain.gain.exponentialRampToValueAtTime(0.12, now + 0.012);
+  masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
 
-  gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+  highPass.type = "highpass";
+  highPass.frequency.setValueAtTime(420, now);
 
-  oscillator.connect(gain);
-  gain.connect(context.destination);
+  delay.delayTime.setValueAtTime(0.045, now);
+  feedback.gain.setValueAtTime(0.22, now);
+  echoGain.gain.setValueAtTime(0.18, now);
 
-  oscillator.start(now);
-  oscillator.stop(now + 0.1);
+  masterGain.connect(highPass);
+  highPass.connect(context.destination);
+  masterGain.connect(delay);
+  delay.connect(feedback);
+  feedback.connect(delay);
+  delay.connect(echoGain);
+  echoGain.connect(highPass);
+
+  const voices: Array<{
+    type: OscillatorType;
+    startFrequency: number;
+    endFrequency: number;
+    startOffset: number;
+    duration: number;
+    gain: number;
+  }> = [
+    {
+      type: "triangle",
+      startFrequency: 620,
+      endFrequency: 1480,
+      startOffset: 0,
+      duration: 0.09,
+      gain: 0.75,
+    },
+    {
+      type: "sine",
+      startFrequency: 1540,
+      endFrequency: 2360,
+      startOffset: 0.018,
+      duration: 0.075,
+      gain: 0.45,
+    },
+  ];
+
+  voices.forEach((voice) => {
+    const oscillator = context.createOscillator();
+    const voiceGain = context.createGain();
+    const start = now + voice.startOffset;
+    const end = start + voice.duration;
+
+    oscillator.type = voice.type;
+    oscillator.frequency.setValueAtTime(voice.startFrequency, start);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      voice.endFrequency,
+      end
+    );
+
+    voiceGain.gain.setValueAtTime(0.0001, start);
+    voiceGain.gain.exponentialRampToValueAtTime(voice.gain, start + 0.01);
+    voiceGain.gain.exponentialRampToValueAtTime(0.0001, end);
+
+    oscillator.connect(voiceGain);
+    voiceGain.connect(masterGain);
+
+    oscillator.start(start);
+    oscillator.stop(end + 0.02);
+  });
 }
 
 type UseShoppingStateProps = {
