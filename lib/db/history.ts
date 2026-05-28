@@ -25,6 +25,13 @@ export async function exportShoppingList() {
   });
 }
 
+export async function deleteShoppingHistoryEntry(historyId: string) {
+  return supabase.rpc("delete_shopping_history_entry", {
+    p_household_id: HOUSEHOLD_ID,
+    p_history_id: historyId,
+  });
+}
+
 export async function addProductsToShoppingList(
   productNames: string[]
 ) {
