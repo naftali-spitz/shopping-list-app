@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, Reorder, useDragControls } from "framer-motion";
-import { Edit2, GripVertical, Plus, Search, X } from "lucide-react";
+import { Edit2, MoreVertical, Plus, Search, X } from "lucide-react";
 import { Category, Product } from "@/types/shopping";
 
 type ProductSortMode = "az" | "popular" | "custom";
@@ -60,16 +60,15 @@ function ProductRow({
           onPointerDown={(event) => {
             if (!canReorder) return;
 
-            event.preventDefault();
             dragControls.start(event);
           }}
-          className={`rounded-full p-2 transition ${
+          className={`p-1 transition ${
             canReorder
-              ? "cursor-grab touch-none bg-white/10 text-white/60 active:cursor-grabbing hover:bg-white/20 hover:text-white"
-              : "cursor-not-allowed bg-white/5 text-white/20"
+              ? "cursor-grab touch-none text-white/45 active:cursor-grabbing hover:text-white/80"
+              : "cursor-not-allowed text-white/20"
           }`}
         >
-          <GripVertical size={16} />
+          <MoreVertical size={18} strokeWidth={2.4} />
         </button>
       )}
 
@@ -97,7 +96,7 @@ function ProductRow({
     </>
   );
 
-  const className = `flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 transition ${
+  const className = `flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 transition-colors ${
     selected
       ? "border-cyan-400 bg-cyan-400/10"
       : "border-white/10 bg-white/5 hover:bg-white/10"
@@ -107,11 +106,14 @@ function ProductRow({
     return (
       <Reorder.Item
         as="div"
-        value={product}
+        value={product.id}
         dragListener={false}
         dragControls={dragControls}
         onDragStart={() => onDragStart(product.id)}
         onDragEnd={onDragEnd}
+        layout
+        whileDrag={{ scale: 1.02, zIndex: 20 }}
+        transition={{ layout: { type: "spring", stiffness: 500, damping: 38 } }}
         className={className}
       >
         {rowContent}
@@ -159,7 +161,16 @@ export function CategoryModal({
     latestOrderRef.current = products;
   }, [products]);
 
-  const handleReorder = (nextProducts: Product[]) => {
+  const handleReorder = (nextProductIds: string[]) => {
+    const productsById = new Map(
+      latestOrderRef.current.map((product) => [product.id, product])
+    );
+
+    const nextProducts = nextProductIds.flatMap((id) => {
+      const product = productsById.get(id);
+      return product ? [product] : [];
+    });
+
     latestOrderRef.current = nextProducts;
     setReorderedProducts(nextProducts);
   };
@@ -254,9 +265,9 @@ export function CategoryModal({
               <Reorder.Group
                 as="div"
                 axis="y"
-                values={reorderedProducts}
+                values={reorderedProducts.map((product) => product.id)}
                 onReorder={handleReorder}
-                className="mt-8 flex-1 overflow-y-auto space-y-3 pr-1 modal-scrollbar"
+                className="mt-8 flex flex-1 flex-col gap-3 overflow-y-auto pr-1 modal-scrollbar"
               >
                 {visibleProducts.map((product, index) => (
                   <ProductRow
@@ -276,7 +287,7 @@ export function CategoryModal({
                 ))}
               </Reorder.Group>
             ) : (
-              <div className="mt-8 flex-1 overflow-y-auto space-y-3 pr-1 modal-scrollbar">
+              <div className="mt-8 flex flex-1 flex-col gap-3 overflow-y-auto pr-1 modal-scrollbar">
                 {visibleProducts.map((product, index) => (
                   <ProductRow
                     key={product.id}
