@@ -45,3 +45,29 @@ export async function updateProductQuantity(
     .update({ quantity })
     .eq("id", productId);
 }
+
+export async function updateProductDisplayOrder(
+  productId: string,
+  displayOrder: number
+) {
+  return supabase
+    .from("products")
+    .update({ display_order: displayOrder })
+    .eq("id", productId);
+}
+
+export async function updateProductDisplayOrders(
+  updates: { id: string; displayOrder: number }[]
+) {
+  const results = await Promise.all(
+    updates.map((update) =>
+      updateProductDisplayOrder(update.id, update.displayOrder)
+    )
+  );
+
+  const failedResult = results.find((result) => result.error);
+
+  return {
+    error: failedResult?.error ?? null,
+  };
+}
