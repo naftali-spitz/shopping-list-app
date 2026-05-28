@@ -223,6 +223,7 @@ export function useShoppingState({
 
       if (nextQuantity === product.quantity) return;
 
+      playSound();
       optimisticQuantity(product.id, nextQuantity);
 
       const { error } = await updateProductQuantity(product.id, nextQuantity);
@@ -233,7 +234,7 @@ export function useShoppingState({
         await refreshCategories();
       }
     },
-    [allProducts, optimisticQuantity, refreshCategories]
+    [allProducts, optimisticQuantity, playSound, refreshCategories]
   );
 
   const increaseQuantity = useCallback(
@@ -287,6 +288,8 @@ export function useShoppingState({
     async (items: string[]) => {
       const previousProducts = allProducts;
 
+      playSound();
+
       setCategories((prev) =>
         prev.map((category) => ({
           ...category,
@@ -324,7 +327,7 @@ export function useShoppingState({
         await refreshCategories();
       }
     },
-    [allProducts, refreshCategories, setCategories]
+    [allProducts, playSound, refreshCategories, setCategories]
   );
 
   const exportDoc = useCallback(async () => {
@@ -368,6 +371,8 @@ export function useShoppingState({
       return false;
     }
 
+    playSound();
+
     const createdAt = await exportShoppingDoc(shoppingProducts);
 
     if (createdAt) {
@@ -388,6 +393,7 @@ export function useShoppingState({
     return true;
   }, [
     allProducts,
+    playSound,
     refreshCategories,
     setCategories,
     shoppingProducts,
