@@ -1,0 +1,122 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { LogOut, Mail, Menu, Volume2, VolumeX, X } from "lucide-react";
+
+type ProfileSettingsModalProps = {
+  open: boolean;
+  email?: string | null;
+  soundOn: boolean;
+  onClose: () => void;
+  onToggleSound: () => void;
+  onLogout: () => void;
+};
+
+export function ProfileSettingsModal({
+  open,
+  email,
+  soundOn,
+  onClose,
+  onToggleSound,
+  onLogout,
+}: ProfileSettingsModalProps) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 backdrop-blur-md sm:items-center"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 80, scale: 1 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 80, scale: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 28 }}
+            className="w-full max-w-md rounded-t-[32px] border border-white/10 bg-[#0b1020]/95 p-6 text-white shadow-2xl backdrop-blur-2xl sm:rounded-[32px] sm:p-7"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mx-auto mb-5 h-1.5 w-12 rounded-full bg-white/20 sm:hidden" />
+
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-400/15 text-cyan-300">
+                  <Menu size={22} />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Profile</h2>
+                  <p className="mt-1 text-sm text-white/50">Settings and account</p>
+                </div>
+              </div>
+
+              <button
+                onClick={onClose}
+                className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20"
+                aria-label="Close profile settings"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">
+                  <Mail size={18} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs uppercase tracking-[0.2em] text-white/40">Signed in as</p>
+                  <p className="truncate text-sm font-medium text-white/85">
+                    {email || "Unknown user"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              <button
+                onClick={onToggleSound}
+                className="flex w-full items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-left transition hover:bg-white/10"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">
+                    {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                  </span>
+                  <span>
+                    <span className="block font-medium">Sound</span>
+                    <span className="text-sm text-white/45">
+                      {soundOn ? "Enabled" : "Disabled"}
+                    </span>
+                  </span>
+                </span>
+                <span
+                  className={`relative h-7 w-12 rounded-full transition ${
+                    soundOn ? "bg-cyan-400" : "bg-white/15"
+                  }`}
+                >
+                  <span
+                    className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${
+                      soundOn ? "right-1" : "right-6"
+                    }`}
+                  />
+                </span>
+              </button>
+
+              <button
+                onClick={onLogout}
+                className="flex w-full items-center justify-between rounded-3xl border border-red-400/20 bg-red-400/10 px-4 py-4 text-left text-red-100 transition hover:bg-red-400/20"
+              >
+                <span>
+                  <span className="block font-medium">Logout</span>
+                  <span className="text-sm text-red-100/60">Sign out of this account</span>
+                </span>
+                <LogOut size={20} />
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
