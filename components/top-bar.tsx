@@ -1,33 +1,21 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  History,
-  LogOut,
-  ShoppingCart,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { History, Menu, Moon, ShoppingCart, Sun } from "lucide-react";
 
 type TopBarProps = {
   darkMode: boolean;
-  soundOn: boolean;
   onToggleTheme: () => void;
-  onToggleSound: () => void;
-  onExport: () => void;
   onOpenHistory: () => void;
-  onLogout: () => void;
+  onOpenProfile: () => void;
   cardClass: string;
 };
 
 export function TopBar({
   darkMode,
-  soundOn,
   onToggleTheme,
-  onToggleSound,
-  onExport,
   onOpenHistory,
-  onLogout,
+  onOpenProfile,
   cardClass,
 }: TopBarProps) {
   return (
@@ -50,41 +38,29 @@ export function TopBar({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          onClick={onToggleSound}
-          className="rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-sm transition hover:bg-white/20"
-        >
-          Sound {soundOn ? "On" : "Off"}
-        </button>
-
-        <button
-          onClick={onOpenHistory}
-          className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"
-        >
-          <History size={18} />
-        </button>
-
+      <div className="flex items-center gap-2">
         <button
           onClick={onToggleTheme}
           className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"
+          aria-label="Toggle theme"
         >
           {darkMode ? <Sun size={18} /> : <Moon size={18} />}
         </button>
 
         <button
-          onClick={onLogout}
-          className="flex items-center gap-2 rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-2 text-sm transition hover:bg-red-400/20"
+          onClick={onOpenHistory}
+          className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"
+          aria-label="Open history"
         >
-          <LogOut size={16} />
-          Logout
+          <History size={18} />
         </button>
 
         <button
-          onClick={onExport}
-          className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm transition hover:bg-cyan-400/20"
+          onClick={onOpenProfile}
+          className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"
+          aria-label="Open profile settings"
         >
-          Export List
+          <Menu size={18} />
         </button>
       </div>
     </header>
