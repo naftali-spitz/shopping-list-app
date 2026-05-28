@@ -22,6 +22,8 @@ export function HistoryModal({
 }: HistoryModalProps) {
   const [selectedEntry, setSelectedEntry] = useState<HistoryEntry | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [pendingDeleteEntry, setPendingDeleteEntry] =
+    useState<HistoryEntry | null>(null);
   const [deletingHistoryId, setDeletingHistoryId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -66,21 +68,25 @@ export function HistoryModal({
     setSelectedItems(allSelected ? [] : selectedEntry.items);
   };
 
-  const deleteEntry = async (entry: HistoryEntry) => {
-    const confirmed = window.confirm(
-      "Delete this exported history list? Product counts will be recalculated from the remaining history."
-    );
+  const requestDeleteEntry = (entry: HistoryEntry) => {
+    setPendingDeleteEntry(entry);
+  };
 
-    if (!confirmed) return;
+  const confirmDeleteEntry = async () => {
+    if (!pendingDeleteEntry) return;
 
-    setDeletingHistoryId(entry.id);
+    const entryToDelete = pendingDeleteEntry;
+
+    setDeletingHistoryId(entryToDelete.id);
 
     try {
-      await onDelete(entry.id);
+      await onDelete(entryToDelete.id);
 
-      if (selectedEntry?.id === entry.id) {
+      if (selectedEntry?.id === entryToDelete.id) {
         setSelectedEntry(null);
       }
+
+      setPendingDeleteEntry(null);
     } finally {
       setDeletingHistoryId(null);
     }
@@ -113,6 +119,7 @@ export function HistoryModal({
               <button
                 onClick={() => {
                   setSelectedEntry(null);
+                  setPendingDeleteEntry(null);
                   onClose();
                 }}
                 className="rounded-2xl bg-white/10 p-3"
@@ -136,7 +143,7 @@ export function HistoryModal({
                   >
                     <button
                       type="button"
-                      onClick={() => void deleteEntry(entry)}
+                      onClick={() => requestDeleteEntry(entry)}
                       disabled={deletingHistoryId === entry.id}
                       className="absolute left-3 top-3 rounded-full bg-white/10 p-1.5 text-white/55 transition hover:bg-red-500/20 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-50"
                       aria-label="Delete history list"
@@ -220,7 +227,7 @@ export function HistoryModal({
                   </button>
 
                   <button
-                    onClick={() => void deleteEntry(selectedEntry)}
+                    onClick={() => requestDeleteEntry(selectedEntry)}
                     disabled={deletingHistoryId === selectedEntry.id}
                     className="flex items-center justify-center gap-2 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-red-200 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
                   >
@@ -244,6 +251,74 @@ export function HistoryModal({
               </>
             )}
           </motion.div>
+
+          <AnimatePresence>
+            {pendingDeleteEntry && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.92, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.96, y: 6 }}
+                  className="w-full max-w-sm rounded-[28px] border border-red-400/20 bg-[#0b1020] p-6 text-white shadow-2xl"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-xl font-bold">Delete history list?</h3>
+                      <p className="mt-2 text-sm leading-6 text-white/60">
+                        This will remove the exported list from history and
+                        recalculate product counts from the remaining history.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setPendingDeleteEntry(null)}
+                      className="rounded-full bg-white/10 p-2 text-white/70 transition hover:bg-white/20"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+
+                  <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/60">
+                    <div className="font-medium text-white/80">
+                      {new Date(pendingDeleteEntry.createdAt).toLocaleString()}
+                    </div>
+                    <div className="mt-1">
+                      {pendingDeleteEntry.items.length} items
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setPendingDeleteEntry(null)}
+                      disabled={deletingHistoryId === pendingDeleteEntry.id}
+                      className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => void confirmDeleteEntry()}
+                      disabled={deletingHistoryId === pendingDeleteEntry.id}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-red-500 px-4 py-3 font-medium text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Trash2 size={17} />
+                      {deletingHistoryId === pendingDeleteEntry.id
+                        ? "Deleting..."
+                        : "Delete"}
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
