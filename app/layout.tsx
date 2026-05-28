@@ -12,8 +12,9 @@ export const metadata: Metadata = {
     title: "FutureCart",
   },
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
+    icon: "/futurecart-icon.svg",
+    shortcut: "/futurecart-icon.svg",
+    apple: "/futurecart-icon.svg",
   },
 };
 
