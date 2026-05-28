@@ -340,9 +340,7 @@ export default function Home() {
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
         <TopBar
-          darkMode={darkMode}
           cardClass={cardClass}
-          onToggleTheme={() => setDarkMode((v) => !v)}
           onOpenHistory={() => setHistoryOpen(true)}
           onOpenProfile={() => setProfileOpen(true)}
         />
@@ -448,8 +446,10 @@ export default function Home() {
       <ProfileSettingsModal
         open={profileOpen}
         email={session.user.email}
+        darkMode={darkMode}
         soundOn={soundOn}
         onClose={() => setProfileOpen(false)}
+        onToggleTheme={() => setDarkMode((v) => !v)}
         onToggleSound={() => setSoundOn((v) => !v)}
         onLogout={() => void handleLogout()}
       />
