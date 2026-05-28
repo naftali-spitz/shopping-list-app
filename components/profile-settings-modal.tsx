@@ -1,13 +1,15 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { LogOut, Mail, Menu, Volume2, VolumeX, X } from "lucide-react";
+import { LogOut, Mail, Menu, Moon, Sun, Volume2, VolumeX, X } from "lucide-react";
 
 type ProfileSettingsModalProps = {
   open: boolean;
   email?: string | null;
+  darkMode: boolean;
   soundOn: boolean;
   onClose: () => void;
+  onToggleTheme: () => void;
   onToggleSound: () => void;
   onLogout: () => void;
 };
@@ -15,8 +17,10 @@ type ProfileSettingsModalProps = {
 export function ProfileSettingsModal({
   open,
   email,
+  darkMode,
   soundOn,
   onClose,
+  onToggleTheme,
   onToggleSound,
   onLogout,
 }: ProfileSettingsModalProps) {
@@ -75,6 +79,24 @@ export function ProfileSettingsModal({
             </div>
 
             <div className="mt-5 space-y-3">
+              <button
+                onClick={onToggleTheme}
+                className="flex w-full items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-left transition hover:bg-white/10"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">
+                    {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+                  </span>
+                  <span>
+                    <span className="block font-medium">Theme</span>
+                    <span className="text-sm text-white/45">
+                      {darkMode ? "Dark mode" : "Light mode"}
+                    </span>
+                  </span>
+                </span>
+                <span className="text-sm text-white/45">Tap to change</span>
+              </button>
+
               <button
                 onClick={onToggleSound}
                 className="flex w-full items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-4 py-4 text-left transition hover:bg-white/10"
