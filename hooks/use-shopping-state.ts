@@ -121,6 +121,19 @@ type UseShoppingStateProps = {
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 };
 
+function historyItemsToLabels(items: unknown): string[] {
+  if (!Array.isArray(items)) return [];
+
+  return items.flatMap((item: any) => {
+    if (typeof item === "string") return [item];
+    if (!item || typeof item.name !== "string") return [];
+
+    const quantity = Number(item.quantity || 1);
+
+    return [quantity > 1 ? `${item.name} ×${quantity}` : item.name];
+  });
+}
+
 export function useShoppingState({
   categories,
   refreshCategories,
@@ -139,19 +152,7 @@ export function useShoppingState({
           data.map((entry: any) => ({
             id: entry.id,
             createdAt: entry.exported_at,
-            items: Array.isArray(entry.items)
-              ? entry.items.map((item: any) => {
-                  if (typeof item === "string") {
-                    return item;
-                  }
-
-                  const quantity = Number(item.quantity || 1);
-
-                  return quantity > 1
-                    ? `${item.name} ×${quantity}`
-                    : item.name;
-                })
-              : [],
+            items: historyItemsToLabels(entry.items),
           }))
         );
       }
@@ -357,8 +358,7 @@ export function useShoppingState({
           ...category,
           products: category.products.map((product) => ({
             ...product,
-            checked:
-              product.checked || items.includes(product.name),
+            checked: product.checked || items.includes(product.name),
           })),
         }))
       );
@@ -414,9 +414,7 @@ export function useShoppingState({
         prev.map((category) => ({
           ...category,
           products: category.products.map((product) => {
-            const previous = previousProducts.find(
-              (p) => p.id === product.id
-            );
+            const previous = previousProducts.find((p) => p.id === product.id);
 
             return previous
               ? {
@@ -451,6 +449,8 @@ export function useShoppingState({
         ...prev,
       ]);
     }
+
+    await refreshCategories();
 
     return true;
   }, [
