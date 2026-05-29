@@ -1,12 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { Category } from "@/types/shopping";
 
-function showMutationError(message: string) {
-  if (typeof window !== "undefined") {
-    window.alert(message);
-  }
-}
-
 export async function fetchCategories(
   householdId: string
 ): Promise<Category[]> {
@@ -58,15 +52,10 @@ export async function updateCategory(
     .eq("id", categoryId)
     .select();
 
-  const failed =
-    result.error || !result.data || result.data.length === 0;
+  const failed = result.error || !result.data || result.data.length === 0;
 
   if (failed) {
     console.error(result.error);
-
-    showMutationError(
-      "שמירת הקטגוריה נכשלה. כנראה חסרה הרשאת UPDATE ב-Supabase."
-    );
 
     return {
       ...result,
