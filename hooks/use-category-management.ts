@@ -23,6 +23,7 @@ type UseCategoryManagementProps = {
   refreshCategories: () => Promise<void>;
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   setSelectedCategoryId: React.Dispatch<React.SetStateAction<string | null>>;
+  onError?: (message: string) => void;
 };
 
 export function useCategoryManagement({
@@ -31,6 +32,7 @@ export function useCategoryManagement({
   refreshCategories,
   setCategories,
   setSelectedCategoryId,
+  onError,
 }: UseCategoryManagementProps) {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newProductName, setNewProductName] = useState("");
@@ -66,11 +68,12 @@ export function useCategoryManagement({
 
     if (error) {
       console.error("Failed to create category:", error);
+      onError?.("הוספת הקטגוריה נכשלה.");
       return;
     }
 
     await refreshCategories();
-  }, [newCategoryName, refreshCategories]);
+  }, [newCategoryName, onError, refreshCategories]);
 
   const addProduct = useCallback(async () => {
     const name = newProductName.trim();
@@ -83,11 +86,12 @@ export function useCategoryManagement({
 
     if (error) {
       console.error("Failed to create product:", error);
+      onError?.("הוספת המוצר נכשלה.");
       return;
     }
 
     await refreshCategories();
-  }, [newProductName, refreshCategories, selectedCategory]);
+  }, [newProductName, onError, refreshCategories, selectedCategory]);
 
   const saveCategoryEdit = useCallback(async () => {
     if (!editingCategoryId || !editingCategoryName.trim()) return;
@@ -96,12 +100,16 @@ export function useCategoryManagement({
       name: editingCategoryName,
     });
 
-    if (error) return;
+    if (error) {
+      console.error("Failed to update category:", error);
+      onError?.("שמירת הקטגוריה נכשלה.");
+      return;
+    }
 
     await refreshCategories();
     setEditingCategoryId(null);
     setEditingCategoryName("");
-  }, [editingCategoryId, editingCategoryName, refreshCategories]);
+  }, [editingCategoryId, editingCategoryName, onError, refreshCategories]);
 
   const saveProductEdit = useCallback(async () => {
     if (!editingProductId || !editingProductCategoryId) return;
@@ -122,6 +130,7 @@ export function useCategoryManagement({
 
     if (error) {
       console.error("Failed to update product:", error);
+      onError?.("שמירת המוצר נכשלה.");
     }
 
     await refreshCategories();
@@ -129,6 +138,7 @@ export function useCategoryManagement({
     editingProductCategoryId,
     editingProductId,
     editingProductName,
+    onError,
     refreshCategories,
   ]);
 
@@ -179,6 +189,7 @@ export function useCategoryManagement({
 
       if (error) {
         console.error("Failed to delete product:", error);
+        onError?.("מחיקת המוצר נכשלה.");
         await refreshCategories();
       }
 
@@ -201,9 +212,11 @@ export function useCategoryManagement({
 
     if (error) {
       console.error("Failed to delete category:", error);
+      onError?.("מחיקת הקטגוריה נכשלה.");
       await refreshCategories();
     }
   }, [
+    onError,
     pendingDelete,
     refreshCategories,
     selectedCategoryId,
