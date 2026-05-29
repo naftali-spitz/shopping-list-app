@@ -120,6 +120,7 @@ type UseShoppingStateProps = {
   categories: Category[];
   refreshCategories: () => Promise<void>;
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  onError?: (message: string) => void;
 };
 
 function historyItemsToLabels(items: unknown): string[] {
@@ -139,6 +140,7 @@ export function useShoppingState({
   categories,
   refreshCategories,
   setCategories,
+  onError,
 }: UseShoppingStateProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [soundOn, setSoundOn] = useState(false);
@@ -146,7 +148,12 @@ export function useShoppingState({
 
   useEffect(() => {
     const loadInitialData = async () => {
-      const { data } = await fetchHistory(HOUSEHOLD_ID);
+      const { data, error } = await fetchHistory(HOUSEHOLD_ID);
+
+      if (error) {
+        console.error("Failed to load shopping history:", error);
+        onError?.("טעינת היסטוריית הקניות נכשלה. נסה לרענן את הדף.");
+      }
 
       if (data) {
         setHistory(
@@ -162,7 +169,7 @@ export function useShoppingState({
     };
 
     void loadInitialData();
-  }, []);
+  }, [onError]);
 
   useEffect(() => {
     saveHistory(history);
@@ -248,13 +255,14 @@ export function useShoppingState({
 
       if (error) {
         console.error("Failed to toggle product:", error);
+        onError?.("עדכון המוצר ברשימת הקניות נכשל.");
 
         optimisticToggle(product.id, product.checked);
 
         await refreshCategories();
       }
     },
-    [allProducts, optimisticToggle, playSound, refreshCategories]
+    [allProducts, onError, optimisticToggle, playSound, refreshCategories]
   );
 
   const removeProductFromShoppingList = useCallback(
@@ -270,11 +278,12 @@ export function useShoppingState({
 
       if (error) {
         console.error("Failed to remove product from shopping list:", error);
+        onError?.("הסרת המוצר מהרשימה נכשלה.");
         optimisticToggle(product.id, true);
         await refreshCategories();
       }
     },
-    [allProducts, optimisticToggle, playSound, refreshCategories]
+    [allProducts, onError, optimisticToggle, playSound, refreshCategories]
   );
 
   const setProductQuantity = useCallback(
@@ -294,11 +303,12 @@ export function useShoppingState({
 
       if (error) {
         console.error("Failed to update product quantity:", error);
+        onError?.("עדכון הכמות נכשל.");
         optimisticQuantity(product.id, product.quantity);
         await refreshCategories();
       }
     },
-    [allProducts, optimisticQuantity, playSound, refreshCategories]
+    [allProducts, onError, optimisticQuantity, playSound, refreshCategories]
   );
 
   const increaseQuantity = useCallback(
@@ -339,13 +349,14 @@ export function useShoppingState({
 
       if (error) {
         console.error("Failed to add product:", error);
+        onError?.("הוספת המוצר לרשימת הקניות נכשלה.");
 
         optimisticToggle(product.id, false);
 
         await refreshCategories();
       }
     },
-    [allProducts, optimisticToggle, playSound, refreshCategories]
+    [allProducts, onError, optimisticToggle, playSound, refreshCategories]
   );
 
   const setShoppingList = useCallback(
@@ -368,6 +379,7 @@ export function useShoppingState({
 
       if (error) {
         console.error("Failed to restore shopping list:", error);
+        onError?.("שחזור הרשימה מההיסטוריה נכשל.");
 
         setCategories((prev) =>
           prev.map((category) => ({
@@ -390,7 +402,7 @@ export function useShoppingState({
         await refreshCategories();
       }
     },
-    [allProducts, playSound, refreshCategories, setCategories]
+    [allProducts, onError, playSound, refreshCategories, setCategories]
   );
 
   const deleteHistoryEntry = useCallback(
@@ -404,6 +416,7 @@ export function useShoppingState({
 
       if (error) {
         console.error("Failed to delete history entry:", error);
+        onError?.("מחיקת רשימת ההיסטוריה נכשלה.");
         setHistory(previousHistory);
         await refreshCategories();
         return false;
@@ -412,7 +425,7 @@ export function useShoppingState({
       await refreshCategories();
       return true;
     },
-    [history, playSound, refreshCategories]
+    [history, onError, playSound, refreshCategories]
   );
 
   const exportDoc = useCallback(async () => {
@@ -432,6 +445,7 @@ export function useShoppingState({
 
     if (error) {
       console.error("Failed to export shopping list:", error);
+      onError?.("ייצוא רשימת הקניות נכשל.");
 
       setCategories((prev) =>
         prev.map((category) => ({
@@ -456,7 +470,16 @@ export function useShoppingState({
 
     playSound();
 
-    const createdAt = await exportShoppingDoc(shoppingProducts);
+    let createdAt: string | null = null;
+
+    try {
+      createdAt = await exportShoppingDoc(shoppingProducts);
+    } catch (error) {
+      console.error("Failed to generate shopping document:", error);
+      onError?.("יצירת מסמך הקניות נכשלה.");
+      await refreshCategories();
+      return false;
+    }
 
     if (createdAt) {
       setHistory((prev) => [
@@ -478,6 +501,7 @@ export function useShoppingState({
     return true;
   }, [
     allProducts,
+    onError,
     playSound,
     refreshCategories,
     setCategories,
