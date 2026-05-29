@@ -1,7 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatedBackground } from "@/components/animated-background";
+import {
+  AppFeedback,
+  AppFeedbackMessage,
+} from "@/components/app-feedback";
 import { AuthButton } from "@/components/auth-button";
 import { CategoriesSection } from "@/components/categories-section";
 import { CategoryModal } from "@/components/category-modal";
@@ -71,6 +75,18 @@ function buildBalancedDisplayOrder(products: Product[]) {
 
 export default function Home() {
   const { session, loading } = useSession();
+  const [feedback, setFeedback] = useState<AppFeedbackMessage | null>(null);
+
+  const showError = useCallback((message: string) => {
+    setFeedback({
+      id: Date.now(),
+      message,
+    });
+  }, []);
+
+  const closeFeedback = useCallback(() => {
+    setFeedback(null);
+  }, []);
 
   const {
     categories,
@@ -100,6 +116,7 @@ export default function Home() {
     categories,
     refreshCategories,
     setCategories,
+    onError: showError,
   });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -143,6 +160,7 @@ export default function Home() {
     refreshCategories,
     setCategories,
     setSelectedCategoryId,
+    onError: showError,
   });
 
   const anyModalOpen =
@@ -272,6 +290,7 @@ export default function Home() {
 
       if (error) {
         console.error("Failed to update custom product order:", error);
+        showError("שמירת סדר המוצרים נכשלה.");
         await refreshCategories();
       }
 
@@ -302,6 +321,7 @@ export default function Home() {
 
     if (error) {
       console.error("Failed to rebalance custom product order:", error);
+      showError("שמירת סדר המוצרים נכשלה.");
       await refreshCategories();
     }
   };
@@ -311,6 +331,7 @@ export default function Home() {
 
     if (error) {
       console.error("Logout failed:", error);
+      showError("ההתנתקות נכשלה.");
     }
   };
 
@@ -488,6 +509,8 @@ export default function Home() {
         }}
         onDelete={(historyId) => void deleteHistoryEntry(historyId)}
       />
+
+      <AppFeedback feedback={feedback} onClose={closeFeedback} />
     </main>
   );
 }
