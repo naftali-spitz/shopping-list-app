@@ -12,6 +12,12 @@ type HouseholdRow = {
   member_role: string;
 };
 
+type InviteRow = {
+  invite_token: string;
+  household_name: string;
+  expires_at: string;
+};
+
 function mapHousehold(row: HouseholdRow): UserHousehold {
   return {
     id: row.household_id,
@@ -52,6 +58,48 @@ export async function listMyHouseholds() {
 export async function createHousehold(name: string) {
   const { data, error } = await supabase.rpc("create_household", {
     p_name: name,
+  });
+
+  if (error || !data?.length) {
+    return {
+      household: null,
+      error: error ?? new Error("No household returned"),
+    };
+  }
+
+  return {
+    household: mapHousehold(data[0] as HouseholdRow),
+    error: null,
+  };
+}
+
+export async function createHouseholdInvite(householdId: string) {
+  const { data, error } = await supabase.rpc("create_household_invite", {
+    p_household_id: householdId,
+  });
+
+  if (error || !data?.length) {
+    return {
+      invite: null,
+      error: error ?? new Error("No invite returned"),
+    };
+  }
+
+  const invite = data[0] as InviteRow;
+
+  return {
+    invite: {
+      token: invite.invite_token,
+      householdName: invite.household_name,
+      expiresAt: invite.expires_at,
+    },
+    error: null,
+  };
+}
+
+export async function acceptHouseholdInvite(token: string) {
+  const { data, error } = await supabase.rpc("accept_household_invite", {
+    p_token: token,
   });
 
   if (error || !data?.length) {
