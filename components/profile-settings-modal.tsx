@@ -1,16 +1,33 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { LogOut, Mail, Menu, Moon, Sun, Volume2, VolumeX, X } from "lucide-react";
+import {
+  Check,
+  Home,
+  LogOut,
+  Mail,
+  Menu,
+  Moon,
+  Plus,
+  Sun,
+  Volume2,
+  VolumeX,
+  X,
+} from "lucide-react";
+import { UserHousehold } from "@/lib/db/households";
 
 type ProfileSettingsModalProps = {
   open: boolean;
   email?: string | null;
   darkMode: boolean;
   soundOn: boolean;
+  households: UserHousehold[];
+  currentHouseholdId: string | null;
   onClose: () => void;
   onToggleTheme: () => void;
   onToggleSound: () => void;
+  onSwitchHousehold: (householdId: string) => void;
+  onCreateHousehold: () => void;
   onLogout: () => void;
 };
 
@@ -19,9 +36,13 @@ export function ProfileSettingsModal({
   email,
   darkMode,
   soundOn,
+  households,
+  currentHouseholdId,
   onClose,
   onToggleTheme,
   onToggleSound,
+  onSwitchHousehold,
+  onCreateHousehold,
   onLogout,
 }: ProfileSettingsModalProps) {
   return (
@@ -39,7 +60,7 @@ export function ProfileSettingsModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 80, scale: 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
-            className="w-full max-w-md rounded-t-[32px] border border-white/10 bg-[#0b1020]/95 p-6 text-white shadow-2xl backdrop-blur-2xl sm:rounded-[32px] sm:p-7"
+            className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-t-[32px] border border-white/10 bg-[#0b1020]/95 p-6 text-white shadow-2xl backdrop-blur-2xl sm:rounded-[32px] sm:p-7"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mx-auto mb-5 h-1.5 w-12 rounded-full bg-white/20 sm:hidden" />
@@ -75,6 +96,55 @@ export function ProfileSettingsModal({
                     {email || "Unknown user"}
                   </p>
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-3xl border border-cyan-300/15 bg-cyan-300/5 p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <span className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-400/15 text-cyan-200">
+                    <Home size={18} />
+                  </span>
+                  <span>
+                    <span className="block font-medium">Household</span>
+                    <span className="text-sm text-white/45">Switch shopping space</span>
+                  </span>
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                {households.map((household) => {
+                  const active = household.id === currentHouseholdId;
+
+                  return (
+                    <button
+                      key={household.id}
+                      onClick={() => onSwitchHousehold(household.id)}
+                      className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+                        active
+                          ? "border-cyan-300/40 bg-cyan-300/15 text-cyan-50"
+                          : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
+                      }`}
+                    >
+                      <span className="min-w-0">
+                        <span className="block truncate font-medium">{household.name}</span>
+                        <span className="text-xs text-white/45">{household.role}</span>
+                      </span>
+                      {active && <Check size={18} />}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={onCreateHousehold}
+                  className="flex w-full items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-4 py-3 text-left text-white/75 transition hover:bg-white/10"
+                >
+                  <span>
+                    <span className="block font-medium">Create new household</span>
+                    <span className="text-xs text-white/45">Start a separate list</span>
+                  </span>
+                  <Plus size={18} />
+                </button>
               </div>
             </div>
 
