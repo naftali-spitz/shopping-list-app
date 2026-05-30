@@ -3,26 +3,36 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchCategories } from "@/lib/db/categories";
 import { subscribeToProducts } from "@/lib/realtime/products-channel";
-import { HOUSEHOLD_ID } from "@/lib/constants";
 import { Category } from "@/types/shopping";
 
-export function useSharedCategories(initialCategories: Category[]) {
+export function useSharedCategories(initialCategories: Category[], householdId: string | null) {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [loading, setLoading] = useState(true);
 
   const refreshCategories = useCallback(async () => {
     try {
-      const data = await fetchCategories(HOUSEHOLD_ID);
-
-      if (data.length > 0) {
-        setCategories(data);
+      if (!householdId) {
+        setCategories(initialCategories);
+        setLoading(false);
+        return;
       }
+
+      const data = await fetchCategories(householdId);
+
+      setCategories(data);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [householdId, initialCategories]);
 
   useEffect(() => {
+    if (!householdId) {
+      setCategories(initialCategories);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     void refreshCategories();
 
     const channel = subscribeToProducts(() => {
@@ -32,7 +42,7 @@ export function useSharedCategories(initialCategories: Category[]) {
     return () => {
       channel.unsubscribe();
     };
-  }, [refreshCategories]);
+  }, [householdId, initialCategories, refreshCategories]);
 
   return {
     categories,
