@@ -5,6 +5,8 @@ import { useEffect } from "react";
 export type AppFeedbackMessage = {
   id: number;
   message: string;
+  title?: string;
+  variant?: "error" | "success";
 };
 
 type AppFeedbackProps = {
@@ -22,15 +24,23 @@ export function AppFeedback({ feedback, onClose }: AppFeedbackProps) {
 
   if (!feedback) return null;
 
+  const success = feedback.variant === "success";
+
   return (
     <div
-      className="fixed bottom-6 left-1/2 z-[80] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 rounded-3xl border border-white/15 bg-[#22101a]/95 p-4 text-white shadow-2xl backdrop-blur-xl"
+      className={`fixed bottom-6 left-1/2 z-[80] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 rounded-3xl border p-4 text-white shadow-2xl backdrop-blur-xl ${
+        success
+          ? "border-cyan-300/20 bg-[#071b24]/95"
+          : "border-white/15 bg-[#22101a]/95"
+      }`}
       dir="rtl"
       role="status"
     >
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
-          <div className="font-semibold">שגיאה</div>
+          <div className="font-semibold">
+            {feedback.title ?? (success ? "בוצע" : "שגיאה")}
+          </div>
           <p className="mt-1 text-sm leading-6 text-white/80">{feedback.message}</p>
         </div>
 

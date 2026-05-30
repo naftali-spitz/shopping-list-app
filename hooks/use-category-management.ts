@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 
-import { HOUSEHOLD_ID } from "@/lib/constants";
 import {
   createCategory,
   deleteCategory as deleteCategoryFromDb,
@@ -19,6 +18,7 @@ type PendingDelete =
 
 type UseCategoryManagementProps = {
   categories: Category[];
+  householdId: string | null;
   selectedCategoryId: string | null;
   refreshCategories: () => Promise<void>;
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
@@ -28,6 +28,7 @@ type UseCategoryManagementProps = {
 
 export function useCategoryManagement({
   categories,
+  householdId,
   selectedCategoryId,
   refreshCategories,
   setCategories,
@@ -61,7 +62,12 @@ export function useCategoryManagement({
 
     setNewCategoryName("");
 
-    const { error } = await createCategory(HOUSEHOLD_ID, {
+    if (!householdId) {
+      onError?.("לא נמצא בית פעיל.");
+      return;
+    }
+
+    const { error } = await createCategory(householdId, {
       name,
       icon: "general",
     });
@@ -73,7 +79,7 @@ export function useCategoryManagement({
     }
 
     await refreshCategories();
-  }, [newCategoryName, onError, refreshCategories]);
+  }, [householdId, newCategoryName, onError, refreshCategories]);
 
   const addProduct = useCallback(async () => {
     const name = newProductName.trim();

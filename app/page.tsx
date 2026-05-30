@@ -22,7 +22,7 @@ import { useCategoryManagement } from "@/hooks/use-category-management";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
-import { isAllowedEmail } from "@/lib/auth/whitelist";
+import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
 import {
   updateProductDisplayOrder,
   updateProductDisplayOrders,
@@ -73,14 +73,34 @@ function buildBalancedDisplayOrder(products: Product[]) {
   }));
 }
 
+function removeInviteTokenFromUrl() {
+  if (typeof window === "undefined") return;
+
+  const url = new URL(window.location.href);
+  url.searchParams.delete("invite");
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
 export default function Home() {
   const { session, loading } = useSession();
   const [feedback, setFeedback] = useState<AppFeedbackMessage | null>(null);
+  const [pendingInviteToken, setPendingInviteToken] = useState<string | null>(null);
+  const [acceptingInvite, setAcceptingInvite] = useState(false);
 
   const showError = useCallback((message: string) => {
     setFeedback({
       id: Date.now(),
       message,
+      variant: "error",
+    });
+  }, []);
+
+  const showSuccess = useCallback((message: string, title = "בוצע") => {
+    setFeedback({
+      id: Date.now(),
+      message,
+      title,
+      variant: "success",
     });
   }, []);
 
@@ -88,12 +108,31 @@ export default function Home() {
     setFeedback(null);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const token = new URLSearchParams(window.location.search).get("invite");
+    if (token) {
+      setPendingInviteToken(token);
+    }
+  }, []);
+
+  const {
+    acceptInvite,
+    createHousehold,
+    createInviteLink,
+    currentHouseholdId,
+    households,
+    loading: householdLoading,
+    setCurrentHouseholdId,
+  } = useCurrentHousehold({ onError: showError });
+
   const {
     categories,
     setCategories,
     loading: categoriesLoading,
     refreshCategories,
-  } = useSharedCategories(initialCategories);
+  } = useSharedCategories(initialCategories, currentHouseholdId);
 
   const {
     decreaseQuantity,
@@ -114,6 +153,7 @@ export default function Home() {
     toggleItem,
   } = useShoppingState({
     categories,
+    householdId: currentHouseholdId,
     refreshCategories,
     setCategories,
     onError: showError,
@@ -156,12 +196,39 @@ export default function Home() {
     setPendingDelete,
   } = useCategoryManagement({
     categories,
+    householdId: currentHouseholdId,
     selectedCategoryId,
     refreshCategories,
     setCategories,
     setSelectedCategoryId,
     onError: showError,
   });
+
+  useEffect(() => {
+    if (!session || !pendingInviteToken || householdLoading || acceptingInvite) return;
+
+    const acceptPendingInvite = async () => {
+      setAcceptingInvite(true);
+      const household = await acceptInvite(pendingInviteToken);
+
+      if (household) {
+        showSuccess(`הצטרפת לבית ${household.name}.`, "ההזמנה התקבלה");
+      }
+
+      setPendingInviteToken(null);
+      removeInviteTokenFromUrl();
+      setAcceptingInvite(false);
+    };
+
+    void acceptPendingInvite();
+  }, [
+    acceptInvite,
+    acceptingInvite,
+    householdLoading,
+    pendingInviteToken,
+    session,
+    showSuccess,
+  ]);
 
   const anyModalOpen =
     Boolean(selectedCategoryId) ||
@@ -326,6 +393,63 @@ export default function Home() {
     }
   };
 
+  const handleSwitchHousehold = (householdId: string) => {
+    if (householdId === currentHouseholdId) return;
+
+    playSound();
+    setCurrentHouseholdId(householdId);
+    setSelectedCategoryId(null);
+    setEditingCategoryId(null);
+    setEditingCategoryName("");
+    setEditingProductId(null);
+    setEditingProductName("");
+    setEditingProductCategoryId(null);
+    setPendingDelete(null);
+    setHistoryOpen(false);
+    setProfileOpen(false);
+    setSearchTerm("");
+    setGlobalSearch("");
+  };
+
+  const handleCreateHousehold = async () => {
+    playSound();
+
+    const name = window.prompt("Household name", "My household")?.trim();
+
+    if (!name) return;
+
+    const household = await createHousehold(name);
+
+    if (!household) return;
+
+    setSelectedCategoryId(null);
+    setHistoryOpen(false);
+    setProfileOpen(false);
+    setSearchTerm("");
+    setGlobalSearch("");
+  };
+
+  const handleCreateInviteLink = async () => {
+    if (!currentHouseholdId) {
+      showError("לא נמצא בית פעיל להזמנה.");
+      return;
+    }
+
+    playSound();
+
+    const inviteLink = await createInviteLink(currentHouseholdId);
+
+    if (!inviteLink) return;
+
+    try {
+      await navigator.clipboard.writeText(inviteLink);
+      showSuccess("קישור ההזמנה הועתק. אפשר לשלוח אותו למשפחה או חברים.", "קישור הועתק");
+    } catch {
+      window.prompt("Copy this invite link", inviteLink);
+      showSuccess("קישור ההזמנה נוצר.", "קישור מוכן");
+    }
+  };
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
 
@@ -335,7 +459,7 @@ export default function Home() {
     }
   };
 
-  if (loading || isLoading || categoriesLoading) {
+  if (loading || householdLoading || acceptingInvite || isLoading || categoriesLoading) {
     return <LoadingScreen />;
   }
 
@@ -343,14 +467,6 @@ export default function Home() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050816]">
         <AuthButton />
-      </main>
-    );
-  }
-
-  if (!isAllowedEmail(session.user.email)) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
-        Access denied
       </main>
     );
   }
@@ -479,6 +595,8 @@ export default function Home() {
         email={session.user.email}
         darkMode={darkMode}
         soundOn={soundOn}
+        households={households}
+        currentHouseholdId={currentHouseholdId}
         onClose={() => setProfileOpen(false)}
         onToggleTheme={() => {
           playSound();
@@ -493,6 +611,9 @@ export default function Home() {
 
           setSoundOn((v) => !v);
         }}
+        onSwitchHousehold={handleSwitchHousehold}
+        onCreateHousehold={() => void handleCreateHousehold()}
+        onCreateInviteLink={() => void handleCreateInviteLink()}
         onLogout={() => {
           playSound();
           void handleLogout();
