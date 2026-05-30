@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  acceptHouseholdInvite,
   createHousehold as createHouseholdInDb,
+  createHouseholdInvite,
   getOrCreateCurrentHousehold,
   listMyHouseholds,
   UserHousehold,
@@ -97,13 +99,52 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
     [onError, setCurrentHouseholdId]
   );
 
+  const createInviteLink = useCallback(
+    async (householdId: string) => {
+      const { invite, error } = await createHouseholdInvite(householdId);
+
+      if (error || !invite) {
+        console.error("Failed to create household invite:", error);
+        onError?.("יצירת קישור ההזמנה נכשלה.");
+        return null;
+      }
+
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      return `${origin}/?invite=${invite.token}`;
+    },
+    [onError]
+  );
+
+  const acceptInvite = useCallback(
+    async (token: string) => {
+      const { household, error } = await acceptHouseholdInvite(token);
+
+      if (error || !household) {
+        console.error("Failed to accept household invite:", error);
+        onError?.("קישור ההזמנה לא תקין או שפג תוקפו.");
+        return null;
+      }
+
+      setHouseholds((prev) => {
+        const withoutDuplicate = prev.filter((item) => item.id !== household.id);
+        return [...withoutDuplicate, household];
+      });
+      setCurrentHouseholdId(household.id);
+      await refreshHouseholds();
+      return household;
+    },
+    [onError, refreshHouseholds, setCurrentHouseholdId]
+  );
+
   const currentHousehold = useMemo(
     () => households.find((household) => household.id === currentHouseholdId) ?? null,
     [currentHouseholdId, households]
   );
 
   return {
+    acceptInvite,
     createHousehold,
+    createInviteLink,
     currentHousehold,
     currentHouseholdId,
     householdId: currentHouseholdId,
