@@ -13,7 +13,7 @@ create table if not exists public.household_invites (
 
 alter table public.household_invites enable row level security;
 
-create policy if not exists "household members can view household invites"
+create policy "household members can view household invites"
 on public.household_invites
 for select
 to authenticated
