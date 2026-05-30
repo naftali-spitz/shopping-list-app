@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
   Home,
+  Link,
   LogOut,
   Mail,
   Menu,
@@ -28,6 +29,7 @@ type ProfileSettingsModalProps = {
   onToggleSound: () => void;
   onSwitchHousehold: (householdId: string) => void;
   onCreateHousehold: () => void;
+  onCreateInviteLink: () => void;
   onLogout: () => void;
 };
 
@@ -43,8 +45,12 @@ export function ProfileSettingsModal({
   onToggleSound,
   onSwitchHousehold,
   onCreateHousehold,
+  onCreateInviteLink,
   onLogout,
 }: ProfileSettingsModalProps) {
+  const currentHousehold =
+    households.find((household) => household.id === currentHouseholdId) ?? null;
+
   return (
     <AnimatePresence>
       {open && (
@@ -134,6 +140,20 @@ export function ProfileSettingsModal({
                     </button>
                   );
                 })}
+
+                <button
+                  onClick={onCreateInviteLink}
+                  disabled={!currentHousehold}
+                  className="flex w-full items-center justify-between rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-left text-cyan-50 transition hover:bg-cyan-300/20 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <span>
+                    <span className="block font-medium">Invite to household</span>
+                    <span className="text-xs text-white/45">
+                      Copy a link for family or friends
+                    </span>
+                  </span>
+                  <Link size={18} />
+                </button>
 
                 <button
                   onClick={onCreateHousehold}
