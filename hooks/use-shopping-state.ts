@@ -6,7 +6,6 @@ import {
   exportShoppingList,
   fetchHistory,
 } from "@/lib/db/history";
-import { HOUSEHOLD_ID } from "@/lib/constants";
 import {
   updateProductChecked,
   updateProductQuantity,
@@ -118,6 +117,7 @@ async function playTickSound() {
 
 type UseShoppingStateProps = {
   categories: Category[];
+  householdId: string | null;
   refreshCategories: () => Promise<void>;
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   onError?: (message: string) => void;
@@ -138,6 +138,7 @@ function historyItemsToLabels(items: unknown): string[] {
 
 export function useShoppingState({
   categories,
+  householdId,
   refreshCategories,
   setCategories,
   onError,
@@ -148,7 +149,14 @@ export function useShoppingState({
 
   useEffect(() => {
     const loadInitialData = async () => {
-      const { data, error } = await fetchHistory(HOUSEHOLD_ID);
+      if (!householdId) {
+        setHistory([]);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      const { data, error } = await fetchHistory(householdId);
 
       if (error) {
         console.error("Failed to load shopping history:", error);
@@ -169,7 +177,7 @@ export function useShoppingState({
     };
 
     void loadInitialData();
-  }, [onError]);
+  }, [householdId, onError]);
 
   useEffect(() => {
     saveHistory(history);
@@ -361,6 +369,11 @@ export function useShoppingState({
 
   const setShoppingList = useCallback(
     async (items: string[]) => {
+      if (!householdId) {
+        onError?.("לא נמצא בית פעיל.");
+        return false;
+      }
+
       const previousProducts = allProducts;
 
       playSound();
@@ -375,7 +388,7 @@ export function useShoppingState({
         }))
       );
 
-      const { error } = await addProductsToShoppingList(items);
+      const { error } = await addProductsToShoppingList(householdId, items);
 
       if (error) {
         console.error("Failed to restore shopping list:", error);
@@ -402,7 +415,7 @@ export function useShoppingState({
         await refreshCategories();
       }
     },
-    [allProducts, onError, playSound, refreshCategories, setCategories]
+    [allProducts, householdId, onError, playSound, refreshCategories, setCategories]
   );
 
   const deleteHistoryEntry = useCallback(
@@ -412,7 +425,13 @@ export function useShoppingState({
       playSound();
       setHistory((prev) => prev.filter((entry) => entry.id !== historyId));
 
-      const { error } = await deleteShoppingHistoryEntry(historyId);
+      if (!householdId) {
+        onError?.("לא נמצא בית פעיל.");
+        setHistory(previousHistory);
+        return false;
+      }
+
+      const { error } = await deleteShoppingHistoryEntry(householdId, historyId);
 
       if (error) {
         console.error("Failed to delete history entry:", error);
@@ -425,10 +444,15 @@ export function useShoppingState({
       await refreshCategories();
       return true;
     },
-    [history, onError, playSound, refreshCategories]
+    [history, householdId, onError, playSound, refreshCategories]
   );
 
   const exportDoc = useCallback(async () => {
+    if (!householdId) {
+      onError?.("לא נמצא בית פעיל.");
+      return false;
+    }
+
     const previousProducts = allProducts;
 
     setCategories((prev) =>
@@ -441,7 +465,7 @@ export function useShoppingState({
       }))
     );
 
-    const { error } = await exportShoppingList();
+    const { error } = await exportShoppingList(householdId);
 
     if (error) {
       console.error("Failed to export shopping list:", error);
@@ -501,6 +525,7 @@ export function useShoppingState({
     return true;
   }, [
     allProducts,
+    householdId,
     onError,
     playSound,
     refreshCategories,
