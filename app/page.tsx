@@ -22,7 +22,7 @@ import { useCategoryManagement } from "@/hooks/use-category-management";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
-import { isAllowedEmail } from "@/lib/auth/whitelist";
+import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
 import {
   updateProductDisplayOrder,
   updateProductDisplayOrders,
@@ -89,11 +89,19 @@ export default function Home() {
   }, []);
 
   const {
+    createHousehold,
+    currentHouseholdId,
+    households,
+    loading: householdLoading,
+    setCurrentHouseholdId,
+  } = useCurrentHousehold({ onError: showError });
+
+  const {
     categories,
     setCategories,
     loading: categoriesLoading,
     refreshCategories,
-  } = useSharedCategories(initialCategories);
+  } = useSharedCategories(initialCategories, currentHouseholdId);
 
   const {
     decreaseQuantity,
@@ -114,6 +122,7 @@ export default function Home() {
     toggleItem,
   } = useShoppingState({
     categories,
+    householdId: currentHouseholdId,
     refreshCategories,
     setCategories,
     onError: showError,
@@ -156,6 +165,7 @@ export default function Home() {
     setPendingDelete,
   } = useCategoryManagement({
     categories,
+    householdId: currentHouseholdId,
     selectedCategoryId,
     refreshCategories,
     setCategories,
@@ -326,6 +336,42 @@ export default function Home() {
     }
   };
 
+  const handleSwitchHousehold = (householdId: string) => {
+    if (householdId === currentHouseholdId) return;
+
+    playSound();
+    setCurrentHouseholdId(householdId);
+    setSelectedCategoryId(null);
+    setEditingCategoryId(null);
+    setEditingCategoryName("");
+    setEditingProductId(null);
+    setEditingProductName("");
+    setEditingProductCategoryId(null);
+    setPendingDelete(null);
+    setHistoryOpen(false);
+    setProfileOpen(false);
+    setSearchTerm("");
+    setGlobalSearch("");
+  };
+
+  const handleCreateHousehold = async () => {
+    playSound();
+
+    const name = window.prompt("Household name", "My household")?.trim();
+
+    if (!name) return;
+
+    const household = await createHousehold(name);
+
+    if (!household) return;
+
+    setSelectedCategoryId(null);
+    setHistoryOpen(false);
+    setProfileOpen(false);
+    setSearchTerm("");
+    setGlobalSearch("");
+  };
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
 
@@ -335,7 +381,7 @@ export default function Home() {
     }
   };
 
-  if (loading || isLoading || categoriesLoading) {
+  if (loading || householdLoading || isLoading || categoriesLoading) {
     return <LoadingScreen />;
   }
 
@@ -343,14 +389,6 @@ export default function Home() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#050816]">
         <AuthButton />
-      </main>
-    );
-  }
-
-  if (!isAllowedEmail(session.user.email)) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
-        Access denied
       </main>
     );
   }
@@ -479,6 +517,8 @@ export default function Home() {
         email={session.user.email}
         darkMode={darkMode}
         soundOn={soundOn}
+        households={households}
+        currentHouseholdId={currentHouseholdId}
         onClose={() => setProfileOpen(false)}
         onToggleTheme={() => {
           playSound();
@@ -493,6 +533,8 @@ export default function Home() {
 
           setSoundOn((v) => !v);
         }}
+        onSwitchHousehold={handleSwitchHousehold}
+        onCreateHousehold={() => void handleCreateHousehold()}
         onLogout={() => {
           playSound();
           void handleLogout();
