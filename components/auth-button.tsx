@@ -4,8 +4,16 @@ import { supabase } from "@/lib/supabase";
 
 export function AuthButton() {
   const login = async () => {
+    const redirectTo =
+      typeof window !== "undefined"
+        ? `${window.location.origin}${window.location.pathname}${window.location.search}`
+        : undefined;
+
     await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo,
+      },
     });
   };
 
