@@ -6,7 +6,6 @@ import {
   createHousehold as createHouseholdInDb,
   createHouseholdInvite,
   deleteHousehold as deleteHouseholdInDb,
-  getOrCreateCurrentHousehold,
   listMyHouseholds,
   UserHousehold,
 } from "@/lib/db/households";
@@ -51,41 +50,35 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
 
     setLoading(true);
 
-    const { household, error: ensureError } = await getOrCreateCurrentHousehold();
-
-    if (ensureError || !household) {
-      console.error("Failed to get or create household:", ensureError);
-      onError?.("טעינת הבית נכשלה. נסה לרענן את הדף.");
-      setLoading(false);
-      return;
-    }
-
     const { households: userHouseholds, error: listError } = await listMyHouseholds();
 
     if (listError) {
       console.error("Failed to load households:", listError);
       onError?.("טעינת רשימת הבתים נכשלה.");
-      setHouseholds([household]);
-      setCurrentHouseholdId(household.id);
       setLoading(false);
       return;
     }
 
-    const nextHouseholds = userHouseholds.length ? userHouseholds : [household];
-    setHouseholds(nextHouseholds);
+    setHouseholds(userHouseholds);
+
+    if (!userHouseholds.length) {
+      clearCurrentHouseholdId();
+      setLoading(false);
+      return;
+    }
 
     const storedHouseholdId =
       typeof window !== "undefined"
         ? window.localStorage.getItem(ACTIVE_HOUSEHOLD_STORAGE_KEY)
         : null;
     const nextCurrentHouseholdId =
-      storedHouseholdId && nextHouseholds.some((item) => item.id === storedHouseholdId)
+      storedHouseholdId && userHouseholds.some((item) => item.id === storedHouseholdId)
         ? storedHouseholdId
-        : household.id;
+        : userHouseholds[0].id;
 
     setCurrentHouseholdId(nextCurrentHouseholdId);
     setLoading(false);
-  }, [onError, session?.user?.id, setCurrentHouseholdId]);
+  }, [clearCurrentHouseholdId, onError, session?.user?.id, setCurrentHouseholdId]);
 
   useEffect(() => {
     void refreshHouseholds();
