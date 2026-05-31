@@ -11,6 +11,7 @@ import {
   updateProductQuantity,
 } from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
+import { buildShoppingExportCategories } from "@/hooks/use-shopping-export-doc";
 import { saveHistory } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
 
@@ -194,6 +195,11 @@ export function useShoppingState({
   const shoppingProducts = useMemo(
     () => allProducts.filter((product) => product.checked),
     [allProducts]
+  );
+
+  const shoppingExportCategories = useMemo(
+    () => buildShoppingExportCategories(categories),
+    [categories]
   );
 
   const shoppingList = useMemo(
@@ -500,7 +506,7 @@ export function useShoppingState({
     let createdAt: string | null = null;
 
     try {
-      createdAt = await exportShoppingDoc(shoppingProducts);
+      createdAt = await exportShoppingDoc(shoppingExportCategories);
     } catch (error) {
       console.error("Failed to generate shopping document:", error);
       onError?.("יצירת מסמך הקניות נכשלה.");
@@ -533,6 +539,7 @@ export function useShoppingState({
     playSound,
     refreshCategories,
     setCategories,
+    shoppingExportCategories,
     shoppingProducts,
   ]);
 
