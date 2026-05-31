@@ -20,7 +20,7 @@ export function LoadingScreen() {
           className="relative flex h-28 w-28 items-center justify-center rounded-[32px] border border-cyan-400/20 bg-cyan-400/10 shadow-[0_0_40px_rgba(34,211,238,0.28)] backdrop-blur-xl"
         >
           <Image
-            src="/futurecart-icon.svg"
+            src="/app-logo.svg"
             alt="FutureCart"
             fill
             priority
