@@ -1,9 +1,16 @@
-import { Product } from "@/types/shopping";
+import { Category, Product } from "@/types/shopping";
 
 type ExportItem = Pick<Product, "name" | "quantity">;
 
-export async function exportShoppingDoc(items: ExportItem[]) {
-  if (!items.length) {
+type ExportCategory = {
+  name: Category["name"];
+  items: ExportItem[];
+};
+
+export async function exportShoppingDoc(categories: ExportCategory[]) {
+  const nonEmptyCategories = categories.filter((category) => category.items.length > 0);
+
+  if (!nonEmptyCategories.length) {
     return null;
   }
 
@@ -15,9 +22,12 @@ export async function exportShoppingDoc(items: ExportItem[]) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      items: items.map((item) => ({
-        name: item.name,
-        quantity: item.quantity,
+      categories: nonEmptyCategories.map((category) => ({
+        name: category.name,
+        items: category.items.map((item) => ({
+          name: item.name,
+          quantity: item.quantity,
+        })),
       })),
     }),
   });
