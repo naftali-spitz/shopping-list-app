@@ -146,11 +146,13 @@ export function useShoppingState({
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [soundOn, setSoundOn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadedHistoryHouseholdId, setLoadedHistoryHouseholdId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadInitialData = async () => {
       if (!householdId) {
         setHistory([]);
+        setLoadedHistoryHouseholdId(null);
         setIsLoading(false);
         return;
       }
@@ -173,6 +175,7 @@ export function useShoppingState({
         );
       }
 
+      setLoadedHistoryHouseholdId(householdId);
       setIsLoading(false);
     };
 
@@ -533,13 +536,15 @@ export function useShoppingState({
     shoppingProducts,
   ]);
 
+  const activeHouseholdHistoryReady = !householdId || loadedHistoryHouseholdId === householdId;
+
   return {
     decreaseQuantity,
     deleteHistoryEntry,
     exportDoc,
     history,
     increaseQuantity,
-    isLoading,
+    isLoading: isLoading || !activeHouseholdHistoryReady,
     playSound,
     previewSound,
     quickAddItem,
