@@ -11,6 +11,7 @@ import {
   Moon,
   Plus,
   Sun,
+  Trash2,
   Volume2,
   VolumeX,
   X,
@@ -30,6 +31,7 @@ type ProfileSettingsModalProps = {
   onSwitchHousehold: (householdId: string) => void;
   onCreateHousehold: () => void;
   onCreateInviteLink: () => void;
+  onDeleteHousehold: () => void;
   onLogout: () => void;
 };
 
@@ -46,10 +48,12 @@ export function ProfileSettingsModal({
   onSwitchHousehold,
   onCreateHousehold,
   onCreateInviteLink,
+  onDeleteHousehold,
   onLogout,
 }: ProfileSettingsModalProps) {
   const currentHousehold =
     households.find((household) => household.id === currentHouseholdId) ?? null;
+  const canDeleteCurrentHousehold = currentHousehold?.role === "owner";
 
   return (
     <AnimatePresence>
@@ -164,6 +168,22 @@ export function ProfileSettingsModal({
                     <span className="text-xs text-white/45">Start a separate list</span>
                   </span>
                   <Plus size={18} />
+                </button>
+
+                <button
+                  onClick={onDeleteHousehold}
+                  disabled={!canDeleteCurrentHousehold}
+                  className="flex w-full items-center justify-between rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-left text-red-100 transition hover:bg-red-400/20 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <span>
+                    <span className="block font-medium">Delete household</span>
+                    <span className="text-xs text-red-100/60">
+                      {canDeleteCurrentHousehold
+                        ? "Deletes this household and its data"
+                        : "Only the owner can delete this household"}
+                    </span>
+                  </span>
+                  <Trash2 size={18} />
                 </button>
               </div>
             </div>
