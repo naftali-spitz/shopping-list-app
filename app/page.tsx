@@ -10,6 +10,7 @@ import { AuthButton } from "@/components/auth-button";
 import { CategoriesSection } from "@/components/categories-section";
 import { CategoryModal } from "@/components/category-modal";
 import { ConfirmModal } from "@/components/confirm-modal";
+import { CreateHouseholdModal } from "@/components/create-household-modal";
 import { EditCategoryModal } from "@/components/edit-category-modal";
 import { EditProductModal } from "@/components/edit-product-modal";
 import { GlobalSearchSection } from "@/components/global-search-section";
@@ -32,8 +33,15 @@ import { Category, Product } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
 const ORDER_STEP = 100;
+const DARK_MODE_STORAGE_KEY = "futurecart.darkMode";
 
 type ProductSortMode = "az" | "popular" | "custom";
+
+function getInitialDarkMode() {
+  if (typeof window === "undefined") return false;
+
+  return window.localStorage.getItem(DARK_MODE_STORAGE_KEY) === "true";
+}
 
 function getNewDisplayOrder(
   previousProduct: Product | null,
@@ -160,12 +168,14 @@ export default function Home() {
   });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(getInitialDarkMode);
   const [sortMode, setSortMode] = useState<ProductSortMode>("popular");
   const [searchTerm, setSearchTerm] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [createHouseholdOpen, setCreateHouseholdOpen] = useState(false);
+  const [newHouseholdName, setNewHouseholdName] = useState("My household");
 
   const {
     addCategory,
@@ -205,6 +215,12 @@ export default function Home() {
   });
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    window.localStorage.setItem(DARK_MODE_STORAGE_KEY, String(darkMode));
+  }, [darkMode]);
+
+  useEffect(() => {
     if (!session || !pendingInviteToken || householdLoading || acceptingInvite) return;
 
     const acceptPendingInvite = async () => {
@@ -236,7 +252,8 @@ export default function Home() {
     Boolean(editingProductId) ||
     Boolean(pendingDelete) ||
     historyOpen ||
-    profileOpen;
+    profileOpen ||
+    createHouseholdOpen;
 
   useEffect(() => {
     if (anyModalOpen) {
@@ -411,10 +428,15 @@ export default function Home() {
     setGlobalSearch("");
   };
 
-  const handleCreateHousehold = async () => {
+  const handleCreateHousehold = () => {
     playSound();
+    setNewHouseholdName("My household");
+    setProfileOpen(false);
+    setCreateHouseholdOpen(true);
+  };
 
-    const name = window.prompt("Household name", "My household")?.trim();
+  const handleConfirmCreateHousehold = async () => {
+    const name = newHouseholdName.trim();
 
     if (!name) return;
 
@@ -424,7 +446,8 @@ export default function Home() {
 
     setSelectedCategoryId(null);
     setHistoryOpen(false);
-    setProfileOpen(false);
+    setCreateHouseholdOpen(false);
+    setNewHouseholdName("My household");
     setSearchTerm("");
     setGlobalSearch("");
   };
@@ -590,6 +613,14 @@ export default function Home() {
         onCancel={() => setPendingDelete(null)}
       />
 
+      <CreateHouseholdModal
+        open={createHouseholdOpen}
+        value={newHouseholdName}
+        onChange={setNewHouseholdName}
+        onClose={() => setCreateHouseholdOpen(false)}
+        onCreate={() => void handleConfirmCreateHousehold()}
+      />
+
       <ProfileSettingsModal
         open={profileOpen}
         email={session.user.email}
@@ -612,7 +643,7 @@ export default function Home() {
           setSoundOn((v) => !v);
         }}
         onSwitchHousehold={handleSwitchHousehold}
-        onCreateHousehold={() => void handleCreateHousehold()}
+        onCreateHousehold={handleCreateHousehold}
         onCreateInviteLink={() => void handleCreateInviteLink()}
         onLogout={() => {
           playSound();
