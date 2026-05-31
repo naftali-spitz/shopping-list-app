@@ -25,7 +25,7 @@ export function TopBar({
           className="relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl shadow-[0_0_22px_rgba(34,211,238,0.22)] sm:h-12 sm:w-12"
         >
           <Image
-            src="/futurecart-icon.svg"
+            src="/app-logo.svg"
             alt="FutureCart"
             fill
             priority
