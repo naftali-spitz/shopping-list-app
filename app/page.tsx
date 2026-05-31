@@ -15,6 +15,7 @@ import { EditCategoryModal } from "@/components/edit-category-modal";
 import { EditProductModal } from "@/components/edit-product-modal";
 import { GlobalSearchSection } from "@/components/global-search-section";
 import { HistoryModal } from "@/components/history-modal";
+import { HouseholdOnboarding } from "@/components/household-onboarding";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ProfileSettingsModal } from "@/components/profile-settings-modal";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
@@ -491,6 +492,25 @@ export default function Home() {
       <main className="flex min-h-screen items-center justify-center bg-[#050816]">
         <AuthButton />
       </main>
+    );
+  }
+
+  if (!currentHouseholdId && households.length === 0) {
+    return (
+      <>
+        <HouseholdOnboarding
+          email={session.user.email}
+          onCreateHousehold={handleCreateHousehold}
+        />
+        <CreateHouseholdModal
+          open={createHouseholdOpen}
+          value={newHouseholdName}
+          onChange={setNewHouseholdName}
+          onClose={() => setCreateHouseholdOpen(false)}
+          onCreate={() => void handleConfirmCreateHousehold()}
+        />
+        <AppFeedback feedback={feedback} onClose={closeFeedback} />
+      </>
     );
   }
 
