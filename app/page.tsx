@@ -44,6 +44,7 @@ import {
 } from "@/lib/product-ordering";
 import { buildGlobalProductSearchResults } from "@/lib/product-search";
 import { supabase } from "@/lib/supabase";
+import { getAppBackgroundClass, getCardClass } from "@/lib/theme-classes";
 import { Category, Product } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
@@ -251,13 +252,8 @@ export default function Home() {
     [pendingDelete]
   );
 
-  const backgroundClass = darkMode
-    ? "bg-[#050816] text-white"
-    : "bg-[#f3f7ff] text-slate-950";
-
-  const cardClass = darkMode
-    ? "border-white/10 bg-white/5"
-    : "border-slate-950/10 bg-white/70 text-slate-950";
+  const backgroundClass = getAppBackgroundClass(darkMode);
+  const cardClass = getCardClass(darkMode);
 
   const sortedProducts = useMemo(() => {
     if (!selectedCategory) return [];
