@@ -29,6 +29,10 @@ import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
 import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
+import {
+  buildCategoryProductList,
+  ProductSortMode,
+} from "@/lib/category-product-list";
 import { getDeleteConfirmationCopy } from "@/lib/delete-confirmation";
 import {
   updateProductDisplayOrder,
@@ -43,8 +47,6 @@ import { supabase } from "@/lib/supabase";
 import { Category, Product } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
-
-type ProductSortMode = "az" | "popular" | "custom";
 
 function removeInviteTokenFromUrl() {
   if (typeof window === "undefined") return;
@@ -260,26 +262,11 @@ export default function Home() {
   const sortedProducts = useMemo(() => {
     if (!selectedCategory) return [];
 
-    return [...selectedCategory.products]
-      .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      .sort((a, b) => {
-        if (sortMode === "az") {
-          return a.name.localeCompare(b.name);
-        }
-
-        if (sortMode === "custom") {
-          const aOrder = a.displayOrder ?? Number.MAX_SAFE_INTEGER;
-          const bOrder = b.displayOrder ?? Number.MAX_SAFE_INTEGER;
-
-          if (aOrder !== bOrder) {
-            return aOrder - bOrder;
-          }
-
-          return a.name.localeCompare(b.name);
-        }
-
-        return b.usageCount - a.usageCount || a.name.localeCompare(b.name);
-      });
+    return buildCategoryProductList(
+      selectedCategory.products,
+      searchTerm,
+      sortMode
+    );
   }, [searchTerm, selectedCategory, sortMode]);
 
   const handleCustomOrderChange = async (
