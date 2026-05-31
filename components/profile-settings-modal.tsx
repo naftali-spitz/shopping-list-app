@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
@@ -45,7 +45,7 @@ function SectionTitle({
   title,
   subtitle,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   subtitle?: string;
 }) {
