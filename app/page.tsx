@@ -31,11 +31,14 @@ import {
   updateProductDisplayOrder,
   updateProductDisplayOrders,
 } from "@/lib/db/products";
+import {
+  buildBalancedDisplayOrder,
+  getNewDisplayOrder,
+} from "@/lib/product-ordering";
 import { supabase } from "@/lib/supabase";
 import { Category, Product } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
-const ORDER_STEP = 100;
 const DARK_MODE_STORAGE_KEY = "futurecart.darkMode";
 
 type ProductSortMode = "az" | "popular" | "custom";
@@ -44,44 +47,6 @@ function getInitialDarkMode() {
   if (typeof window === "undefined") return false;
 
   return window.localStorage.getItem(DARK_MODE_STORAGE_KEY) === "true";
-}
-
-function getNewDisplayOrder(
-  previousProduct: Product | null,
-  nextProduct: Product | null
-) {
-  if (previousProduct && previousProduct.displayOrder === null) return null;
-  if (nextProduct && nextProduct.displayOrder === null) return null;
-
-  const previousOrder = previousProduct?.displayOrder ?? null;
-  const nextOrder = nextProduct?.displayOrder ?? null;
-
-  if (previousOrder === null && nextOrder === null) {
-    return ORDER_STEP;
-  }
-
-  if (previousOrder === null) {
-    return nextOrder! - ORDER_STEP;
-  }
-
-  if (nextOrder === null) {
-    return previousOrder + ORDER_STEP;
-  }
-
-  const gap = nextOrder - previousOrder;
-
-  if (gap > 1) {
-    return Math.floor((previousOrder + nextOrder) / 2);
-  }
-
-  return null;
-}
-
-function buildBalancedDisplayOrder(products: Product[]) {
-  return products.map((product, index) => ({
-    id: product.id,
-    displayOrder: (index + 1) * ORDER_STEP,
-  }));
 }
 
 function removeInviteTokenFromUrl() {
