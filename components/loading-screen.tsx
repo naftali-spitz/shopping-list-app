@@ -5,11 +5,7 @@ import { motion } from "framer-motion";
 
 export function LoadingScreen() {
   return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-[#050816]"
-    >
+    <main className="flex min-h-[100dvh] items-center justify-center bg-[#050816] px-4 text-white">
       <div className="relative flex flex-col items-center gap-6">
         <motion.div
           animate={{
@@ -57,6 +53,6 @@ export function LoadingScreen() {
           ))}
         </div>
       </div>
-    </motion.div>
+    </main>
   );
 }
