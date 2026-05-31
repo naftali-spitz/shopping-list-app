@@ -14,11 +14,11 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/futurecart-icon.svg", type: "image/svg+xml" },
+      { url: "/app-logo.svg", type: "image/svg+xml" },
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
-    shortcut: "/futurecart-icon.svg",
-    apple: "/futurecart-icon.svg",
+    shortcut: "/app-logo.svg",
+    apple: "/app-logo.svg",
   },
 };
 
