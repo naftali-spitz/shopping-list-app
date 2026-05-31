@@ -77,7 +77,7 @@ export function ProfileSettingsModal({
   onLogout,
 }: ProfileSettingsModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [householdExpanded, setHouseholdExpanded] = useState(true);
+  const [householdExpanded, setHouseholdExpanded] = useState(false);
   const { deleteHousehold } = useCurrentHousehold();
   const currentHousehold =
     households.find((household) => household.id === currentHouseholdId) ?? null;
