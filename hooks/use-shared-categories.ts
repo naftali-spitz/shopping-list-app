@@ -8,11 +8,13 @@ import { Category } from "@/types/shopping";
 export function useSharedCategories(initialCategories: Category[], householdId: string | null) {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [loading, setLoading] = useState(true);
+  const [loadedHouseholdId, setLoadedHouseholdId] = useState<string | null>(null);
 
   const refreshCategories = useCallback(async () => {
     try {
       if (!householdId) {
         setCategories(initialCategories);
+        setLoadedHouseholdId(null);
         setLoading(false);
         return;
       }
@@ -20,6 +22,7 @@ export function useSharedCategories(initialCategories: Category[], householdId: 
       const data = await fetchCategories(householdId);
 
       setCategories(data);
+      setLoadedHouseholdId(householdId);
     } finally {
       setLoading(false);
     }
@@ -28,6 +31,7 @@ export function useSharedCategories(initialCategories: Category[], householdId: 
   useEffect(() => {
     if (!householdId) {
       setCategories(initialCategories);
+      setLoadedHouseholdId(null);
       setLoading(false);
       return;
     }
@@ -44,10 +48,12 @@ export function useSharedCategories(initialCategories: Category[], householdId: 
     };
   }, [householdId, initialCategories, refreshCategories]);
 
+  const activeHouseholdReady = !householdId || loadedHouseholdId === householdId;
+
   return {
     categories,
     setCategories,
-    loading,
+    loading: loading || !activeHouseholdReady,
     refreshCategories,
   };
 }
