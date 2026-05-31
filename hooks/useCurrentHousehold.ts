@@ -5,6 +5,7 @@ import {
   acceptHouseholdInvite,
   createHousehold as createHouseholdInDb,
   createHouseholdInvite,
+  deleteHousehold as deleteHouseholdInDb,
   getOrCreateCurrentHousehold,
   listMyHouseholds,
   UserHousehold,
@@ -29,6 +30,14 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
 
     if (typeof window !== "undefined") {
       window.localStorage.setItem(ACTIVE_HOUSEHOLD_STORAGE_KEY, householdId);
+    }
+  }, []);
+
+  const clearCurrentHouseholdId = useCallback(() => {
+    setCurrentHouseholdIdState(null);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(ACTIVE_HOUSEHOLD_STORAGE_KEY);
     }
   }, []);
 
@@ -99,6 +108,36 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
     [onError, setCurrentHouseholdId]
   );
 
+  const deleteHousehold = useCallback(
+    async (householdId: string) => {
+      const { error } = await deleteHouseholdInDb(householdId);
+
+      if (error) {
+        console.error("Failed to delete household:", error);
+        onError?.("מחיקת הבית נכשלה. רק בעל הבית יכול למחוק אותו.");
+        return false;
+      }
+
+      let nextHouseholdId: string | null = null;
+
+      setHouseholds((prev) => {
+        const nextHouseholds = prev.filter((household) => household.id !== householdId);
+        nextHouseholdId = nextHouseholds[0]?.id ?? null;
+        return nextHouseholds;
+      });
+
+      if (nextHouseholdId) {
+        setCurrentHouseholdId(nextHouseholdId);
+      } else {
+        clearCurrentHouseholdId();
+      }
+
+      await refreshHouseholds();
+      return true;
+    },
+    [clearCurrentHouseholdId, onError, refreshHouseholds, setCurrentHouseholdId]
+  );
+
   const createInviteLink = useCallback(
     async (householdId: string) => {
       const { invite, error } = await createHouseholdInvite(householdId);
@@ -147,6 +186,7 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
     createInviteLink,
     currentHousehold,
     currentHouseholdId,
+    deleteHousehold,
     householdId: currentHouseholdId,
     households,
     loading,
