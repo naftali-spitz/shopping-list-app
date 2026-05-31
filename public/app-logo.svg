@@ -1,1 +1,42 @@
-placeholder
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="72%">
+      <stop offset="0" stop-color="#173A68"/>
+      <stop offset="0.62" stop-color="#07162C"/>
+      <stop offset="1" stop-color="#020716"/>
+    </radialGradient>
+    <linearGradient id="stroke" x1="92" y1="118" x2="421" y2="407" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A7FFFF"/>
+      <stop offset="0.45" stop-color="#20E8FF"/>
+      <stop offset="1" stop-color="#A9FFFF"/>
+    </linearGradient>
+    <filter id="glow" x="-45%" y="-45%" width="190%" height="190%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.05 0 0 0 0 0.85 0 0 0 0 1 0 0 0 0.95 0" result="cyanGlow"/>
+      <feMerge>
+        <feMergeNode in="cyanGlow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#00D9FF" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect x="28" y="28" width="456" height="456" rx="106" fill="url(#bg)"/>
+  <rect x="31" y="31" width="450" height="450" rx="103" stroke="#38DFFF" stroke-opacity="0.45" stroke-width="6"/>
+  <circle cx="256" cy="254" r="178" fill="#00D9FF" opacity="0.055"/>
+  <path d="M82 328C122 263 218 222 322 216C413 211 461 241 438 291C413 346 298 382 180 364C102 352 54 346 82 328Z" stroke="#00D9FF" stroke-width="8" opacity="0.36"/>
+  <path d="M248 174C307 135 385 132 423 162C465 196 443 266 378 316" stroke="#3DEEFF" stroke-width="8" opacity="0.38"/>
+  <g filter="url(#shadow)">
+    <g filter="url(#glow)" stroke="url(#stroke)" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M107 160H157C169 160 178 168 181 180L199 240" stroke-width="22"/>
+      <path d="M199 240H390C404 240 414 253 410 266L391 330H214" stroke-width="22"/>
+      <path d="M199 240L222 318C226 332 216 345 201 345H359" stroke-width="22"/>
+      <path d="M214 368H355" stroke-width="14" opacity="0.95"/>
+      <circle cx="208" cy="393" r="27" stroke-width="17"/>
+      <circle cx="344" cy="393" r="27" stroke-width="17"/>
+      <path d="M279 276L309 306L368 245" stroke-width="20"/>
+      <path d="M251 282C259 249 292 231 324 241" stroke-width="12" opacity="0.78"/>
+    </g>
+  </g>
+</svg>
