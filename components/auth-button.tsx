@@ -2,7 +2,15 @@
 
 import { supabase } from "@/lib/supabase";
 
-export function AuthButton() {
+type AuthButtonProps = {
+  label?: string;
+  variant?: "primary" | "secondary";
+};
+
+export function AuthButton({
+  label = "Login with Google",
+  variant = "primary",
+}: AuthButtonProps) {
   const login = async () => {
     const redirectTo =
       typeof window !== "undefined"
@@ -20,9 +28,13 @@ export function AuthButton() {
   return (
     <button
       onClick={login}
-      className="rounded-2xl bg-cyan-400 px-4 py-2 font-medium text-black"
+      className={
+        variant === "primary"
+          ? "rounded-2xl bg-cyan-400 px-4 py-2 font-medium text-black"
+          : "rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/75 transition hover:bg-white/10 hover:text-white"
+      }
     >
-      Login with Google
+      {label}
     </button>
   );
 }
