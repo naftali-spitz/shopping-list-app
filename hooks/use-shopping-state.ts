@@ -137,6 +137,14 @@ function historyItemsToLabels(items: unknown): string[] {
   });
 }
 
+function historyRowsToEntries(data: any[]): HistoryEntry[] {
+  return data.map((entry: any) => ({
+    id: entry.id,
+    createdAt: entry.exported_at,
+    items: historyItemsToLabels(entry.items),
+  }));
+}
+
 export function useShoppingState({
   categories,
   householdId,
@@ -167,13 +175,7 @@ export function useShoppingState({
       }
 
       if (data) {
-        setHistory(
-          data.map((entry: any) => ({
-            id: entry.id,
-            createdAt: entry.exported_at,
-            items: historyItemsToLabels(entry.items),
-          }))
-        );
+        setHistory(historyRowsToEntries(data));
       }
 
       setLoadedHistoryHouseholdId(householdId);
@@ -503,10 +505,8 @@ export function useShoppingState({
 
     playSound();
 
-    let createdAt: string | null = null;
-
     try {
-      createdAt = await exportShoppingDoc(shoppingExportCategories);
+      await exportShoppingDoc(shoppingExportCategories);
     } catch (error) {
       console.error("Failed to generate shopping document:", error);
       onError?.("יצירת מסמך הקניות נכשלה.");
@@ -514,19 +514,15 @@ export function useShoppingState({
       return false;
     }
 
-    if (createdAt) {
-      setHistory((prev) => [
-        {
-          id: createdAt,
-          createdAt,
-          items: shoppingProducts.map((product) =>
-            product.quantity > 1
-              ? `${product.name} ×${product.quantity}`
-              : product.name
-          ),
-        },
-        ...prev,
-      ]);
+    const { data: freshHistory, error: historyError } = await fetchHistory(householdId);
+
+    if (historyError) {
+      console.error("Failed to reload shopping history after export:", historyError);
+      onError?.("הרשימה יוצאה, אבל טעינת ההיסטוריה מחדש נכשלה. נסה לרענן את הדף.");
+    }
+
+    if (freshHistory) {
+      setHistory(historyRowsToEntries(freshHistory));
     }
 
     await refreshCategories();
@@ -540,7 +536,6 @@ export function useShoppingState({
     refreshCategories,
     setCategories,
     shoppingExportCategories,
-    shoppingProducts,
   ]);
 
   const activeHouseholdHistoryReady = !householdId || loadedHistoryHouseholdId === householdId;
