@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 
 type GlobalResult = {
   id: string;
@@ -12,6 +12,7 @@ type GlobalSearchSectionProps = {
   globalResults: GlobalResult[];
   onGlobalSearchChange: (value: string) => void;
   onQuickAdd: (item: string) => void;
+  onAddMissingProduct?: (name: string) => void;
 };
 
 export function GlobalSearchSection({
@@ -20,7 +21,12 @@ export function GlobalSearchSection({
   globalResults,
   onGlobalSearchChange,
   onQuickAdd,
+  onAddMissingProduct,
 }: GlobalSearchSectionProps) {
+  const trimmedSearch = globalSearch.trim();
+  const showAddMissingProduct =
+    trimmedSearch.length > 0 && globalResults.length === 0 && Boolean(onAddMissingProduct);
+
   return (
     <section className="mt-8">
       <div
@@ -35,6 +41,17 @@ export function GlobalSearchSection({
             placeholder="חיפוש מהיר להוספה לרשימה..."
             className="w-full bg-transparent text-lg outline-none placeholder:text-slate-400"
           />
+
+          {trimmedSearch && (
+            <button
+              type="button"
+              onClick={() => onGlobalSearchChange("")}
+              className="rounded-full bg-white/10 p-2 text-white/60 transition hover:bg-white/20 hover:text-white"
+              aria-label="נקה חיפוש"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
 
         {globalResults.length > 0 && (
@@ -58,6 +75,26 @@ export function GlobalSearchSection({
               </button>
             ))}
           </div>
+        )}
+
+        {showAddMissingProduct && (
+          <button
+            type="button"
+            onClick={() => onAddMissingProduct?.(trimmedSearch)}
+            className="mt-4 flex w-full items-center justify-between rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-right transition hover:scale-[1.01] hover:bg-cyan-300/15"
+          >
+            <div>
+              <div className="text-sm text-white/60">לא נמצאו תוצאות</div>
+              <div className="mt-1 font-semibold text-cyan-100">
+                הוסף “{trimmedSearch}”
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 rounded-full bg-cyan-300 px-3 py-1 text-sm font-bold text-slate-950">
+              <Plus size={14} />
+              הוסף
+            </div>
+          </button>
         )}
       </div>
     </section>
