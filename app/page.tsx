@@ -22,6 +22,7 @@ import { ProfileSettingsModal } from "@/components/profile-settings-modal";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
 import { useCategoryManagement } from "@/hooks/use-category-management";
+import { useDarkMode } from "@/hooks/use-dark-mode";
 import { useMissingProductAdd } from "@/hooks/use-missing-product-add";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
@@ -39,15 +40,8 @@ import { supabase } from "@/lib/supabase";
 import { Category, Product } from "@/types/shopping";
 
 const initialCategories: Category[] = [];
-const DARK_MODE_STORAGE_KEY = "futurecart.darkMode";
 
 type ProductSortMode = "az" | "popular" | "custom";
-
-function getInitialDarkMode() {
-  if (typeof window === "undefined") return false;
-
-  return window.localStorage.getItem(DARK_MODE_STORAGE_KEY) === "true";
-}
 
 function removeInviteTokenFromUrl() {
   if (typeof window === "undefined") return;
@@ -136,7 +130,7 @@ export default function Home() {
   });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [darkMode, setDarkMode] = useState(getInitialDarkMode);
+  const [darkMode, setDarkMode] = useDarkMode();
   const [sortMode, setSortMode] = useState<ProductSortMode>("popular");
   const [searchTerm, setSearchTerm] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
@@ -198,12 +192,6 @@ export default function Home() {
     onError: showError,
     onDone: () => setGlobalSearch(""),
   });
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    window.localStorage.setItem(DARK_MODE_STORAGE_KEY, String(darkMode));
-  }, [darkMode]);
 
   useEffect(() => {
     if (!session || !pendingInviteToken || householdLoading || acceptingInvite) return;
