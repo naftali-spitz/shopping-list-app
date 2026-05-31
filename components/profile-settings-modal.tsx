@@ -4,7 +4,7 @@ import { ReactNode, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
-  ChevronRight,
+  ChevronDown,
   Home,
   Link,
   LogOut,
@@ -13,7 +13,6 @@ import {
   Moon,
   Plus,
   Settings,
-  ShieldAlert,
   Sun,
   Trash2,
   Volume2,
@@ -78,10 +77,14 @@ export function ProfileSettingsModal({
   onLogout,
 }: ProfileSettingsModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [householdExpanded, setHouseholdExpanded] = useState(true);
   const { deleteHousehold } = useCurrentHousehold();
   const currentHousehold =
     households.find((household) => household.id === currentHouseholdId) ?? null;
   const canDeleteCurrentHousehold = currentHousehold?.role === "owner";
+  const otherHouseholds = households.filter(
+    (household) => household.id !== currentHouseholdId
+  );
 
   const confirmDeleteHousehold = async () => {
     if (!currentHousehold || !canDeleteCurrentHousehold) return;
@@ -156,75 +159,122 @@ export function ProfileSettingsModal({
               </div>
 
               <div className="mt-5 rounded-3xl border border-cyan-300/15 bg-cyan-300/[0.06] p-4">
-                <SectionTitle
-                  icon={<Home size={17} />}
-                  title="Current household"
-                  subtitle="Choose which shopping list you are using"
-                />
+                <button
+                  type="button"
+                  onClick={() => setHouseholdExpanded((value) => !value)}
+                  className="flex w-full items-center justify-between gap-3 text-left"
+                >
+                  <span className="flex min-w-0 items-center gap-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-400/15 text-cyan-200">
+                      <Home size={18} />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold text-white/90">
+                        Current household
+                      </span>
+                      <span className="block truncate text-xs text-white/45">
+                        {currentHousehold
+                          ? `${currentHousehold.name} • ${currentHousehold.role}`
+                          : "No active household"}
+                      </span>
+                    </span>
+                  </span>
+                  <ChevronDown
+                    size={20}
+                    className={`shrink-0 text-white/55 transition ${
+                      householdExpanded ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
-                {currentHousehold && (
-                  <div className="mb-3 rounded-2xl border border-cyan-300/30 bg-cyan-300/15 p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="truncate text-base font-semibold text-cyan-50">
-                          {currentHousehold.name}
-                        </p>
-                        <p className="mt-1 text-xs text-cyan-50/55">
-                          Active household • {currentHousehold.role}
-                        </p>
-                      </div>
-                      <Check className="shrink-0 text-cyan-100" size={20} />
-                    </div>
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {householdExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      {currentHousehold && (
+                        <div className="mt-4 rounded-2xl border border-cyan-300/30 bg-cyan-300/15 p-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="truncate text-base font-semibold text-cyan-50">
+                                {currentHousehold.name}
+                              </p>
+                              <p className="mt-1 text-xs text-cyan-50/55">
+                                Active household • {currentHousehold.role}
+                              </p>
+                            </div>
+                            <Check className="shrink-0 text-cyan-100" size={20} />
+                          </div>
+                        </div>
+                      )}
 
-                {households.length > 1 && (
-                  <div className="mb-3 space-y-2">
-                    <p className="px-1 text-xs font-medium uppercase tracking-[0.18em] text-white/35">
-                      Switch to
-                    </p>
-                    {households
-                      .filter((household) => household.id !== currentHouseholdId)
-                      .map((household) => (
+                      {otherHouseholds.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          <p className="px-1 text-xs font-medium uppercase tracking-[0.18em] text-white/35">
+                            Switch to
+                          </p>
+                          {otherHouseholds.map((household) => (
+                            <button
+                              key={household.id}
+                              onClick={() => onSwitchHousehold(household.id)}
+                              className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white/80 transition hover:bg-white/10"
+                            >
+                              <span className="min-w-0">
+                                <span className="block truncate font-medium">{household.name}</span>
+                                <span className="text-xs text-white/40">{household.role}</span>
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <button
-                          key={household.id}
-                          onClick={() => onSwitchHousehold(household.id)}
-                          className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white/80 transition hover:bg-white/10"
+                          onClick={onCreateInviteLink}
+                          disabled={!currentHousehold}
+                          className="flex items-center justify-between rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-left text-cyan-50 transition hover:bg-cyan-300/20 disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                          <span className="min-w-0">
-                            <span className="block truncate font-medium">{household.name}</span>
-                            <span className="text-xs text-white/40">{household.role}</span>
+                          <span>
+                            <span className="block text-sm font-semibold">Invite</span>
+                            <span className="text-xs text-white/45">Copy link</span>
                           </span>
-                          <ChevronRight size={18} className="text-white/45" />
+                          <Link size={18} />
                         </button>
-                      ))}
-                  </div>
-                )}
 
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <button
-                    onClick={onCreateInviteLink}
-                    disabled={!currentHousehold}
-                    className="flex items-center justify-between rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-left text-cyan-50 transition hover:bg-cyan-300/20 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <span>
-                      <span className="block text-sm font-semibold">Invite</span>
-                      <span className="text-xs text-white/45">Copy link</span>
-                    </span>
-                    <Link size={18} />
-                  </button>
+                        <button
+                          onClick={onCreateHousehold}
+                          className="flex items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-4 py-3 text-left text-white/75 transition hover:bg-white/10"
+                        >
+                          <span>
+                            <span className="block text-sm font-semibold">New household</span>
+                            <span className="text-xs text-white/45">Separate list</span>
+                          </span>
+                          <Plus size={18} />
+                        </button>
+                      </div>
 
-                  <button
-                    onClick={onCreateHousehold}
-                    className="flex items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-4 py-3 text-left text-white/75 transition hover:bg-white/10"
-                  >
-                    <span>
-                      <span className="block text-sm font-semibold">New household</span>
-                      <span className="text-xs text-white/45">Separate list</span>
-                    </span>
-                    <Plus size={18} />
-                  </button>
-                </div>
+                      <button
+                        onClick={() => setDeleteConfirmOpen(true)}
+                        disabled={!canDeleteCurrentHousehold}
+                        className="mt-2 flex w-full items-center justify-between rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-left text-red-100 transition hover:bg-red-400/20 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <span>
+                          <span className="block font-medium">Delete household</span>
+                          <span className="text-xs text-red-100/60">
+                            {canDeleteCurrentHousehold
+                              ? "Permanently removes this household"
+                              : "Only the owner can delete this household"}
+                          </span>
+                        </span>
+                        <Trash2 size={18} />
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="mt-5 rounded-3xl border border-white/10 bg-white/[0.04] p-4">
@@ -285,49 +335,16 @@ export function ProfileSettingsModal({
                 </div>
               </div>
 
-              <details className="mt-5 rounded-3xl border border-red-400/15 bg-red-400/[0.05] p-4">
-                <summary className="flex cursor-pointer list-none items-center justify-between text-red-100">
-                  <span className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-red-400/10 text-red-100">
-                      <ShieldAlert size={17} />
-                    </span>
-                    <span>
-                      <span className="block text-sm font-semibold">Danger zone</span>
-                      <span className="text-xs text-red-100/50">Account and household actions</span>
-                    </span>
-                  </span>
-                  <ChevronRight size={18} className="text-red-100/55" />
-                </summary>
-
-                <div className="mt-4 space-y-2">
-                  <button
-                    onClick={() => setDeleteConfirmOpen(true)}
-                    disabled={!canDeleteCurrentHousehold}
-                    className="flex w-full items-center justify-between rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-left text-red-100 transition hover:bg-red-400/20 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <span>
-                      <span className="block font-medium">Delete household</span>
-                      <span className="text-xs text-red-100/60">
-                        {canDeleteCurrentHousehold
-                          ? "Permanently removes this household"
-                          : "Only the owner can delete this household"}
-                      </span>
-                    </span>
-                    <Trash2 size={18} />
-                  </button>
-
-                  <button
-                    onClick={onLogout}
-                    className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white/80 transition hover:bg-white/10"
-                  >
-                    <span>
-                      <span className="block font-medium">Logout</span>
-                      <span className="text-xs text-white/45">Sign out of this account</span>
-                    </span>
-                    <LogOut size={18} />
-                  </button>
-                </div>
-              </details>
+              <button
+                onClick={onLogout}
+                className="mt-5 flex w-full items-center justify-between rounded-3xl border border-red-400/20 bg-red-400/10 px-4 py-4 text-left text-red-100 transition hover:bg-red-400/20"
+              >
+                <span>
+                  <span className="block font-medium">Logout</span>
+                  <span className="text-sm text-red-100/60">Sign out of this account</span>
+                </span>
+                <LogOut size={20} />
+              </button>
             </motion.div>
           </motion.div>
         )}
