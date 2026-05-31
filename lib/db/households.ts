@@ -73,6 +73,14 @@ export async function createHousehold(name: string) {
   };
 }
 
+export async function deleteHousehold(householdId: string) {
+  const { error } = await supabase.rpc("delete_household", {
+    p_household_id: householdId,
+  });
+
+  return { error };
+}
+
 export async function createHouseholdInvite(householdId: string) {
   const { data, error } = await supabase.rpc("create_household_invite", {
     p_household_id: householdId,
