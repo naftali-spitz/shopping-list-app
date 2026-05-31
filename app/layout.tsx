@@ -11,15 +11,19 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "FutureCart",
   },
+  manifest: "/manifest.json",
   icons: {
-    icon: "/futurecart-icon.svg",
+    icon: [
+      { url: "/futurecart-icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
     shortcut: "/futurecart-icon.svg",
     apple: "/futurecart-icon.svg",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050816",
+  themeColor: "#051630",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
