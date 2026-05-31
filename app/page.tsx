@@ -37,6 +37,7 @@ import {
   buildBalancedDisplayOrder,
   getNewDisplayOrder,
 } from "@/lib/product-ordering";
+import { buildGlobalProductSearchResults } from "@/lib/product-search";
 import { supabase } from "@/lib/supabase";
 import { Category, Product } from "@/types/shopping";
 
@@ -237,14 +238,10 @@ export default function Home() {
     [categories, selectedCategoryId]
   );
 
-  const globalResults = useMemo(() => {
-    if (!globalSearch.trim()) return [];
-
-    return categories
-      .flatMap((c) => c.products.map((p) => ({ ...p, categoryName: c.name })))
-      .filter((p) => p.name.toLowerCase().includes(globalSearch.toLowerCase()))
-      .slice(0, 8);
-  }, [categories, globalSearch]);
+  const globalResults = useMemo(
+    () => buildGlobalProductSearchResults(categories, globalSearch),
+    [categories, globalSearch]
+  );
 
   const { confirmTitle, confirmDescription } = useMemo(() => {
     if (!pendingDelete) {
