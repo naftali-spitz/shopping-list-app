@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AddMissingProductModal } from "@/components/add-missing-product-modal";
 import { AnimatedBackground } from "@/components/animated-background";
 import {
   AppFeedback,
@@ -21,6 +22,7 @@ import { ProfileSettingsModal } from "@/components/profile-settings-modal";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
 import { useCategoryManagement } from "@/hooks/use-category-management";
+import { useMissingProductAdd } from "@/hooks/use-missing-product-add";
 import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
@@ -215,6 +217,23 @@ export default function Home() {
     onError: showError,
   });
 
+  const {
+    addMissingProductModalOpen,
+    addMissingProductName,
+    addMissingProductSelectedCategoryId,
+    closeAddMissingProduct,
+    confirmAddMissingProduct,
+    openAddMissingProduct,
+    setAddMissingProductSelectedCategoryId,
+  } = useMissingProductAdd({
+    categories,
+    refreshCategories,
+    soundOn,
+    onSuccess: showSuccess,
+    onError: showError,
+    onDone: () => setGlobalSearch(""),
+  });
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -252,6 +271,7 @@ export default function Home() {
     Boolean(editingCategoryId) ||
     Boolean(editingProductId) ||
     Boolean(pendingDelete) ||
+    addMissingProductModalOpen ||
     historyOpen ||
     profileOpen ||
     createHouseholdOpen;
@@ -543,6 +563,7 @@ export default function Home() {
             void quickAddItem(item);
             setGlobalSearch("");
           }}
+          onAddMissingProduct={openAddMissingProduct}
         />
 
         <CategoriesSection
@@ -591,6 +612,16 @@ export default function Home() {
         onCustomOrderChange={(productsInFinalOrder, movedProductId) =>
           void handleCustomOrderChange(productsInFinalOrder, movedProductId)
         }
+      />
+
+      <AddMissingProductModal
+        open={addMissingProductModalOpen}
+        productName={addMissingProductName}
+        categories={categories}
+        selectedCategoryId={addMissingProductSelectedCategoryId}
+        onCategoryChange={setAddMissingProductSelectedCategoryId}
+        onClose={closeAddMissingProduct}
+        onAdd={() => void confirmAddMissingProduct()}
       />
 
       <EditCategoryModal
