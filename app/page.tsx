@@ -21,6 +21,7 @@ import { LoadingScreen } from "@/components/loading-screen";
 import { ProfileSettingsModal } from "@/components/profile-settings-modal";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 import { useCategoryManagement } from "@/hooks/use-category-management";
 import { useDarkMode } from "@/hooks/use-dark-mode";
 import { useMissingProductAdd } from "@/hooks/use-missing-product-add";
@@ -229,17 +230,7 @@ export default function Home() {
     profileOpen ||
     createHouseholdOpen;
 
-  useEffect(() => {
-    if (anyModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [anyModalOpen]);
+  useBodyScrollLock(anyModalOpen);
 
   const selectedCategory = useMemo(
     () => categories.find((c) => c.id === selectedCategoryId) ?? null,
