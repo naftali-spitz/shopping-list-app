@@ -1,9 +1,14 @@
 import { supabase } from "@/lib/supabase";
 
-export async function createProduct(categoryId: string, name: string) {
+export async function createProduct(
+  categoryId: string,
+  name: string,
+  options: { checked?: boolean } = {}
+) {
   return supabase.from("products").insert({
     category_id: categoryId,
     name,
+    checked: options.checked ?? false,
     quantity: 1,
   });
 }
