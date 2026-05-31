@@ -29,6 +29,7 @@ import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
 import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
+import { getDeleteConfirmationCopy } from "@/lib/delete-confirmation";
 import {
   updateProductDisplayOrder,
   updateProductDisplayOrders,
@@ -243,26 +244,10 @@ export default function Home() {
     [categories, globalSearch]
   );
 
-  const { confirmTitle, confirmDescription } = useMemo(() => {
-    if (!pendingDelete) {
-      return {
-        confirmTitle: "",
-        confirmDescription: "",
-      };
-    }
-
-    if (pendingDelete.type === "category") {
-      return {
-        confirmTitle: "מחיקת קטגוריה?",
-        confirmDescription: `הקטגוריה \"${pendingDelete.name}\" תימחק יחד עם ${pendingDelete.productCount} מוצרים. הפעולה לא ניתנת לביטול.`,
-      };
-    }
-
-    return {
-      confirmTitle: "מחיקת מוצר?",
-      confirmDescription: `המוצר \"${pendingDelete.name}\" יימחק מהרשימה. הפעולה לא ניתנת לביטול.`,
-    };
-  }, [pendingDelete]);
+  const { confirmTitle, confirmDescription } = useMemo(
+    () => getDeleteConfirmationCopy(pendingDelete),
+    [pendingDelete]
+  );
 
   const backgroundClass = darkMode
     ? "bg-[#050816] text-white"
