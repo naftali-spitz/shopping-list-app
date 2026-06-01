@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import {
+  AlignmentType,
   BorderStyle,
   Document,
   HeadingLevel,
@@ -25,6 +26,11 @@ type ExportCategory = {
   items: ExportItem[];
 };
 
+type ExportBody = {
+  categories?: ExportCategory[];
+  items?: ExportItem[];
+};
+
 type NormalizedItem = {
   name: string;
   quantity: number;
@@ -40,9 +46,40 @@ type Column = {
   children: Paragraph[];
 };
 
+type DocumentDirection = "ltr" | "rtl";
+
+type ExportCopy = {
+  locale: string;
+  fallbackCategory: string;
+  continued: string;
+  title: string;
+  summary: (formattedDate: string, itemCount: number, categoryCount: number) => string;
+};
+
 const MAX_COLUMNS = 4;
-const TARGET_LINES_PER_COLUMN = 34;
+const TARGET_LINES_PER_COLUMN = 26;
 const MIN_ITEMS_TO_START_CATEGORY = 3;
+const RTL_CHARACTER = /[\u0590-\u08ff\ufb1d-\ufdff\ufe70-\ufefc]/;
+const LETTER_CHARACTER = /\p{L}/u;
+
+const EXPORT_COPY: Record<DocumentDirection, ExportCopy> = {
+  ltr: {
+    locale: "en-US",
+    fallbackCategory: "General",
+    continued: "continued",
+    title: "🛒 FutureCart Shopping List",
+    summary: (formattedDate, itemCount, categoryCount) =>
+      `Created at: ${formattedDate} | ${itemCount} items in ${categoryCount} categories`,
+  },
+  rtl: {
+    locale: "he-IL",
+    fallbackCategory: "כללי",
+    continued: "המשך",
+    title: "🛒 FutureCart רשימת קניות",
+    summary: (formattedDate, itemCount, categoryCount) =>
+      `נוצר בתאריך: ${formattedDate} | ${itemCount} פריטים ב-${categoryCount} קטגוריות`,
+  },
+};
 
 function normalizeItem(item: ExportItem): NormalizedItem | null {
   const name = typeof item === "string" ? item : item.name;
@@ -58,14 +95,14 @@ function normalizeItem(item: ExportItem): NormalizedItem | null {
   };
 }
 
-function normalizeCategories(body: any): NormalizedCategory[] {
+function normalizeCategories(body: ExportBody, fallbackCategory = "General"): NormalizedCategory[] {
   if (Array.isArray(body.categories)) {
     return body.categories
       .map((category: ExportCategory) => ({
         name:
           typeof category?.name === "string" && category.name.trim()
             ? category.name.trim()
-            : "כללי",
+            : fallbackCategory,
         items: Array.isArray(category?.items)
           ? category.items.flatMap((item) => {
               const normalized = normalizeItem(item);
@@ -88,7 +125,7 @@ function normalizeCategories(body: any): NormalizedCategory[] {
   return fallbackItems.length
     ? [
         {
-          name: "כללי",
+          name: fallbackCategory,
           items: fallbackItems,
         },
       ]
@@ -103,16 +140,69 @@ function itemText(item: NormalizedItem) {
   return `☐ ${item.name}${item.quantity > 1 ? ` ×${item.quantity}` : ""}`;
 }
 
-function createCategoryTitle(name: string, continued: boolean) {
+function getTextDirection(text: string): DocumentDirection | null {
+  let rtlCharacters = 0;
+  let ltrCharacters = 0;
+
+  for (const character of text) {
+    if (RTL_CHARACTER.test(character)) {
+      rtlCharacters += 1;
+    } else if (LETTER_CHARACTER.test(character)) {
+      ltrCharacters += 1;
+    }
+  }
+
+  if (rtlCharacters === ltrCharacters) return null;
+
+  return rtlCharacters > ltrCharacters ? "rtl" : "ltr";
+}
+
+function getDocumentDirection(categories: NormalizedCategory[]): DocumentDirection {
+  const directionCounts = categories
+    .flatMap((category) => category.items)
+    .reduce(
+      (counts, item) => {
+        const direction = getTextDirection(item.name);
+
+        if (direction) counts[direction] += 1;
+
+        return counts;
+      },
+      { ltr: 0, rtl: 0 }
+    );
+
+  return directionCounts.rtl > directionCounts.ltr ? "rtl" : "ltr";
+}
+
+function paragraphDirection(direction: DocumentDirection) {
+  return {
+    alignment: direction === "rtl" ? AlignmentType.RIGHT : AlignmentType.LEFT,
+    bidirectional: direction === "rtl",
+  };
+}
+
+function textRunDirection(direction: DocumentDirection) {
+  return {
+    rightToLeft: direction === "rtl",
+  };
+}
+
+function createCategoryTitle(
+  name: string,
+  continued: boolean,
+  direction: DocumentDirection,
+  copy: ExportCopy
+) {
   return new Paragraph({
-    bidirectional: true,
+    ...paragraphDirection(direction),
     spacing: {
       before: 80,
       after: 80,
     },
     children: [
       new TextRun({
-        text: continued ? `${name} - המשך` : name,
+        ...textRunDirection(direction),
+        text: continued ? `${name} - ${copy.continued}` : name,
         bold: true,
         size: 24,
         color: "0891B2",
@@ -121,14 +211,15 @@ function createCategoryTitle(name: string, continued: boolean) {
   });
 }
 
-function createItemLine(item: NormalizedItem) {
+function createItemLine(item: NormalizedItem, direction: DocumentDirection) {
   return new Paragraph({
-    bidirectional: true,
+    ...paragraphDirection(direction),
     spacing: {
       after: 65,
     },
     children: [
       new TextRun({
+        ...textRunDirection(direction),
         text: itemText(item),
         size: 21,
       }),
@@ -149,13 +240,15 @@ function addCategorySlice(
   column: Column,
   category: NormalizedCategory,
   startIndex: number,
-  endIndex: number
+  endIndex: number,
+  direction: DocumentDirection,
+  copy: ExportCopy
 ) {
-  column.children.push(createCategoryTitle(category.name, startIndex > 0));
+  column.children.push(createCategoryTitle(category.name, startIndex > 0, direction, copy));
   column.lines += 1;
 
   category.items.slice(startIndex, endIndex).forEach((item) => {
-    column.children.push(createItemLine(item));
+    column.children.push(createItemLine(item, direction));
     column.lines += 1;
   });
 
@@ -170,7 +263,11 @@ function getColumnCount(totalLines: number) {
   );
 }
 
-function arrangeCategories(categories: NormalizedCategory[]) {
+function arrangeCategories(
+  categories: NormalizedCategory[],
+  direction: DocumentDirection,
+  copy: ExportCopy
+) {
   const totalLines = categories.reduce(
     (sum, category) => sum + estimateCategoryLines(category),
     0
@@ -206,7 +303,7 @@ function arrangeCategories(categories: NormalizedCategory[]) {
 
       if (remainingItems <= MIN_ITEMS_TO_START_CATEGORY) {
         if (isLastColumn || fullRemainingLines <= availableLines) {
-          addCategorySlice(column, category, itemIndex, category.items.length);
+          addCategorySlice(column, category, itemIndex, category.items.length, direction, copy);
           itemIndex = category.items.length;
         } else {
           moveToNextColumn();
@@ -216,7 +313,7 @@ function arrangeCategories(categories: NormalizedCategory[]) {
       }
 
       if (fullRemainingLines <= availableLines || isLastColumn) {
-        addCategorySlice(column, category, itemIndex, category.items.length);
+        addCategorySlice(column, category, itemIndex, category.items.length, direction, copy);
         itemIndex = category.items.length;
         continue;
       }
@@ -239,7 +336,7 @@ function arrangeCategories(categories: NormalizedCategory[]) {
         endIndex = category.items.length - MIN_ITEMS_TO_START_CATEGORY;
       }
 
-      addCategorySlice(column, category, itemIndex, endIndex);
+      addCategorySlice(column, category, itemIndex, endIndex, direction, copy);
       itemIndex = endIndex;
       moveToNextColumn();
     }
@@ -248,10 +345,14 @@ function arrangeCategories(categories: NormalizedCategory[]) {
   return columns;
 }
 
-function createColumnTable(columns: Column[]) {
-  const emptyParagraph = new Paragraph({ text: "" });
+function createColumnTable(columns: Column[], direction: DocumentDirection) {
+  const emptyParagraph = new Paragraph({
+    ...paragraphDirection(direction),
+    text: "",
+  });
 
   return new Table({
+    visuallyRightToLeft: direction === "rtl",
     width: {
       size: 100,
       type: WidthType.PERCENTAGE,
@@ -287,8 +388,8 @@ function createColumnTable(columns: Column[]) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const categories = normalizeCategories(body);
+    const body = (await request.json()) as ExportBody;
+    let categories = normalizeCategories(body);
 
     if (!categories.length) {
       return NextResponse.json(
@@ -297,15 +398,20 @@ export async function POST(request: Request) {
       );
     }
 
+    const direction = getDocumentDirection(categories);
+    const copy = EXPORT_COPY[direction];
+
+    categories = normalizeCategories(body, copy.fallbackCategory);
+
     const itemCount = categories.reduce(
       (sum, category) => sum + category.items.length,
       0
     );
-    const formattedDate = new Intl.DateTimeFormat("he-IL", {
+    const formattedDate = new Intl.DateTimeFormat(copy.locale, {
       dateStyle: "medium",
       timeStyle: "short",
     }).format(new Date());
-    const columns = arrangeCategories(categories);
+    const columns = arrangeCategories(categories, direction, copy);
 
     const doc = new Document({
       sections: [
@@ -326,40 +432,43 @@ export async function POST(request: Request) {
           children: [
             new Paragraph({
               heading: HeadingLevel.HEADING_1,
-              bidirectional: true,
+              ...paragraphDirection(direction),
               spacing: {
                 after: 120,
               },
               children: [
                 new TextRun({
-                  text: "🛒 FutureCart רשימת קניות",
+                  ...textRunDirection(direction),
+                  text: copy.title,
                   bold: true,
                   size: 34,
                 }),
               ],
             }),
             new Paragraph({
-              bidirectional: true,
+              ...paragraphDirection(direction),
               spacing: {
                 after: 240,
               },
               children: [
                 new TextRun({
-                  text: `נוצר בתאריך: ${formattedDate} | ${itemCount} פריטים ב-${categories.length} קטגוריות`,
+                  ...textRunDirection(direction),
+                  text: copy.summary(formattedDate, itemCount, categories.length),
                   italics: true,
                   size: 20,
                   color: "475569",
                 }),
               ],
             }),
-            createColumnTable(columns),
+            createColumnTable(columns, direction),
             new Paragraph({
-              bidirectional: true,
+              ...paragraphDirection(direction),
               spacing: {
                 before: 240,
               },
               children: [
                 new TextRun({
+                  ...textRunDirection(direction),
                   text: "Generated by FutureCart",
                   size: 18,
                   color: "64748B",
