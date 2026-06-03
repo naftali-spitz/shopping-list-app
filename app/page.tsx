@@ -619,7 +619,7 @@ export default function Home() {
           void setShoppingList(items);
           setHistoryOpen(false);
         }}
-        onDelete={(historyId) => void deleteHistoryEntry(historyId)}
+        onDelete={deleteHistoryEntry}
       />
 
       <AppFeedback feedback={feedback} onClose={closeFeedback} />
