@@ -431,31 +431,27 @@ export function useShoppingState({
 
   const deleteHistoryEntry = useCallback(
     async (historyId: string) => {
-      const previousHistory = history;
-
-      playSound();
-      setHistory((prev) => prev.filter((entry) => entry.id !== historyId));
-
       if (!householdId) {
         onError?.("לא נמצא בית פעיל.");
-        setHistory(previousHistory);
         return false;
       }
+
+      playSound();
 
       const { error } = await deleteShoppingHistoryEntry(householdId, historyId);
 
       if (error) {
         console.error("Failed to delete history entry:", error);
         onError?.("מחיקת רשימת ההיסטוריה נכשלה.");
-        setHistory(previousHistory);
-        await refreshCategories();
         return false;
       }
 
+      setHistory((prev) => prev.filter((entry) => entry.id !== historyId));
       await refreshCategories();
+
       return true;
     },
-    [history, householdId, onError, playSound, refreshCategories]
+    [householdId, onError, playSound, refreshCategories]
   );
 
   const exportDoc = useCallback(async () => {
