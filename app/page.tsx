@@ -619,7 +619,13 @@ export default function Home() {
           void setShoppingList(items);
           setHistoryOpen(false);
         }}
-        onDelete={deleteHistoryEntry}
+        onDelete={async (historyId) => {
+          const deleted = await deleteHistoryEntry(historyId);
+
+          if (!deleted) {
+            throw new Error("History delete failed");
+          }
+        }}
       />
 
       <AppFeedback feedback={feedback} onClose={closeFeedback} />
