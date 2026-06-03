@@ -447,7 +447,7 @@ export function useShoppingState({
       }
 
       setHistory((prev) => prev.filter((entry) => entry.id !== historyId));
-      await refreshCategories();
+      void refreshCategories();
 
       return true;
     },
