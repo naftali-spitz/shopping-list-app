@@ -13,6 +13,30 @@ type HistoryModalProps = {
   onDelete: (historyId: string) => void | Promise<void>;
 };
 
+function AnimatedDeleteDots() {
+  return (
+    <span className="inline-flex items-center gap-1" aria-label="Deleting">
+      <span>Deleting</span>
+      {[0, 1, 2].map((dot) => (
+        <motion.span
+          key={dot}
+          aria-hidden="true"
+          animate={{ opacity: [0.25, 1, 0.25], y: [0, -3, 0] }}
+          transition={{
+            duration: 0.85,
+            repeat: Infinity,
+            delay: dot * 0.14,
+            ease: "easeInOut",
+          }}
+          className="inline-block"
+        >
+          .
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export function HistoryModal({
   open,
   history,
@@ -310,9 +334,11 @@ export function HistoryModal({
                       className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-red-500 px-4 py-3 font-medium text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Trash2 size={17} />
-                      {deletingHistoryId === pendingDeleteEntry.id
-                        ? "Deleting..."
-                        : "Delete"}
+                      {deletingHistoryId === pendingDeleteEntry.id ? (
+                        <AnimatedDeleteDots />
+                      ) : (
+                        "Delete"
+                      )}
                     </button>
                   </div>
                 </motion.div>
