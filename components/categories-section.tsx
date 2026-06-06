@@ -56,6 +56,7 @@ export function CategoriesSection({
               value={newCategoryIcon}
               onChange={onCategoryIconChange}
               label={copy.categories.iconLabel}
+              variant={darkMode ? "dark" : "light"}
             />
           </div>
 
