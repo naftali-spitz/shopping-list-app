@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   createCategory,
@@ -11,6 +11,7 @@ import {
   updateProduct,
 } from "@/lib/db/products";
 import { Category } from "@/types/shopping";
+import { CategoryIcon, DEFAULT_CATEGORY_ICON } from "@/lib/category-icons";
 
 type PendingDelete =
   | { type: "category"; id: string; name: string; productCount: number }
@@ -36,9 +37,11 @@ export function useCategoryManagement({
   onError,
 }: UseCategoryManagementProps) {
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryIcon, setNewCategoryIcon] = useState<CategoryIcon>(DEFAULT_CATEGORY_ICON);
   const [newProductName, setNewProductName] = useState("");
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [editingCategoryName, setEditingCategoryName] = useState("");
+  const [editingCategoryIcon, setEditingCategoryIcon] = useState<CategoryIcon>(DEFAULT_CATEGORY_ICON);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [editingProductName, setEditingProductName] = useState("");
   const [editingProductCategoryId, setEditingProductCategoryId] = useState<string | null>(null);
@@ -55,12 +58,18 @@ export function useCategoryManagement({
       (product) => product.id === editingProductId
     ) ?? null;
 
+  useEffect(() => {
+    if (!editingCategory) return;
+    setEditingCategoryIcon(editingCategory.icon ?? DEFAULT_CATEGORY_ICON);
+  }, [editingCategory]);
+
   const addCategory = useCallback(async () => {
     const name = newCategoryName.trim();
 
     if (!name) return;
 
     setNewCategoryName("");
+    setNewCategoryIcon(DEFAULT_CATEGORY_ICON);
 
     if (!householdId) {
       onError?.("לא נמצא בית פעיל.");
@@ -69,7 +78,7 @@ export function useCategoryManagement({
 
     const { error } = await createCategory(householdId, {
       name,
-      icon: "general",
+      icon: newCategoryIcon,
     });
 
     if (error) {
@@ -79,7 +88,7 @@ export function useCategoryManagement({
     }
 
     await refreshCategories();
-  }, [householdId, newCategoryName, onError, refreshCategories]);
+  }, [householdId, newCategoryIcon, newCategoryName, onError, refreshCategories]);
 
   const addProduct = useCallback(async () => {
     const name = newProductName.trim();
@@ -104,6 +113,7 @@ export function useCategoryManagement({
 
     const { error } = await updateCategory(editingCategoryId, {
       name: editingCategoryName,
+      icon: editingCategoryIcon,
     });
 
     if (error) {
@@ -115,7 +125,8 @@ export function useCategoryManagement({
     await refreshCategories();
     setEditingCategoryId(null);
     setEditingCategoryName("");
-  }, [editingCategoryId, editingCategoryName, onError, refreshCategories]);
+    setEditingCategoryIcon(DEFAULT_CATEGORY_ICON);
+  }, [editingCategoryIcon, editingCategoryId, editingCategoryName, onError, refreshCategories]);
 
   const saveProductEdit = useCallback(async () => {
     if (!editingProductId || !editingProductCategoryId) return;
@@ -212,6 +223,7 @@ export function useCategoryManagement({
 
     setEditingCategoryId(null);
     setEditingCategoryName("");
+    setEditingCategoryIcon(DEFAULT_CATEGORY_ICON);
     setPendingDelete(null);
 
     const { error } = await deleteCategoryFromDb(pendingDelete.id);
@@ -252,6 +264,7 @@ export function useCategoryManagement({
     deleteCategory,
     deleteProduct,
     editingCategory,
+    editingCategoryIcon,
     editingCategoryId,
     editingCategoryName,
     editingProduct,
@@ -259,16 +272,19 @@ export function useCategoryManagement({
     editingProductId,
     editingProductName,
     handleEditProduct,
+    newCategoryIcon,
     newCategoryName,
     newProductName,
     pendingDelete,
     saveCategoryEdit,
     saveProductEdit,
+    setEditingCategoryIcon,
     setEditingCategoryId,
     setEditingCategoryName,
     setEditingProductCategoryId,
     setEditingProductId,
     setEditingProductName,
+    setNewCategoryIcon,
     setNewCategoryName,
     setNewProductName,
     setPendingDelete,
