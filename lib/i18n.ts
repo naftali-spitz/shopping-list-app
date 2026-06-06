@@ -25,6 +25,42 @@ export function getBrowserDefaultLanguage(): AppLanguage {
   return DEFAULT_APP_LANGUAGE;
 }
 
+const heIconLabels = {
+  general: "כללי",
+  dairy: "מוצרי חלב",
+  fruit: "פירות וירקות",
+  bakery: "מאפייה",
+  meat: "בשר",
+  eggs: "ביצים",
+  grains: "יבשים ודגנים",
+  cans: "שימורים",
+  spices: "תבלינים",
+  sauces: "רטבים",
+  drinks: "שתייה",
+  snacks: "חטיפים",
+  cleaning: "ניקיון",
+  baby: "תינוקות",
+  beauty: "טיפוח",
+} as const;
+
+const enIconLabels = {
+  general: "General",
+  dairy: "Dairy",
+  fruit: "Fruit & veg",
+  bakery: "Bakery",
+  meat: "Meat",
+  eggs: "Eggs",
+  grains: "Grains",
+  cans: "Cans",
+  spices: "Spices",
+  sauces: "Sauces",
+  drinks: "Drinks",
+  snacks: "Snacks",
+  cleaning: "Cleaning",
+  baby: "Baby",
+  beauty: "Beauty",
+} as const;
+
 export const appCopy = {
   he: {
     language: { label: "שפה", options: { he: "עברית", en: "English" } },
@@ -32,7 +68,7 @@ export const appCopy = {
     login: { title: "FutureCart", subtitle: "רשימת קניות חכמה למשפחה", intro: "בחר שפה והתחבר כדי להמשיך." },
     topBar: { title: "FutureCart", subtitle: "עוזר קניות חכם", openHistory: "פתח היסטוריה", openMenu: "פתח תפריט והגדרות" },
     common: { close: "סגור", cancel: "ביטול", save: "שמור", delete: "מחק", create: "צור", add: "הוסף", back: "חזרה", change: "שנה", clear: "נקה", selectAll: "בחר הכל", unknownUser: "משתמש לא ידוע", doneTitle: "בוצע" },
-    categories: { chooseCategory: "בחר קטגוריה", addCategoryPlaceholder: "הוסף קטגוריה", emptyCategory: "אין מוצרים בקטגוריה", editCategory: "עריכת קטגוריה", editCategoryDescription: "שנה שם קטגוריה בצורה בטוחה.", categoryName: "שם קטגוריה", iconLabel: "אייקון", deleteCategory: "מחק קטגוריה" },
+    categories: { chooseCategory: "בחר קטגוריה", addCategoryPlaceholder: "שם קטגוריה", emptyCategory: "אין מוצרים בקטגוריה", createCategory: "קטגוריה חדשה", createCategoryDescription: "בחר שם ואייקון שיופיעו במסך הראשי.", editCategory: "עריכת קטגוריה", editCategoryDescription: "שנה שם או אייקון קטגוריה בצורה בטוחה.", categoryName: "שם קטגוריה", iconLabel: "אייקון", deleteCategory: "מחק קטגוריה", iconLabels: heIconLabels },
     categoryModal: { description: "מיין, הוסף, הסר ובחר מוצרים.", searchPlaceholder: "חיפוש מוצרים", sortPopular: "הכי נבחרים", sortAz: "א-ת / A-Z", sortCustom: "סדר מותאם", clearSearchToReorder: "נקה את החיפוש כדי לסדר מוצרים מחדש.", addProductPlaceholder: "הוסף מוצר", reorderProduct: "סדר מוצר מחדש", dragToReorder: "גרור כדי לסדר מחדש", clearSearchToReorderTitle: "נקה חיפוש כדי לסדר מחדש" },
     products: { editProduct: "עריכת מוצר", editProductDescription: "ערוך או מחק מוצר בצורה בטוחה.", productName: "שם מוצר", category: "קטגוריה", deleteProduct: "מחק מוצר" },
     search: { placeholder: "חיפוש מהיר להוספה לרשימה...", clearSearch: "נקה חיפוש", noResults: "לא נמצאו תוצאות", addMissing: (name: string) => `הוסף “${name}”` },
@@ -49,7 +85,7 @@ export const appCopy = {
     login: { title: "FutureCart", subtitle: "Smart shopping list for the family", intro: "Choose a language and sign in to continue." },
     topBar: { title: "FutureCart", subtitle: "Smart shopping companion", openHistory: "Open history", openMenu: "Open menu and settings" },
     common: { close: "Close", cancel: "Cancel", save: "Save", delete: "Delete", create: "Create", add: "Add", back: "Back", change: "Change", clear: "Clear", selectAll: "Select all", unknownUser: "Unknown user", doneTitle: "Done" },
-    categories: { chooseCategory: "Choose category", addCategoryPlaceholder: "Add category", emptyCategory: "No products in this category", editCategory: "Edit category", editCategoryDescription: "Safely rename this category.", categoryName: "Category name", iconLabel: "Icon", deleteCategory: "Delete category" },
+    categories: { chooseCategory: "Choose category", addCategoryPlaceholder: "Category name", emptyCategory: "No products in this category", createCategory: "New category", createCategoryDescription: "Choose the name and icon that will appear on the main screen.", editCategory: "Edit category", editCategoryDescription: "Safely rename or change this category icon.", categoryName: "Category name", iconLabel: "Icon", deleteCategory: "Delete category", iconLabels: enIconLabels },
     categoryModal: { description: "Sort, add, remove, and choose products.", searchPlaceholder: "Search products", sortPopular: "Most chosen", sortAz: "A-Z", sortCustom: "Custom", clearSearchToReorder: "Clear search to reorder products.", addProductPlaceholder: "Add product", reorderProduct: "Reorder product", dragToReorder: "Drag to reorder", clearSearchToReorderTitle: "Clear search to reorder" },
     products: { editProduct: "Edit product", editProductDescription: "Safely edit or delete this product.", productName: "Product name", category: "Category", deleteProduct: "Delete product" },
     search: { placeholder: "Quick search to add to the list...", clearSearch: "Clear search", noResults: "No results found", addMissing: (name: string) => `Add “${name}”` },
