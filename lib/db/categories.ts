@@ -1,3 +1,4 @@
+import { normalizeCategoryIcon } from "@/lib/category-icons";
 import { supabase } from "@/lib/supabase";
 import { Category } from "@/types/shopping";
 
@@ -18,7 +19,7 @@ export async function fetchCategories(
   return data.map((category: any) => ({
     id: category.id,
     name: category.name,
-    icon: category.icon,
+    icon: normalizeCategoryIcon(category.icon),
     products: (category.products || []).map((product: any) => ({
       id: product.id,
       name: product.name,
