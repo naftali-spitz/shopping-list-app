@@ -1,8 +1,6 @@
-import { Sparkles } from "lucide-react";
+import { Plus, Sparkles } from "lucide-react";
 
 import { CategoryCard } from "@/components/category-card";
-import { CategoryIconPicker } from "@/components/category-icon-picker";
-import { CategoryIcon } from "@/lib/category-icons";
 import { AppCopy } from "@/lib/i18n";
 import { Category } from "@/types/shopping";
 
@@ -11,11 +9,7 @@ type CategoriesSectionProps = {
   cardClass: string;
   categories: Category[];
   darkMode: boolean;
-  newCategoryName: string;
-  newCategoryIcon: CategoryIcon;
-  onAddCategory: () => void;
-  onCategoryNameChange: (value: string) => void;
-  onCategoryIconChange: (icon: CategoryIcon) => void;
+  onCreateCategory: () => void;
   onDeleteCategory: (categoryId: string, categoryName: string) => void;
   onOpenCategory: (categoryId: string) => void;
 };
@@ -25,11 +19,7 @@ export function CategoriesSection({
   cardClass,
   categories,
   darkMode,
-  newCategoryName,
-  newCategoryIcon,
-  onAddCategory,
-  onCategoryNameChange,
-  onCategoryIconChange,
+  onCreateCategory,
   onDeleteCategory,
   onOpenCategory,
 }: CategoriesSectionProps) {
@@ -41,32 +31,13 @@ export function CategoriesSection({
           <h2 className="text-3xl font-bold">{copy.categories.chooseCategory}</h2>
         </div>
 
-        <div className={`flex w-full flex-wrap items-center gap-2 rounded-3xl border p-2 backdrop-blur-xl sm:w-auto ${cardClass}`}>
-          <input
-            value={newCategoryName}
-            onChange={(e) => onCategoryNameChange(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && onAddCategory()}
-            placeholder={copy.categories.addCategoryPlaceholder}
-            dir="auto"
-            className="h-11 min-w-[150px] flex-1 bg-transparent px-3 text-sm outline-none placeholder:opacity-50 sm:w-44 sm:flex-none"
-          />
-
-          <div className="min-w-[155px] flex-1 sm:flex-none">
-            <CategoryIconPicker
-              value={newCategoryIcon}
-              onChange={onCategoryIconChange}
-              label={copy.categories.iconLabel}
-              variant={darkMode ? "dark" : "light"}
-            />
-          </div>
-
-          <button
-            onClick={onAddCategory}
-            className="h-11 rounded-2xl bg-cyan-400 px-4 text-sm font-medium text-black"
-          >
-            {copy.common.add}
-          </button>
-        </div>
+        <button
+          onClick={onCreateCategory}
+          className={`flex items-center gap-2 rounded-3xl border px-5 py-3 text-sm font-semibold backdrop-blur-xl transition hover:scale-[1.02] ${cardClass}`}
+        >
+          <Plus size={18} className="text-cyan-300" />
+          {copy.categories.createCategory}
+        </button>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
