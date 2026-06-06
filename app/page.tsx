@@ -74,7 +74,7 @@ export default function Home() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [createHouseholdOpen, setCreateHouseholdOpen] = useState(false);
-  const [newHouseholdName, setNewHouseholdName] = useState(copy.household.defaultName);
+  const [newHouseholdName, setNewHouseholdName] = useState<string>(copy.household.defaultName);
 
   const { addCategory, addProduct, confirmDelete, deleteCategory, deleteProduct, editingCategory, editingCategoryId, editingCategoryName, editingProduct, editingProductCategoryId, editingProductId, editingProductName, handleEditProduct, newCategoryName, newProductName, pendingDelete, saveCategoryEdit, saveProductEdit, setEditingCategoryId, setEditingCategoryName, setEditingProductCategoryId, setEditingProductId, setEditingProductName, setNewCategoryName, setNewProductName, setPendingDelete } = useCategoryManagement({ categories, householdId: currentHouseholdId, selectedCategoryId, refreshCategories, setCategories, setSelectedCategoryId, onError: showError });
   const { addMissingProductModalOpen, addMissingProductName, addMissingProductSelectedCategoryId, closeAddMissingProduct, confirmAddMissingProduct, openAddMissingProduct, setAddMissingProductSelectedCategoryId } = useMissingProductAdd({ categories, refreshCategories, soundOn, onSuccess: showSuccess, onError: showError, onDone: () => setGlobalSearch("") });
