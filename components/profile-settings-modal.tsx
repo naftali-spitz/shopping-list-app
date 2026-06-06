@@ -2,26 +2,12 @@
 
 import { ReactNode, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Check,
-  ChevronDown,
-  Home,
-  Link,
-  LogOut,
-  Mail,
-  Menu,
-  Moon,
-  Plus,
-  Settings,
-  Sun,
-  Trash2,
-  Volume2,
-  VolumeX,
-  X,
-} from "lucide-react";
+import { Check, ChevronDown, Home, Link, LogOut, Mail, Menu, Moon, Plus, Settings, Sun, Trash2, Volume2, VolumeX, X } from "lucide-react";
 import { ConfirmModal } from "@/components/confirm-modal";
+import { LanguageSelector } from "@/components/language-selector";
 import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
 import { UserHousehold } from "@/lib/db/households";
+import { AppCopy, AppLanguage } from "@/lib/i18n";
 
 type ProfileSettingsModalProps = {
   open: boolean;
@@ -30,6 +16,9 @@ type ProfileSettingsModalProps = {
   soundOn: boolean;
   households: UserHousehold[];
   currentHouseholdId: string | null;
+  language: AppLanguage;
+  copy: AppCopy;
+  onLanguageChange: (language: AppLanguage) => void;
   onClose: () => void;
   onToggleTheme: () => void;
   onToggleSound: () => void;
@@ -39,15 +28,7 @@ type ProfileSettingsModalProps = {
   onLogout: () => void;
 };
 
-function SectionTitle({
-  icon,
-  title,
-  subtitle,
-}: {
-  icon: ReactNode;
-  title: string;
-  subtitle?: string;
-}) {
+function SectionTitle({ icon, title, subtitle }: { icon: ReactNode; title: string; subtitle?: string }) {
   return (
     <div className="mb-3 flex items-center gap-3">
       <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white/10 text-cyan-200">
@@ -68,6 +49,9 @@ export function ProfileSettingsModal({
   soundOn,
   households,
   currentHouseholdId,
+  language,
+  copy,
+  onLanguageChange,
   onClose,
   onToggleTheme,
   onToggleSound,
@@ -79,20 +63,14 @@ export function ProfileSettingsModal({
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [householdExpanded, setHouseholdExpanded] = useState(false);
   const { deleteHousehold } = useCurrentHousehold();
-  const currentHousehold =
-    households.find((household) => household.id === currentHouseholdId) ?? null;
+  const currentHousehold = households.find((household) => household.id === currentHouseholdId) ?? null;
   const canDeleteCurrentHousehold = currentHousehold?.role === "owner";
-  const otherHouseholds = households.filter(
-    (household) => household.id !== currentHouseholdId
-  );
+  const otherHouseholds = households.filter((household) => household.id !== currentHouseholdId);
 
   const confirmDeleteHousehold = async () => {
     if (!currentHousehold || !canDeleteCurrentHousehold) return;
-
     const deleted = await deleteHousehold(currentHousehold.id);
-
     if (!deleted) return;
-
     setDeleteConfirmOpen(false);
     onClose();
     window.location.reload();
@@ -125,16 +103,12 @@ export function ProfileSettingsModal({
                     <Menu size={22} />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold">Menu</h2>
-                    <p className="mt-1 text-sm text-white/50">Households and settings</p>
+                    <h2 className="text-2xl font-bold">{copy.profile.title}</h2>
+                    <p className="mt-1 text-sm text-white/50">{copy.profile.subtitle}</p>
                   </div>
                 </div>
 
-                <button
-                  onClick={onClose}
-                  className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20"
-                  aria-label="Close profile settings"
-                >
+                <button onClick={onClose} className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20" aria-label={copy.common.close}>
                   <X size={18} />
                 </button>
               </div>
@@ -145,9 +119,9 @@ export function ProfileSettingsModal({
                     <Mail size={18} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/40">Signed in</p>
-                    <p className="truncate text-sm font-medium text-white/85">
-                      {email || "Unknown user"}
+                    <p className="text-xs uppercase tracking-[0.2em] text-white/40">{copy.profile.signedIn}</p>
+                    <p className="truncate text-sm font-medium text-white/85" dir="auto">
+                      {email || copy.common.unknownUser}
                     </p>
                   </div>
                   {currentHousehold && (
@@ -159,53 +133,30 @@ export function ProfileSettingsModal({
               </div>
 
               <div className="mt-5 rounded-3xl border border-cyan-300/15 bg-cyan-300/[0.06] p-4">
-                <button
-                  type="button"
-                  onClick={() => setHouseholdExpanded((value) => !value)}
-                  className="flex w-full items-center justify-between gap-3 text-left"
-                >
+                <button type="button" onClick={() => setHouseholdExpanded((value) => !value)} className="flex w-full items-center justify-between gap-3 text-start">
                   <span className="flex min-w-0 items-center gap-3">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-400/15 text-cyan-200">
                       <Home size={18} />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-sm font-semibold text-white/90">
-                        Current household
-                      </span>
-                      <span className="block truncate text-xs text-white/45">
-                        {currentHousehold
-                          ? `${currentHousehold.name} • ${currentHousehold.role}`
-                          : "No active household"}
+                      <span className="block text-sm font-semibold text-white/90">{copy.household.current}</span>
+                      <span className="block truncate text-xs text-white/45" dir="auto">
+                        {currentHousehold ? `${currentHousehold.name} • ${currentHousehold.role}` : copy.household.noActive}
                       </span>
                     </span>
                   </span>
-                  <ChevronDown
-                    size={20}
-                    className={`shrink-0 text-white/55 transition ${
-                      householdExpanded ? "rotate-180" : ""
-                    }`}
-                  />
+                  <ChevronDown size={20} className={`shrink-0 text-white/55 transition ${householdExpanded ? "rotate-180" : ""}`} />
                 </button>
 
                 <AnimatePresence initial={false}>
                   {householdExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
-                    >
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
                       {currentHousehold && (
                         <div className="mt-4 rounded-2xl border border-cyan-300/30 bg-cyan-300/15 p-4">
                           <div className="flex items-center justify-between gap-3">
                             <div className="min-w-0">
-                              <p className="truncate text-base font-semibold text-cyan-50">
-                                {currentHousehold.name}
-                              </p>
-                              <p className="mt-1 text-xs text-cyan-50/55">
-                                Active household • {currentHousehold.role}
-                              </p>
+                              <p className="truncate text-base font-semibold text-cyan-50" dir="auto">{currentHousehold.name}</p>
+                              <p className="mt-1 text-xs text-cyan-50/55">{copy.household.active} • {currentHousehold.role}</p>
                             </div>
                             <Check className="shrink-0 text-cyan-100" size={20} />
                           </div>
@@ -214,17 +165,11 @@ export function ProfileSettingsModal({
 
                       {otherHouseholds.length > 0 && (
                         <div className="mt-3 space-y-2">
-                          <p className="px-1 text-xs font-medium uppercase tracking-[0.18em] text-white/35">
-                            Switch to
-                          </p>
+                          <p className="px-1 text-xs font-medium uppercase tracking-[0.18em] text-white/35">{copy.household.switchTo}</p>
                           {otherHouseholds.map((household) => (
-                            <button
-                              key={household.id}
-                              onClick={() => onSwitchHousehold(household.id)}
-                              className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white/80 transition hover:bg-white/10"
-                            >
+                            <button key={household.id} onClick={() => onSwitchHousehold(household.id)} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-start text-white/80 transition hover:bg-white/10">
                               <span className="min-w-0">
-                                <span className="block truncate font-medium">{household.name}</span>
+                                <span className="block truncate font-medium" dir="auto">{household.name}</span>
                                 <span className="text-xs text-white/40">{household.role}</span>
                               </span>
                             </button>
@@ -233,43 +178,19 @@ export function ProfileSettingsModal({
                       )}
 
                       <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                        <button
-                          onClick={onCreateInviteLink}
-                          disabled={!currentHousehold}
-                          className="flex items-center justify-between rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-left text-cyan-50 transition hover:bg-cyan-300/20 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          <span>
-                            <span className="block text-sm font-semibold">Invite</span>
-                            <span className="text-xs text-white/45">Copy link</span>
-                          </span>
+                        <button onClick={onCreateInviteLink} disabled={!currentHousehold} className="flex items-center justify-between rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-start text-cyan-50 transition hover:bg-cyan-300/20 disabled:cursor-not-allowed disabled:opacity-50">
+                          <span><span className="block text-sm font-semibold">{copy.household.invite}</span><span className="text-xs text-white/45">{copy.household.copyLink}</span></span>
                           <Link size={18} />
                         </button>
 
-                        <button
-                          onClick={onCreateHousehold}
-                          className="flex items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-4 py-3 text-left text-white/75 transition hover:bg-white/10"
-                        >
-                          <span>
-                            <span className="block text-sm font-semibold">New household</span>
-                            <span className="text-xs text-white/45">Separate list</span>
-                          </span>
+                        <button onClick={onCreateHousehold} className="flex items-center justify-between rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-4 py-3 text-start text-white/75 transition hover:bg-white/10">
+                          <span><span className="block text-sm font-semibold">{copy.household.newHousehold}</span><span className="text-xs text-white/45">{copy.household.separateList}</span></span>
                           <Plus size={18} />
                         </button>
                       </div>
 
-                      <button
-                        onClick={() => setDeleteConfirmOpen(true)}
-                        disabled={!canDeleteCurrentHousehold}
-                        className="mt-2 flex w-full items-center justify-between rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-left text-red-100 transition hover:bg-red-400/20 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        <span>
-                          <span className="block font-medium">Delete household</span>
-                          <span className="text-xs text-red-100/60">
-                            {canDeleteCurrentHousehold
-                              ? "Permanently removes this household"
-                              : "Only the owner can delete this household"}
-                          </span>
-                        </span>
+                      <button onClick={() => setDeleteConfirmOpen(true)} disabled={!canDeleteCurrentHousehold} className="mt-2 flex w-full items-center justify-between rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-start text-red-100 transition hover:bg-red-400/20 disabled:cursor-not-allowed disabled:opacity-50">
+                        <span><span className="block font-medium">{copy.household.deleteHousehold}</span><span className="text-xs text-red-100/60">{canDeleteCurrentHousehold ? copy.household.deleteAllowed : copy.household.deleteOwnerOnly}</span></span>
                         <Trash2 size={18} />
                       </button>
                     </motion.div>
@@ -278,71 +199,26 @@ export function ProfileSettingsModal({
               </div>
 
               <div className="mt-5 rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-                <SectionTitle
-                  icon={<Settings size={17} />}
-                  title="Preferences"
-                  subtitle="Personal to this device"
-                />
-
+                <SectionTitle icon={<Settings size={17} />} title={copy.profile.preferences} subtitle={copy.profile.preferencesSubtitle} />
                 <div className="space-y-2">
-                  <button
-                    onClick={onToggleTheme}
-                    className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left transition hover:bg-white/10"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">
-                        {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                      </span>
-                      <span>
-                        <span className="block font-medium">Theme</span>
-                        <span className="text-sm text-white/45">
-                          {darkMode ? "Dark mode" : "Light mode"}
-                        </span>
-                      </span>
-                    </span>
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/55">
-                      Change
-                    </span>
+                  <LanguageSelector language={language} copy={copy} onChange={onLanguageChange} />
+
+                  <button onClick={onToggleTheme} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-start transition hover:bg-white/10">
+                    <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">{darkMode ? <Sun size={18} /> : <Moon size={18} />}</span><span><span className="block font-medium">{copy.profile.theme}</span><span className="text-sm text-white/45">{darkMode ? copy.profile.darkMode : copy.profile.lightMode}</span></span></span>
+                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/55">{copy.common.change}</span>
                   </button>
 
-                  <button
-                    onClick={onToggleSound}
-                    className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left transition hover:bg-white/10"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">
-                        {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
-                      </span>
-                      <span>
-                        <span className="block font-medium">Sound</span>
-                        <span className="text-sm text-white/45">
-                          {soundOn ? "Enabled" : "Disabled"}
-                        </span>
-                      </span>
-                    </span>
-                    <span
-                      className={`relative h-7 w-12 rounded-full transition ${
-                        soundOn ? "bg-cyan-400" : "bg-white/15"
-                      }`}
-                    >
-                      <span
-                        className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${
-                          soundOn ? "right-1" : "right-6"
-                        }`}
-                      />
+                  <button onClick={onToggleSound} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-start transition hover:bg-white/10">
+                    <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">{soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}</span><span><span className="block font-medium">{copy.profile.sound}</span><span className="text-sm text-white/45">{soundOn ? copy.profile.enabled : copy.profile.disabled}</span></span></span>
+                    <span className={`relative h-7 w-12 rounded-full transition ${soundOn ? "bg-cyan-400" : "bg-white/15"}`}>
+                      <span className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${soundOn ? "right-1" : "right-6"}`} />
                     </span>
                   </button>
                 </div>
               </div>
 
-              <button
-                onClick={onLogout}
-                className="mt-5 flex w-full items-center justify-between rounded-3xl border border-red-400/20 bg-red-400/10 px-4 py-4 text-left text-red-100 transition hover:bg-red-400/20"
-              >
-                <span>
-                  <span className="block font-medium">Logout</span>
-                  <span className="text-sm text-red-100/60">Sign out of this account</span>
-                </span>
+              <button onClick={onLogout} className="mt-5 flex w-full items-center justify-between rounded-3xl border border-red-400/20 bg-red-400/10 px-4 py-4 text-start text-red-100 transition hover:bg-red-400/20">
+                <span><span className="block font-medium">{copy.profile.logout}</span><span className="text-sm text-red-100/60">{copy.profile.logoutDescription}</span></span>
                 <LogOut size={20} />
               </button>
             </motion.div>
@@ -352,10 +228,10 @@ export function ProfileSettingsModal({
 
       <ConfirmModal
         open={deleteConfirmOpen}
-        title="Delete household?"
-        description={`This will permanently delete ${currentHousehold?.name ?? "this household"}, including its categories, products, shopping list, history, members, and invite links. This cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
+        title={copy.household.deleteTitle}
+        description={copy.household.deleteDescription(currentHousehold?.name ?? copy.household.current)}
+        confirmText={copy.common.delete}
+        cancelText={copy.common.cancel}
         onConfirm={() => void confirmDeleteHousehold()}
         onCancel={() => setDeleteConfirmOpen(false)}
       />
