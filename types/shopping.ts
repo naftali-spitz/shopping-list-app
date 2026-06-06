@@ -1,3 +1,5 @@
+import { CategoryIcon } from "@/lib/category-icons";
+
 export type Product = {
   id: string;
   name: string;
@@ -11,7 +13,7 @@ export type Product = {
 export type Category = {
   id: string;
   name: string;
-  icon: "dairy" | "fruit" | "bakery" | "general";
+  icon: CategoryIcon;
   products: Product[];
 };
 
