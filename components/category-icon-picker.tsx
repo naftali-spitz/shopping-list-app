@@ -13,31 +13,31 @@ export function CategoryIconPicker({
   onChange,
   label = "Icon",
 }: CategoryIconPickerProps) {
-  return (
-    <div className="space-y-3">
-      <p className="text-sm text-white/70">{label}</p>
-      <div className="grid grid-cols-5 gap-2">
-        {categoryIconOptions.map(({ value: iconValue, label: iconLabel, Icon }) => {
-          const selected = value === iconValue;
+  const selectedOption =
+    categoryIconOptions.find((option) => option.value === value) ??
+    categoryIconOptions[0];
+  const SelectedIcon = selectedOption.Icon;
 
-          return (
-            <button
-              key={iconValue}
-              type="button"
-              onClick={() => onChange(iconValue)}
-              className={`flex h-12 items-center justify-center rounded-2xl border transition ${
-                selected
-                  ? "border-cyan-300 bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-300/20"
-                  : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
-              }`}
-              aria-label={iconLabel}
-              title={iconLabel}
-            >
-              <Icon size={20} />
-            </button>
-          );
-        })}
-      </div>
-    </div>
+  return (
+    <label className="flex items-center gap-2">
+      <span className="sr-only">{label}</span>
+
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-cyan-300/30 bg-cyan-300/20 text-cyan-700 shadow-sm dark:bg-cyan-300 dark:text-slate-950">
+        <SelectedIcon size={20} />
+      </span>
+
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value as CategoryIcon)}
+        className="h-11 min-w-0 flex-1 rounded-2xl border border-slate-200 bg-white/80 px-3 text-sm font-medium text-slate-700 outline-none transition focus:border-cyan-400 dark:border-white/10 dark:bg-white/5 dark:text-white/80"
+        aria-label={label}
+      >
+        {categoryIconOptions.map(({ value: iconValue, label: iconLabel }) => (
+          <option key={iconValue} value={iconValue} className="bg-white text-slate-900 dark:bg-slate-950 dark:text-white">
+            {iconLabel}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
