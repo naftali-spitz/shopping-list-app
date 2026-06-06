@@ -1,56 +1,58 @@
 "use client";
 
 import { CategoryIcon, categoryIconOptions } from "@/lib/category-icons";
+import { AppCopy } from "@/lib/i18n";
 
 type CategoryIconPickerProps = {
   value: CategoryIcon;
   onChange: (icon: CategoryIcon) => void;
-  label?: string;
+  copy: AppCopy;
   variant?: "light" | "dark";
 };
 
 export function CategoryIconPicker({
   value,
   onChange,
-  label = "Icon",
-  variant = "light",
+  copy,
+  variant = "dark",
 }: CategoryIconPickerProps) {
-  const selectedOption =
-    categoryIconOptions.find((option) => option.value === value) ??
-    categoryIconOptions[0];
-  const SelectedIcon = selectedOption.Icon;
   const isDark = variant === "dark";
 
-  const previewClass = isDark
-    ? "border-cyan-300/40 bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-300/20"
-    : "border-cyan-500/40 bg-cyan-100 text-cyan-800 shadow-sm";
+  const baseButtonClass = isDark
+    ? "border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+    : "border-slate-200 bg-white/80 text-slate-600 shadow-sm hover:border-cyan-300 hover:bg-cyan-50 hover:text-slate-950";
 
-  const selectClass = isDark
-    ? "border-white/10 bg-slate-900 text-white focus:border-cyan-300"
-    : "border-slate-300 bg-white text-slate-950 focus:border-cyan-500";
+  const selectedButtonClass =
+    "border-cyan-300 bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-300/20";
 
   return (
-    <label className="flex items-center gap-2">
-      <span className="sr-only">{label}</span>
+    <div className="space-y-3">
+      <p className={isDark ? "text-sm text-white/70" : "text-sm font-medium text-slate-600"}>
+        {copy.categories.iconLabel}
+      </p>
 
-      <span
-        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border ${previewClass}`}
-      >
-        <SelectedIcon size={20} strokeWidth={2.4} />
-      </span>
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+        {categoryIconOptions.map(({ value: iconValue, Icon }) => {
+          const selected = value === iconValue;
+          const label = copy.categories.iconLabels[iconValue];
 
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value as CategoryIcon)}
-        className={`h-11 min-w-0 flex-1 rounded-2xl border px-3 text-sm font-semibold outline-none transition ${selectClass}`}
-        aria-label={label}
-      >
-        {categoryIconOptions.map(({ value: iconValue, label: iconLabel }) => (
-          <option key={iconValue} value={iconValue}>
-            {iconLabel}
-          </option>
-        ))}
-      </select>
-    </label>
+          return (
+            <button
+              key={iconValue}
+              type="button"
+              onClick={() => onChange(iconValue)}
+              className={`flex min-h-[76px] flex-col items-center justify-center gap-2 rounded-2xl border px-2 py-3 text-center text-xs font-semibold transition ${
+                selected ? selectedButtonClass : baseButtonClass
+              }`}
+              aria-label={label}
+              title={label}
+            >
+              <Icon size={20} strokeWidth={2.4} />
+              <span className="leading-tight">{label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
