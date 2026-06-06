@@ -3,14 +3,17 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { History, Menu } from "lucide-react";
+import { AppCopy } from "@/lib/i18n";
 
 type TopBarProps = {
+  copy: AppCopy;
   onOpenHistory: () => void;
   onOpenProfile: () => void;
   cardClass: string;
 };
 
 export function TopBar({
+  copy,
   onOpenHistory,
   onOpenProfile,
   cardClass,
@@ -34,9 +37,9 @@ export function TopBar({
         </motion.div>
 
         <div className="min-w-0">
-          <h1 className="truncate text-lg font-semibold sm:text-xl">FutureCart</h1>
+          <h1 className="truncate text-lg font-semibold sm:text-xl">{copy.topBar.title}</h1>
           <p className="truncate text-xs opacity-60 sm:text-sm">
-            Smart shopping companion
+            {copy.topBar.subtitle}
           </p>
         </div>
       </div>
@@ -45,7 +48,7 @@ export function TopBar({
         <button
           onClick={onOpenHistory}
           className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"
-          aria-label="Open history"
+          aria-label={copy.topBar.openHistory}
         >
           <History size={18} />
         </button>
@@ -53,7 +56,7 @@ export function TopBar({
         <button
           onClick={onOpenProfile}
           className="rounded-2xl border border-white/10 bg-white/10 p-3 transition hover:bg-white/20"
-          aria-label="Open profile settings"
+          aria-label={copy.topBar.openMenu}
         >
           <Menu size={18} />
         </button>
