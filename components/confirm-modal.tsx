@@ -29,7 +29,7 @@ export function ConfirmModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md"
-          dir="rtl"
+          dir="auto"
         >
           <motion.div
             initial={{ scale: 0.92, opacity: 0, y: 16 }}
