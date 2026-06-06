@@ -3,10 +3,13 @@
 import { FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Home, X } from "lucide-react";
+import { AppCopy, AppDirection } from "@/lib/i18n";
 
 type CreateHouseholdModalProps = {
   open: boolean;
   value: string;
+  copy: AppCopy;
+  direction: AppDirection;
   onChange: (value: string) => void;
   onClose: () => void;
   onCreate: () => void;
@@ -15,6 +18,8 @@ type CreateHouseholdModalProps = {
 export function CreateHouseholdModal({
   open,
   value,
+  copy,
+  direction,
   onChange,
   onClose,
   onCreate,
@@ -33,6 +38,7 @@ export function CreateHouseholdModal({
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 backdrop-blur-md sm:items-center"
           onClick={onClose}
+          dir={direction}
         >
           <motion.form
             initial={{ opacity: 0, y: 80, scale: 0.98 }}
@@ -51,9 +57,9 @@ export function CreateHouseholdModal({
                   <Home size={22} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold">Create household</h2>
+                  <h2 className="text-2xl font-bold">{copy.household.createTitle}</h2>
                   <p className="mt-1 text-sm text-white/50">
-                    Start a separate shared shopping list.
+                    {copy.household.createDescription}
                   </p>
                 </div>
               </div>
@@ -62,19 +68,20 @@ export function CreateHouseholdModal({
                 type="button"
                 onClick={onClose}
                 className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20"
-                aria-label="Close create household modal"
+                aria-label={copy.common.close}
               >
                 <X size={18} />
               </button>
             </div>
 
             <label className="mt-6 block">
-              <span className="text-sm font-medium text-white/75">Household name</span>
+              <span className="text-sm font-medium text-white/75">{copy.household.nameLabel}</span>
               <input
                 autoFocus
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
-                placeholder="My household"
+                placeholder={copy.household.namePlaceholder}
+                dir="auto"
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-white/35 focus:border-cyan-300/50 focus:bg-white/15"
               />
             </label>
@@ -85,14 +92,14 @@ export function CreateHouseholdModal({
                 onClick={onClose}
                 className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 font-medium text-white/80 transition hover:bg-white/10"
               >
-                Cancel
+                {copy.common.cancel}
               </button>
               <button
                 type="submit"
                 disabled={!value.trim()}
                 className="flex-1 rounded-2xl bg-cyan-400 px-4 py-3 font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Create
+                {copy.common.create}
               </button>
             </div>
           </motion.form>
