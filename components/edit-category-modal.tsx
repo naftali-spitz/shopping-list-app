@@ -69,6 +69,7 @@ export function EditCategoryModal({
                 value={icon}
                 onChange={onIconChange}
                 label={copy.categories.iconLabel}
+                variant="dark"
               />
             </div>
 
