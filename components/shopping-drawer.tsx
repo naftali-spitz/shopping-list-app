@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Download, Minus, Plus, ShoppingCart, X } from "lucide-react";
-import { AppCopy } from "@/lib/i18n";
+import { AppCopy, appCopy } from "@/lib/i18n";
 import { Product } from "@/types/shopping";
 
 type ShoppingDrawerProps = {
-  copy: AppCopy;
+  copy?: AppCopy;
   items: Product[];
   onRemove: (productId: string) => void;
   onIncreaseQuantity: (productId: string) => void;
@@ -15,7 +15,7 @@ type ShoppingDrawerProps = {
   onExport: () => void;
 };
 
-export function ShoppingDrawer({ copy, items, onRemove, onIncreaseQuantity, onDecreaseQuantity, onExport }: ShoppingDrawerProps) {
+export function ShoppingDrawer({ copy = appCopy.he, items, onRemove, onIncreaseQuantity, onDecreaseQuantity, onExport }: ShoppingDrawerProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -44,7 +44,7 @@ export function ShoppingDrawer({ copy, items, onRemove, onIncreaseQuantity, onDe
   );
 }
 
-type DrawerContentProps = ShoppingDrawerProps;
+type DrawerContentProps = Required<Pick<ShoppingDrawerProps, "copy">> & Omit<ShoppingDrawerProps, "copy">;
 function DrawerContent({ copy, items, onRemove, onIncreaseQuantity, onDecreaseQuantity, onExport }: DrawerContentProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fixed bottom-4 left-6 z-20 h-fit w-[360px] rounded-3xl border border-white/10 bg-black/55 p-5 text-white shadow-2xl backdrop-blur-xl">
