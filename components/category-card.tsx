@@ -1,45 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Apple,
-  Baby,
-  Beef,
-  Coffee,
-  Cookie,
-  Droplets,
-  Egg,
-  HeartHandshake,
-  Milk,
-  PackagePlus,
-  Pencil,
-  Sandwich,
-  ShoppingCart,
-  Soup,
-  Sparkles,
-  UtensilsCrossed,
-  Wheat,
-} from "lucide-react";
+import { Pencil } from "lucide-react";
+import { getCategoryIconComponent } from "@/lib/category-icons";
 import { AppCopy } from "@/lib/i18n";
 import { Category } from "@/types/shopping";
-
-const iconMap = {
-  dairy: Milk,
-  fruit: Apple,
-  bakery: Sandwich,
-  meat: Beef,
-  eggs: Egg,
-  grains: Wheat,
-  cans: Soup,
-  spices: UtensilsCrossed,
-  sauces: Droplets,
-  drinks: Coffee,
-  snacks: Cookie,
-  cleaning: Sparkles,
-  baby: Baby,
-  beauty: HeartHandshake,
-  general: PackagePlus,
-};
 
 type CategoryCardProps = {
   copy: AppCopy;
@@ -60,7 +25,7 @@ export function CategoryCard({
   onOpen,
   onDelete,
 }: CategoryCardProps) {
-  const Icon = iconMap[category.icon as keyof typeof iconMap] || ShoppingCart;
+  const Icon = getCategoryIconComponent(category.icon);
   const iconColor = darkMode ? "text-cyan-300" : "text-cyan-600";
   const iconBg = darkMode ? "bg-white/10" : "bg-cyan-100";
   const editBg = darkMode
