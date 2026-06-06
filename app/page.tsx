@@ -29,6 +29,7 @@ import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
 import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
 import { buildCategoryProductList, ProductSortMode } from "@/lib/category-product-list";
+import { DEFAULT_CATEGORY_ICON } from "@/lib/category-icons";
 import { getDeleteConfirmationCopy } from "@/lib/delete-confirmation";
 import { updateProductDisplayOrder, updateProductDisplayOrders } from "@/lib/db/products";
 import { buildBalancedDisplayOrder, getNewDisplayOrder } from "@/lib/product-ordering";
@@ -74,6 +75,7 @@ export default function Home() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [createHouseholdOpen, setCreateHouseholdOpen] = useState(false);
+  const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const [newHouseholdName, setNewHouseholdName] = useState<string>(copy.household.defaultName);
 
   const {
@@ -124,7 +126,7 @@ export default function Home() {
     void acceptPendingInvite();
   }, [acceptInvite, acceptingInvite, copy.household, householdLoading, pendingInviteToken, session, showSuccess]);
 
-  useBodyScrollLock(Boolean(selectedCategoryId) || Boolean(editingCategoryId) || Boolean(editingProductId) || Boolean(pendingDelete) || addMissingProductModalOpen || historyOpen || profileOpen || createHouseholdOpen);
+  useBodyScrollLock(Boolean(selectedCategoryId) || Boolean(editingCategoryId) || Boolean(editingProductId) || Boolean(pendingDelete) || addMissingProductModalOpen || historyOpen || profileOpen || createHouseholdOpen || createCategoryOpen);
   const selectedCategory = useMemo(() => categories.find((c) => c.id === selectedCategoryId) ?? null, [categories, selectedCategoryId]);
   const globalResults = useMemo(() => buildGlobalProductSearchResults(categories, globalSearch), [categories, globalSearch]);
   const { confirmTitle, confirmDescription } = useMemo(() => getDeleteConfirmationCopy(pendingDelete), [pendingDelete]);
@@ -142,6 +144,7 @@ export default function Home() {
     setPendingDelete(null);
     setHistoryOpen(false);
     setProfileOpen(false);
+    setCreateCategoryOpen(false);
     setSearchTerm("");
     setGlobalSearch("");
   };
@@ -167,6 +170,8 @@ export default function Home() {
   const handleSwitchHousehold = (householdId: string) => { if (householdId === currentHouseholdId) return; playSound(); setCurrentHouseholdId(householdId); resetViewState(); };
   const handleCreateHousehold = () => { playSound(); setNewHouseholdName(copy.household.defaultName); setProfileOpen(false); setCreateHouseholdOpen(true); };
   const handleConfirmCreateHousehold = async () => { const name = newHouseholdName.trim(); if (!name) return; const household = await createHousehold(name); if (!household) return; resetViewState(); setCreateHouseholdOpen(false); setNewHouseholdName(copy.household.defaultName); };
+  const handleOpenCreateCategory = () => { playSound(); setNewCategoryName(""); setNewCategoryIcon(DEFAULT_CATEGORY_ICON); setCreateCategoryOpen(true); };
+  const handleConfirmCreateCategory = async () => { if (!newCategoryName.trim()) return; await addCategory(); setCreateCategoryOpen(false); };
   const handleCreateInviteLink = async () => {
     if (!currentHouseholdId) { showError(copy.errors.inviteMissingHousehold); return; }
     playSound();
@@ -202,12 +207,13 @@ export default function Home() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
         <TopBar copy={copy} cardClass={cardClass} onOpenHistory={() => { playSound(); setHistoryOpen(true); }} onOpenProfile={() => { playSound(); setProfileOpen(true); }} />
         <GlobalSearchSection copy={copy} cardClass={cardClass} globalSearch={globalSearch} globalResults={globalResults} onGlobalSearchChange={setGlobalSearch} onQuickAdd={(item) => { void quickAddItem(item); setGlobalSearch(""); }} onAddMissingProduct={openAddMissingProduct} />
-        <CategoriesSection copy={copy} cardClass={cardClass} categories={categories} darkMode={darkMode} newCategoryName={newCategoryName} newCategoryIcon={newCategoryIcon} onAddCategory={() => void addCategory()} onCategoryNameChange={setNewCategoryName} onCategoryIconChange={setNewCategoryIcon} onDeleteCategory={(categoryId, categoryName) => { setEditingCategoryId(categoryId); setEditingCategoryName(categoryName); }} onOpenCategory={(categoryId) => { playSound(); setSelectedCategoryId(categoryId); setSearchTerm(""); }} />
+        <CategoriesSection copy={copy} cardClass={cardClass} categories={categories} darkMode={darkMode} onCreateCategory={handleOpenCreateCategory} onDeleteCategory={(categoryId, categoryName) => { setEditingCategoryId(categoryId); setEditingCategoryName(categoryName); }} onOpenCategory={(categoryId) => { playSound(); setSelectedCategoryId(categoryId); setSearchTerm(""); }} />
       </div>
       <ShoppingDrawer copy={copy} items={shoppingProducts} onRemove={(productId) => void removeProductFromShoppingList(productId)} onIncreaseQuantity={(productId) => increaseQuantity(productId)} onDecreaseQuantity={(productId) => decreaseQuantity(productId)} onExport={() => void exportDoc()} />
       <CategoryModal copy={copy} category={selectedCategory} shoppingList={shoppingList} searchTerm={searchTerm} sortMode={sortMode} newProductName={newProductName} products={sortedProducts} onClose={() => setSelectedCategoryId(null)} onToggleItem={(item) => void toggleItem(item)} onSearchChange={setSearchTerm} onSortChange={setSortMode} onNewProductChange={setNewProductName} onAddProduct={() => void addProduct()} onEditProduct={handleEditProduct} onCustomOrderChange={(productsInFinalOrder, movedProductId) => void handleCustomOrderChange(productsInFinalOrder, movedProductId)} />
+      <EditCategoryModal copy={copy} category={null} mode="create" open={createCategoryOpen} value={newCategoryName} icon={newCategoryIcon} onClose={() => setCreateCategoryOpen(false)} onChange={setNewCategoryName} onIconChange={setNewCategoryIcon} onSave={() => void handleConfirmCreateCategory()} />
       <AddMissingProductModal open={addMissingProductModalOpen} productName={addMissingProductName} categories={categories} selectedCategoryId={addMissingProductSelectedCategoryId} onCategoryChange={setAddMissingProductSelectedCategoryId} onClose={closeAddMissingProduct} onAdd={() => void confirmAddMissingProduct()} />
-      <EditCategoryModal copy={copy} category={editingCategory} open={Boolean(editingCategory)} value={editingCategoryName} icon={editingCategoryIcon} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onIconChange={setEditingCategoryIcon} onSave={() => void saveCategoryEdit()} onDelete={deleteCategory} />
+      <EditCategoryModal copy={copy} category={editingCategory} mode="edit" open={Boolean(editingCategory)} value={editingCategoryName} icon={editingCategoryIcon} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onIconChange={setEditingCategoryIcon} onSave={() => void saveCategoryEdit()} onDelete={deleteCategory} />
       <EditProductModal product={editingProduct} categories={categories} selectedCategoryId={editingProductCategoryId} open={Boolean(editingProductId)} value={editingProductName} onClose={() => { setEditingProductId(null); setEditingProductName(""); setEditingProductCategoryId(null); }} onChange={setEditingProductName} onCategoryChange={setEditingProductCategoryId} onSave={() => void saveProductEdit()} onDelete={deleteProduct} />
       <ConfirmModal open={Boolean(pendingDelete)} title={confirmTitle} description={confirmDescription} confirmText={copy.common.delete} cancelText={copy.common.cancel} onConfirm={() => void confirmDelete()} onCancel={() => setPendingDelete(null)} />
       <CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} onChange={setNewHouseholdName} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} />
