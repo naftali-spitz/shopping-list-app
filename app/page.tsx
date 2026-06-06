@@ -3,10 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AddMissingProductModal } from "@/components/add-missing-product-modal";
 import { AnimatedBackground } from "@/components/animated-background";
-import {
-  AppFeedback,
-  AppFeedbackMessage,
-} from "@/components/app-feedback";
+import { AppFeedback, AppFeedbackMessage } from "@/components/app-feedback";
 import { AuthButton } from "@/components/auth-button";
 import { CategoriesSection } from "@/components/categories-section";
 import { CategoryModal } from "@/components/category-modal";
@@ -17,10 +14,12 @@ import { EditProductModal } from "@/components/edit-product-modal";
 import { GlobalSearchSection } from "@/components/global-search-section";
 import { HistoryModal } from "@/components/history-modal";
 import { HouseholdOnboarding } from "@/components/household-onboarding";
+import { LanguageSelector } from "@/components/language-selector";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ProfileSettingsModal } from "@/components/profile-settings-modal";
 import { ShoppingDrawer } from "@/components/shopping-drawer";
 import { TopBar } from "@/components/top-bar";
+import { useAppLanguage } from "@/hooks/use-app-language";
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 import { useCategoryManagement } from "@/hooks/use-category-management";
 import { useDarkMode } from "@/hooks/use-dark-mode";
@@ -29,19 +28,10 @@ import { useSession } from "@/hooks/use-session";
 import { useSharedCategories } from "@/hooks/use-shared-categories";
 import { useShoppingState } from "@/hooks/use-shopping-state";
 import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
-import {
-  buildCategoryProductList,
-  ProductSortMode,
-} from "@/lib/category-product-list";
+import { buildCategoryProductList, ProductSortMode } from "@/lib/category-product-list";
 import { getDeleteConfirmationCopy } from "@/lib/delete-confirmation";
-import {
-  updateProductDisplayOrder,
-  updateProductDisplayOrders,
-} from "@/lib/db/products";
-import {
-  buildBalancedDisplayOrder,
-  getNewDisplayOrder,
-} from "@/lib/product-ordering";
+import { updateProductDisplayOrder, updateProductDisplayOrders } from "@/lib/db/products";
+import { buildBalancedDisplayOrder, getNewDisplayOrder } from "@/lib/product-ordering";
 import { buildGlobalProductSearchResults } from "@/lib/product-search";
 import { supabase } from "@/lib/supabase";
 import { getAppBackgroundClass, getCardClass } from "@/lib/theme-classes";
@@ -51,89 +41,45 @@ const initialCategories: Category[] = [];
 
 function removeInviteTokenFromUrl() {
   if (typeof window === "undefined") return;
-
   const url = new URL(window.location.href);
   url.searchParams.delete("invite");
   window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
 export default function Home() {
+  const { language, setLanguage, direction, copy } = useAppLanguage();
   const { session, loading } = useSession();
   const [feedback, setFeedback] = useState<AppFeedbackMessage | null>(null);
   const [pendingInviteToken, setPendingInviteToken] = useState<string | null>(null);
   const [acceptingInvite, setAcceptingInvite] = useState(false);
 
   const showError = useCallback((message: string) => {
-    setFeedback({
-      id: Date.now(),
-      message,
-      variant: "error",
-    });
+    setFeedback({ id: Date.now(), message, variant: "error" });
   }, []);
 
-  const showSuccess = useCallback((message: string, title = "בוצע") => {
-    setFeedback({
-      id: Date.now(),
-      message,
-      title,
-      variant: "success",
-    });
-  }, []);
+  const showSuccess = useCallback(
+    (message: string, title = copy.common.doneTitle) => {
+      setFeedback({ id: Date.now(), message, title, variant: "success" });
+    },
+    [copy.common.doneTitle]
+  );
 
-  const closeFeedback = useCallback(() => {
-    setFeedback(null);
-  }, []);
+  const closeFeedback = useCallback(() => setFeedback(null), []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
     const token = new URLSearchParams(window.location.search).get("invite");
-    if (token) {
-      setPendingInviteToken(token);
-    }
+    if (token) setPendingInviteToken(token);
   }, []);
 
-  const {
-    acceptInvite,
-    createHousehold,
-    createInviteLink,
-    currentHouseholdId,
-    households,
-    loading: householdLoading,
-    setCurrentHouseholdId,
-  } = useCurrentHousehold({ onError: showError });
+  const { acceptInvite, createHousehold, createInviteLink, currentHouseholdId, households, loading: householdLoading, setCurrentHouseholdId } =
+    useCurrentHousehold({ onError: showError });
 
-  const {
-    categories,
-    setCategories,
-    loading: categoriesLoading,
-    refreshCategories,
-  } = useSharedCategories(initialCategories, currentHouseholdId);
+  const { categories, setCategories, loading: categoriesLoading, refreshCategories } =
+    useSharedCategories(initialCategories, currentHouseholdId);
 
-  const {
-    decreaseQuantity,
-    deleteHistoryEntry,
-    exportDoc,
-    history,
-    increaseQuantity,
-    isLoading,
-    playSound,
-    previewSound,
-    quickAddItem,
-    removeProductFromShoppingList,
-    setShoppingList,
-    shoppingList,
-    shoppingProducts,
-    soundOn,
-    setSoundOn,
-    toggleItem,
-  } = useShoppingState({
-    categories,
-    householdId: currentHouseholdId,
-    refreshCategories,
-    setCategories,
-    onError: showError,
-  });
+  const { decreaseQuantity, deleteHistoryEntry, exportDoc, history, increaseQuantity, isLoading, playSound, previewSound, quickAddItem, removeProductFromShoppingList, setShoppingList, shoppingList, shoppingProducts, soundOn, setSoundOn, toggleItem } =
+    useShoppingState({ categories, householdId: currentHouseholdId, refreshCategories, setCategories, onError: showError });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [darkMode, setDarkMode] = useDarkMode();
@@ -143,61 +89,13 @@ export default function Home() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [createHouseholdOpen, setCreateHouseholdOpen] = useState(false);
-  const [newHouseholdName, setNewHouseholdName] = useState("My household");
+  const [newHouseholdName, setNewHouseholdName] = useState(copy.household.defaultName);
 
-  const {
-    addCategory,
-    addProduct,
-    confirmDelete,
-    deleteCategory,
-    deleteProduct,
-    editingCategory,
-    editingCategoryId,
-    editingCategoryName,
-    editingProduct,
-    editingProductCategoryId,
-    editingProductId,
-    editingProductName,
-    handleEditProduct,
-    newCategoryName,
-    newProductName,
-    pendingDelete,
-    saveCategoryEdit,
-    saveProductEdit,
-    setEditingCategoryId,
-    setEditingCategoryName,
-    setEditingProductCategoryId,
-    setEditingProductId,
-    setEditingProductName,
-    setNewCategoryName,
-    setNewProductName,
-    setPendingDelete,
-  } = useCategoryManagement({
-    categories,
-    householdId: currentHouseholdId,
-    selectedCategoryId,
-    refreshCategories,
-    setCategories,
-    setSelectedCategoryId,
-    onError: showError,
-  });
+  const { addCategory, addProduct, confirmDelete, deleteCategory, deleteProduct, editingCategory, editingCategoryId, editingCategoryName, editingProduct, editingProductCategoryId, editingProductId, editingProductName, handleEditProduct, newCategoryName, newProductName, pendingDelete, saveCategoryEdit, saveProductEdit, setEditingCategoryId, setEditingCategoryName, setEditingProductCategoryId, setEditingProductId, setEditingProductName, setNewCategoryName, setNewProductName, setPendingDelete } =
+    useCategoryManagement({ categories, householdId: currentHouseholdId, selectedCategoryId, refreshCategories, setCategories, setSelectedCategoryId, onError: showError });
 
-  const {
-    addMissingProductModalOpen,
-    addMissingProductName,
-    addMissingProductSelectedCategoryId,
-    closeAddMissingProduct,
-    confirmAddMissingProduct,
-    openAddMissingProduct,
-    setAddMissingProductSelectedCategoryId,
-  } = useMissingProductAdd({
-    categories,
-    refreshCategories,
-    soundOn,
-    onSuccess: showSuccess,
-    onError: showError,
-    onDone: () => setGlobalSearch(""),
-  });
+  const { addMissingProductModalOpen, addMissingProductName, addMissingProductSelectedCategoryId, closeAddMissingProduct, confirmAddMissingProduct, openAddMissingProduct, setAddMissingProductSelectedCategoryId } =
+    useMissingProductAdd({ categories, refreshCategories, soundOn, onSuccess: showSuccess, onError: showError, onDone: () => setGlobalSearch("") });
 
   useEffect(() => {
     if (!session || !pendingInviteToken || householdLoading || acceptingInvite) return;
@@ -205,146 +103,26 @@ export default function Home() {
     const acceptPendingInvite = async () => {
       setAcceptingInvite(true);
       const household = await acceptInvite(pendingInviteToken);
-
-      if (household) {
-        showSuccess(`הצטרפת לבית ${household.name}.`, "ההזמנה התקבלה");
-      }
-
+      if (household) showSuccess(copy.household.joined(household.name), copy.household.joinedTitle);
       setPendingInviteToken(null);
       removeInviteTokenFromUrl();
       setAcceptingInvite(false);
     };
 
     void acceptPendingInvite();
-  }, [
-    acceptInvite,
-    acceptingInvite,
-    householdLoading,
-    pendingInviteToken,
-    session,
-    showSuccess,
-  ]);
+  }, [acceptInvite, acceptingInvite, copy.household, householdLoading, pendingInviteToken, session, showSuccess]);
 
-  const anyModalOpen =
-    Boolean(selectedCategoryId) ||
-    Boolean(editingCategoryId) ||
-    Boolean(editingProductId) ||
-    Boolean(pendingDelete) ||
-    addMissingProductModalOpen ||
-    historyOpen ||
-    profileOpen ||
-    createHouseholdOpen;
-
+  const anyModalOpen = Boolean(selectedCategoryId) || Boolean(editingCategoryId) || Boolean(editingProductId) || Boolean(pendingDelete) || addMissingProductModalOpen || historyOpen || profileOpen || createHouseholdOpen;
   useBodyScrollLock(anyModalOpen);
 
-  const selectedCategory = useMemo(
-    () => categories.find((c) => c.id === selectedCategoryId) ?? null,
-    [categories, selectedCategoryId]
-  );
-
-  const globalResults = useMemo(
-    () => buildGlobalProductSearchResults(categories, globalSearch),
-    [categories, globalSearch]
-  );
-
-  const { confirmTitle, confirmDescription } = useMemo(
-    () => getDeleteConfirmationCopy(pendingDelete),
-    [pendingDelete]
-  );
-
+  const selectedCategory = useMemo(() => categories.find((c) => c.id === selectedCategoryId) ?? null, [categories, selectedCategoryId]);
+  const globalResults = useMemo(() => buildGlobalProductSearchResults(categories, globalSearch), [categories, globalSearch]);
+  const { confirmTitle, confirmDescription } = useMemo(() => getDeleteConfirmationCopy(pendingDelete), [pendingDelete]);
   const backgroundClass = getAppBackgroundClass(darkMode);
   const cardClass = getCardClass(darkMode);
+  const sortedProducts = useMemo(() => selectedCategory ? buildCategoryProductList(selectedCategory.products, searchTerm, sortMode) : [], [searchTerm, selectedCategory, sortMode]);
 
-  const sortedProducts = useMemo(() => {
-    if (!selectedCategory) return [];
-
-    return buildCategoryProductList(
-      selectedCategory.products,
-      searchTerm,
-      sortMode
-    );
-  }, [searchTerm, selectedCategory, sortMode]);
-
-  const handleCustomOrderChange = async (
-    productsInFinalOrder: Product[],
-    movedProductId: string
-  ) => {
-    if (!selectedCategoryId) return;
-
-    const movedIndex = productsInFinalOrder.findIndex(
-      (product) => product.id === movedProductId
-    );
-
-    if (movedIndex === -1) return;
-
-    const previousProduct = productsInFinalOrder[movedIndex - 1] ?? null;
-    const nextProduct = productsInFinalOrder[movedIndex + 1] ?? null;
-    const newDisplayOrder = getNewDisplayOrder(previousProduct, nextProduct);
-
-    if (newDisplayOrder !== null) {
-      setCategories((prev) =>
-        prev.map((category) =>
-          category.id === selectedCategoryId
-            ? {
-                ...category,
-                products: category.products.map((product) =>
-                  product.id === movedProductId
-                    ? { ...product, displayOrder: newDisplayOrder }
-                    : product
-                ),
-              }
-            : category
-        )
-      );
-
-      const { error } = await updateProductDisplayOrder(
-        movedProductId,
-        newDisplayOrder
-      );
-
-      if (error) {
-        console.error("Failed to update custom product order:", error);
-        showError("שמירת סדר המוצרים נכשלה.");
-        await refreshCategories();
-      }
-
-      return;
-    }
-
-    const balancedUpdates = buildBalancedDisplayOrder(productsInFinalOrder);
-    const orderByProductId = new Map(
-      balancedUpdates.map((update) => [update.id, update.displayOrder])
-    );
-
-    setCategories((prev) =>
-      prev.map((category) =>
-        category.id === selectedCategoryId
-          ? {
-              ...category,
-              products: category.products.map((product) => ({
-                ...product,
-                displayOrder:
-                  orderByProductId.get(product.id) ?? product.displayOrder,
-              })),
-            }
-          : category
-      )
-    );
-
-    const { error } = await updateProductDisplayOrders(balancedUpdates);
-
-    if (error) {
-      console.error("Failed to rebalance custom product order:", error);
-      showError("שמירת סדר המוצרים נכשלה.");
-      await refreshCategories();
-    }
-  };
-
-  const handleSwitchHousehold = (householdId: string) => {
-    if (householdId === currentHouseholdId) return;
-
-    playSound();
-    setCurrentHouseholdId(householdId);
+  const resetViewState = () => {
     setSelectedCategoryId(null);
     setEditingCategoryId(null);
     setEditingCategoryName("");
@@ -358,68 +136,101 @@ export default function Home() {
     setGlobalSearch("");
   };
 
+  const handleCustomOrderChange = async (productsInFinalOrder: Product[], movedProductId: string) => {
+    if (!selectedCategoryId) return;
+    const movedIndex = productsInFinalOrder.findIndex((product) => product.id === movedProductId);
+    if (movedIndex === -1) return;
+
+    const previousProduct = productsInFinalOrder[movedIndex - 1] ?? null;
+    const nextProduct = productsInFinalOrder[movedIndex + 1] ?? null;
+    const newDisplayOrder = getNewDisplayOrder(previousProduct, nextProduct);
+
+    if (newDisplayOrder !== null) {
+      setCategories((prev) => prev.map((category) => category.id === selectedCategoryId ? { ...category, products: category.products.map((product) => product.id === movedProductId ? { ...product, displayOrder: newDisplayOrder } : product) } : category));
+      const { error } = await updateProductDisplayOrder(movedProductId, newDisplayOrder);
+      if (error) {
+        console.error("Failed to update custom product order:", error);
+        showError(copy.errors.orderSaveFailed);
+        await refreshCategories();
+      }
+      return;
+    }
+
+    const balancedUpdates = buildBalancedDisplayOrder(productsInFinalOrder);
+    const orderByProductId = new Map(balancedUpdates.map((update) => [update.id, update.displayOrder]));
+    setCategories((prev) => prev.map((category) => category.id === selectedCategoryId ? { ...category, products: category.products.map((product) => ({ ...product, displayOrder: orderByProductId.get(product.id) ?? product.displayOrder })) } : category));
+    const { error } = await updateProductDisplayOrders(balancedUpdates);
+    if (error) {
+      console.error("Failed to rebalance custom product order:", error);
+      showError(copy.errors.orderSaveFailed);
+      await refreshCategories();
+    }
+  };
+
+  const handleSwitchHousehold = (householdId: string) => {
+    if (householdId === currentHouseholdId) return;
+    playSound();
+    setCurrentHouseholdId(householdId);
+    resetViewState();
+  };
+
   const handleCreateHousehold = () => {
     playSound();
-    setNewHouseholdName("My household");
+    setNewHouseholdName(copy.household.defaultName);
     setProfileOpen(false);
     setCreateHouseholdOpen(true);
   };
 
   const handleConfirmCreateHousehold = async () => {
     const name = newHouseholdName.trim();
-
     if (!name) return;
-
     const household = await createHousehold(name);
-
     if (!household) return;
-
-    setSelectedCategoryId(null);
-    setHistoryOpen(false);
+    resetViewState();
     setCreateHouseholdOpen(false);
-    setNewHouseholdName("My household");
-    setSearchTerm("");
-    setGlobalSearch("");
+    setNewHouseholdName(copy.household.defaultName);
   };
 
   const handleCreateInviteLink = async () => {
     if (!currentHouseholdId) {
-      showError("לא נמצא בית פעיל להזמנה.");
+      showError(copy.errors.inviteMissingHousehold);
       return;
     }
-
     playSound();
-
     const inviteLink = await createInviteLink(currentHouseholdId);
-
     if (!inviteLink) return;
-
     try {
       await navigator.clipboard.writeText(inviteLink);
-      showSuccess("קישור ההזמנה הועתק. אפשר לשלוח אותו למשפחה או חברים.", "קישור הועתק");
+      showSuccess(copy.household.inviteCopied, copy.household.inviteCopiedTitle);
     } catch {
       window.prompt("Copy this invite link", inviteLink);
-      showSuccess("קישור ההזמנה נוצר.", "קישור מוכן");
+      showSuccess(copy.household.inviteReady, copy.household.inviteReadyTitle);
     }
   };
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
-
     if (error) {
       console.error("Logout failed:", error);
-      showError("ההתנתקות נכשלה.");
+      showError(copy.errors.logoutFailed);
     }
   };
 
-  if (loading || householdLoading || acceptingInvite || isLoading || categoriesLoading) {
-    return <LoadingScreen />;
-  }
+  if (loading || householdLoading || acceptingInvite || isLoading || categoriesLoading) return <LoadingScreen />;
 
   if (!session) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050816]">
-        <AuthButton />
+      <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#050816] p-4 text-white" dir={direction}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.18),_transparent_42%),radial-gradient(circle_at_bottom_left,_rgba(168,85,247,0.14),_transparent_36%)]" />
+        <div className="absolute top-4 z-20 sm:top-6" style={{ insetInlineEnd: "1rem" }}>
+          <LanguageSelector language={language} copy={copy} onChange={setLanguage} compact />
+        </div>
+        <section className="relative z-10 w-full max-w-sm rounded-[32px] border border-white/10 bg-white/10 p-7 text-center shadow-2xl backdrop-blur-2xl">
+          <h1 className="text-3xl font-bold">{copy.login.title}</h1>
+          <p className="mt-2 text-sm text-cyan-100/75">{copy.login.subtitle}</p>
+          <p className="mt-5 text-sm leading-6 text-white/60">{copy.login.intro}</p>
+          <div className="mt-6 flex justify-center"><AuthButton label={copy.auth.loginWithGoogle} /></div>
+        </section>
       </main>
     );
   }
@@ -427,207 +238,30 @@ export default function Home() {
   if (!currentHouseholdId && households.length === 0) {
     return (
       <>
-        <HouseholdOnboarding
-          email={session.user.email}
-          onCreateHousehold={handleCreateHousehold}
-        />
-        <CreateHouseholdModal
-          open={createHouseholdOpen}
-          value={newHouseholdName}
-          onChange={setNewHouseholdName}
-          onClose={() => setCreateHouseholdOpen(false)}
-          onCreate={() => void handleConfirmCreateHousehold()}
-        />
+        <HouseholdOnboarding email={session.user.email} language={language} direction={direction} copy={copy} onLanguageChange={setLanguage} onCreateHousehold={handleCreateHousehold} />
+        <CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} onChange={setNewHouseholdName} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} />
         <AppFeedback feedback={feedback} onClose={closeFeedback} />
       </>
     );
   }
 
   return (
-    <main
-      dir="rtl"
-      className={`relative min-h-screen overflow-hidden pb-40 transition-all duration-500 ${backgroundClass}`}
-    >
+    <main dir={direction} className={`relative min-h-screen overflow-hidden pb-40 transition-all duration-500 ${backgroundClass}`}>
       <AnimatedBackground />
-
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
-        <TopBar
-          cardClass={cardClass}
-          onOpenHistory={() => {
-            playSound();
-            setHistoryOpen(true);
-          }}
-          onOpenProfile={() => {
-            playSound();
-            setProfileOpen(true);
-          }}
-        />
-
-        <GlobalSearchSection
-          cardClass={cardClass}
-          globalSearch={globalSearch}
-          globalResults={globalResults}
-          onGlobalSearchChange={setGlobalSearch}
-          onQuickAdd={(item) => {
-            void quickAddItem(item);
-            setGlobalSearch("");
-          }}
-          onAddMissingProduct={openAddMissingProduct}
-        />
-
-        <CategoriesSection
-          cardClass={cardClass}
-          categories={categories}
-          darkMode={darkMode}
-          newCategoryName={newCategoryName}
-          onAddCategory={() => void addCategory()}
-          onCategoryNameChange={setNewCategoryName}
-          onDeleteCategory={(categoryId, categoryName) => {
-            setEditingCategoryId(categoryId);
-            setEditingCategoryName(categoryName);
-          }}
-          onOpenCategory={(categoryId) => {
-            playSound();
-            setSelectedCategoryId(categoryId);
-            setSearchTerm("");
-          }}
-        />
+        <TopBar copy={copy} cardClass={cardClass} onOpenHistory={() => { playSound(); setHistoryOpen(true); }} onOpenProfile={() => { playSound(); setProfileOpen(true); }} />
+        <GlobalSearchSection cardClass={cardClass} globalSearch={globalSearch} globalResults={globalResults} onGlobalSearchChange={setGlobalSearch} onQuickAdd={(item) => { void quickAddItem(item); setGlobalSearch(""); }} onAddMissingProduct={openAddMissingProduct} />
+        <CategoriesSection cardClass={cardClass} categories={categories} darkMode={darkMode} newCategoryName={newCategoryName} onAddCategory={() => void addCategory()} onCategoryNameChange={setNewCategoryName} onDeleteCategory={(categoryId, categoryName) => { setEditingCategoryId(categoryId); setEditingCategoryName(categoryName); }} onOpenCategory={(categoryId) => { playSound(); setSelectedCategoryId(categoryId); setSearchTerm(""); }} />
       </div>
-
-      <ShoppingDrawer
-        items={shoppingProducts}
-        onRemove={(productId) =>
-          void removeProductFromShoppingList(productId)
-        }
-        onIncreaseQuantity={(productId) => increaseQuantity(productId)}
-        onDecreaseQuantity={(productId) => decreaseQuantity(productId)}
-        onExport={() => void exportDoc()}
-      />
-
-      <CategoryModal
-        category={selectedCategory}
-        shoppingList={shoppingList}
-        searchTerm={searchTerm}
-        sortMode={sortMode}
-        newProductName={newProductName}
-        products={sortedProducts}
-        onClose={() => setSelectedCategoryId(null)}
-        onToggleItem={(item) => void toggleItem(item)}
-        onSearchChange={setSearchTerm}
-        onSortChange={setSortMode}
-        onNewProductChange={setNewProductName}
-        onAddProduct={() => void addProduct()}
-        onEditProduct={handleEditProduct}
-        onCustomOrderChange={(productsInFinalOrder, movedProductId) =>
-          void handleCustomOrderChange(productsInFinalOrder, movedProductId)
-        }
-      />
-
-      <AddMissingProductModal
-        open={addMissingProductModalOpen}
-        productName={addMissingProductName}
-        categories={categories}
-        selectedCategoryId={addMissingProductSelectedCategoryId}
-        onCategoryChange={setAddMissingProductSelectedCategoryId}
-        onClose={closeAddMissingProduct}
-        onAdd={() => void confirmAddMissingProduct()}
-      />
-
-      <EditCategoryModal
-        category={editingCategory}
-        open={Boolean(editingCategory)}
-        value={editingCategoryName}
-        onClose={() => {
-          setEditingCategoryId(null);
-          setEditingCategoryName("");
-        }}
-        onChange={setEditingCategoryName}
-        onSave={() => void saveCategoryEdit()}
-        onDelete={deleteCategory}
-      />
-
-      <EditProductModal
-        product={editingProduct}
-        categories={categories}
-        selectedCategoryId={editingProductCategoryId}
-        open={Boolean(editingProductId)}
-        value={editingProductName}
-        onClose={() => {
-          setEditingProductId(null);
-          setEditingProductName("");
-          setEditingProductCategoryId(null);
-        }}
-        onChange={setEditingProductName}
-        onCategoryChange={setEditingProductCategoryId}
-        onSave={() => void saveProductEdit()}
-        onDelete={deleteProduct}
-      />
-
-      <ConfirmModal
-        open={Boolean(pendingDelete)}
-        title={confirmTitle}
-        description={confirmDescription}
-        confirmText="מחק"
-        cancelText="ביטול"
-        onConfirm={() => void confirmDelete()}
-        onCancel={() => setPendingDelete(null)}
-      />
-
-      <CreateHouseholdModal
-        open={createHouseholdOpen}
-        value={newHouseholdName}
-        onChange={setNewHouseholdName}
-        onClose={() => setCreateHouseholdOpen(false)}
-        onCreate={() => void handleConfirmCreateHousehold()}
-      />
-
-      <ProfileSettingsModal
-        open={profileOpen}
-        email={session.user.email}
-        darkMode={darkMode}
-        soundOn={soundOn}
-        households={households}
-        currentHouseholdId={currentHouseholdId}
-        onClose={() => setProfileOpen(false)}
-        onToggleTheme={() => {
-          playSound();
-          setDarkMode((v) => !v);
-        }}
-        onToggleSound={() => {
-          if (soundOn) {
-            playSound();
-          } else {
-            previewSound();
-          }
-
-          setSoundOn((v) => !v);
-        }}
-        onSwitchHousehold={handleSwitchHousehold}
-        onCreateHousehold={handleCreateHousehold}
-        onCreateInviteLink={() => void handleCreateInviteLink()}
-        onLogout={() => {
-          playSound();
-          void handleLogout();
-        }}
-      />
-
-      <HistoryModal
-        open={historyOpen}
-        history={history}
-        onClose={() => setHistoryOpen(false)}
-        onLoad={(items) => {
-          void setShoppingList(items);
-          setHistoryOpen(false);
-        }}
-        onDelete={async (historyId) => {
-          const deleted = await deleteHistoryEntry(historyId);
-
-          if (!deleted) {
-            throw new Error("History delete failed");
-          }
-        }}
-      />
-
+      <ShoppingDrawer items={shoppingProducts} onRemove={(productId) => void removeProductFromShoppingList(productId)} onIncreaseQuantity={(productId) => increaseQuantity(productId)} onDecreaseQuantity={(productId) => decreaseQuantity(productId)} onExport={() => void exportDoc()} />
+      <CategoryModal category={selectedCategory} shoppingList={shoppingList} searchTerm={searchTerm} sortMode={sortMode} newProductName={newProductName} products={sortedProducts} onClose={() => setSelectedCategoryId(null)} onToggleItem={(item) => void toggleItem(item)} onSearchChange={setSearchTerm} onSortChange={setSortMode} onNewProductChange={setNewProductName} onAddProduct={() => void addProduct()} onEditProduct={handleEditProduct} onCustomOrderChange={(productsInFinalOrder, movedProductId) => void handleCustomOrderChange(productsInFinalOrder, movedProductId)} />
+      <AddMissingProductModal open={addMissingProductModalOpen} productName={addMissingProductName} categories={categories} selectedCategoryId={addMissingProductSelectedCategoryId} onCategoryChange={setAddMissingProductSelectedCategoryId} onClose={closeAddMissingProduct} onAdd={() => void confirmAddMissingProduct()} />
+      <EditCategoryModal category={editingCategory} open={Boolean(editingCategory)} value={editingCategoryName} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onSave={() => void saveCategoryEdit()} onDelete={deleteCategory} />
+      <EditProductModal product={editingProduct} categories={categories} selectedCategoryId={editingProductCategoryId} open={Boolean(editingProductId)} value={editingProductName} onClose={() => { setEditingProductId(null); setEditingProductName(""); setEditingProductCategoryId(null); }} onChange={setEditingProductName} onCategoryChange={setEditingProductCategoryId} onSave={() => void saveProductEdit()} onDelete={deleteProduct} />
+      <ConfirmModal open={Boolean(pendingDelete)} title={confirmTitle} description={confirmDescription} confirmText={copy.common.delete} cancelText={copy.common.cancel} onConfirm={() => void confirmDelete()} onCancel={() => setPendingDelete(null)} />
+      <CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} onChange={setNewHouseholdName} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} />
+      <ProfileSettingsModal open={profileOpen} email={session.user.email} darkMode={darkMode} soundOn={soundOn} households={households} currentHouseholdId={currentHouseholdId} language={language} copy={copy} onLanguageChange={setLanguage} onClose={() => setProfileOpen(false)} onToggleTheme={() => { playSound(); setDarkMode((v) => !v); }} onToggleSound={() => { soundOn ? playSound() : previewSound(); setSoundOn((v) => !v); }} onSwitchHousehold={handleSwitchHousehold} onCreateHousehold={handleCreateHousehold} onCreateInviteLink={() => void handleCreateInviteLink()} onLogout={() => { playSound(); void handleLogout(); }} />
+      <HistoryModal open={historyOpen} history={history} onClose={() => setHistoryOpen(false)} onLoad={(items) => { void setShoppingList(items); setHistoryOpen(false); }} onDelete={async (historyId) => { const deleted = await deleteHistoryEntry(historyId); if (!deleted) throw new Error("History delete failed"); }} />
       <AppFeedback feedback={feedback} onClose={closeFeedback} />
     </main>
   );
