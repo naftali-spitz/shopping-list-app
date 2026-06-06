@@ -20,6 +20,7 @@ import {
   UtensilsCrossed,
   Wheat,
 } from "lucide-react";
+import { AppCopy } from "@/lib/i18n";
 import { Category } from "@/types/shopping";
 
 const iconMap = {
@@ -41,6 +42,7 @@ const iconMap = {
 };
 
 type CategoryCardProps = {
+  copy: AppCopy;
   category: Category;
   index: number;
   cardClass: string;
@@ -50,6 +52,7 @@ type CategoryCardProps = {
 };
 
 export function CategoryCard({
+  copy,
   category,
   index,
   cardClass,
@@ -57,13 +60,10 @@ export function CategoryCard({
   onOpen,
   onDelete,
 }: CategoryCardProps) {
-  const Icon =
-    iconMap[category.icon as keyof typeof iconMap] || ShoppingCart;
-
-  // FIX: icon and edit button use mode-aware colours
+  const Icon = iconMap[category.icon as keyof typeof iconMap] || ShoppingCart;
   const iconColor = darkMode ? "text-cyan-300" : "text-cyan-600";
-  const iconBg    = darkMode ? "bg-white/10"   : "bg-cyan-100";
-  const editBg    = darkMode
+  const iconBg = darkMode ? "bg-white/10" : "bg-cyan-100";
+  const editBg = darkMode
     ? "bg-cyan-500/10 text-cyan-300"
     : "bg-cyan-100 text-cyan-700";
 
@@ -76,13 +76,11 @@ export function CategoryCard({
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.98 }}
       onClick={onOpen}
-      className={`group relative overflow-hidden rounded-3xl border p-6 backdrop-blur-xl cursor-pointer text-right ${cardClass}`}
+      className={`group relative cursor-pointer overflow-hidden rounded-3xl border p-6 text-start backdrop-blur-xl ${cardClass}`}
     >
-      {/* Hover background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10 opacity-0 transition duration-500 group-hover:opacity-100" />
 
       <div className="relative z-10">
-        {/* FIX: items-center so the pencil button is vertically aligned with the icon */}
         <div className="mb-4 flex items-center justify-between">
           <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${iconBg}`}>
             <Icon className={iconColor} />
@@ -93,29 +91,29 @@ export function CategoryCard({
               e.stopPropagation();
               onDelete();
             }}
-            className={`rounded-2xl p-2 opacity-70 transition hover:opacity-100 relative z-20 ${editBg}`}
+            className={`relative z-20 rounded-2xl p-2 opacity-70 transition hover:opacity-100 ${editBg}`}
+            aria-label={copy.categories.editCategory}
           >
             <Pencil size={16} />
           </button>
         </div>
 
-        <h3 className="text-2xl font-semibold">{category.name}</h3>
+        <h3 className="text-2xl font-semibold" dir="auto">{category.name}</h3>
 
         <div className="mt-4 flex flex-wrap gap-2">
           {category.products.slice(0, 3).map((product) => (
             <span
               key={product.id}
               className={`rounded-full border px-3 py-1 text-sm opacity-70 ${
-                darkMode
-                  ? "border-white/10 bg-black/20"
-                  : "border-slate-200 bg-slate-100"
+                darkMode ? "border-white/10 bg-black/20" : "border-slate-200 bg-slate-100"
               }`}
+              dir="auto"
             >
               {product.name}
             </span>
           ))}
           {category.products.length === 0 && (
-            <span className="text-sm opacity-40">אין מוצרים בקטגוריה</span>
+            <span className="text-sm opacity-40">{copy.categories.emptyCategory}</span>
           )}
         </div>
       </div>
