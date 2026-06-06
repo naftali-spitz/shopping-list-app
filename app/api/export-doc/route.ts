@@ -3,7 +3,6 @@ import {
   AlignmentType,
   BorderStyle,
   Document,
-  HeadingLevel,
   Packer,
   PageOrientation,
   Paragraph,
@@ -14,40 +13,13 @@ import {
   WidthType,
 } from "docx";
 
-type ExportItem =
-  | string
-  | {
-      name: string;
-      quantity?: number;
-    };
-
-type ExportCategory = {
-  name: string;
-  items: ExportItem[];
-};
-
-type ExportBody = {
-  categories?: ExportCategory[];
-  items?: ExportItem[];
-};
-
-type NormalizedItem = {
-  name: string;
-  quantity: number;
-};
-
-type NormalizedCategory = {
-  name: string;
-  items: NormalizedItem[];
-};
-
-type Column = {
-  lines: number;
-  children: Paragraph[];
-};
-
+type ExportItem = string | { name: string; quantity?: number };
+type ExportCategory = { name: string; items: ExportItem[] };
+type ExportBody = { categories?: ExportCategory[]; items?: ExportItem[] };
+type NormalizedItem = { name: string; quantity: number };
+type NormalizedCategory = { name: string; items: NormalizedItem[] };
+type Column = { lines: number; children: Paragraph[] };
 type DocumentDirection = "ltr" | "rtl";
-
 type ExportCopy = {
   locale: string;
   fallbackCategory: string;
@@ -83,53 +55,35 @@ const EXPORT_COPY: Record<DocumentDirection, ExportCopy> = {
 
 function normalizeItem(item: ExportItem): NormalizedItem | null {
   const name = typeof item === "string" ? item : item.name;
-
   if (typeof name !== "string" || !name.trim()) return null;
-
   const rawQuantity = typeof item === "string" ? 1 : Number(item.quantity || 1);
   const quantity = Number.isFinite(rawQuantity) ? Math.max(1, rawQuantity) : 1;
-
-  return {
-    name: name.trim(),
-    quantity,
-  };
+  return { name: name.trim(), quantity };
 }
 
 function normalizeCategories(body: ExportBody, fallbackCategory = "General"): NormalizedCategory[] {
   if (Array.isArray(body.categories)) {
     return body.categories
-      .map((category: ExportCategory) => ({
-        name:
-          typeof category?.name === "string" && category.name.trim()
-            ? category.name.trim()
-            : fallbackCategory,
+      .map((category) => ({
+        name: typeof category?.name === "string" && category.name.trim() ? category.name.trim() : fallbackCategory,
         items: Array.isArray(category?.items)
           ? category.items.flatMap((item) => {
               const normalized = normalizeItem(item);
-
               return normalized ? [normalized] : [];
             })
           : [],
       }))
-      .filter((category: NormalizedCategory) => category.items.length > 0);
+      .filter((category) => category.items.length > 0);
   }
 
   const fallbackItems = Array.isArray(body.items)
-    ? body.items.flatMap((item: ExportItem) => {
+    ? body.items.flatMap((item) => {
         const normalized = normalizeItem(item);
-
         return normalized ? [normalized] : [];
       })
     : [];
 
-  return fallbackItems.length
-    ? [
-        {
-          name: fallbackCategory,
-          items: fallbackItems,
-        },
-      ]
-    : [];
+  return fallbackItems.length ? [{ name: fallbackCategory, items: fallbackItems }] : [];
 }
 
 function estimateCategoryLines(category: NormalizedCategory, startIndex = 0) {
@@ -143,34 +97,23 @@ function itemText(item: NormalizedItem) {
 function getTextDirection(text: string): DocumentDirection | null {
   let rtlCharacters = 0;
   let ltrCharacters = 0;
-
   for (const character of text) {
-    if (RTL_CHARACTER.test(character)) {
-      rtlCharacters += 1;
-    } else if (LETTER_CHARACTER.test(character)) {
-      ltrCharacters += 1;
-    }
+    if (RTL_CHARACTER.test(character)) rtlCharacters += 1;
+    else if (LETTER_CHARACTER.test(character)) ltrCharacters += 1;
   }
-
   if (rtlCharacters === ltrCharacters) return null;
-
   return rtlCharacters > ltrCharacters ? "rtl" : "ltr";
 }
 
 function getDocumentDirection(categories: NormalizedCategory[]): DocumentDirection {
-  const directionCounts = categories
-    .flatMap((category) => category.items)
-    .reduce(
-      (counts, item) => {
-        const direction = getTextDirection(item.name);
-
-        if (direction) counts[direction] += 1;
-
-        return counts;
-      },
-      { ltr: 0, rtl: 0 }
-    );
-
+  const directionCounts = categories.flatMap((category) => category.items).reduce(
+    (counts, item) => {
+      const direction = getTextDirection(item.name);
+      if (direction) counts[direction] += 1;
+      return counts;
+    },
+    { ltr: 0, rtl: 0 }
+  );
   return directionCounts.rtl > directionCounts.ltr ? "rtl" : "ltr";
 }
 
@@ -182,23 +125,60 @@ function paragraphDirection(direction: DocumentDirection) {
 }
 
 function textRunDirection(direction: DocumentDirection) {
-  return {
-    rightToLeft: direction === "rtl",
-  };
+  return { rightToLeft: direction === "rtl" };
 }
 
-function createCategoryTitle(
-  name: string,
-  continued: boolean,
-  direction: DocumentDirection,
-  copy: ExportCopy
-) {
+function createTitleParagraph(copy: ExportCopy, direction: DocumentDirection) {
   return new Paragraph({
     ...paragraphDirection(direction),
-    spacing: {
-      before: 80,
-      after: 80,
-    },
+    spacing: { after: 120 },
+    children: [
+      new TextRun({
+        ...textRunDirection(direction),
+        text: copy.title,
+        bold: true,
+        size: 34,
+      }),
+    ],
+  });
+}
+
+function createSummaryParagraph(text: string, direction: DocumentDirection) {
+  return new Paragraph({
+    ...paragraphDirection(direction),
+    spacing: { after: 240 },
+    children: [
+      new TextRun({
+        ...textRunDirection(direction),
+        text,
+        italics: true,
+        size: 20,
+        color: "475569",
+      }),
+    ],
+  });
+}
+
+function createFooterParagraph() {
+  return new Paragraph({
+    alignment: AlignmentType.LEFT,
+    bidirectional: false,
+    spacing: { before: 240 },
+    children: [
+      new TextRun({
+        rightToLeft: false,
+        text: "Generated by FutureCart",
+        size: 18,
+        color: "64748B",
+      }),
+    ],
+  });
+}
+
+function createCategoryTitle(name: string, continued: boolean, direction: DocumentDirection, copy: ExportCopy) {
+  return new Paragraph({
+    ...paragraphDirection(direction),
+    spacing: { before: 80, after: 80 },
     children: [
       new TextRun({
         ...textRunDirection(direction),
@@ -214,81 +194,45 @@ function createCategoryTitle(
 function createItemLine(item: NormalizedItem, direction: DocumentDirection) {
   return new Paragraph({
     ...paragraphDirection(direction),
-    spacing: {
-      after: 65,
-    },
-    children: [
-      new TextRun({
-        ...textRunDirection(direction),
-        text: itemText(item),
-        size: 21,
-      }),
-    ],
+    spacing: { after: 65 },
+    children: [new TextRun({ ...textRunDirection(direction), text: itemText(item), size: 21 })],
   });
 }
 
-function createSpacerLine() {
+function createSpacerLine(direction: DocumentDirection) {
   return new Paragraph({
-    spacing: {
-      after: 70,
-    },
-    children: [new TextRun({ text: "", size: 4 })],
+    ...paragraphDirection(direction),
+    spacing: { after: 70 },
+    children: [new TextRun({ ...textRunDirection(direction), text: "", size: 4 })],
   });
 }
 
-function addCategorySlice(
-  column: Column,
-  category: NormalizedCategory,
-  startIndex: number,
-  endIndex: number,
-  direction: DocumentDirection,
-  copy: ExportCopy
-) {
+function addCategorySlice(column: Column, category: NormalizedCategory, startIndex: number, endIndex: number, direction: DocumentDirection, copy: ExportCopy) {
   column.children.push(createCategoryTitle(category.name, startIndex > 0, direction, copy));
   column.lines += 1;
-
   category.items.slice(startIndex, endIndex).forEach((item) => {
     column.children.push(createItemLine(item, direction));
     column.lines += 1;
   });
-
-  column.children.push(createSpacerLine());
+  column.children.push(createSpacerLine(direction));
   column.lines += 1;
 }
 
 function getColumnCount(totalLines: number) {
-  return Math.min(
-    MAX_COLUMNS,
-    Math.max(1, Math.ceil(totalLines / TARGET_LINES_PER_COLUMN))
-  );
+  return Math.min(MAX_COLUMNS, Math.max(1, Math.ceil(totalLines / TARGET_LINES_PER_COLUMN)));
 }
 
-function arrangeCategories(
-  categories: NormalizedCategory[],
-  direction: DocumentDirection,
-  copy: ExportCopy
-) {
-  const totalLines = categories.reduce(
-    (sum, category) => sum + estimateCategoryLines(category),
-    0
-  );
+function arrangeCategories(categories: NormalizedCategory[], direction: DocumentDirection, copy: ExportCopy) {
+  const totalLines = categories.reduce((sum, category) => sum + estimateCategoryLines(category), 0);
   const columnCount = getColumnCount(totalLines);
-  const columns: Column[] = Array.from({ length: columnCount }, () => ({
-    lines: 0,
-    children: [],
-  }));
-
+  const columns: Column[] = Array.from({ length: columnCount }, () => ({ lines: 0, children: [] }));
   let columnIndex = 0;
-
   const moveToNextColumn = () => {
-    if (columnIndex < columnCount - 1) {
-      columnIndex += 1;
-    }
+    if (columnIndex < columnCount - 1) columnIndex += 1;
   };
 
   categories.forEach((category) => {
     let itemIndex = 0;
-
     while (itemIndex < category.items.length) {
       const column = columns[columnIndex];
       const remainingItems = category.items.length - itemIndex;
@@ -308,7 +252,6 @@ function arrangeCategories(
         } else {
           moveToNextColumn();
         }
-
         continue;
       }
 
@@ -319,7 +262,6 @@ function arrangeCategories(
       }
 
       const itemsThatCanFit = availableLines - 2;
-
       if (itemsThatCanFit < MIN_ITEMS_TO_START_CATEGORY) {
         moveToNextColumn();
         continue;
@@ -327,12 +269,7 @@ function arrangeCategories(
 
       let endIndex = itemIndex + itemsThatCanFit;
       const itemsLeftForNextColumn = category.items.length - endIndex;
-
-      if (
-        itemsLeftForNextColumn > 0 &&
-        itemsLeftForNextColumn < MIN_ITEMS_TO_START_CATEGORY &&
-        itemsThatCanFit > MIN_ITEMS_TO_START_CATEGORY
-      ) {
+      if (itemsLeftForNextColumn > 0 && itemsLeftForNextColumn < MIN_ITEMS_TO_START_CATEGORY && itemsThatCanFit > MIN_ITEMS_TO_START_CATEGORY) {
         endIndex = category.items.length - MIN_ITEMS_TO_START_CATEGORY;
       }
 
@@ -346,32 +283,19 @@ function arrangeCategories(
 }
 
 function createColumnTable(columns: Column[], direction: DocumentDirection) {
-  const emptyParagraph = new Paragraph({
-    ...paragraphDirection(direction),
-    text: "",
-  });
+  const orderedColumns = direction === "rtl" ? [...columns].reverse() : columns;
+  const emptyParagraph = new Paragraph({ ...paragraphDirection(direction), text: "" });
 
   return new Table({
     visuallyRightToLeft: direction === "rtl",
-    width: {
-      size: 100,
-      type: WidthType.PERCENTAGE,
-    },
+    width: { size: 100, type: WidthType.PERCENTAGE },
     rows: [
       new TableRow({
-        children: columns.map(
+        children: orderedColumns.map(
           (column) =>
             new TableCell({
-              width: {
-                size: 100 / columns.length,
-                type: WidthType.PERCENTAGE,
-              },
-              margins: {
-                top: 120,
-                right: 160,
-                bottom: 120,
-                left: 160,
-              },
+              width: { size: 100 / orderedColumns.length, type: WidthType.PERCENTAGE },
+              margins: { top: 120, right: 160, bottom: 120, left: 160 },
               borders: {
                 top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
                 bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
@@ -390,27 +314,14 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as ExportBody;
     let categories = normalizeCategories(body);
-
-    if (!categories.length) {
-      return NextResponse.json(
-        { error: "No items provided" },
-        { status: 400 }
-      );
-    }
+    if (!categories.length) return NextResponse.json({ error: "No items provided" }, { status: 400 });
 
     const direction = getDocumentDirection(categories);
     const copy = EXPORT_COPY[direction];
-
     categories = normalizeCategories(body, copy.fallbackCategory);
 
-    const itemCount = categories.reduce(
-      (sum, category) => sum + category.items.length,
-      0
-    );
-    const formattedDate = new Intl.DateTimeFormat(copy.locale, {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date());
+    const itemCount = categories.reduce((sum, category) => sum + category.items.length, 0);
+    const formattedDate = new Intl.DateTimeFormat(copy.locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date());
     const columns = arrangeCategories(categories, direction, copy);
 
     const doc = new Document({
@@ -418,70 +329,21 @@ export async function POST(request: Request) {
         {
           properties: {
             page: {
-              size: {
-                orientation: PageOrientation.LANDSCAPE,
-              },
-              margin: {
-                top: 700,
-                right: 620,
-                bottom: 620,
-                left: 620,
-              },
+              size: { orientation: PageOrientation.LANDSCAPE },
+              margin: { top: 700, right: 620, bottom: 620, left: 620 },
             },
           },
           children: [
-            new Paragraph({
-              heading: HeadingLevel.HEADING_1,
-              ...paragraphDirection(direction),
-              spacing: {
-                after: 120,
-              },
-              children: [
-                new TextRun({
-                  ...textRunDirection(direction),
-                  text: copy.title,
-                  bold: true,
-                  size: 34,
-                }),
-              ],
-            }),
-            new Paragraph({
-              ...paragraphDirection(direction),
-              spacing: {
-                after: 240,
-              },
-              children: [
-                new TextRun({
-                  ...textRunDirection(direction),
-                  text: copy.summary(formattedDate, itemCount, categories.length),
-                  italics: true,
-                  size: 20,
-                  color: "475569",
-                }),
-              ],
-            }),
+            createTitleParagraph(copy, direction),
+            createSummaryParagraph(copy.summary(formattedDate, itemCount, categories.length), direction),
             createColumnTable(columns, direction),
-            new Paragraph({
-              ...paragraphDirection(direction),
-              spacing: {
-                before: 240,
-              },
-              children: [
-                new TextRun({
-                  ...textRunDirection(direction),
-                  text: "Generated by FutureCart",
-                  size: 18,
-                  color: "64748B",
-                }),
-              ],
-            }),
+            createFooterParagraph(),
           ],
         },
       ],
     });
 
     const buffer = await Packer.toBuffer(doc);
-
     return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -490,14 +352,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error(error);
-
-    return NextResponse.json(
-      {
-        error: "Failed to generate document",
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: "Failed to generate document" }, { status: 500 });
   }
 }
