@@ -3,12 +3,12 @@
 import { supabase } from "@/lib/supabase";
 
 type AuthButtonProps = {
-  label?: string;
+  label: string;
   variant?: "primary" | "secondary";
 };
 
 export function AuthButton({
-  label = "Login with Google",
+  label,
   variant = "primary",
 }: AuthButtonProps) {
   const login = async () => {
