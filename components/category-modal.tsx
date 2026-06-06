@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, Reorder, useDragControls } from "framer-motion";
 import { Edit2, MoreVertical, Plus, Search, X } from "lucide-react";
+import { AppCopy, appCopy } from "@/lib/i18n";
 import { Category, Product } from "@/types/shopping";
 
 type ProductSortMode = "az" | "popular" | "custom";
 
 type CategoryModalProps = {
+  copy?: AppCopy;
   category: Category | null;
   shoppingList: string[];
   searchTerm: string;
@@ -25,6 +27,7 @@ type CategoryModalProps = {
 };
 
 type ProductRowProps = {
+  copy: AppCopy;
   product: Product;
   selected: boolean;
   index: number;
@@ -38,6 +41,7 @@ type ProductRowProps = {
 };
 
 function ProductRow({
+  copy,
   product,
   selected,
   index,
@@ -57,11 +61,10 @@ function ProductRow({
         <button
           type="button"
           disabled={!canReorder}
-          aria-label="Reorder product"
-          title={canReorder ? "Drag to reorder" : "Clear search to reorder"}
+          aria-label={copy.categoryModal.reorderProduct}
+          title={canReorder ? copy.categoryModal.dragToReorder : copy.categoryModal.clearSearchToReorderTitle}
           onPointerDown={(event) => {
             if (!canReorder) return;
-
             dragControls.start(event);
           }}
           className={`p-1 transition ${
@@ -76,22 +79,17 @@ function ProductRow({
 
       <button
         onClick={() => onToggleItem(product.name)}
-        className="flex flex-1 items-center gap-3 text-left"
+        className="flex flex-1 items-center gap-3 text-start"
       >
-        <div
-          className={`h-4 w-4 rounded-full ${
-            selected ? "bg-cyan-300" : "bg-white/20"
-          }`}
-        />
-        <span>{product.name}</span>
-        <span className="ml-auto pr-3 text-xs text-white/40">
-          {product.usageCount}x
-        </span>
+        <div className={`h-4 w-4 rounded-full ${selected ? "bg-cyan-300" : "bg-white/20"}`} />
+        <span className="min-w-0 truncate" dir="auto">{product.name}</span>
+        <span className="ms-auto text-xs text-white/40">{product.usageCount}x</span>
       </button>
 
       <button
         onClick={() => onEditProduct(product.id)}
         className="rounded-full bg-cyan-400/10 p-2 text-cyan-300"
+        aria-label={copy.products.editProduct}
       >
         <Edit2 size={15} />
       </button>
@@ -99,9 +97,7 @@ function ProductRow({
   );
 
   const className = `flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 transition-colors ${
-    selected
-      ? "border-cyan-400 bg-cyan-400/10"
-      : "border-white/10 bg-white/5 hover:bg-white/10"
+    selected ? "border-cyan-400 bg-cyan-400/10" : "border-white/10 bg-white/5 hover:bg-white/10"
   }`;
 
   if (canReorder) {
@@ -137,6 +133,7 @@ function ProductRow({
 }
 
 export function CategoryModal({
+  copy = appCopy.he,
   category,
   shoppingList,
   searchTerm,
@@ -166,7 +163,6 @@ export function CategoryModal({
     if (autoScrollFrameRef.current !== null && typeof window !== "undefined") {
       window.cancelAnimationFrame(autoScrollFrameRef.current);
     }
-
     autoScrollFrameRef.current = null;
     dragPointerYRef.current = null;
   };
@@ -174,7 +170,6 @@ export function CategoryModal({
   const runAutoScroll = () => {
     const container = scrollContainerRef.current;
     const pointerY = dragPointerYRef.current;
-
     if (!container || pointerY === null || typeof window === "undefined") {
       autoScrollFrameRef.current = null;
       return;
@@ -193,16 +188,12 @@ export function CategoryModal({
       scrollDelta = Math.ceil(intensity * maxSpeed);
     }
 
-    if (scrollDelta !== 0) {
-      container.scrollTop += scrollDelta;
-    }
-
+    if (scrollDelta !== 0) container.scrollTop += scrollDelta;
     autoScrollFrameRef.current = window.requestAnimationFrame(runAutoScroll);
   };
 
   const handleDragMove = (pointerY: number) => {
     dragPointerYRef.current = pointerY;
-
     if (autoScrollFrameRef.current === null && typeof window !== "undefined") {
       autoScrollFrameRef.current = window.requestAnimationFrame(runAutoScroll);
     }
@@ -216,26 +207,19 @@ export function CategoryModal({
   useEffect(() => stopAutoScroll, []);
 
   const handleReorder = (nextProductIds: string[]) => {
-    const productsById = new Map(
-      latestOrderRef.current.map((product) => [product.id, product])
-    );
-
+    const productsById = new Map(latestOrderRef.current.map((product) => [product.id, product]));
     const nextProducts = nextProductIds.flatMap((id) => {
       const product = productsById.get(id);
       return product ? [product] : [];
     });
-
     latestOrderRef.current = nextProducts;
     setReorderedProducts(nextProducts);
   };
 
   const handleDragEnd = () => {
     stopAutoScroll();
-
     const movedProductId = movedProductIdRef.current;
-
     if (!movedProductId) return;
-
     movedProductIdRef.current = null;
     onCustomOrderChange(latestOrderRef.current, movedProductId);
   };
@@ -254,32 +238,26 @@ export function CategoryModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="max-h-[92vh] w-full max-w-xl flex flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#0b1020]/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8"
+            className="flex max-h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#0b1020]/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8"
           >
-            {/* Header — never scrolls */}
-            <div className="flex items-start justify-between gap-4 shrink-0">
-              <div>
-                <h2 className="text-3xl font-bold">{category.name}</h2>
-                <p className="mt-2 text-sm text-white/60">
-                  Sort, add, remove, and choose products.
-                </p>
+            <div className="flex shrink-0 items-start justify-between gap-4">
+              <div className="min-w-0">
+                <h2 className="truncate text-3xl font-bold" dir="auto">{category.name}</h2>
+                <p className="mt-2 text-sm text-white/60">{copy.categoryModal.description}</p>
               </div>
-              <button
-                onClick={onClose}
-                className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20"
-              >
+              <button onClick={onClose} className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20" aria-label={copy.common.close}>
                 <X size={18} />
               </button>
             </div>
 
-            {/* Controls — never scroll */}
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row shrink-0">
+            <div className="mt-6 flex shrink-0 flex-col gap-3 sm:flex-row">
               <div className="flex flex-1 items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4">
                 <Search size={16} className="opacity-50" />
                 <input
                   value={searchTerm}
                   onChange={(e) => onSearchChange(e.target.value)}
-                  placeholder="Search products"
+                  placeholder={copy.categoryModal.searchPlaceholder}
+                  dir="auto"
                   className="w-full bg-transparent py-3 text-sm outline-none placeholder:text-white/40"
                 />
               </div>
@@ -288,35 +266,30 @@ export function CategoryModal({
                 onChange={(e) => onSortChange(e.target.value as ProductSortMode)}
                 className="rounded-2xl border border-white/10 bg-[#10172a] px-4 py-3 text-sm outline-none"
               >
-                <option value="popular">Most chosen</option>
-                <option value="az">A-Z</option>
-                <option value="custom">Custom</option>
+                <option value="popular">{copy.categoryModal.sortPopular}</option>
+                <option value="az">{copy.categoryModal.sortAz}</option>
+                <option value="custom">{copy.categoryModal.sortCustom}</option>
               </select>
             </div>
 
             {showDragHandle && !canReorder && (
-              <p className="mt-3 shrink-0 text-xs text-amber-200/80">
-                Clear search to reorder products.
-              </p>
+              <p className="mt-3 shrink-0 text-xs text-amber-200/80">{copy.categoryModal.clearSearchToReorder}</p>
             )}
 
-            <div className="mt-4 flex gap-2 shrink-0">
+            <div className="mt-4 flex shrink-0 gap-2">
               <input
                 value={newProductName}
                 onChange={(e) => onNewProductChange(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && onAddProduct()}
-                placeholder="Add product"
+                placeholder={copy.categoryModal.addProductPlaceholder}
+                dir="auto"
                 className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/40"
               />
-              <button
-                onClick={onAddProduct}
-                className="rounded-2xl bg-cyan-400 px-4 py-3 font-medium text-black"
-              >
+              <button onClick={onAddProduct} className="rounded-2xl bg-cyan-400 px-4 py-3 font-medium text-black" aria-label={copy.common.add}>
                 <Plus size={18} />
               </button>
             </div>
 
-            {/* Products list is the only thing that scrolls. During drag, it auto-scrolls near the top/bottom edges. */}
             {canReorder ? (
               <Reorder.Group
                 ref={scrollContainerRef}
@@ -324,11 +297,12 @@ export function CategoryModal({
                 axis="y"
                 values={reorderedProducts.map((product) => product.id)}
                 onReorder={handleReorder}
-                className="mt-8 flex flex-1 flex-col gap-3 overflow-y-auto pr-1 modal-scrollbar"
+                className="modal-scrollbar mt-8 flex flex-1 flex-col gap-3 overflow-y-auto pr-1"
               >
                 {visibleProducts.map((product, index) => (
                   <ProductRow
                     key={product.id}
+                    copy={copy}
                     product={product}
                     selected={shoppingList.includes(product.name)}
                     index={index}
@@ -336,19 +310,18 @@ export function CategoryModal({
                     canReorder={canReorder}
                     onToggleItem={onToggleItem}
                     onEditProduct={onEditProduct}
-                    onDragStart={(id) => {
-                      movedProductIdRef.current = id;
-                    }}
+                    onDragStart={(id) => { movedProductIdRef.current = id; }}
                     onDragMove={handleDragMove}
                     onDragEnd={handleDragEnd}
                   />
                 ))}
               </Reorder.Group>
             ) : (
-              <div className="mt-8 flex flex-1 flex-col gap-3 overflow-y-auto pr-1 modal-scrollbar">
+              <div className="modal-scrollbar mt-8 flex flex-1 flex-col gap-3 overflow-y-auto pr-1">
                 {visibleProducts.map((product, index) => (
                   <ProductRow
                     key={product.id}
+                    copy={copy}
                     product={product}
                     selected={shoppingList.includes(product.name)}
                     index={index}
