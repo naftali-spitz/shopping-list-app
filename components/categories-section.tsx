@@ -1,9 +1,11 @@
 import { Sparkles } from "lucide-react";
 
 import { CategoryCard } from "@/components/category-card";
+import { AppCopy } from "@/lib/i18n";
 import { Category } from "@/types/shopping";
 
 type CategoriesSectionProps = {
+  copy: AppCopy;
   cardClass: string;
   categories: Category[];
   darkMode: boolean;
@@ -15,6 +17,7 @@ type CategoriesSectionProps = {
 };
 
 export function CategoriesSection({
+  copy,
   cardClass,
   categories,
   darkMode,
@@ -29,17 +32,16 @@ export function CategoriesSection({
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Sparkles className="text-cyan-300" />
-          <h2 className="text-3xl font-bold">בחר קטגוריה</h2>
+          <h2 className="text-3xl font-bold">{copy.categories.chooseCategory}</h2>
         </div>
 
-        <div
-          className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}
-        >
+        <div className={`flex gap-2 rounded-3xl border p-2 backdrop-blur-xl ${cardClass}`}>
           <input
             value={newCategoryName}
             onChange={(e) => onCategoryNameChange(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && onAddCategory()}
-            placeholder="הוסף קטגוריה"
+            placeholder={copy.categories.addCategoryPlaceholder}
+            dir="auto"
             className="w-40 bg-transparent px-3 text-sm outline-none placeholder:opacity-50"
           />
 
@@ -47,7 +49,7 @@ export function CategoriesSection({
             onClick={onAddCategory}
             className="rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-medium text-black"
           >
-            הוסף
+            {copy.common.add}
           </button>
         </div>
       </div>
@@ -56,14 +58,13 @@ export function CategoriesSection({
         {categories.map((category, index) => (
           <CategoryCard
             key={category.id}
+            copy={copy}
             category={category}
             index={index}
             cardClass={cardClass}
             darkMode={darkMode}
             onOpen={() => onOpenCategory(category.id)}
-            onDelete={() =>
-              onDeleteCategory(category.id, category.name)
-            }
+            onDelete={() => onDeleteCategory(category.id, category.name)}
           />
         ))}
       </div>
