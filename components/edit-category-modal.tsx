@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { CategoryIconPicker } from "@/components/category-icon-picker";
+import { AppSound } from "@/lib/app-sounds";
 import { CategoryIcon } from "@/lib/category-icons";
 import { AppCopy, appCopy } from "@/lib/i18n";
 import { Category } from "@/types/shopping";
@@ -18,6 +19,7 @@ type EditCategoryModalProps = {
   onIconChange: (icon: CategoryIcon) => void;
   onSave: () => void;
   onDelete?: () => void;
+  onPlaySound?: (sound?: AppSound) => void;
 };
 
 export function EditCategoryModal({
@@ -32,11 +34,16 @@ export function EditCategoryModal({
   onIconChange,
   onSave,
   onDelete,
+  onPlaySound,
 }: EditCategoryModalProps) {
   const isCreate = mode === "create";
   const title = isCreate ? copy.categories.createCategory : copy.categories.editCategory;
   const description = isCreate ? copy.categories.createCategoryDescription : copy.categories.editCategoryDescription;
   const submitText = isCreate ? copy.common.create : copy.common.save;
+  const closeWithSound = () => {
+    onPlaySound?.("tap");
+    onClose();
+  };
 
   return (
     <AnimatePresence>
@@ -46,7 +53,7 @@ export function EditCategoryModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[100] flex items-end justify-center bg-black/70 p-3 backdrop-blur-md sm:items-center sm:p-4"
-          onClick={onClose}
+          onClick={closeWithSound}
         >
           <motion.div
             initial={{ scale: 0.96, opacity: 0, y: 60 }}
@@ -82,13 +89,17 @@ export function EditCategoryModal({
                 onChange={onIconChange}
                 copy={copy}
                 variant="dark"
+                onPlaySound={onPlaySound}
               />
             </div>
 
             <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
               {!isCreate && onDelete ? (
                 <button
-                  onClick={onDelete}
+                  onClick={() => {
+                    onPlaySound?.("delete");
+                    onDelete();
+                  }}
                   className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-red-300 transition hover:bg-red-500/20"
                 >
                   {copy.categories.deleteCategory}
@@ -99,14 +110,17 @@ export function EditCategoryModal({
 
               <div className="flex gap-3">
                 <button
-                  onClick={onClose}
+                  onClick={closeWithSound}
                   className="flex-1 rounded-2xl border border-white/10 px-5 py-3 text-white/70 transition hover:bg-white/10 sm:flex-none"
                 >
                   {copy.common.cancel}
                 </button>
 
                 <button
-                  onClick={onSave}
+                  onClick={() => {
+                    onPlaySound?.("success");
+                    onSave();
+                  }}
                   disabled={!value.trim()}
                   className="flex-1 rounded-2xl bg-cyan-400 px-5 py-3 font-medium text-black transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-40 sm:flex-none"
                 >
