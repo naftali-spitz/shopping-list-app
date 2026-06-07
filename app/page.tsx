@@ -78,39 +78,7 @@ export default function Home() {
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const [newHouseholdName, setNewHouseholdName] = useState<string>(copy.household.defaultName);
 
-  const {
-    addCategory,
-    addProduct,
-    confirmDelete,
-    deleteCategory,
-    deleteProduct,
-    editingCategory,
-    editingCategoryIcon,
-    editingCategoryId,
-    editingCategoryName,
-    editingProduct,
-    editingProductCategoryId,
-    editingProductId,
-    editingProductName,
-    handleEditProduct,
-    newCategoryIcon,
-    newCategoryName,
-    newProductName,
-    pendingDelete,
-    saveCategoryEdit,
-    saveProductEdit,
-    setEditingCategoryIcon,
-    setEditingCategoryId,
-    setEditingCategoryName,
-    setEditingProductCategoryId,
-    setEditingProductId,
-    setEditingProductName,
-    setNewCategoryIcon,
-    setNewCategoryName,
-    setNewProductName,
-    setPendingDelete,
-  } = useCategoryManagement({ categories, householdId: currentHouseholdId, selectedCategoryId, refreshCategories, setCategories, setSelectedCategoryId, onError: showError });
-
+  const { addCategory, addProduct, confirmDelete, deleteCategory, deleteProduct, editingCategory, editingCategoryIcon, editingCategoryId, editingCategoryName, editingProduct, editingProductCategoryId, editingProductId, editingProductName, handleEditProduct, newCategoryIcon, newCategoryName, newProductName, pendingDelete, saveCategoryEdit, saveProductEdit, setEditingCategoryIcon, setEditingCategoryId, setEditingCategoryName, setEditingProductCategoryId, setEditingProductId, setEditingProductName, setNewCategoryIcon, setNewCategoryName, setNewProductName, setPendingDelete } = useCategoryManagement({ categories, householdId: currentHouseholdId, selectedCategoryId, refreshCategories, setCategories, setSelectedCategoryId, onError: showError });
   const { addMissingProductModalOpen, addMissingProductName, addMissingProductSelectedCategoryId, closeAddMissingProduct, confirmAddMissingProduct, openAddMissingProduct, setAddMissingProductSelectedCategoryId } = useMissingProductAdd({ categories, refreshCategories, soundOn, onSuccess: showSuccess, onError: showError, onDone: () => setGlobalSearch("") });
 
   useEffect(() => {
@@ -210,10 +178,10 @@ export default function Home() {
         <CategoriesSection copy={copy} cardClass={cardClass} categories={categories} darkMode={darkMode} onCreateCategory={handleOpenCreateCategory} onDeleteCategory={(categoryId, categoryName) => { playSound("open"); setEditingCategoryId(categoryId); setEditingCategoryName(categoryName); }} onOpenCategory={(categoryId) => { playSound("open"); setSelectedCategoryId(categoryId); setSearchTerm(""); }} />
       </div>
       <ShoppingDrawer copy={copy} items={shoppingProducts} onRemove={(productId) => void removeProductFromShoppingList(productId)} onIncreaseQuantity={(productId) => increaseQuantity(productId)} onDecreaseQuantity={(productId) => decreaseQuantity(productId)} onExport={() => void exportDoc()} />
-      <CategoryModal copy={copy} category={selectedCategory} shoppingList={shoppingList} searchTerm={searchTerm} sortMode={sortMode} newProductName={newProductName} products={sortedProducts} onClose={() => setSelectedCategoryId(null)} onToggleItem={(item) => void toggleItem(item)} onSearchChange={setSearchTerm} onSortChange={setSortMode} onNewProductChange={setNewProductName} onAddProduct={() => void addProduct()} onEditProduct={handleEditProduct} onCustomOrderChange={(productsInFinalOrder, movedProductId) => void handleCustomOrderChange(productsInFinalOrder, movedProductId)} />
-      <EditCategoryModal copy={copy} category={null} mode="create" open={createCategoryOpen} value={newCategoryName} icon={newCategoryIcon} onClose={() => setCreateCategoryOpen(false)} onChange={setNewCategoryName} onIconChange={setNewCategoryIcon} onSave={() => void handleConfirmCreateCategory()} />
+      <CategoryModal copy={copy} category={selectedCategory} shoppingList={shoppingList} searchTerm={searchTerm} sortMode={sortMode} newProductName={newProductName} products={sortedProducts} onClose={() => setSelectedCategoryId(null)} onToggleItem={(item) => void toggleItem(item)} onSearchChange={setSearchTerm} onSortChange={setSortMode} onNewProductChange={setNewProductName} onAddProduct={() => void addProduct()} onEditProduct={handleEditProduct} onCustomOrderChange={(productsInFinalOrder, movedProductId) => void handleCustomOrderChange(productsInFinalOrder, movedProductId)} onPlaySound={playSound} />
+      <EditCategoryModal copy={copy} category={null} mode="create" open={createCategoryOpen} value={newCategoryName} icon={newCategoryIcon} onClose={() => setCreateCategoryOpen(false)} onChange={setNewCategoryName} onIconChange={setNewCategoryIcon} onSave={() => void handleConfirmCreateCategory()} onPlaySound={playSound} />
       <AddMissingProductModal open={addMissingProductModalOpen} productName={addMissingProductName} categories={categories} selectedCategoryId={addMissingProductSelectedCategoryId} onCategoryChange={setAddMissingProductSelectedCategoryId} onClose={closeAddMissingProduct} onAdd={() => void confirmAddMissingProduct()} />
-      <EditCategoryModal copy={copy} category={editingCategory} mode="edit" open={Boolean(editingCategory)} value={editingCategoryName} icon={editingCategoryIcon} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onIconChange={setEditingCategoryIcon} onSave={() => { playSound("success"); void saveCategoryEdit(); }} onDelete={() => { playSound("delete"); deleteCategory(); }} />
+      <EditCategoryModal copy={copy} category={editingCategory} mode="edit" open={Boolean(editingCategory)} value={editingCategoryName} icon={editingCategoryIcon} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onIconChange={setEditingCategoryIcon} onSave={() => { playSound("success"); void saveCategoryEdit(); }} onDelete={() => { playSound("delete"); deleteCategory(); }} onPlaySound={playSound} />
       <EditProductModal product={editingProduct} categories={categories} selectedCategoryId={editingProductCategoryId} open={Boolean(editingProductId)} value={editingProductName} onClose={() => { setEditingProductId(null); setEditingProductName(""); setEditingProductCategoryId(null); }} onChange={setEditingProductName} onCategoryChange={setEditingProductCategoryId} onSave={() => { playSound("success"); void saveProductEdit(); }} onDelete={() => { playSound("delete"); deleteProduct(); }} />
       <ConfirmModal open={Boolean(pendingDelete)} title={confirmTitle} description={confirmDescription} confirmText={copy.common.delete} cancelText={copy.common.cancel} onConfirm={() => void confirmDelete()} onCancel={() => setPendingDelete(null)} />
       <CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} onChange={setNewHouseholdName} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} />
