@@ -30,7 +30,7 @@ type ProfileSettingsModalProps = {
 
 function SectionTitle({ icon, title, subtitle }: { icon: ReactNode; title: string; subtitle?: string }) {
   return (
-    <div className="mb-3 flex items-center gap-3">
+    <div className="flex items-center gap-3">
       <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white/10 text-cyan-200">
         {icon}
       </span>
@@ -62,6 +62,7 @@ export function ProfileSettingsModal({
 }: ProfileSettingsModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [householdExpanded, setHouseholdExpanded] = useState(false);
+  const [preferencesExpanded, setPreferencesExpanded] = useState(false);
   const { deleteHousehold } = useCurrentHousehold();
   const currentHousehold = households.find((household) => household.id === currentHouseholdId) ?? null;
   const canDeleteCurrentHousehold = currentHousehold?.role === "owner";
@@ -199,22 +200,32 @@ export function ProfileSettingsModal({
               </div>
 
               <div className="mt-5 rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-                <SectionTitle icon={<Settings size={17} />} title={copy.profile.preferences} subtitle={copy.profile.preferencesSubtitle} />
-                <div className="space-y-2">
-                  <LanguageSelector language={language} copy={copy} onChange={onLanguageChange} />
+                <button type="button" onClick={() => setPreferencesExpanded((value) => !value)} className="flex w-full items-center justify-between gap-3 text-start">
+                  <SectionTitle icon={<Settings size={17} />} title={copy.profile.preferences} subtitle={copy.profile.preferencesSubtitle} />
+                  <ChevronDown size={20} className={`shrink-0 text-white/55 transition ${preferencesExpanded ? "rotate-180" : ""}`} />
+                </button>
 
-                  <button onClick={onToggleTheme} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-start transition hover:bg-white/10">
-                    <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">{darkMode ? <Sun size={18} /> : <Moon size={18} />}</span><span><span className="block font-medium">{copy.profile.theme}</span><span className="text-sm text-white/45">{darkMode ? copy.profile.darkMode : copy.profile.lightMode}</span></span></span>
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/55">{copy.common.change}</span>
-                  </button>
+                <AnimatePresence initial={false}>
+                  {preferencesExpanded && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+                      <div className="mt-4 space-y-2">
+                        <LanguageSelector language={language} copy={copy} onChange={onLanguageChange} />
 
-                  <button onClick={onToggleSound} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-start transition hover:bg-white/10">
-                    <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">{soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}</span><span><span className="block font-medium">{copy.profile.sound}</span><span className="text-sm text-white/45">{soundOn ? copy.profile.enabled : copy.profile.disabled}</span></span></span>
-                    <span className={`relative h-7 w-12 rounded-full transition ${soundOn ? "bg-cyan-400" : "bg-white/15"}`}>
-                      <span className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${soundOn ? "right-1" : "right-6"}`} />
-                    </span>
-                  </button>
-                </div>
+                        <button onClick={onToggleTheme} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-start transition hover:bg-white/10">
+                          <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">{darkMode ? <Sun size={18} /> : <Moon size={18} />}</span><span><span className="block font-medium">{copy.profile.theme}</span><span className="text-sm text-white/45">{darkMode ? copy.profile.darkMode : copy.profile.lightMode}</span></span></span>
+                          <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/55">{copy.common.change}</span>
+                        </button>
+
+                        <button onClick={onToggleSound} className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-start transition hover:bg-white/10">
+                          <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white/70">{soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}</span><span><span className="block font-medium">{copy.profile.sound}</span><span className="text-sm text-white/45">{soundOn ? copy.profile.enabled : copy.profile.disabled}</span></span></span>
+                          <span className={`relative h-7 w-12 rounded-full transition ${soundOn ? "bg-cyan-400" : "bg-white/15"}`}>
+                            <span className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${soundOn ? "right-1" : "right-6"}`} />
+                          </span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <button onClick={onLogout} className="mt-5 flex w-full items-center justify-between rounded-3xl border border-red-400/20 bg-red-400/10 px-4 py-4 text-start text-red-100 transition hover:bg-red-400/20">
