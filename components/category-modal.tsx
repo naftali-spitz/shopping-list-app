@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, Reorder, useDragControls } from "framer-motion";
 import { Edit2, MoreVertical, Plus, Search, X } from "lucide-react";
+import { AppSound } from "@/lib/app-sounds";
 import { AppCopy, appCopy } from "@/lib/i18n";
 import { Category, Product } from "@/types/shopping";
 
@@ -24,6 +25,7 @@ type CategoryModalProps = {
   onAddProduct: () => void;
   onEditProduct: (id: string) => void;
   onCustomOrderChange: (products: Product[], movedProductId: string) => void;
+  onPlaySound?: (sound?: AppSound) => void;
 };
 
 type ProductRowProps = {
@@ -38,6 +40,7 @@ type ProductRowProps = {
   onDragStart: (id: string) => void;
   onDragMove: (pointerY: number) => void;
   onDragEnd: () => void;
+  onPlaySound?: (sound?: AppSound) => void;
 };
 
 function ProductRow({
@@ -52,6 +55,7 @@ function ProductRow({
   onDragStart,
   onDragMove,
   onDragEnd,
+  onPlaySound,
 }: ProductRowProps) {
   const dragControls = useDragControls();
 
@@ -65,6 +69,7 @@ function ProductRow({
           title={canReorder ? copy.categoryModal.dragToReorder : copy.categoryModal.clearSearchToReorderTitle}
           onPointerDown={(event) => {
             if (!canReorder) return;
+            onPlaySound?.("tap");
             dragControls.start(event);
           }}
           className={`p-1 transition ${
@@ -87,7 +92,10 @@ function ProductRow({
       </button>
 
       <button
-        onClick={() => onEditProduct(product.id)}
+        onClick={() => {
+          onPlaySound?.("open");
+          onEditProduct(product.id);
+        }}
         className="rounded-full bg-cyan-400/10 p-2 text-cyan-300"
         aria-label={copy.products.editProduct}
       >
@@ -148,6 +156,7 @@ export function CategoryModal({
   onAddProduct,
   onEditProduct,
   onCustomOrderChange,
+  onPlaySound,
 }: CategoryModalProps) {
   const [reorderedProducts, setReorderedProducts] = useState(products);
   const latestOrderRef = useRef(products);
@@ -221,6 +230,7 @@ export function CategoryModal({
     const movedProductId = movedProductIdRef.current;
     if (!movedProductId) return;
     movedProductIdRef.current = null;
+    onPlaySound?.("success");
     onCustomOrderChange(latestOrderRef.current, movedProductId);
   };
 
@@ -245,7 +255,7 @@ export function CategoryModal({
                 <h2 className="truncate text-3xl font-bold" dir="auto">{category.name}</h2>
                 <p className="mt-2 text-sm text-white/60">{copy.categoryModal.description}</p>
               </div>
-              <button onClick={onClose} className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20" aria-label={copy.common.close}>
+              <button onClick={() => { onPlaySound?.("tap"); onClose(); }} className="rounded-2xl bg-white/10 p-3 transition hover:bg-white/20" aria-label={copy.common.close}>
                 <X size={18} />
               </button>
             </div>
@@ -263,7 +273,7 @@ export function CategoryModal({
               </div>
               <select
                 value={sortMode}
-                onChange={(e) => onSortChange(e.target.value as ProductSortMode)}
+                onChange={(e) => { onPlaySound?.("toggle"); onSortChange(e.target.value as ProductSortMode); }}
                 className="rounded-2xl border border-white/10 bg-[#10172a] px-4 py-3 text-sm outline-none"
               >
                 <option value="popular">{copy.categoryModal.sortPopular}</option>
@@ -285,7 +295,7 @@ export function CategoryModal({
                 dir="auto"
                 className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/40"
               />
-              <button onClick={onAddProduct} className="rounded-2xl bg-cyan-400 px-4 py-3 font-medium text-black" aria-label={copy.common.add}>
+              <button onClick={() => { onPlaySound?.("add"); onAddProduct(); }} className="rounded-2xl bg-cyan-400 px-4 py-3 font-medium text-black" aria-label={copy.common.add}>
                 <Plus size={18} />
               </button>
             </div>
@@ -313,6 +323,7 @@ export function CategoryModal({
                     onDragStart={(id) => { movedProductIdRef.current = id; }}
                     onDragMove={handleDragMove}
                     onDragEnd={handleDragEnd}
+                    onPlaySound={onPlaySound}
                   />
                 ))}
               </Reorder.Group>
@@ -332,6 +343,7 @@ export function CategoryModal({
                     onDragStart={() => undefined}
                     onDragMove={() => undefined}
                     onDragEnd={() => undefined}
+                    onPlaySound={onPlaySound}
                   />
                 ))}
               </div>
