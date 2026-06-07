@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { CategoryIcon, categoryIconOptions } from "@/lib/category-icons";
+import { AppSound } from "@/lib/app-sounds";
 import { AppCopy } from "@/lib/i18n";
 
 type CategoryIconPickerProps = {
@@ -10,6 +11,7 @@ type CategoryIconPickerProps = {
   onChange: (icon: CategoryIcon) => void;
   copy: AppCopy;
   variant?: "light" | "dark";
+  onPlaySound?: (sound?: AppSound) => void;
 };
 
 export function CategoryIconPicker({
@@ -17,6 +19,7 @@ export function CategoryIconPicker({
   onChange,
   copy,
   variant = "dark",
+  onPlaySound,
 }: CategoryIconPickerProps) {
   const [open, setOpen] = useState(false);
   const isDark = variant === "dark";
@@ -46,7 +49,10 @@ export function CategoryIconPicker({
 
       <button
         type="button"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          onPlaySound?.("open");
+          setOpen((value) => !value);
+        }}
         className={`flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-start transition ${triggerClass}`}
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -82,6 +88,7 @@ export function CategoryIconPicker({
                 key={iconValue}
                 type="button"
                 onClick={() => {
+                  onPlaySound?.("tap");
                   onChange(iconValue);
                   setOpen(false);
                 }}
