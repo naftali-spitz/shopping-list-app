@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { buildShoppingExportCategories } from "@/hooks/use-shopping-export-doc";
+import { AppSound, playAppSound } from "@/lib/app-sounds";
 import {
   addProductsToShoppingList,
   deleteShoppingHistoryEntry,
@@ -11,11 +13,8 @@ import {
   updateProductQuantity,
 } from "@/lib/db/products";
 import { exportShoppingDoc } from "@/lib/export-doc";
-import { buildShoppingExportCategories } from "@/hooks/use-shopping-export-doc";
 import { saveHistory } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
-
-let audioContext: AudioContext | null = null;
 
 const SOUND_STORAGE_KEY = "futurecart.soundOn";
 
@@ -27,105 +26,6 @@ function getInitialSoundOn() {
   if (savedValue === null) return true;
 
   return savedValue === "true";
-}
-
-function getAudioContext() {
-  if (typeof window === "undefined") return null;
-
-  const AudioContextConstructor =
-    window.AudioContext || (window as any).webkitAudioContext;
-
-  if (!AudioContextConstructor) return null;
-
-  audioContext ??= new AudioContextConstructor();
-
-  return audioContext;
-}
-
-async function playTickSound() {
-  const context = getAudioContext();
-
-  if (!context) return;
-
-  if (context.state === "suspended") {
-    await context.resume();
-  }
-
-  const now = context.currentTime;
-  const masterGain = context.createGain();
-  const delay = context.createDelay();
-  const feedback = context.createGain();
-  const echoGain = context.createGain();
-  const highPass = context.createBiquadFilter();
-
-  masterGain.gain.setValueAtTime(0.0001, now);
-  masterGain.gain.exponentialRampToValueAtTime(0.12, now + 0.012);
-  masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
-
-  highPass.type = "highpass";
-  highPass.frequency.setValueAtTime(420, now);
-
-  delay.delayTime.setValueAtTime(0.045, now);
-  feedback.gain.setValueAtTime(0.22, now);
-  echoGain.gain.setValueAtTime(0.18, now);
-
-  masterGain.connect(highPass);
-  highPass.connect(context.destination);
-  masterGain.connect(delay);
-  delay.connect(feedback);
-  feedback.connect(delay);
-  delay.connect(echoGain);
-  echoGain.connect(highPass);
-
-  const voices: Array<{
-    type: OscillatorType;
-    startFrequency: number;
-    endFrequency: number;
-    startOffset: number;
-    duration: number;
-    gain: number;
-  }> = [
-    {
-      type: "triangle",
-      startFrequency: 620,
-      endFrequency: 1480,
-      startOffset: 0,
-      duration: 0.09,
-      gain: 0.75,
-    },
-    {
-      type: "sine",
-      startFrequency: 1540,
-      endFrequency: 2360,
-      startOffset: 0.018,
-      duration: 0.075,
-      gain: 0.45,
-    },
-  ];
-
-  voices.forEach((voice) => {
-    const oscillator = context.createOscillator();
-    const voiceGain = context.createGain();
-    const start = now + voice.startOffset;
-    const end = start + voice.duration;
-
-    oscillator.type = voice.type;
-    oscillator.frequency.setValueAtTime(voice.startFrequency, start);
-    oscillator.frequency.exponentialRampToValueAtTime(
-      voice.endFrequency,
-      end
-    );
-
-    voiceGain.gain.setValueAtTime(0.0001, start);
-    voiceGain.gain.exponentialRampToValueAtTime(voice.gain, start + 0.01);
-    voiceGain.gain.exponentialRampToValueAtTime(0.0001, end);
-
-    oscillator.connect(voiceGain);
-    voiceGain.connect(masterGain);
-
-    oscillator.start(start);
-    oscillator.stop(end + 0.02);
-  });
 }
 
 type UseShoppingStateProps = {
@@ -191,9 +91,7 @@ export function useShoppingState({
         onError?.("טעינת היסטוריית הקניות נכשלה. נסה לרענן את הדף.");
       }
 
-      if (data) {
-        setHistory(historyRowsToEntries(data));
-      }
+      if (data) setHistory(historyRowsToEntries(data));
 
       setLoadedHistoryHouseholdId(householdId);
       setIsLoading(false);
@@ -226,14 +124,16 @@ export function useShoppingState({
     [shoppingProducts]
   );
 
-  const playSound = useCallback(() => {
-    if (!soundOn) return;
-
-    void playTickSound().catch(() => undefined);
-  }, [soundOn]);
+  const playSound = useCallback(
+    (sound: AppSound = "tap") => {
+      if (!soundOn) return;
+      void playAppSound(sound).catch(() => undefined);
+    },
+    [soundOn]
+  );
 
   const previewSound = useCallback(() => {
-    void playTickSound().catch(() => undefined);
+    void playAppSound("success").catch(() => undefined);
   }, []);
 
   const optimisticToggle = useCallback(
@@ -242,12 +142,7 @@ export function useShoppingState({
         prev.map((category) => ({
           ...category,
           products: category.products.map((product) =>
-            product.id === productId
-              ? {
-                  ...product,
-                  checked,
-                }
-              : product
+            product.id === productId ? { ...product, checked } : product
           ),
         }))
       );
@@ -261,12 +156,7 @@ export function useShoppingState({
         prev.map((category) => ({
           ...category,
           products: category.products.map((product) =>
-            product.id === productId
-              ? {
-                  ...product,
-                  quantity,
-                }
-              : product
+            product.id === productId ? { ...product, quantity } : product
           ),
         }))
       );
@@ -277,24 +167,17 @@ export function useShoppingState({
   const toggleItem = useCallback(
     async (item: string) => {
       const product = allProducts.find((p) => p.name === item);
-
       if (!product) return;
 
-      playSound();
-
+      playSound(product.checked ? "remove" : "add");
       optimisticToggle(product.id, !product.checked);
 
-      const { error } = await updateProductChecked(
-        product.id,
-        !product.checked
-      );
+      const { error } = await updateProductChecked(product.id, !product.checked);
 
       if (error) {
         console.error("Failed to toggle product:", error);
         onError?.("עדכון המוצר ברשימת הקניות נכשל.");
-
         optimisticToggle(product.id, product.checked);
-
         await refreshCategories();
       }
     },
@@ -304,10 +187,9 @@ export function useShoppingState({
   const removeProductFromShoppingList = useCallback(
     async (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
-
       if (!product || !product.checked) return;
 
-      playSound();
+      playSound("remove");
       optimisticToggle(product.id, false);
 
       const { error } = await updateProductChecked(product.id, false);
@@ -325,14 +207,12 @@ export function useShoppingState({
   const setProductQuantity = useCallback(
     async (productId: string, quantity: number) => {
       const product = allProducts.find((p) => p.id === productId);
-
       if (!product) return;
 
       const nextQuantity = Math.max(1, quantity);
-
       if (nextQuantity === product.quantity) return;
 
-      playSound();
+      playSound("quantity");
       optimisticQuantity(product.id, nextQuantity);
 
       const { error } = await updateProductQuantity(product.id, nextQuantity);
@@ -350,9 +230,7 @@ export function useShoppingState({
   const increaseQuantity = useCallback(
     (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
-
       if (!product) return;
-
       void setProductQuantity(product.id, product.quantity + 1);
     },
     [allProducts, setProductQuantity]
@@ -361,9 +239,7 @@ export function useShoppingState({
   const decreaseQuantity = useCallback(
     (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
-
       if (!product || product.quantity <= 1) return;
-
       void setProductQuantity(product.id, product.quantity - 1);
     },
     [allProducts, setProductQuantity]
@@ -372,13 +248,9 @@ export function useShoppingState({
   const quickAddItem = useCallback(
     async (item: string) => {
       const product = allProducts.find((p) => p.name === item);
+      if (!product || product.checked) return;
 
-      if (!product || product.checked) {
-        return;
-      }
-
-      playSound();
-
+      playSound("add");
       optimisticToggle(product.id, true);
 
       const { error } = await updateProductChecked(product.id, true);
@@ -386,9 +258,7 @@ export function useShoppingState({
       if (error) {
         console.error("Failed to add product:", error);
         onError?.("הוספת המוצר לרשימת הקניות נכשלה.");
-
         optimisticToggle(product.id, false);
-
         await refreshCategories();
       }
     },
@@ -404,8 +274,7 @@ export function useShoppingState({
 
       const previousProducts = allProducts;
 
-      playSound();
-
+      playSound("success");
       setCategories((prev) =>
         prev.map((category) => ({
           ...category,
@@ -421,25 +290,15 @@ export function useShoppingState({
       if (error) {
         console.error("Failed to restore shopping list:", error);
         onError?.("שחזור הרשימה מההיסטוריה נכשל.");
-
         setCategories((prev) =>
           prev.map((category) => ({
             ...category,
             products: category.products.map((product) => {
-              const previous = previousProducts.find(
-                (p) => p.id === product.id
-              );
-
-              return previous
-                ? {
-                    ...product,
-                    checked: previous.checked,
-                  }
-                : product;
+              const previous = previousProducts.find((p) => p.id === product.id);
+              return previous ? { ...product, checked: previous.checked } : product;
             }),
           }))
         );
-
         await refreshCategories();
       }
     },
@@ -453,8 +312,7 @@ export function useShoppingState({
         return false;
       }
 
-      playSound();
-
+      playSound("delete");
       const { error } = await deleteShoppingHistoryEntry(householdId, historyId);
 
       if (error) {
@@ -465,7 +323,6 @@ export function useShoppingState({
 
       setHistory((prev) => prev.filter((entry) => entry.id !== historyId));
       void refreshCategories();
-
       return true;
     },
     [householdId, onError, playSound, refreshCategories]
@@ -482,10 +339,7 @@ export function useShoppingState({
     setCategories((prev) =>
       prev.map((category) => ({
         ...category,
-        products: category.products.map((product) => ({
-          ...product,
-          checked: false,
-        })),
+        products: category.products.map((product) => ({ ...product, checked: false })),
       }))
     );
 
@@ -494,29 +348,20 @@ export function useShoppingState({
     if (error) {
       console.error("Failed to export shopping list:", error);
       onError?.("ייצוא רשימת הקניות נכשל.");
-
       setCategories((prev) =>
         prev.map((category) => ({
           ...category,
           products: category.products.map((product) => {
             const previous = previousProducts.find((p) => p.id === product.id);
-
-            return previous
-              ? {
-                  ...product,
-                  checked: previous.checked,
-                }
-              : product;
+            return previous ? { ...product, checked: previous.checked } : product;
           }),
         }))
       );
-
       await refreshCategories();
-
       return false;
     }
 
-    playSound();
+    playSound("success");
 
     try {
       await exportShoppingDoc(shoppingExportCategories);
@@ -534,12 +379,9 @@ export function useShoppingState({
       onError?.("הרשימה יוצאה, אבל טעינת ההיסטוריה מחדש נכשלה. נסה לרענן את הדף.");
     }
 
-    if (freshHistory) {
-      setHistory(historyRowsToEntries(freshHistory));
-    }
+    if (freshHistory) setHistory(historyRowsToEntries(freshHistory));
 
     await refreshCategories();
-
     return true;
   }, [
     allProducts,
