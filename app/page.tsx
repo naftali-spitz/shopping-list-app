@@ -167,20 +167,20 @@ export default function Home() {
     if (error) { console.error("Failed to rebalance custom product order:", error); showError(copy.errors.orderSaveFailed); await refreshCategories(); }
   };
 
-  const handleSwitchHousehold = (householdId: string) => { if (householdId === currentHouseholdId) return; playSound(); setCurrentHouseholdId(householdId); resetViewState(); };
-  const handleCreateHousehold = () => { playSound(); setNewHouseholdName(copy.household.defaultName); setProfileOpen(false); setCreateHouseholdOpen(true); };
-  const handleConfirmCreateHousehold = async () => { const name = newHouseholdName.trim(); if (!name) return; const household = await createHousehold(name); if (!household) return; resetViewState(); setCreateHouseholdOpen(false); setNewHouseholdName(copy.household.defaultName); };
-  const handleOpenCreateCategory = () => { playSound(); setNewCategoryName(""); setNewCategoryIcon(DEFAULT_CATEGORY_ICON); setCreateCategoryOpen(true); };
-  const handleConfirmCreateCategory = async () => { if (!newCategoryName.trim()) return; await addCategory(); setCreateCategoryOpen(false); };
+  const handleSwitchHousehold = (householdId: string) => { if (householdId === currentHouseholdId) return; playSound("open"); setCurrentHouseholdId(householdId); resetViewState(); };
+  const handleCreateHousehold = () => { playSound("open"); setNewHouseholdName(copy.household.defaultName); setProfileOpen(false); setCreateHouseholdOpen(true); };
+  const handleConfirmCreateHousehold = async () => { const name = newHouseholdName.trim(); if (!name) return; const household = await createHousehold(name); if (!household) return; playSound("success"); resetViewState(); setCreateHouseholdOpen(false); setNewHouseholdName(copy.household.defaultName); };
+  const handleOpenCreateCategory = () => { playSound("open"); setNewCategoryName(""); setNewCategoryIcon(DEFAULT_CATEGORY_ICON); setCreateCategoryOpen(true); };
+  const handleConfirmCreateCategory = async () => { if (!newCategoryName.trim()) return; await addCategory(); playSound("success"); setCreateCategoryOpen(false); };
   const handleCreateInviteLink = async () => {
     if (!currentHouseholdId) { showError(copy.errors.inviteMissingHousehold); return; }
-    playSound();
+    playSound("tap");
     const inviteLink = await createInviteLink(currentHouseholdId);
     if (!inviteLink) return;
-    try { await navigator.clipboard.writeText(inviteLink); showSuccess(copy.household.inviteCopied, copy.household.inviteCopiedTitle); }
-    catch { window.prompt("Copy this invite link", inviteLink); showSuccess(copy.household.inviteReady, copy.household.inviteReadyTitle); }
+    try { await navigator.clipboard.writeText(inviteLink); playSound("success"); showSuccess(copy.household.inviteCopied, copy.household.inviteCopiedTitle); }
+    catch { window.prompt("Copy this invite link", inviteLink); playSound("success"); showSuccess(copy.household.inviteReady, copy.household.inviteReadyTitle); }
   };
-  const handleLogout = async () => { const { error } = await supabase.auth.signOut(); if (error) { console.error("Logout failed:", error); showError(copy.errors.logoutFailed); } };
+  const handleLogout = async () => { playSound("open"); const { error } = await supabase.auth.signOut(); if (error) { console.error("Logout failed:", error); showError(copy.errors.logoutFailed); } };
 
   if (loading || householdLoading || acceptingInvite || isLoading || categoriesLoading) return <LoadingScreen />;
 
@@ -205,19 +205,19 @@ export default function Home() {
     <main dir={direction} className={`relative min-h-screen overflow-hidden pb-40 transition-all duration-500 ${backgroundClass}`}>
       <AnimatedBackground />
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
-        <TopBar copy={copy} cardClass={cardClass} onOpenHistory={() => { playSound(); setHistoryOpen(true); }} onOpenProfile={() => { playSound(); setProfileOpen(true); }} />
-        <GlobalSearchSection copy={copy} cardClass={cardClass} globalSearch={globalSearch} globalResults={globalResults} onGlobalSearchChange={setGlobalSearch} onQuickAdd={(item) => { void quickAddItem(item); setGlobalSearch(""); }} onAddMissingProduct={openAddMissingProduct} />
-        <CategoriesSection copy={copy} cardClass={cardClass} categories={categories} darkMode={darkMode} onCreateCategory={handleOpenCreateCategory} onDeleteCategory={(categoryId, categoryName) => { setEditingCategoryId(categoryId); setEditingCategoryName(categoryName); }} onOpenCategory={(categoryId) => { playSound(); setSelectedCategoryId(categoryId); setSearchTerm(""); }} />
+        <TopBar copy={copy} cardClass={cardClass} onOpenHistory={() => { playSound("open"); setHistoryOpen(true); }} onOpenProfile={() => { playSound("open"); setProfileOpen(true); }} />
+        <GlobalSearchSection copy={copy} cardClass={cardClass} globalSearch={globalSearch} globalResults={globalResults} onGlobalSearchChange={setGlobalSearch} onQuickAdd={(item) => { void quickAddItem(item); setGlobalSearch(""); }} onAddMissingProduct={(name) => { playSound("open"); openAddMissingProduct(name); }} />
+        <CategoriesSection copy={copy} cardClass={cardClass} categories={categories} darkMode={darkMode} onCreateCategory={handleOpenCreateCategory} onDeleteCategory={(categoryId, categoryName) => { playSound("open"); setEditingCategoryId(categoryId); setEditingCategoryName(categoryName); }} onOpenCategory={(categoryId) => { playSound("open"); setSelectedCategoryId(categoryId); setSearchTerm(""); }} />
       </div>
       <ShoppingDrawer copy={copy} items={shoppingProducts} onRemove={(productId) => void removeProductFromShoppingList(productId)} onIncreaseQuantity={(productId) => increaseQuantity(productId)} onDecreaseQuantity={(productId) => decreaseQuantity(productId)} onExport={() => void exportDoc()} />
       <CategoryModal copy={copy} category={selectedCategory} shoppingList={shoppingList} searchTerm={searchTerm} sortMode={sortMode} newProductName={newProductName} products={sortedProducts} onClose={() => setSelectedCategoryId(null)} onToggleItem={(item) => void toggleItem(item)} onSearchChange={setSearchTerm} onSortChange={setSortMode} onNewProductChange={setNewProductName} onAddProduct={() => void addProduct()} onEditProduct={handleEditProduct} onCustomOrderChange={(productsInFinalOrder, movedProductId) => void handleCustomOrderChange(productsInFinalOrder, movedProductId)} />
       <EditCategoryModal copy={copy} category={null} mode="create" open={createCategoryOpen} value={newCategoryName} icon={newCategoryIcon} onClose={() => setCreateCategoryOpen(false)} onChange={setNewCategoryName} onIconChange={setNewCategoryIcon} onSave={() => void handleConfirmCreateCategory()} />
       <AddMissingProductModal open={addMissingProductModalOpen} productName={addMissingProductName} categories={categories} selectedCategoryId={addMissingProductSelectedCategoryId} onCategoryChange={setAddMissingProductSelectedCategoryId} onClose={closeAddMissingProduct} onAdd={() => void confirmAddMissingProduct()} />
-      <EditCategoryModal copy={copy} category={editingCategory} mode="edit" open={Boolean(editingCategory)} value={editingCategoryName} icon={editingCategoryIcon} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onIconChange={setEditingCategoryIcon} onSave={() => void saveCategoryEdit()} onDelete={deleteCategory} />
-      <EditProductModal product={editingProduct} categories={categories} selectedCategoryId={editingProductCategoryId} open={Boolean(editingProductId)} value={editingProductName} onClose={() => { setEditingProductId(null); setEditingProductName(""); setEditingProductCategoryId(null); }} onChange={setEditingProductName} onCategoryChange={setEditingProductCategoryId} onSave={() => void saveProductEdit()} onDelete={deleteProduct} />
+      <EditCategoryModal copy={copy} category={editingCategory} mode="edit" open={Boolean(editingCategory)} value={editingCategoryName} icon={editingCategoryIcon} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onIconChange={setEditingCategoryIcon} onSave={() => { playSound("success"); void saveCategoryEdit(); }} onDelete={() => { playSound("delete"); deleteCategory(); }} />
+      <EditProductModal product={editingProduct} categories={categories} selectedCategoryId={editingProductCategoryId} open={Boolean(editingProductId)} value={editingProductName} onClose={() => { setEditingProductId(null); setEditingProductName(""); setEditingProductCategoryId(null); }} onChange={setEditingProductName} onCategoryChange={setEditingProductCategoryId} onSave={() => { playSound("success"); void saveProductEdit(); }} onDelete={() => { playSound("delete"); deleteProduct(); }} />
       <ConfirmModal open={Boolean(pendingDelete)} title={confirmTitle} description={confirmDescription} confirmText={copy.common.delete} cancelText={copy.common.cancel} onConfirm={() => void confirmDelete()} onCancel={() => setPendingDelete(null)} />
       <CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} onChange={setNewHouseholdName} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} />
-      <ProfileSettingsModal open={profileOpen} email={session.user.email} darkMode={darkMode} soundOn={soundOn} households={households} currentHouseholdId={currentHouseholdId} language={language} copy={copy} onLanguageChange={setLanguage} onClose={() => setProfileOpen(false)} onToggleTheme={() => { playSound(); setDarkMode((v) => !v); }} onToggleSound={() => { soundOn ? playSound() : previewSound(); setSoundOn((v) => !v); }} onSwitchHousehold={handleSwitchHousehold} onCreateHousehold={handleCreateHousehold} onCreateInviteLink={() => void handleCreateInviteLink()} onLogout={() => { playSound(); void handleLogout(); }} />
+      <ProfileSettingsModal open={profileOpen} email={session.user.email} darkMode={darkMode} soundOn={soundOn} households={households} currentHouseholdId={currentHouseholdId} language={language} copy={copy} onLanguageChange={setLanguage} onClose={() => setProfileOpen(false)} onToggleTheme={() => { playSound("toggle"); setDarkMode((v) => !v); }} onToggleSound={() => { soundOn ? playSound("toggle") : previewSound(); setSoundOn((v) => !v); }} onSwitchHousehold={handleSwitchHousehold} onCreateHousehold={handleCreateHousehold} onCreateInviteLink={() => void handleCreateInviteLink()} onLogout={() => { void handleLogout(); }} />
       <HistoryModal open={historyOpen} history={history} onClose={() => setHistoryOpen(false)} onLoad={(items) => { void setShoppingList(items); setHistoryOpen(false); }} onDelete={async (historyId) => { const deleted = await deleteHistoryEntry(historyId); if (!deleted) throw new Error("History delete failed"); }} />
       <AppFeedback feedback={feedback} onClose={closeFeedback} />
     </main>
