@@ -17,6 +17,18 @@ import { Category, HistoryEntry } from "@/types/shopping";
 
 let audioContext: AudioContext | null = null;
 
+const SOUND_STORAGE_KEY = "futurecart.soundOn";
+
+function getInitialSoundOn() {
+  if (typeof window === "undefined") return true;
+
+  const savedValue = window.localStorage.getItem(SOUND_STORAGE_KEY);
+
+  if (savedValue === null) return true;
+
+  return savedValue === "true";
+}
+
 function getAudioContext() {
   if (typeof window === "undefined") return null;
 
@@ -153,9 +165,14 @@ export function useShoppingState({
   onError,
 }: UseShoppingStateProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [soundOn, setSoundOn] = useState(false);
+  const [soundOn, setSoundOn] = useState(getInitialSoundOn);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedHistoryHouseholdId, setLoadedHistoryHouseholdId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(SOUND_STORAGE_KEY, String(soundOn));
+  }, [soundOn]);
 
   useEffect(() => {
     const loadInitialData = async () => {
