@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { buildShoppingExportCategories } from "@/hooks/use-shopping-export-doc";
 import { AppSound, playAppSound } from "@/lib/app-sounds";
@@ -17,6 +17,8 @@ import { saveHistory } from "@/lib/storage";
 import { Category, HistoryEntry } from "@/types/shopping";
 
 const SOUND_STORAGE_KEY = "futurecart.soundOn";
+
+type CheckedOverrides = Record<string, boolean>;
 
 function getInitialSoundOn() {
   if (typeof window === "undefined") return true;
@@ -57,6 +59,19 @@ function historyRowsToEntries(data: any[]): HistoryEntry[] {
   }));
 }
 
+function applyCheckedOverrides(categories: Category[], overrides: CheckedOverrides): Category[] {
+  if (!Object.keys(overrides).length) return categories;
+
+  return categories.map((category) => ({
+    ...category,
+    products: category.products.map((product) =>
+      Object.prototype.hasOwnProperty.call(overrides, product.id)
+        ? { ...product, checked: overrides[product.id] }
+        : product
+    ),
+  }));
+}
+
 export function useShoppingState({
   categories,
   householdId,
@@ -68,6 +83,8 @@ export function useShoppingState({
   const [soundOn, setSoundOn] = useState(getInitialSoundOn);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedHistoryHouseholdId, setLoadedHistoryHouseholdId] = useState<string | null>(null);
+  const [checkedOverrides, setCheckedOverrides] = useState<CheckedOverrides>({});
+  const pendingCheckedUpdatesRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -104,9 +121,36 @@ export function useShoppingState({
     saveHistory(history);
   }, [history]);
 
+  useEffect(() => {
+    setCheckedOverrides((prev) => {
+      const entries = Object.entries(prev);
+      if (!entries.length) return prev;
+
+      let next = prev;
+
+      entries.forEach(([productId, expectedChecked]) => {
+        const product = categories
+          .flatMap((category) => category.products)
+          .find((item) => item.id === productId);
+
+        if (!product || product.checked === expectedChecked) {
+          if (next === prev) next = { ...prev };
+          delete next[productId];
+        }
+      });
+
+      return next;
+    });
+  }, [categories]);
+
+  const categoriesWithCheckedOverrides = useMemo(
+    () => applyCheckedOverrides(categories, checkedOverrides),
+    [categories, checkedOverrides]
+  );
+
   const allProducts = useMemo(
-    () => categories.flatMap((category) => category.products),
-    [categories]
+    () => categoriesWithCheckedOverrides.flatMap((category) => category.products),
+    [categoriesWithCheckedOverrides]
   );
 
   const shoppingProducts = useMemo(
@@ -115,8 +159,8 @@ export function useShoppingState({
   );
 
   const shoppingExportCategories = useMemo(
-    () => buildShoppingExportCategories(categories),
-    [categories]
+    () => buildShoppingExportCategories(categoriesWithCheckedOverrides),
+    [categoriesWithCheckedOverrides]
   );
 
   const shoppingList = useMemo(
@@ -136,20 +180,6 @@ export function useShoppingState({
     void playAppSound("success").catch(() => undefined);
   }, []);
 
-  const optimisticToggle = useCallback(
-    (productId: string, checked: boolean) => {
-      setCategories((prev) =>
-        prev.map((category) => ({
-          ...category,
-          products: category.products.map((product) =>
-            product.id === productId ? { ...product, checked } : product
-          ),
-        }))
-      );
-    },
-    [setCategories]
-  );
-
   const optimisticQuantity = useCallback(
     (productId: string, quantity: number) => {
       setCategories((prev) =>
@@ -164,44 +194,68 @@ export function useShoppingState({
     [setCategories]
   );
 
+  const setCheckedOverride = useCallback((productId: string, checked: boolean) => {
+    setCheckedOverrides((prev) => ({ ...prev, [productId]: checked }));
+  }, []);
+
+  const clearCheckedOverride = useCallback((productId: string) => {
+    setCheckedOverrides((prev) => {
+      if (!Object.prototype.hasOwnProperty.call(prev, productId)) return prev;
+      const next = { ...prev };
+      delete next[productId];
+      return next;
+    });
+  }, []);
+
+  const updateCheckedWithPendingGuard = useCallback(
+    async (productId: string, nextChecked: boolean, previousChecked: boolean) => {
+      if (pendingCheckedUpdatesRef.current.has(productId)) return false;
+
+      pendingCheckedUpdatesRef.current.add(productId);
+      setCheckedOverride(productId, nextChecked);
+
+      const { error } = await updateProductChecked(productId, nextChecked);
+
+      pendingCheckedUpdatesRef.current.delete(productId);
+
+      if (error) {
+        console.error("Failed to update product checked state:", error);
+        onError?.("עדכון המוצר ברשימת הקניות נכשל.");
+        setCheckedOverride(productId, previousChecked);
+        window.setTimeout(() => clearCheckedOverride(productId), 400);
+        await refreshCategories();
+        return false;
+      }
+
+      void refreshCategories();
+      return true;
+    },
+    [clearCheckedOverride, onError, refreshCategories, setCheckedOverride]
+  );
+
   const toggleItem = useCallback(
     async (item: string) => {
       const product = allProducts.find((p) => p.name === item);
       if (!product) return;
+      if (pendingCheckedUpdatesRef.current.has(product.id)) return;
 
-      playSound(product.checked ? "remove" : "add");
-      optimisticToggle(product.id, !product.checked);
-
-      const { error } = await updateProductChecked(product.id, !product.checked);
-
-      if (error) {
-        console.error("Failed to toggle product:", error);
-        onError?.("עדכון המוצר ברשימת הקניות נכשל.");
-        optimisticToggle(product.id, product.checked);
-        await refreshCategories();
-      }
+      const nextChecked = !product.checked;
+      playSound(nextChecked ? "add" : "remove");
+      await updateCheckedWithPendingGuard(product.id, nextChecked, product.checked);
     },
-    [allProducts, onError, optimisticToggle, playSound, refreshCategories]
+    [allProducts, playSound, updateCheckedWithPendingGuard]
   );
 
   const removeProductFromShoppingList = useCallback(
     async (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
       if (!product || !product.checked) return;
+      if (pendingCheckedUpdatesRef.current.has(product.id)) return;
 
       playSound("remove");
-      optimisticToggle(product.id, false);
-
-      const { error } = await updateProductChecked(product.id, false);
-
-      if (error) {
-        console.error("Failed to remove product from shopping list:", error);
-        onError?.("הסרת המוצר מהרשימה נכשלה.");
-        optimisticToggle(product.id, true);
-        await refreshCategories();
-      }
+      await updateCheckedWithPendingGuard(product.id, false, true);
     },
-    [allProducts, onError, optimisticToggle, playSound, refreshCategories]
+    [allProducts, playSound, updateCheckedWithPendingGuard]
   );
 
   const setProductQuantity = useCallback(
@@ -249,20 +303,12 @@ export function useShoppingState({
     async (item: string) => {
       const product = allProducts.find((p) => p.name === item);
       if (!product || product.checked) return;
+      if (pendingCheckedUpdatesRef.current.has(product.id)) return;
 
       playSound("add");
-      optimisticToggle(product.id, true);
-
-      const { error } = await updateProductChecked(product.id, true);
-
-      if (error) {
-        console.error("Failed to add product:", error);
-        onError?.("הוספת המוצר לרשימת הקניות נכשלה.");
-        optimisticToggle(product.id, false);
-        await refreshCategories();
-      }
+      await updateCheckedWithPendingGuard(product.id, true, false);
     },
-    [allProducts, onError, optimisticToggle, playSound, refreshCategories]
+    [allProducts, playSound, updateCheckedWithPendingGuard]
   );
 
   const setShoppingList = useCallback(
