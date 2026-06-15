@@ -31,7 +31,9 @@ import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
 import { buildCategoryProductList, ProductSortMode } from "@/lib/category-product-list";
 import { DEFAULT_CATEGORY_ICON } from "@/lib/category-icons";
 import { getDeleteConfirmationCopy } from "@/lib/delete-confirmation";
+import { fetchCategories } from "@/lib/db/categories";
 import { updateProductDisplayOrder, updateProductDisplayOrders } from "@/lib/db/products";
+import { seedDefaultHouseholdData, type DefaultHouseholdLanguage } from "@/lib/default-household-template";
 import { buildBalancedDisplayOrder, getNewDisplayOrder } from "@/lib/product-ordering";
 import { buildGlobalProductSearchResults } from "@/lib/product-search";
 import { supabase } from "@/lib/supabase";
@@ -77,6 +79,9 @@ export default function Home() {
   const [createHouseholdOpen, setCreateHouseholdOpen] = useState(false);
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const [newHouseholdName, setNewHouseholdName] = useState<string>(copy.household.defaultName);
+  const [newHouseholdUseDefaults, setNewHouseholdUseDefaults] = useState(true);
+  const [newHouseholdDefaultLanguage, setNewHouseholdDefaultLanguage] = useState<DefaultHouseholdLanguage>(language);
+  const [creatingHousehold, setCreatingHousehold] = useState(false);
 
   const { addCategory, addProduct, confirmDelete, deleteCategory, deleteProduct, editingCategory, editingCategoryIcon, editingCategoryId, editingCategoryName, editingProduct, editingProductCategoryId, editingProductId, editingProductName, handleEditProduct, newCategoryIcon, newCategoryName, newProductName, pendingDelete, saveCategoryEdit, saveProductEdit, setEditingCategoryIcon, setEditingCategoryId, setEditingCategoryName, setEditingProductCategoryId, setEditingProductId, setEditingProductName, setNewCategoryIcon, setNewCategoryName, setNewProductName, setPendingDelete } = useCategoryManagement({ categories, householdId: currentHouseholdId, selectedCategoryId, refreshCategories, setCategories, setSelectedCategoryId, onError: showError });
   const { addMissingProductModalOpen, addMissingProductName, addMissingProductSelectedCategoryId, closeAddMissingProduct, confirmAddMissingProduct, openAddMissingProduct, setAddMissingProductSelectedCategoryId } = useMissingProductAdd({ categories, refreshCategories, soundOn, onSuccess: showSuccess, onError: showError, onDone: () => setGlobalSearch("") });
@@ -136,8 +141,40 @@ export default function Home() {
   };
 
   const handleSwitchHousehold = (householdId: string) => { if (householdId === currentHouseholdId) return; playSound("open"); setCurrentHouseholdId(householdId); resetViewState(); };
-  const handleCreateHousehold = () => { playSound("open"); setNewHouseholdName(copy.household.defaultName); setProfileOpen(false); setCreateHouseholdOpen(true); };
-  const handleConfirmCreateHousehold = async () => { const name = newHouseholdName.trim(); if (!name) return; const household = await createHousehold(name); if (!household) return; playSound("success"); resetViewState(); setCreateHouseholdOpen(false); setNewHouseholdName(copy.household.defaultName); };
+  const handleCreateHousehold = () => { playSound("open"); setNewHouseholdName(copy.household.defaultName); setNewHouseholdUseDefaults(true); setNewHouseholdDefaultLanguage(language); setProfileOpen(false); setCreateHouseholdOpen(true); };
+  const handleConfirmCreateHousehold = async () => {
+    const name = newHouseholdName.trim();
+    if (!name || creatingHousehold) return;
+
+    setCreatingHousehold(true);
+
+    try {
+      const household = await createHousehold(name);
+      if (!household) return;
+
+      if (newHouseholdUseDefaults) {
+        const { error } = await seedDefaultHouseholdData(household.id, newHouseholdDefaultLanguage);
+
+        if (error) {
+          console.error("Failed to seed default household data:", error);
+          showError(direction === "rtl" ? "הבית נוצר, אבל הוספת מוצרי ברירת המחדל נכשלה." : "The household was created, but the starter products could not be added.");
+        } else {
+          setCategories(await fetchCategories(household.id));
+        }
+      } else {
+        setCategories([]);
+      }
+
+      playSound("success");
+      resetViewState();
+      setCreateHouseholdOpen(false);
+      setNewHouseholdName(copy.household.defaultName);
+      setNewHouseholdUseDefaults(true);
+      setNewHouseholdDefaultLanguage(language);
+    } finally {
+      setCreatingHousehold(false);
+    }
+  };
   const handleOpenCreateCategory = () => { playSound("open"); setNewCategoryName(""); setNewCategoryIcon(DEFAULT_CATEGORY_ICON); setCreateCategoryOpen(true); };
   const handleConfirmCreateCategory = async () => { if (!newCategoryName.trim()) return; await addCategory(); playSound("success"); setCreateCategoryOpen(false); };
   const handleCreateInviteLink = async () => {
@@ -166,7 +203,7 @@ export default function Home() {
   }
 
   if (!currentHouseholdId && households.length === 0) {
-    return <><HouseholdOnboarding email={session.user.email} language={language} direction={direction} copy={copy} onLanguageChange={setLanguage} onCreateHousehold={handleCreateHousehold} /><CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} onChange={setNewHouseholdName} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} /><AppFeedback feedback={feedback} onClose={closeFeedback} /></>;
+    return <><HouseholdOnboarding email={session.user.email} language={language} direction={direction} copy={copy} onLanguageChange={setLanguage} onCreateHousehold={handleCreateHousehold} /><CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} useDefaultProducts={newHouseholdUseDefaults} defaultLanguage={newHouseholdDefaultLanguage} isCreating={creatingHousehold} onChange={setNewHouseholdName} onUseDefaultProductsChange={setNewHouseholdUseDefaults} onDefaultLanguageChange={setNewHouseholdDefaultLanguage} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} /><AppFeedback feedback={feedback} onClose={closeFeedback} /></>;
   }
 
   return (
@@ -184,7 +221,7 @@ export default function Home() {
       <EditCategoryModal copy={copy} category={editingCategory} mode="edit" open={Boolean(editingCategory)} value={editingCategoryName} icon={editingCategoryIcon} onClose={() => { setEditingCategoryId(null); setEditingCategoryName(""); }} onChange={setEditingCategoryName} onIconChange={setEditingCategoryIcon} onSave={() => { playSound("success"); void saveCategoryEdit(); }} onDelete={() => { playSound("delete"); deleteCategory(); }} onPlaySound={playSound} />
       <EditProductModal product={editingProduct} categories={categories} selectedCategoryId={editingProductCategoryId} open={Boolean(editingProductId)} value={editingProductName} onClose={() => { setEditingProductId(null); setEditingProductName(""); setEditingProductCategoryId(null); }} onChange={setEditingProductName} onCategoryChange={setEditingProductCategoryId} onSave={() => { playSound("success"); void saveProductEdit(); }} onDelete={() => { playSound("delete"); deleteProduct(); }} />
       <ConfirmModal open={Boolean(pendingDelete)} title={confirmTitle} description={confirmDescription} confirmText={copy.common.delete} cancelText={copy.common.cancel} onConfirm={() => void confirmDelete()} onCancel={() => setPendingDelete(null)} />
-      <CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} onChange={setNewHouseholdName} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} />
+      <CreateHouseholdModal open={createHouseholdOpen} value={newHouseholdName} copy={copy} direction={direction} useDefaultProducts={newHouseholdUseDefaults} defaultLanguage={newHouseholdDefaultLanguage} isCreating={creatingHousehold} onChange={setNewHouseholdName} onUseDefaultProductsChange={setNewHouseholdUseDefaults} onDefaultLanguageChange={setNewHouseholdDefaultLanguage} onClose={() => setCreateHouseholdOpen(false)} onCreate={() => void handleConfirmCreateHousehold()} />
       <ProfileSettingsModal open={profileOpen} email={session.user.email} darkMode={darkMode} soundOn={soundOn} households={households} currentHouseholdId={currentHouseholdId} language={language} copy={copy} onLanguageChange={setLanguage} onClose={() => setProfileOpen(false)} onToggleTheme={() => { playSound("toggle"); setDarkMode((v) => !v); }} onToggleSound={() => { soundOn ? playSound("toggle") : previewSound(); setSoundOn((v) => !v); }} onSwitchHousehold={handleSwitchHousehold} onCreateHousehold={handleCreateHousehold} onCreateInviteLink={() => void handleCreateInviteLink()} onLogout={() => { void handleLogout(); }} />
       <HistoryModal open={historyOpen} history={history} onClose={() => setHistoryOpen(false)} onLoad={(items) => { void setShoppingList(items); setHistoryOpen(false); }} onDelete={async (historyId) => { const deleted = await deleteHistoryEntry(historyId); if (!deleted) throw new Error("History delete failed"); }} />
       <AppFeedback feedback={feedback} onClose={closeFeedback} />
