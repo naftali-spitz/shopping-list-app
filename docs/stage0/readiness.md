@@ -1,155 +1,186 @@
-# Stage 0 environment verification and readiness report
+# Stage 0 Environment Verification & Readiness
 
-Date: 2026-11-19. Decision: **NO-GO**. NAF-160 must remain incomplete.
-Stage 1 has not started. Evidence belongs to Linear NAF-149–160 and these files.
-All results below are scoped; a local pass does not establish remote readiness.
+2026-11-19. **NO-GO: NAF-154 broker authorization and NAF-157 broker security
+checks remain incomplete. Stage 1 has not started.** This report supersedes the
+initial access-blocked snapshots, retained in Git/Linear history.
 
-## Environment matrix
+## Verified environment
 
-| Issue | Result | Actual resource and evidence | Remaining requirement |
-|---|---|---|---|
-| NAF-149 repository | PASS | GitHub naftali-spitz/shopping-list-app, ID 1239195094; HTTPS fetch; feature/flespi-home-backend based on origin/develop 88af18681659fe69b0f2ca3122bc308de563e54f; clean initial separate worktree | None for this issue |
-| NAF-150 protections/CI | FAIL/BLOCKED | main and develop protected:false; rulesets []; detailed protection GET 403; no tracked .github workflow | Owner-approved repository protection policy and actual admin access; deployment mapping |
-| NAF-151 Vercel | BLOCKED | Historical shopping-list-app in team 0012ab-5576s-projects; current connection lists zero projects, direct project/deployment GET 404 | Current project visibility, production branch, domains, preview URL, env targets and smoke |
-| NAF-152 Supabase | PARTIAL/BLOCKED | Production inebdmynrfwmmxcyziyi; FutureCart Dev njomxqthjglqesxchlbm restored ACTIVE_HEALTHY; existing dev isolation SQL passes; zero rows/users remain | Prove preview targets dev exclusively; provider config and remote credential boundaries |
-| NAF-153 Debian | PARTIAL/BLOCKED | Current host debian, Debian 13.7, uid1000 naf-w; 15GB disk free, about 27GB available RAM; dedicated process restart demonstrated | Intended deployment host confirmation; durable unprivileged service identity/boot startup; firewall/NAT evidence |
-| NAF-154 flespi | BLOCKED | Existing shopping-mqtt-poc/src/poc.mjs found; token metadata GET returns HTTP400/code1004 Invalid or non-existing token | Dedicated dev account/token ACL/expiry and namespace; minimal exchange/reconnect/denial proof |
-| NAF-155 PostgreSQL | PASS (local dev scope) | Separate PostgreSQL 17.12 cluster, 127.0.0.1:55439, shopping_stage0, role shopping_stage0_app; rollback/commit/restart/restore and privilege denials passed | Service boot/host mapping separately blocked in NAF-153 |
-| NAF-156 auth inventory | PASS (plan scope) | auth-plan.md; dev tenant SQL suite passed | Actual OAuth/bridge implementation is not claimed |
-| NAF-157 security | PARTIAL/BLOCKED | 15 local guard tests pass; private runtime modes 0700/0600; dev RLS and isolation suite verified | Remote least-privilege scopes, ACLs, firewall/NAT and provider boundaries |
-| NAF-158 recovery | PARTIAL/BLOCKED | Custom-format local synthetic backup/restore and restart passed | Verified preview rollback, boot recovery and off-host backup |
-| NAF-159 tooling | PARTIAL/BLOCKED | Node24.22.3/npm11.19.1/Git2.47.3/Next16.2.6; lockfile npm ci; build PASS; loopback HTTP200/404; AGENTS rules and tests; Linear writes verified | Lint baseline has 17 errors/1 warning; real preview/browser OAuth smoke and remote access |
+| Component | Actual development target | Production boundary |
+|---|---|---|
+| GitHub | naftali-spitz/shopping-list-app; base develop; feature/flespi-home-backend | main code was never checked out, pushed or merged |
+| Worktree | /home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend | Original checkout and DOCX edits preserved |
+| Vercel | prj_jsqk7AsPGuxLmvWqYEsqyFClV1cM, team_h5ZyD1rMpbgnak6COakN03nD / 0012ab-5576s-projects | Existing project, no replacement |
+| Dev URL | https://shopping-list-app-git-develop-0012ab-5576s-projects.vercel.app/ | No production alias change |
+| Production URL | https://shopping-list-app-eta-ten.vercel.app/ | Deployment dpl_A3CPtbgVJkQ3PagHjW8gkb8HkV8y unchanged |
+| Supabase baseline | FutureCart Dev njomxqthjglqesxchlbm | inebdmynrfwmmxcyziyi never used for SQL/test writes |
+| Local PostgreSQL | 127.0.0.1:55439, shopping_stage0, shopping_stage0_app | Existing localhost:5432, shopping_poc and cashflow_engine untouched |
+| Debian | debian, Debian13.7, unprivileged uid1000 naf-w | No shared service stopped; no host reboot/firewall change |
+| flespi | Reserved shopping-poc/naf-stage0-041d4f122bdd | No broker message or token mutation; saved credential invalid |
 
-## Repository and production baseline
+## Issue results
 
-Original checkout remains on local main 5f18c5e with its existing DOCX route edit,
-DOCX file and verification-exports preserved. Fetched origin/main is
-409eb9056bf59772c08e30e7939d10509d1d3b88. No commits/pushes/merges/checkouts
-of main and no remote feature pushes were performed. Feature worktree is
-`/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend`.
-Origin remains the existing SSH URL. SSH fetch fails publickey authentication;
-public HTTPS fetch works. Local gh authentication is invalid; the connected
-GitHub integration supports reads but rejects protection administration reads.
+| Issue | Current evidence/result |
+|---|---|
+| NAF-149 | PASS: repository ID1239195094; feature based on origin/develop88af18681659fe69b0f2ca3122bc308de563e54f, upstream origin/develop, ancestry verified |
+| NAF-150 | PASS: owner-approved PR requirement on main/develop, administrators enforced, force-push/deletion denied, zero reviewers for solo ownership; live API readback |
+| NAF-151 | PASS: official CLI login repaired access; actual project/repository/branch/alias verified; Preview credentials separated; Preview rebuilt and browser/static smoke passes |
+| NAF-152 | PASS: explicit dev/prod matrix, dev-only key source, production-target denial, dev tenant-isolation SQL suite passed with zero residual rows/users; no production database change |
+| NAF-153 | PASS: dedicated user service, private directories, loopback-only port, resource controls, normal restart and crash recovery; owner approved Linger=yes for unattended startup |
+| NAF-154 | BLOCKED: existing token invalid; no valid dedicated publisher/listener credentials or ACL/connect/exchange/denial evidence |
+| NAF-155 | PASS: installed PostgreSQL17.12, separate data/roles, SCRAM, least-privilege denials, transaction/commit/restart/backup/restore |
+| NAF-156 | PASS: inventory and trusted identity plan in auth-plan.md; no replacement auth implementation claimed |
+| NAF-157 | PARTIAL/BLOCKED: cloud/env/DB/credential boundaries verified; flespi ACL/account/expiry and negative tests still missing |
+| NAF-158 | PASS: safe Preview rollback and return, custom-format synthetic DB restore, automatic crash recovery, scheduled local backups; off-host limitation documented |
+| NAF-159 | Local tooling/policy/build/browser checks pass; development CI workflow added, remote CI result pending PR verification |
+| NAF-160 | NO-GO; cannot mark Done or start Stage1 while critical broker prerequisites remain unresolved |
 
-Historical Vercel links from GitHub commit status:
-- develop: https://vercel.com/0012ab-5576s-projects/shopping-list-app/F6psAnt3LMBxHQsUosQwcDH22Ay7
-- main: https://vercel.com/0012ab-5576s-projects/shopping-list-app/A3CPtbgVJkQ3PagHjW8gkb8HkV8y
+## Access repair and approved scope changes
 
-These are dashboard deployment records, not verified live preview URLs. Team ID
-is team_h5ZyD1rMpbgnak6COakN03nD. Current 404 responses do not prove deletion;
-project visibility/identity must be restored before any deployment or push.
+Vercel CLI66.2.0 was absent; installed in the separate user-owned
+/home/naf-w/.local/share/shopping-list-tools with exact package-lock integrity.
+Started official device login; owner approved in their browser. CLI verifies
+0012ab-5576 has OWNER access to the expected Hobby team. The connected plugin
+still had visibility failures, so the authenticated official CLI is the working
+path. Local gh CLI access also verifies the repository and protection settings.
+No passwords/PATs/2FA codes were requested in chat.
 
-Original .env.local points to production Supabase despite DEV_MODE=true. It was
-not copied into the feature worktree. All local build/smoke work used only
-127.0.0.1:54321 plus an explicit noncredential placeholder. No production SQL,
-production OAuth settings, user data, Vercel configuration or shared MQTT token
-was changed. One authorized dev-only service change: restored FutureCart Dev.
+Linked only this feature worktree to the verified existing project. The CLI
+created a fresh worktree-only .env.local with its development OIDC token;
+subsequent explicit Development pulls supplied the verified dev URL/publishable
+key. Files are0600; .vercel and private runtime files are ignored. The original
+checkout .env.local was never loaded/copied/sourced. DEV_MODE does not establish
+isolation. POC_APP_URL records the exact required dev URL locally; re-add it after
+a future env pull because Vercel replaces the file.
 
-## Reproduce local checks
+Actual initial project settings had Supabase variables jointly scoped to
+production+preview. GET-only inspection of the old preview's eight JS bundles
+proved a production Supabase hostname was compiled into the dev app. Functional
+testing of that build was prohibited.
 
-Run from the feature worktree, after branch/status/target inspection:
+The user authorized removing/changing dev's Supabase connection while preserving
+production. Removed ONLY the Preview scope from original production entries
+Pf068enU5tISIkB4 and69Svu0hHDycdnoYb; no value field was submitted. Compared
+IDs/types/opaque stored-value fingerprints and production deployment ID before
+and after: unchanged. Added separate Development and Preview-only values from
+FutureCart Dev, plus develop-specific overrides. Feature-specific add initially
+failed because the branch was not remote; did not push into the unsafe fallback.
+After scope separation, effective feature Preview pull resolves to dev only.
+Native CLI rejected a missing Preview-default row as already existing, so used
+the documented create-env API with target[preview] and NO upsert. Existing
+production entries were never overwritten or decrypted.
+
+Rebuilt only existing develop source88af186 with explicit Preview environment.
+First safe build: dpl_GcptEvxM2TyEGoSJKUCMeK8tyV7o. Second safe build:
+dpl_EeL6gzAPKg9SY5r2TC5uZX4SvRjd. Reassigned ONLY the exact develop alias to the
+first safe build and back to the second; readback proves rollback/return.
+Never roll the dev alias back to the old production-compiled build.
+
+Static audit confirms only njomxqthjglqesxchlbm.supabase.co in served bundles.
+Anonymous browser smoke returns200, FutureCart/login screen, no page errors and
+no attempted production requests. Vercel protection remains enabled; used CLI
+curl and an origin-scoped dev OIDC header, never a global browser auth header.
+Details: vercel-isolation.json, preview-browser.json, preview-recovery.json.
+
+## Local services and recovery
+
+The separate PostgreSQL17.12 instance uses SCRAM, TCP loopback55439, no Unix
+sockets, private0700 runtime and0600 credentials/dumps. App role has no superuser,
+createdb, createrole or bypassrls. CREATE DATABASE, SET ROLE admin and access to
+cluster postgres DB were denied. Synthetic rollback/commit and exact restored
+row checks pass. Full business schema remains Stage2 work.
+
+Installed user units (copies in systemd/):
+- shopping-list-stage0-postgres.service: uid1000, NoNewPrivileges,256MB memory,
+  20% CPU,64 tasks; Restart=on-failure; only the dedicated data directory.
+- shopping-list-stage0-backup.service and .timer: daily custom-format pg_dump,
+  private local files, retain seven successful copies. Manual timer service run
+  and restore into shopping_stage0_restore passed.
+
+Normal service restart and a targeted SIGKILL of the verified dev main PID both
+recovered automatically and preserved the committed synthetic row. Service is
+currently active. The user explicitly approved enabling lingering; loginctl
+reports Linger=yes, so enabled user units can start at boot without a login.
+No actual reboot was performed because unrelated desktop/home workloads must be
+preserved. Existing failed xfce4-notifyd user unit was observed and left alone.
+
+No encrypted off-host copy exists: host/disk loss is NOT covered. This is an
+explicit Stage0 limitation, with recurring/off-host operations evaluated in
+later stages. Journald, dedicated unit status, private PG logs and operation-ID
+correlation are the diagnosis paths; never log auth headers or full credentials.
+
+## Tooling, guards and baseline checks
+
+Node24.22.3/npm11.19.1/Git2.47.3/Next16.2.6; npm ci --ignore-scripts passed.
+Pinned external tools: Vercel66.2.0, Playwright-core1.65.1 with installed Chrome.
+Relevant installed Next docs read before edits; application TSX/business code is
+unchanged. Current dev-target build and type checking pass. 55 guard tests pass;
+changed JS lint clean. Preflight verifies actual cwd/root, origin fetch+push,
+branch/upstream/develop ancestry, exact URL/project IDs, both env load orders,
+public key role/project, DB targets, external env symlinks, and fresh provider
+isolation evidence including exact dev key fingerprint. It allows only local
+build/loopback smoke commands, never push/deploy. Passing it is NOT a Stage0 GO.
+Provider evidence expires after six hours; regenerate through the audit script.
+
+New .vercelignore excludes local credentials, databases and browser profiles from
+CLI uploads. No secrets go into CI or artifacts. Development-only GitHub Actions
+workflow targets PRs into develop, with pinned official action SHAs and Node,
+55 denial tests, changed-script lint, and an inert loopback-placeholder build.
+It does not deploy or run on main.
+
+Full application ESLint has a pre-existing17 errors/1 warning in unchanged files:
+React effect/static component checks and explicit-any. These remain visible in
+lint-baseline.json; no rules were disabled. Treat as a nonblocking baseline style/
+type-policy deviation for this infrastructure POC because build/typecheck,
+tenant isolation, guard tests and read-only smoke pass; no new app code depends
+on suppressing it. This does not waive broker/auth/security/recovery prerequisites.
+
+## Remaining authorization blocker
+
+flespi account metadata rejects the saved POC token (HTTP400/code1004 invalid or
+non-existing token). No messages sent. No available flespi integration returned
+from directory searches. Official realm OAuth needs an existing configured realm;
+the user does not know one. Opened official account login in an isolated Debian
+browser; user cannot access that desktop, so that unauthenticated browser was
+closed. Credentials, not a login itself, are sufficient. Never ask for tokens,
+passwords or 2FA codes in chat. Reserved namespace and exact least-privilege role
+matrix are in flespi-authorization.json. Accept only a private credential source,
+then verify account/expiry/ACL, connect/pub/sub/ack/reconnect and foreign-topic
+denial. QoS ACK is not DB commit. Stage1 load/fault suites remain prohibited.
+
+## Reproduction and rollback (agent-owned operations)
+
+From this worktree after checking branch/status/targets:
 
 ```sh
-npm ci --ignore-scripts --no-audit --no-fund
 node --test scripts/stage0-preflight.test.mjs
-node scripts/stage0-preflight.mjs --offline-build -- npm run build
-node scripts/stage0-preflight.mjs --offline-build -- npm run start -- --hostname 127.0.0.1 --port 55440
-npm run lint
+python3 scripts/stage0-vercel-audit.py
+node scripts/stage0-preflight.mjs -- npm run build
+python3 scripts/stage0-backup.py
+systemctl --user status shopping-list-stage0-postgres.service
+systemctl --user list-timers shopping-list-stage0-backup.timer
 ```
 
-HTTP smoke: GET / returns 200 and FutureCart metadata; unknown route returns 404.
-Stop the test server afterward. This proves local HTTP rendering only, not a
-browser sign-in, authorized data workflow, preview deployment or realtime flow.
-Missing dev credentials make the default guard return BLOCKED as intended.
-The guard is a local command wrapper and policy check, not a remote IAM/firewall
-control or a replacement for provider verification. Opaque publishable key
-ownership still needs provider evidence. Do not bypass it with direct commands.
+These are runbook commands for the agent, not work delegated to the user.
+The Vercel audit requires official login plus the private dev-key metadata input;
+never substitute the original production env. It reads provider metadata, pulls
+only dev/Preview files, and checks static bundles without executing browser writes.
+Native Vercel curl incorrectly forwards --non-interactive to curl; the script
+omits that redundant flag only for curl and preserves explicit team/URL targeting.
 
-The first sandboxed build failed because its CSS worker could not bind a socket;
-the approved unsandboxed rerun passed. No config workaround was introduced.
-Nested worktree lockfiles cause a Next workspace-root warning; the build passed
-and no app configuration was changed. Confirm file tracing/root before deployment.
-Lint reports 17 errors/1 warning in unchanged TSX/TS files (React effect/static
-component checks and explicit-any). No lint rules were disabled. No acceptance
-of this baseline deviation has been assumed.
+To revert local service setup: stop/disable ONLY the two shopping-list-stage0
+units/timer, remove ONLY their copied user-unit files after review, reload user
+manager. Linger rollback is loginctl disable-linger naf-w only after checking
+whether other user services now depend on it and obtaining approval. Preserve
+runtime backups/data before moving this worktree, because units use its exact
+path. Never operate on /var/lib/postgresql/17/main.
 
-Supabase existing suite: execute supabase/tests/authorization_isolation.sql only
-against verified FutureCart Dev. It wraps synthetic fixtures in BEGIN/ROLLBACK.
-Follow up with aggregate row counts: all six app tables and auth.users were zero.
-Do not run against production, even though the script rolls back.
+To revert dev environment configuration, remove/replace only new Preview and
+Development entries with another isolated backend; do not reintroduce production
+credentials to Preview. Source rollback uses reviewed feature-only commits or
+patches, never resets the original checkout. Production branch/alias/secret
+values remain unchanged; owner-approved GitHub branch protections are intentional
+policy changes and should not be removed incidentally.
 
-## Local database recovery and rollback
-
-`python3 scripts/stage0-postgres.py` creates a NEW private cluster only when
-.stage0-runtime is absent. It pins the existing PostgreSQL binary directory,
-records exact 17.12 package version, writes new random SCRAM credentials to
-0600 files inside a 0700 ignored directory, and uses TCP loopback port 55439.
-It never connects to system port 5432. It verifies rollback, commit, administrative
-and other-database connection denial, pg_dump custom format, pg_restore into
-shopping_stage0_restore, exact synthetic row recovery, and persistence after
-restart. It stops its server in finally. Inspect .stage0-runtime/result.json and
-postgres.log. Successful run left no postmaster.pid. The first attempt failed on
-a too-long Unix socket path; artifacts remain in .stage0-runtime-failed-start.
-The corrected cluster disables Unix sockets and requires SCRAM over loopback TCP.
-
-No existing shopping_poc or cashflow_engine database was altered. Existing system
-PostgreSQL17-main listens localhost:5432. Current OS database role naf-w has no
-superuser/createdb/createrole/bypassrls privileges. New app role likewise has all
-four flags false and cannot connect to its isolated cluster's postgres DB.
-Runtime admin is private and used only for cluster provisioning/recovery.
-
-For another preflight run, preserve/review the stopped runtime before moving it
-aside; the script refuses reuse. For diagnosis/start/stop use the installed
-/usr/lib/postgresql/17/bin/pg_ctl with the exact .stage0-runtime/data path and
-private log file, never /var/lib/postgresql/17/main. Use pg_dump -Fc and
-pg_restore --no-owner --exit-on-error as the app role, with the private password
-passed via environment, not command-line/Linear. Full app schema is Stage 2.
-
-Proposed dev backup retention: daily, seven local copies, test restore after each
-schema change. Current artifact is synthetic only; no automatic retention job or
-encrypted off-host copy exists. Host/disk loss remains unrecovered. Do not claim
-full operational DR until off-host storage and service boot recovery are verified.
-Use request/operation IDs and sanitized journald/app logs for future MQTT/DB
-correlation; never log tokens or complete auth/request payloads.
-
-Rollback local source edits: review git diff and revert only the files introduced
-by this preflight; preserve unrelated original checkout edits. No remote deployment
-rollback has been tested. Removing this worktree/feature ref requires checking
-its uncommitted artifacts first. FutureCart Dev was unpaused; do not re-pause an
-active shared dev project without checking current users and receiving approval.
-
-## Access/security gaps and concrete next actions
-
-1. Restore Vercel access to the identified existing project; inspect production
-   branch, preview URLs, environment names/scopes and nonproduction targets before
-   pushing this branch. A 404 is not permission to recreate a project.
-2. Review/authorize GitHub main/develop protection policy and supply a connection
-   capable of applying/verifying it. Repository metadata reports unprotected
-   branches; no repository-wide policy was changed without approval.
-3. Supply valid dedicated flespi dev token(s) through a private credential file,
-   with ACL/account/expiry metadata. Current token is invalid; cannot be used to
-   create scoped replacements. No broker messages sent.
-4. Confirm intended Debian deployment host and authorize only the dedicated
-   unprivileged service/boot setup; inspect firewall/NAT without modifying shared
-   network rules. Preserve NoMachine, desktop, Docker, nginx, Samba, Ollama,
-   existing port3000/4000/7001 and unrelated workloads. No WAN scan was attempted.
-5. Verify FutureCart Dev Google provider, exact OAuth callbacks and preview
-   redirects, dev-only keys and synthetic account sign-in. Provider settings are
-   unavailable in the current connector. Inventory and design are in auth-plan.md.
-6. Resolve or explicitly disposition existing lint failures; verify preview
-   rollback and operational recovery. Publish evidence, then reassess NAF-160.
-
-TLS MQTT/HTTPS, dedicated callback signatures, timestamp/nonces, durable operation
-IDs, household membership checks, rotation and rate limits are required designs,
-not implemented/verified controls. Home-network failures, broker expiry/storage,
-long-lived sessions and database commit ambiguity remain risks. No account scopes
-were expanded, paid plans purchased, firewall changed or unrelated service stopped.
-
-Official references checked:
-- https://supabase.com/changelog.md (CLI v3 behavior changed; no CLI migration run)
-- https://flespi.com/kb/tokens-access-keys-to-flespi-platform
-- https://flespi.com/mqtt-broker
-- https://flespi.com/kb/how-flespi-pricing-works
-
-The readiness decision is NO-GO until every critical row above passes. This report
-and any future Stage 0 GO never authorize a production migration.
+Every issue has evidence in Linear. Stage0 remains NO-GO until all critical
+prerequisites pass; a future GO is never production migration authorization.

@@ -1,0 +1,7 @@
+# Keep local credentials, database files and browser profiles out of CLI uploads.
+.env*
+.stage0-runtime*/
+.git/
+.worktrees/
+node_modules/
+.next/

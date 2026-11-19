@@ -1,0 +1,28 @@
+{
+  "channel": "naf-stage0-041d4f122bdd",
+  "namespace": "shopping-poc/naf-stage0-041d4f122bdd",
+  "credentials_file": ".stage0-runtime/flespi-dev.json",
+  "publisher": {
+    "publish": [
+      "shopping-poc/naf-stage0-041d4f122bdd/commands"
+    ],
+    "subscribe": [
+      "shopping-poc/naf-stage0-041d4f122bdd/results"
+    ]
+  },
+  "listener": {
+    "publish": [
+      "shopping-poc/naf-stage0-041d4f122bdd/results"
+    ],
+    "subscribe": [
+      "shopping-poc/naf-stage0-041d4f122bdd/commands"
+    ]
+  },
+  "requirements": [
+    "Dedicated development-only ACL credentials",
+    "Deny other topics and non-MQTT APIs",
+    "Explicit expiry; no production/shared token changes",
+    "Store credentials only in private0600 local file; never chat or Linear"
+  ],
+  "state": "BLOCKED: existing token invalid; account-owner authorization required"
+}

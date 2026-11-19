@@ -1,0 +1,29 @@
+name: Stage 0 development preflight
+on:
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  guard-and-build:
+    if: github.event_name == 'pull_request' || github.ref_name == 'feature/flespi-home-backend'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24.22.3'
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: node --test scripts/stage0-preflight.test.mjs
+      - run: npx eslint scripts/stage0-preflight.mjs scripts/stage0-preflight.test.mjs
+      # No provider credentials or secrets are exposed to this job. The existing
+      # application compiles with an inert loopback endpoint for CI only.
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: stage0-build-placeholder
+          NEXT_TELEMETRY_DISABLED: '1'

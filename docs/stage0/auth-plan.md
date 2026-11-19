@@ -89,3 +89,10 @@ cases before any later integration. Do not disable RLS to silence warnings.
 No authentication bypass is proposed. Google provider visibility, preview scope
 and actual sign-in remain NAF-151/152/157/159 blockers; this issue's deliverable
 is the documented plan and inventory, not an implemented replacement.
+
+Follow-up environment verification: dev `/auth/v1/settings` returns200 with
+Google provider disabled. Anonymous Preview shell smoke passes; no Google sign-in
+is claimed. The owner clarified development need not retain Supabase, so no
+production OAuth credentials/provider settings were copied or altered. The trusted
+identity plan above remains a requirement for later implementation; a disabled
+baseline provider is not permission to bypass authentication.

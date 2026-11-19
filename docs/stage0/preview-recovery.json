@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "alias": "shopping-list-app-git-develop-0012ab-5576s-projects.vercel.app",
+  "rollback_target": "dpl_GcptEvxM2TyEGoSJKUCMeK8tyV7o",
+  "restored_target": "dpl_EeL6gzAPKg9SY5r2TC5uZX4SvRjd",
+  "both_targets": "same verified project, develop commit88af186, isolated dev credentials",
+  "production_alias_changed": false
+}

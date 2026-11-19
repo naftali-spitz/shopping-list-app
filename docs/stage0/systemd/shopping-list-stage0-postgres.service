@@ -1,0 +1,23 @@
+[Unit]
+Description=Shopping List isolated Stage 0 PostgreSQL (development only)
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/postgresql/17/bin/postgres -D /home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/.stage0-runtime/data
+WorkingDirectory=/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend
+Restart=on-failure
+RestartSec=3s
+TimeoutStopSec=30s
+KillSignal=SIGINT
+UMask=0077
+NoNewPrivileges=true
+MemoryMax=256M
+CPUQuota=20%
+TasksMax=64
+LimitNOFILE=1024
+RestrictAddressFamilies=AF_INET AF_UNIX
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
