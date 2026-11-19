@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "url": "https://shopping-list-4nh11ay74-0012ab-5576s-projects.vercel.app/",
+  "deployment_id": "dpl_8rMf1XcH66ccqZeqcSDfVpEGC5DE",
+  "branch": "feature/flespi-home-backend",
+  "sha": "2c7d92c91043d4045f1f66585ecf401882b58ec7",
+  "supabase_hosts": [
+    "njomxqthjglqesxchlbm.supabase.co"
+  ],
+  "static_bundles": 8
+}

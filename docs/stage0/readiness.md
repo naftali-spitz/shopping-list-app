@@ -32,7 +32,7 @@ initial access-blocked snapshots, retained in Git/Linear history.
 | NAF-156 | PASS: inventory and trusted identity plan in auth-plan.md; no replacement auth implementation claimed |
 | NAF-157 | PARTIAL/BLOCKED: cloud/env/DB/credential boundaries verified; flespi ACL/account/expiry and negative tests still missing |
 | NAF-158 | PASS: safe Preview rollback and return, custom-format synthetic DB restore, automatic crash recovery, scheduled local backups; off-host limitation documented |
-| NAF-159 | Local tooling/policy/build/browser checks pass; development CI workflow added, remote CI result pending PR verification |
+| NAF-159 | PASS: tooling/policy/build/browser checks and development CI pass; draft PR16 into develop |
 | NAF-160 | NO-GO; cannot mark Done or start Stage1 while critical broker prerequisites remain unresolved |
 
 ## Access repair and approved scope changes
@@ -181,6 +181,14 @@ credentials to Preview. Source rollback uses reviewed feature-only commits or
 patches, never resets the original checkout. Production branch/alias/secret
 values remain unchanged; owner-approved GitHub branch protections are intentional
 policy changes and should not be removed incidentally.
+
+Draft PR: https://github.com/naftali-spitz/shopping-list-app/pull/16 (develop base, draft; no merge).
+Initial setup head2c7d92c passed guard-and-build in34s:
+https://github.com/naftali-spitz/shopping-list-app/actions/runs/44583991073/job/135771873623
+Vercel Preview checks passed; feature-preview.json independently verifies its
+feature/flespi-home-backend provenance and dev-only served bundles. Main refs
+were not pushed or merged. HTTPS Git credential helper was configured through
+gh auth setup-git; origin URL itself remains unchanged.
 
 Every issue has evidence in Linear. Stage0 remains NO-GO until all critical
 prerequisites pass; a future GO is never production migration authorization.
