@@ -40,3 +40,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local isolated Stage 0 PostgreSQL and redacted command artifacts
+/.stage0-runtime*/
+
+/scripts/__pycache__/
