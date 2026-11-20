@@ -1,3 +1,5 @@
+import { homeBackendEnabled } from "@/lib/backend/selection";
+import { subscribeToProducts } from "@/lib/realtime/products-channel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { buildShoppingExportCategories } from "@/hooks/use-shopping-export-doc";
@@ -85,6 +87,7 @@ export function useShoppingState({
   const [loadedHistoryHouseholdId, setLoadedHistoryHouseholdId] = useState<string | null>(null);
   const [checkedOverrides, setCheckedOverrides] = useState<CheckedOverrides>({});
   const pendingCheckedUpdatesRef = useRef<Set<string>>(new Set());
+  const pendingQuantitiesRef = useRef(new Map<string, number>());
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -116,6 +119,17 @@ export function useShoppingState({
 
     void loadInitialData();
   }, [householdId, onError]);
+
+  useEffect(() => {
+    if (!householdId || !homeBackendEnabled()) return;
+    let cancelled = false;
+    const channel = subscribeToProducts(() => {
+      void fetchHistory(householdId).then(({ data, error }) => {
+        if (!cancelled && !error && data) setHistory(historyRowsToEntries(data));
+      });
+    }, householdId);
+    return () => { cancelled = true; channel.unsubscribe(); };
+  }, [householdId]);
 
   useEffect(() => {
     saveHistory(history);
@@ -264,6 +278,7 @@ export function useShoppingState({
       if (!product) return;
 
       const nextQuantity = Math.max(1, quantity);
+      if (homeBackendEnabled()) pendingQuantitiesRef.current.set(productId, nextQuantity);
       if (nextQuantity === product.quantity) return;
 
       playSound("quantity");
@@ -271,6 +286,7 @@ export function useShoppingState({
 
       const { error } = await updateProductQuantity(product.id, nextQuantity);
 
+      if (pendingQuantitiesRef.current.get(productId) === nextQuantity) pendingQuantitiesRef.current.delete(productId);
       if (error) {
         console.error("Failed to update product quantity:", error);
         onError?.("עדכון הכמות נכשל.");
@@ -285,7 +301,7 @@ export function useShoppingState({
     (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
       if (!product) return;
-      void setProductQuantity(product.id, product.quantity + 1);
+      void setProductQuantity(product.id, (pendingQuantitiesRef.current.get(product.id) ?? product.quantity) + 1);
     },
     [allProducts, setProductQuantity]
   );
@@ -294,7 +310,7 @@ export function useShoppingState({
     (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
       if (!product || product.quantity <= 1) return;
-      void setProductQuantity(product.id, product.quantity - 1);
+      void setProductQuantity(product.id, (pendingQuantitiesRef.current.get(product.id) ?? product.quantity) - 1);
     },
     [allProducts, setProductQuantity]
   );
