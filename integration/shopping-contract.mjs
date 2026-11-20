@@ -12,6 +12,21 @@ export function validateOperation(c) {
   const exact = allowed => { if (Object.keys(p).some(k => !allowed.includes(k))) throw new Error('invalid_payload'); };
   const name = v => typeof v === 'string' && v === v.trim() && v.length > 0 && v.length <= 120;
   const version = n => Number.isSafeInteger(n) && n > 0;
+  if (c.type.startsWith('stage4.')) {
+    const type=c.type.slice(7);
+    if(type.startsWith('stage4.'))throw new Error('invalid_operation');
+    if (['household.list','household.members','invite.accept','invite.create','invite.revoke','household.create','household.rename','household.delete','household.seed','membership.remove'].includes(type)) {
+      if(type==='household.seed'){exact(['language']);if(!['he','en'].includes(p.language)||!version(c.expected_version))throw new Error('invalid_payload');return;}
+      if (['household.list','household.members'].includes(type)) { exact([]);if(c.expected_version!==null)throw new Error('invalid_version');return; }
+      if (type==='household.create'||type==='household.rename') { exact(['name']);if(!name(p.name)||(type==='household.create'?c.expected_version!==0:!version(c.expected_version)))throw new Error('invalid_payload');return; }
+      if(type==='household.delete'){exact([]);if(!version(c.expected_version))throw new Error('invalid_version');return;}
+      if(type==='membership.remove'){exact(['user_id']);if(!uuid(p.user_id)||!version(c.expected_version))throw new Error('invalid_payload');return;}
+      if(type==='invite.revoke'){exact(['id']);if(!uuid(p.id)||c.expected_version!==null)throw new Error('invalid_payload');return;}
+      exact(type==='invite.create'?['id','token']:['token']);
+      if(typeof p.token!=='string'||!(/^[a-f0-9]{48}$/).test(p.token)||type==='invite.create'&&!uuid(p.id)||c.expected_version!==null)throw new Error('invalid_payload');return;
+    }
+    return validateOperation({...c,type});
+  }
   if (c.type === 'snapshot') { exact([]); if (c.expected_version !== null) throw new Error('invalid_version'); return; }
   if (c.type === 'operation.status') { exact(['operation_id']); if (!uuid(p.operation_id)) throw new Error('invalid_payload'); return; }
   if (c.type === 'list.export') { exact(['history_id']); if (!uuid(p.history_id) || !version(c.expected_version)) throw new Error('invalid_payload'); return; }

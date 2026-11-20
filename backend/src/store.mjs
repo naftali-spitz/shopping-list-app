@@ -1,6 +1,8 @@
 import pg from 'pg';
 import { authenticate, validateOperation } from './protocol.mjs';
 import { authenticateCommand } from '../../integration/stage3/protocol.mjs';
+import { getDefaultHouseholdTemplate } from '../../integration/stage4/template.mjs';
+const lifecycleTypes=new Set(['household.list','household.create','household.rename','household.members','household.delete','household.seed','invite.create','invite.accept','invite.revoke','membership.remove'].map(t=>'stage4.'+t));
 export class Store {
   constructor(config) { this.config=config; this.pool=new pg.Pool({ ...config.db,max:2,connectionTimeoutMillis:5000,statement_timeout:5000,idle_in_transaction_session_timeout:10000,application_name:'shopping-stage2-dev' }); }
   async close() { await this.pool.end(); }
@@ -16,6 +18,16 @@ export class Store {
       await db.query('BEGIN');
       await db.query("SELECT set_config('shopping.user_id',$1,true),set_config('shopping.household_id',$2,true)",[c.user_id,c.household_id]);
       await db.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[c.household_id]);
+      if(c.type==='stage4.operation.status') {
+        const result=(await db.query('SELECT shopping.stage4_operation_status($1::jsonb,$2) AS result',[JSON.stringify(c),hash])).rows[0].result;
+        await db.query('COMMIT');return result;
+      }
+      if(lifecycleTypes.has(c.type)) {
+        const starter=c.type==='stage4.household.seed'?getDefaultHouseholdTemplate(c.payload.language):[];
+        const result=(await db.query('SELECT shopping.stage4_lifecycle($1::jsonb,$2,$3::jsonb) AS result',[JSON.stringify(c),hash,JSON.stringify(starter)])).rows[0].result;
+        await hooks.beforeCommit?.(db);
+        await db.query('COMMIT');return result;
+      }
       const principal=await db.query('SELECT id FROM shopping.principals WHERE id=$1::uuid AND issuer=$2 AND subject=$1::text AND active FOR SHARE',[c.user_id,this.config.identity.issuer]);
       const membership=await db.query('SELECT role FROM shopping.household_members WHERE household_id=$1 AND user_id=$2 AND active FOR SHARE',[c.household_id,c.user_id]);
       if (!principal.rowCount || !membership.rowCount) { await db.query('ROLLBACK'); return this.result(c,'forbidden'); }
@@ -28,14 +40,15 @@ export class Store {
         const previous=(await db.query('SELECT canonical_hash,user_id,result FROM shopping.operations WHERE id=$1',[c.id])).rows[0];
         if(previous){await db.query('COMMIT');return previous.canonical_hash===hash && previous.user_id===c.user_id?{...previous.result,replayed:true}:this.result(c,'operation_id_conflict');}
       }
-      if (['snapshot','operation.status'].includes(c.type) && c.expires_ms<=Date.now()) { await db.query('ROLLBACK'); return this.result(c,'expired'); }
-      if (c.type==='operation.status') {
+      const operationType=c.type.startsWith('stage4.')?c.type.slice(7):c.type;
+      if (['snapshot','operation.status'].includes(operationType) && c.expires_ms<=Date.now()) { await db.query('ROLLBACK'); return this.result(c,'expired'); }
+      if (operationType==='operation.status') {
         const old=await db.query('SELECT result FROM shopping.operations WHERE id=$1 AND household_id=$2 AND user_id=$3',[c.payload.operation_id,c.household_id,c.user_id]);
         const result=this.result(c,old.rowCount?'found':'not_found',old.rows[0]?.result??null);
         if(this.config.protocolVersion===2)await persist(result);
         await db.query('COMMIT'); return result;
       }
-      if (c.type==='snapshot') {
+      if (operationType==='snapshot') {
         const snapshot={};
         for (const table of ['categories','products','shopping_history']) snapshot[table]=(await db.query(`SELECT * FROM shopping.${table} WHERE household_id=$1 AND deleted_at IS NULL ORDER BY id`,[c.household_id])).rows;
         snapshot.household=(await db.query('SELECT id,name,version FROM shopping.households WHERE id=$1 AND deleted_at IS NULL',[c.household_id])).rows[0];
@@ -55,7 +68,7 @@ export class Store {
       if (c.expires_ms<=now) result=this.result(c,'expired');
       else {
         await db.query('SAVEPOINT business_operation');
-        try { result=await this.mutate(db,c); }
+        try { result=await this.mutate(db,{...c,type:operationType}); }
         catch(e) {
           if(e.code!=='23505')throw e;
           await db.query('ROLLBACK TO SAVEPOINT business_operation');

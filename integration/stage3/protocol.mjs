@@ -42,7 +42,7 @@ export async function authenticateCommand(command, { commandKeys, verifyIdentity
   if (typeof verifyIdentity !== 'function') throw new Error('identity_verifier_required');
   // Both Vercel and Debian call the provider adapter. No cached admission claim
   // or client user ID substitutes for current identity/session/membership checks.
-  const context = await verifyIdentity(command.identity, command.household_id);
+  const context = await verifyIdentity(command.identity, command.household_id, command.type);
   if (context.user_id !== command.user_id || context.household_id !== command.household_id) throw new Error('identity_mismatch');
   return { ...authenticated, context };
 }

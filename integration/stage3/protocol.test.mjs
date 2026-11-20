@@ -67,3 +67,19 @@ test('diagnostic progress is separately signed, time bounded and cannot claim te
   for(const patch of [{state:'committed'},{aud:'production'},{issued_ms:now-60001},{user_id:'forged'}])assert.throws(()=>verifyProgress(signed({...p,...patch},resultKey.privateKey),callbackKeys,now));
   assert.throws(()=>verifyProgress(signed(p,transport.privateKey),callbackKeys,now));
 });
+test('Stage4 verifies the same live session but makes no provider business-membership claim',async()=>{
+  const urls=[],sid=randomUUID();
+  const fetcher=async url=>{urls.push(url);return Response.json(url.endsWith('/user')?{id:user,is_anonymous:false,email_confirmed_at:'today'}:{user_id:user,session_id:sid,issuer:DEV_ISSUER});};
+  const verified=await verifyDevelopmentIdentity('a.b.c',household,{publishableKey:'sb_publishable_test',fetcher,sessionOnly:true});
+  assert.equal(verified.household_id,household);assert.equal(verified.user_id,user);assert.equal(verified.role,undefined);
+  assert.ok(urls[1].endsWith('/stage4_dev_session_context'));
+  await assert.rejects(()=>verifyDevelopmentIdentity('a.b.c',household,{publishableKey:'sb_publishable_test',fetcher}));
+  await assert.rejects(()=>verifyDevelopmentIdentity('a.b.c',household,{publishableKey:'sb_publishable_test',sessionOnly:true,fetcher:async url=>url.endsWith('/user')?fetcher(url):new Response(null,{status:403})}));
+});
+test('Stage4 operation prefix preserves strict legacy payload validation and signed identity dispatch',async()=>{
+  const i={...intent(),type:'stage4.product.update'},c=make(i);validateCommand(c,keys,now);
+  let seen;
+  await authenticateCommand(c,{commandKeys:keys,verifyIdentity:async(t,h,type)=>{seen=type;return context;}},now);
+  assert.equal(seen,'stage4.product.update');
+  for(const patch of [{type:'stage4.stage4.product.update'},{type:'stage4.product.update',payload:{id:c.payload.id,quantity:-1}},{type:'stage4.household.create',payload:{name:'Good',user_id:user},expected_version:0}])assert.throws(()=>validateCommand(resign({...c,...patch}),keys,now));
+});

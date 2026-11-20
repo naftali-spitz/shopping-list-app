@@ -12,6 +12,12 @@ export function developmentConfig(env = process.env) {
   if(c.projectId!=='prj_jsqk7AsPGuxLmvWqYEsqyFClV1cM' || c.topic!=='shopping-poc/naf-stage0-041d4f122bdd/commands')throw new Error('disabled');
   return {...c,local,publishableKey:env.NEXT_PUBLIC_SUPABASE_ANON_KEY};
 }
+export function stage4Enabled(env=process.env) {
+  try {
+    const config=developmentConfig(env);
+    return env.SHOPPING_STAGE4_ENABLED==='1' && (config.local || env.VERCEL_ENV==='preview' && env.VERCEL_GIT_COMMIT_REF==='feature/flespi-home-backend');
+  } catch {return false;}
+}
 export async function gateway(action, config, token) {
   const r=await fetch(GATEWAY,{method:'POST',headers:{apikey:config.publishableKey,'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},body:JSON.stringify(action),cache:'no-store',redirect:'error',signal:AbortSignal.timeout(10000)});
   const body=await r.json();
@@ -56,7 +62,8 @@ export async function handle(request) {
     const token=(request.headers.get('authorization')||'').replace(/^Bearer /,'');
     if(body.action==='status')return json(await gateway(body,config,token));
     if(body.action!=='command')return json({error:'invalid_action'},400);
-    const context=await verifyDevelopmentIdentity(token,body.intent?.household_id,{publishableKey:config.publishableKey});
+    if(typeof body.intent?.type==='string' && body.intent.type.startsWith('stage4.') && !stage4Enabled())return json({error:'disabled'},404);
+    const context=await verifyDevelopmentIdentity(token,body.intent?.household_id,{publishableKey:config.publishableKey,sessionOnly:typeof body.intent?.type==='string'&&body.intent.type.startsWith('stage4.')});
     const command=signCommand(body.intent,context,token,config.signer);
     validateCommand(command,config.commandKeys);
     const accepted=await gateway({action:'accept',command},config);

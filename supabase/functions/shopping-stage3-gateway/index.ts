@@ -21,7 +21,7 @@ Deno.serve(async req => {
     // Publishable key is not a privileged credential. Caller supplies it to
     // reach the pinned project's Auth API; provider verification remains mandatory.
     const publishableKey=req.headers.get('apikey') || '';
-    const verifyIdentity=(token:string,h:string)=>verifyDevelopmentIdentity(token,h,{publishableKey});
+    const verifyIdentity=(token:string,h:string,type='')=>verifyDevelopmentIdentity(token,h,{publishableKey,sessionOnly:type.startsWith('stage4.')});
     if(body.action==='accept') {
       const verified=await authenticateCommand(body.command,{commandKeys,verifyIdentity});
       return json(await db('rpc/stage3_dev_accept_service',{method:'POST',body:JSON.stringify({p_command:verified.command,p_hash:verified.hash})}));
@@ -43,10 +43,14 @@ Deno.serve(async req => {
     }
     if(body.action==='status' && uuid(body.id) && uuid(body.household_id)) {
       const token=(req.headers.get('authorization')||'').replace(/^Bearer /,'');
-      const ctx=await verifyIdentity(token,body.household_id);
-      const rows=await db('stage3_dev_operations?id=eq.'+body.id+'&household_id=eq.'+ctx.household_id+'&user_id=eq.'+ctx.user_id+'&select=id,accepted_at,result,confirmed_at,callback_count,command,progress_state,progress_issued_ms,progress_at');
+      // Load only the supplied immutable operation binding, then authenticate
+      // before returning anything. Stage4 membership is enforced by PostgreSQL;
+      // status exposes only the current actor's previously accepted result.
+      const rows=await db('stage3_dev_operations?id=eq.'+body.id+'&household_id=eq.'+body.household_id+'&select=id,user_id,accepted_at,result,confirmed_at,callback_count,command,progress_state,progress_issued_ms,progress_at');
       if(!rows.length)return json({error:'not_found'},404);
-      const {command,...status}=rows[0];
+      const ctx=await verifyIdentity(token,body.household_id,rows[0].command.type);
+      if(rows[0].user_id!==ctx.user_id)throw new Error('unauthorized');
+      const {command,user_id:ignored,...status}=rows[0];void ignored;
       return json({...status,state:status.result?status.result.status:Date.now()>command.expires_ms?'reconciliation_required':status.progress_state||'accepted_pending'});
     }
     return json({error:'invalid_action'},400);

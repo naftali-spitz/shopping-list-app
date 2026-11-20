@@ -21,6 +21,6 @@ export function loadStage3Config() {
   assert.ok(!JSON.stringify(extra.commandKeys).includes('PRIVATE KEY'));
   const config = { ...base, ...extra, db:base.db, dispatcher:base.dispatcher,
     mqtt:{...base.mqtt,clientId:extra.clientId}, healthFile:'.stage0-runtime/stage3-health.json' };
-  config.verifyIdentity = (token,h) => verifyDevelopmentIdentity(token,h,{publishableKey:extra.publishableKey});
+  config.verifyIdentity = (token,h,type='') => verifyDevelopmentIdentity(token,h,{publishableKey:extra.publishableKey,sessionOnly:type.startsWith('stage4.')});
   return config;
 }
