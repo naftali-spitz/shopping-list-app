@@ -136,6 +136,9 @@ No external support message or billing/plan change was made.
 
 ## Expiry and replay follow-up (2026-11-20 03:45 UTC)
 
+The subsequent controlled tests of delayed cleanup and CONNECT/DISCONNECT expiry
+interpretation are documented in [expiry-hypotheses.md](expiry-hypotheses.md).
+
 NAF-162 remains In Progress and NAF-165 remains **NO-GO**. The original failed
 session-expiry assertion in failures.json and its script is unchanged. A separate
 Stage 1 synthetic harness now distinguishes three independent properties:
