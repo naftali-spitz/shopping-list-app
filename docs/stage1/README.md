@@ -1,5 +1,10 @@
 # Stage 1 transport experiments
 
+**Current decision: CONDITIONAL GO for isolated Stage2 development, NAF-165 Done
+2026-11-20T06:25:58Z.** See [revised readiness](readiness-revised.md),
+[recovery protocol](recovery-plan.md) and gate.json. Earlier NO-GO sections below
+are historical evidence under the prior diagnostic criteria, not the current gate.
+
 Started only after NAF-160 GO/Done2026-11-20T00:54:50.877Z. These are synthetic
 Debian-to-flespi transport experiments, not shopping-list application benchmarks.
 No Vercel API, PostgreSQL commit, authenticated household request or second phone

@@ -1,0 +1,352 @@
+{
+  "status": "PASS",
+  "run_id": "c97871ba-2c50-47e3-9e33-ce4b49d43000",
+  "started_at": "2026-11-20T06:16:58.095Z",
+  "source_head": "7236de7c684a8d98308ed7dbd0c815da621b5023",
+  "session_expiry_seconds": 1800,
+  "message_expiry_seconds": 300,
+  "cases": [
+    {
+      "duration_seconds": 5,
+      "scenario": "5s",
+      "measured_outage_ms": 5001,
+      "automatic_reconnect_attempts": 5,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 264,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 13,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 5265,
+      "late_message_ages_ms_at_reconnect": [
+        1765,
+        1689
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 15,
+      "scenario": "15s",
+      "measured_outage_ms": 15001,
+      "automatic_reconnect_attempts": 15,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 324,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 13,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 15325,
+      "late_message_ages_ms_at_reconnect": [
+        1824,
+        1751
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 30,
+      "scenario": "30s",
+      "measured_outage_ms": 30001,
+      "automatic_reconnect_attempts": 30,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 341,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 13,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 30341,
+      "late_message_ages_ms_at_reconnect": [
+        1841,
+        1765
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 60,
+      "scenario": "60s",
+      "measured_outage_ms": 60001,
+      "automatic_reconnect_attempts": 60,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 421,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 13,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 60421,
+      "late_message_ages_ms_at_reconnect": [
+        1922,
+        1844
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 120,
+      "scenario": "120s",
+      "measured_outage_ms": 120001,
+      "automatic_reconnect_attempts": 120,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 548,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 13,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 120548,
+      "late_message_ages_ms_at_reconnect": [
+        2049,
+        1972
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 240,
+      "scenario": "240s",
+      "measured_outage_ms": 240000,
+      "automatic_reconnect_attempts": 240,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 540,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 13,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": true,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 240540,
+      "late_message_ages_ms_at_reconnect": [
+        2040,
+        1959
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 290,
+      "scenario": "290s",
+      "measured_outage_ms": 290001,
+      "automatic_reconnect_attempts": 290,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 653,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 13,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 290654,
+      "late_message_ages_ms_at_reconnect": [
+        2154,
+        2080
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 310,
+      "scenario": "310s",
+      "measured_outage_ms": 310000,
+      "automatic_reconnect_attempts": 310,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 999,
+      "published": 13,
+      "expected_valid": 3,
+      "expected_expired": 10,
+      "valid_unique_delivered": 3,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 310999,
+      "late_message_ages_ms_at_reconnect": [
+        2498,
+        2421
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [
+          "b353004c-8782-4114-b472-c620b1bc2b7d",
+          "582625fd-2484-42b2-a7b1-8f9daf98c0e0",
+          "e9bae7f3-7f04-4cf9-b58f-4b1a1fb8448e",
+          "812d2451-59cb-419c-ab88-90d738bf3a20",
+          "3e205d6e-7702-437d-8fde-ac0b5119fc94",
+          "ae0ba856-7cbf-4b87-8392-50c4cf9db70a",
+          "680a06f5-a0b1-428e-807e-551cd3031a05",
+          "27faccfc-6df5-479e-9db3-fa26253227f4",
+          "32cc8a9d-ee86-4ecc-a02d-99a2d5a8cbca",
+          "737cb0dd-88cd-4916-bdeb-ce8a15f7cd4e"
+        ],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 480,
+      "scenario": "480s",
+      "measured_outage_ms": 480000,
+      "automatic_reconnect_attempts": 480,
+      "session_present": true,
+      "recovery_ms_from_network_restoration": 987,
+      "published": 13,
+      "expected_valid": 3,
+      "expected_expired": 10,
+      "valid_unique_delivered": 3,
+      "missing_valid_before_reconciliation": [],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 480987,
+      "late_message_ages_ms_at_reconnect": [
+        2486,
+        2410
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [
+          "aa4567c4-228b-4b16-a18f-522966e05244",
+          "5f8c10f3-d229-421e-bc9e-f6128139efb1",
+          "f7dd8da0-cbee-4b42-8532-a852807709fa",
+          "1d17a27a-2a43-452d-879c-c6a6a2e4bf92",
+          "80693e12-f017-4228-bb1f-da09b0b1ee35",
+          "3924e411-d57f-433a-a28a-a9f07eea73e2",
+          "68221fd3-a713-4ab3-92d7-5fdb1368afff",
+          "52f5e3ed-d6b6-43f1-8037-cbe4d323137f",
+          "c19660fc-afc6-4c5d-8a31-7152191c3eac",
+          "4519c0c6-4679-4450-a3da-ec81c7af6771"
+        ],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "passed": true
+    },
+    {
+      "duration_seconds": 5,
+      "scenario": "lost-session-reconciliation",
+      "measured_outage_ms": 5001,
+      "automatic_reconnect_attempts": 5,
+      "session_present": false,
+      "recovery_ms_from_network_restoration": 252,
+      "published": 13,
+      "expected_valid": 13,
+      "expected_expired": 0,
+      "valid_unique_delivered": 1,
+      "missing_valid_before_reconciliation": [
+        "991de9df-7cf8-4a30-962f-673d3e34ff79",
+        "c55b15ea-5ffa-44d8-a9d1-aea796cd205a",
+        "c9395783-b528-4e76-ab78-a6ae13ec473d",
+        "dd32d34d-085e-4da2-8d67-199db8da9b94",
+        "d52a36fd-369e-4d3a-b31f-752606de88e4",
+        "328d42b0-0a90-43a2-aa59-4da55c61784c",
+        "40167f51-42ba-4884-94c2-f4ab2d121312",
+        "bb17a262-c0f3-48e4-9334-3bddcd9ec428",
+        "2484e871-0b44-41b3-8747-d5da4fd0e59a",
+        "a28538d1-864d-47da-9799-f68d33a0a663",
+        "34fe876e-777f-4400-b94c-5addc0232807",
+        "14dff0fe-8596-4037-907a-62f61be00f2a"
+      ],
+      "duplicates": 0,
+      "out_of_order": false,
+      "expired_delivered_and_rejected": 0,
+      "expired_synthetic_effects": 0,
+      "oldest_early_message_age_ms_at_reconnect": 5253,
+      "late_message_ages_ms_at_reconnect": [
+        1753,
+        1678
+      ],
+      "fresh_control_received": true,
+      "missing_publisher_failure_notification": "No per-message expiry notification observed/assumed; PUBACK is transport only.",
+      "reconciliation": {
+        "unresolved_ids": [
+          "991de9df-7cf8-4a30-962f-673d3e34ff79",
+          "c55b15ea-5ffa-44d8-a9d1-aea796cd205a",
+          "c9395783-b528-4e76-ab78-a6ae13ec473d",
+          "dd32d34d-085e-4da2-8d67-199db8da9b94",
+          "d52a36fd-369e-4d3a-b31f-752606de88e4",
+          "328d42b0-0a90-43a2-aa59-4da55c61784c",
+          "40167f51-42ba-4884-94c2-f4ab2d121312",
+          "bb17a262-c0f3-48e4-9334-3bddcd9ec428",
+          "2484e871-0b44-41b3-8747-d5da4fd0e59a",
+          "a28538d1-864d-47da-9799-f68d33a0a663",
+          "34fe876e-777f-4400-b94c-5addc0232807",
+          "14dff0fe-8596-4037-907a-62f61be00f2a"
+        ],
+        "policy": "Durable frontend/API pending-operation IDs; authenticated status lookup; compare canonical hash; retry SAME ID while valid; explicit renewal after not-found/expiry plus current-state/version check. Never mark saved on PUBACK."
+      },
+      "same_id_reconciled": 12,
+      "passed": true
+    }
+  ],
+  "fault": "Owned TLS socket destroyed; MQTT.js automatic reconnect stream attempts fail locally during the bounded outage. Real flespi broker, no host firewall/ISP interruption.",
+  "database_commit": false,
+  "completed_at": "2026-11-20T06:25:08.661Z"
+}

@@ -27,8 +27,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
   Supabase is an isolated interim baseline, not a required final dev backend.
 - NAF-149–159 must pass, then NAF-160 must record GO and be Done before Stage1+.
   Stage0 passed: NAF-160 GO/Done2026-11-20T00:54:50Z, gate.json records evidence.
-  Stage1 NAF-165 is currently NO-GO: session-expiry discrepancy in NAF-162.
-  Do not begin Stage2 until NAF-161–164 pass and NAF-165 records GO/Done.
+  Owner revised Stage1 acceptance2026-11-20: five-minute message retention and
+  safe short-interruption recovery, NOT precise two-second session expiration.
+  Preserve all old diagnostic failures. NAF-165 recorded CONDITIONAL GO/Done
+  2026-11-20T06:25:58Z after the new5/15/30/60/120/240/290/310/480s matrix passed
+  with message expiry300s/session1800s and same-ID lost-session recovery12/12.
+  Stage2 isolated PostgreSQL is authorized; see docs/stage1/gate.json. Full app
+  auth/frontend synchronization and production migration remain unproven/excluded.
   Local guard/CI/build success alone does not authorize Stage1 or migration.
 - No main checkout/commit/push/merge, production deploy/promotion/domain/secret
   changes, shared token changes, paid plan or unrelated service disruption.

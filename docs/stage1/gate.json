@@ -1,0 +1,16 @@
+{
+  "decision": "CONDITIONAL GO",
+  "authorized_scope": "Stage2 isolated Debian PostgreSQL development only",
+  "decided_at": "2026-11-20T06:25:54.259132+00:00",
+  "owner_requirements": "2026-11-20 revised application recovery criteria;2s diagnostic remains FAIL",
+  "matrix": "docs/stage1/attempts/recovery-c97871ba-2c50-47e3-9e33-ce4b49d43000/report.json",
+  "session_expiry_seconds": 1800,
+  "message_expiry_seconds": 300,
+  "conditions": [
+    "PostgreSQL authoritative commits/results/outbox and canonical operation uniqueness",
+    "Current trusted identity/household checks and versions; reject stale/conflicting/expired writes",
+    "Durable pending IDs/status lookup/sync in Stage3-5; no saved UI on MQTT PUBACK",
+    "Real dev authentication/frontends/multidevice/end-to-end/clock/key lifecycle testing in later stages"
+  ],
+  "stage2_started": false
+}
