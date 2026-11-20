@@ -62,6 +62,7 @@ export async function handle(request) {
     const accepted=await gateway({action:'accept',command},config);
     let transport='not_needed';
     if(!accepted.result && command.expires_ms>Date.now()) {
+      console.log(JSON.stringify({event:'stage3_publish',operation_id:command.id,correlation_id:command.correlation_id,published_at_ms:Date.now()}));
       try {await publishCommand(command,config);transport='puback';}catch{transport='retry_pending';}
     }
     console.log(JSON.stringify({event:'stage3_accepted',operation_id:command.id,correlation_id:command.correlation_id,acceptance_ms:Date.now()-started,transport,duplicate:accepted.duplicate}));
@@ -69,6 +70,6 @@ export async function handle(request) {
   } catch(error) {
     const known=['operation_conflict','rate_limited','too_large','invalid_action','store_unavailable'];
     const message=known.includes(error.message)?error.message:'request_rejected';
-    return json({error:message},error.status || (message==='too_large'?413:message==='request_rejected'?400:503));
+    return json({error:message},error.status || (error.message==='unauthorized'?401:message==='too_large'?413:message==='request_rejected'?400:503));
   }
 }

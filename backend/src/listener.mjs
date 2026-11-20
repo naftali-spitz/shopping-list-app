@@ -7,8 +7,10 @@ import { loadConfig,root } from './config.mjs';
 import { canonical } from './protocol.mjs';
 import { Store } from './store.mjs';
 import { loadStage3Config } from './stage3-config.mjs';
-import { deliverStage3,reconcileStage3 } from './stage3-delivery.mjs';
+import { deliverStage3,reconcileStage3,progressStage3 } from './stage3-delivery.mjs';
 import { validateCommand } from '../../integration/stage3/protocol.mjs';
+import { PassThrough } from 'node:stream';
+import { faults,consumeFault } from './stage3-faults.mjs';
 async function main(){
 const config=process.env.SHOPPING_STAGE3_CONFIG==='1'?loadStage3Config():loadConfig(),store=new Store(config);
 const dispatch=new pg.Pool({...config.db,...config.dispatcher,max:1,connectionTimeoutMillis:5000,statement_timeout:5000});
@@ -22,9 +24,17 @@ const healthyClock=()=>Math.abs(Date.now()-(startWall+performance.now()-startMon
 const client=mqtt.connect(config.mqtt.url,{username:config.mqtt.token,clientId:config.mqtt.clientId,protocolVersion:5,
   clean:false,properties:{sessionExpiryInterval:1800,maximumPacketSize:32768},reconnectPeriod:1500,connectTimeout:10000,keepalive:15,resubscribe:false,rejectUnauthorized:true});
 const event=(name,fields={})=>console.log(JSON.stringify({at:new Date().toISOString(),event:name,...fields}));
+if(config.protocolVersion===2) {
+  const builder=client.streamBuilder;
+  client.streamBuilder=(...args)=>{
+    if(!faults(config).mqttOffline)return builder(...args);
+    const stream=new PassThrough();setImmediate(()=>stream.destroy(new Error('controlled_owned_stream_interruption')));return stream;
+  };
+}
 client.on('error',()=>event('mqtt_error'));
 client.on('close',()=>{connected=false;});
 async function reply(result) {
+  if(faults(config).callbackOffline)throw new Error('controlled_callback_unavailable');
   if(config.protocolVersion===2)return deliverStage3(result,config);
   const value={kind:'stage2-result',kid:'result-v1',...result};
   value.signature=sign(null,Buffer.from(canonical(value)),config.resultPrivateKey).toString('base64url');
@@ -49,13 +59,21 @@ client.handleMessage=(packet,done)=>{
     if(packet.payload.length>16384){event('oversized_command');done();return;}
     try {command=JSON.parse(packet.payload.toString());}catch{done();return;}
     if(packet.topic!==config.mqtt.commands || command.aud!==config.audience) {done();return;}
+    if(config.protocolVersion===2)event('stage3_received',{operation_id:command.id,correlation_id:command.correlation_id,received_ms:Date.now(),mqtt_duplicate:packet.dup,remaining_message_expiry_seconds:packet.properties?.messageExpiryInterval??null});
     if(!healthyClock() || config.mqtt.expire<=Date.now()/1000)throw new Error('Clock or credential health');
     let result;
-    try {result=await store.execute(command);}
+    if(config.protocolVersion===2){
+      try{validateCommand(command,config.commandKeys);}catch{event('invalid_command');done();return;}
+      await progressStage3(command,'processing',config).catch(()=>event('progress_pending'));
+    }
+    try {result=await store.execute(command,{beforeCommit:async()=>{
+      if(consumeFault(config,'crashBeforeCommitId',command.id)){event('controlled_crash_before_commit',{operation_id:command.id,correlation_id:command.correlation_id});process.kill(process.pid,'SIGKILL');}
+      if(consumeFault(config,'failTransactionId',command.id)){event('controlled_transaction_failure',{operation_id:command.id,correlation_id:command.correlation_id});const e=new Error('controlled_transaction_failure');e.code='P0001';throw e;}
+    }});}
     catch(e) {
-      if(e.code)throw e;
+      if(e.code){if(config.protocolVersion===2)await progressStage3(command,'failed_retryable',config).catch(()=>{});throw e;}
       if(config.protocolVersion===2) {
-        try {validateCommand(command,config.commandKeys);result=store.result(command,'forbidden');}
+        try {validateCommand(command,config.commandKeys);await progressStage3(command,'reconciliation_required',config).catch(()=>{});event('identity_unavailable_reconciliation_required',{operation_id:command.id,correlation_id:command.correlation_id});done();return;}
         catch {event('invalid_command');done();return;}
       } else {
       event('invalid_command');done();return;
@@ -63,7 +81,7 @@ client.handleMessage=(packet,done)=>{
     }
     processed++;
     event('operation_result',{operation_id:result.operation_id,correlation_id:result.correlation_id,status:result.status,replayed:result.replayed??false,command_age_ms:Date.now()-command.issued_ms});
-    if(config.testing?.crashAfterCommitId===command.id && result.status==='committed') {
+    if((config.testing?.crashAfterCommitId===command.id || consumeFault(config,'crashAfterCommitId',command.id)) && result.status==='committed') {
       process.send?.({event:'committed_before_crash',operation_id:command.id});
       process.kill(process.pid,'SIGKILL');return;
     }
@@ -71,21 +89,24 @@ client.handleMessage=(packet,done)=>{
     // support status/snapshot/retry/denials; duplicates are safe by operation ID.
     // Release MQTT.js's incoming parser after commit before awaiting a response
     // PUBACK. Waiting here deadlocks that same parser's outgoing-ACK handling.
-    done();setImmediate(()=>reply(result).catch(()=>{event('result_delivery_pending');client.stream.destroy();}));
+    if(consumeFault(config,'lostAckId',command.id)){event('controlled_lost_incoming_ack',{operation_id:command.id,correlation_id:command.correlation_id});client.stream.destroy();done();return;}
+    done();setImmediate(()=>reply(result).catch(()=>{event('result_delivery_pending');if(config.protocolVersion!==2)client.stream.destroy();}));
   })().catch(()=>{event('processing_unavailable');client.stream.destroy();});
 };
 async function tick() {
   if(busy||stopping)return;busy=true;
   try {
+    if(faults(config).mqttOffline && connected)client.stream.destroy();
     await store.pool.query('SELECT 1');
     const state={pid:process.pid,at:new Date().toISOString(),connected,clock_healthy:healthyClock(),database:'shopping_stage0',port:55439,processed};
     mkdirSync(resolve('.stage0-runtime'),{recursive:true,mode:0o700});
     writeFileSync(`${health}.partial`,JSON.stringify(state)+'\n',{mode:0o600});renameSync(`${health}.partial`,health);
     if((connected||config.protocolVersion===2)&&!config.testing?.holdOutbox) {
-      const rows=(await dispatch.query("SELECT operation_id,result FROM shopping.result_outbox WHERE delivered_at IS NULL AND result->>'audience'=$1 ORDER BY created_at LIMIT 20",[config.audience])).rows;
+      const rows=(await dispatch.query("SELECT operation_id,result,attempts,created_at FROM shopping.result_outbox WHERE delivered_at IS NULL AND result->>'audience'=$1 ORDER BY created_at LIMIT 20",[config.audience])).rows;
       for(const row of rows) {
         await dispatch.query('UPDATE shopping.result_outbox SET attempts=attempts+1 WHERE operation_id=$1',[row.operation_id]);
-        await reply(row.result);
+        const deliveryStarted=performance.now();await reply(row.result);
+        if(config.protocolVersion===2)event('stage3_outbox_delivery',{operation_id:row.operation_id,correlation_id:row.result.correlation_id,attempt:row.attempts+1,delivery_ms:Math.round(performance.now()-deliveryStarted),age_since_result_ms:Date.now()-new Date(row.created_at).getTime()});
         await dispatch.query('UPDATE shopping.result_outbox SET delivered_at=now() WHERE operation_id=$1',[row.operation_id]);
       }
     }
@@ -94,11 +115,11 @@ async function tick() {
 const timer=setInterval(tick,1000);await tick();
 let reconciling=false;
 const reconciliationTimer=config.protocolVersion===2?setInterval(async()=>{
-  if(reconciling||stopping)return;reconciling=true;
+  if(reconciling||stopping||faults(config).mqttOffline)return;reconciling=true;
   try {
     for(const {command} of await reconcileStage3(config)) {
       let result;
-      try {result=await store.execute(command);}catch(error){if(error.code)throw error;validateCommand(command,config.commandKeys);result=store.result(command,'forbidden');}
+      try {result=await store.execute(command);}catch(error){if(error.code)throw error;validateCommand(command,config.commandKeys);event('identity_unavailable_reconciliation_required',{operation_id:command.id,correlation_id:command.correlation_id});continue;}
       await reply(result);
       event('reconciled',{operation_id:command.id,correlation_id:command.correlation_id,status:result.status});
     }

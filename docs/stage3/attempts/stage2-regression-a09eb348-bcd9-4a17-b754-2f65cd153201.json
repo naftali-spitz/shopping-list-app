@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "run_id": "a09eb348-bcd9-4a17-b754-2f65cd153201",
+  "tested_at": "2026-11-20T10:11:49.574Z",
+  "database": "shopping_stage0",
+  "port": 55439,
+  "actual_postgresql": true,
+  "identity": "Cryptographically verified synthetic issuer only; no real Google/browser sign-in.",
+  "checks": [
+    {
+      "test": "least-privilege runtime and database targets",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "normal category/product create, checked/quantity/order updates and snapshot",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "twenty concurrent duplicates cause exactly one durable effect/result/outbox",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "lost response retry returns authoritative result; conflicting ID/payload rejected",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "out-of-order/stale writes rejected; concurrent different users cannot overwrite versions",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "current household permissions, foreign IDs, principal binding and revoked membership",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "signed invalid/expired commands and invalid/expired identity never mutate data",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "membership revocation waits for an admitted transaction, then denies later access",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "transaction failure rolls back business change, household version, ledger and outbox",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "atomic export/history/restore and household-safe history usage counts",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "record deletion uses tombstones; retries and stale IDs cannot recreate committed rows",
+      "passed": true,
+      "actual_postgresql": true
+    },
+    {
+      "test": "business uniqueness failure rolls back partial export but durably records rejection",
+      "passed": true,
+      "actual_postgresql": true
+    }
+  ]
+}

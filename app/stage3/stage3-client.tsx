@@ -73,7 +73,7 @@ export default function Stage3Client() {
           if(cancelled)return;
           if(status.result) {
             p.result=status.result;p.state=terminal(status.result);p.confirmed_ms=Date.now();
-          } else p.state=status.state==='reconciliation_required'?'Conflict requiring reconciliation':'Saving';
+          } else p.state=status.state==='reconciliation_required'?'Conflict requiring reconciliation':status.state==='failed_retryable'?'Offline/pending':'Saving';
           persist();
         }
         if(!snapshotIntent) {

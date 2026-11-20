@@ -70,3 +70,10 @@ export function verifyReconciliation(request, callbackKeys, now = Date.now()) {
     !uuid(request.id) || !Number.isSafeInteger(request.issued_ms) || request.issued_ms>now+1000 || request.issued_ms<now-60000)throw new Error('invalid_reconciliation');
   checkSignature(request,callbackKeys);
 }
+export function verifyProgress(progress,callbackKeys,now=Date.now()) {
+  exact(progress,['v','kind','kid','iss','aud','issued_ms','delivery_id','operation_id','user_id','household_id','correlation_id','state','signature']);
+  if(progress.v!==2 || progress.kind!=='operation-progress' || progress.iss!==CALLBACK_ISSUER || progress.aud!==CALLBACK_AUDIENCE ||
+    ![progress.delivery_id,progress.operation_id,progress.user_id,progress.household_id,progress.correlation_id].every(uuid) ||
+    !['processing','failed_retryable','reconciliation_required'].includes(progress.state) || !Number.isSafeInteger(progress.issued_ms) || progress.issued_ms>now+1000 || progress.issued_ms<now-60000)throw new Error('invalid_progress');
+  checkSignature(progress,callbackKeys);
+}

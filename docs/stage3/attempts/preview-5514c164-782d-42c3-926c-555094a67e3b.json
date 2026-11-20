@@ -1,0 +1,39 @@
+{
+  "id": "5514c164-782d-42c3-926c-555094a67e3b",
+  "at": "2026-11-20T08:12:52.614Z",
+  "scope": "actual protected Vercel Preview API → flespi → Debian PostgreSQL → Vercel callback → durable status",
+  "checks": [
+    {
+      "name": "Preview durably accepted then published to real broker",
+      "status": "PASS"
+    },
+    {
+      "name": "authoritative PostgreSQL commit returned through independent HTTPS callback",
+      "status": "PASS"
+    },
+    {
+      "name": "same stable operation retry returns existing durable commit",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong-household API command rejected",
+      "status": "PASS"
+    }
+  ],
+  "acceptance": {
+    "status": 202,
+    "data": {
+      "id": "860fa6b5-f3db-49bf-a100-9e2fc6c98100",
+      "result": null,
+      "duplicate": false,
+      "accepted_at": "2026-11-20T08:12:54.250071+00:00",
+      "state": "accepted_pending",
+      "transport": "puback"
+    }
+  },
+  "acceptance_ms": 2320,
+  "confirmation_ms": 5837,
+  "operation_id": "860fa6b5-f3db-49bf-a100-9e2fc6c98100",
+  "correlation_id": "e0879816-7d5a-45a6-9cee-089c70103ea6",
+  "status": "PASS"
+}

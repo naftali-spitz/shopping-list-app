@@ -1,6 +1,6 @@
 // Development-only durable adapter. The admin credential never leaves this
 // runtime; each public action authenticates independently before any DB access.
-import { authenticateCommand, verifyCallback, verifyReconciliation, uuid } from '../../../integration/stage3/protocol.mjs';
+import { authenticateCommand, verifyCallback, verifyReconciliation, verifyProgress, uuid } from '../../../integration/stage3/protocol.mjs';
 import { verifyDevelopmentIdentity, DEV_SUPABASE } from '../../../integration/stage3/identity.mjs';
 const commandKeys = {'command-1':'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAaA3cpm3ZA/Trm2meHSXGreP8lWMMsIhZ5q1uCifLQsI=\n-----END PUBLIC KEY-----\n'};
 const callbackKeys = {'callback-1':'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAGX+fRSih6snwRf7CMu7uVmfiHzoUz/S8Ghb2ugRS/Ss=\n-----END PUBLIC KEY-----\n'};
@@ -37,13 +37,17 @@ Deno.serve(async req => {
       verifyReconciliation(body.request,callbackKeys);
       return json(await db('stage3_dev_operations?result=is.null&select=command,accepted_at&order=accepted_at.asc&limit=20'));
     }
+    if(body.action==='progress') {
+      verifyProgress(body.progress,callbackKeys);
+      return json(await db('rpc/stage3_dev_progress_service',{method:'POST',body:JSON.stringify({p_progress:body.progress})}));
+    }
     if(body.action==='status' && uuid(body.id) && uuid(body.household_id)) {
       const token=(req.headers.get('authorization')||'').replace(/^Bearer /,'');
       const ctx=await verifyIdentity(token,body.household_id);
-      const rows=await db('stage3_dev_operations?id=eq.'+body.id+'&household_id=eq.'+ctx.household_id+'&user_id=eq.'+ctx.user_id+'&select=id,accepted_at,result,confirmed_at,callback_count,command');
+      const rows=await db('stage3_dev_operations?id=eq.'+body.id+'&household_id=eq.'+ctx.household_id+'&user_id=eq.'+ctx.user_id+'&select=id,accepted_at,result,confirmed_at,callback_count,command,progress_state,progress_issued_ms,progress_at');
       if(!rows.length)return json({error:'not_found'},404);
       const {command,...status}=rows[0];
-      return json({...status,state:status.result?status.result.status:Date.now()>command.expires_ms?'reconciliation_required':'accepted_pending'});
+      return json({...status,state:status.result?status.result.status:Date.now()>command.expires_ms?'reconciliation_required':status.progress_state||'accepted_pending'});
     }
     return json({error:'invalid_action'},400);
   } catch(error) {

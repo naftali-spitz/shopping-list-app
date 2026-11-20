@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, randomUUID } from 'node:crypto';
-import { authenticateCommand, signCommand, signed, validateCommand, verifyCallback, logicalHash, COMMAND_AUDIENCE, CALLBACK_ISSUER, CALLBACK_AUDIENCE } from './protocol.mjs';
+import { authenticateCommand, signCommand, signed, validateCommand, verifyCallback, verifyProgress, logicalHash, COMMAND_AUDIENCE, CALLBACK_ISSUER, CALLBACK_AUDIENCE } from './protocol.mjs';
 import { verifyDevelopmentIdentity, DEV_ISSUER } from './identity.mjs';
 const transport = generateKeyPairSync('ed25519'), resultKey = generateKeyPairSync('ed25519');
 const keys = { 'command-1': transport.publicKey }, callbackKeys = { 'callback-1': resultKey.publicKey };
@@ -60,4 +60,10 @@ test('provider adapter pins URLs and requires current session RPC as well as get
   assert.equal(urls.length,2);assert.ok(urls.every(url=>url.startsWith('https://njomxqthjglqesxchlbm.supabase.co/')));
   await assert.rejects(()=>verifyDevelopmentIdentity('a.b.c',household,{publishableKey:'sb_publishable_test',fetcher:async()=>new Response(null,{status:401})}));
   await assert.rejects(()=>verifyDevelopmentIdentity('a.b.c',household,{publishableKey:'sb_publishable_test',fetcher:async url=>url.endsWith('/user')?Response.json({id:user,is_anonymous:false,email_confirmed_at:'today'}):new Response(null,{status:403})}));
+});
+test('diagnostic progress is separately signed, time bounded and cannot claim terminal success',()=>{
+  const p={v:2,kind:'operation-progress',kid:'callback-1',iss:CALLBACK_ISSUER,aud:CALLBACK_AUDIENCE,issued_ms:now,delivery_id:randomUUID(),operation_id:randomUUID(),user_id:user,household_id:household,correlation_id:randomUUID(),state:'processing'};
+  verifyProgress(signed(p,resultKey.privateKey),callbackKeys,now);
+  for(const patch of [{state:'committed'},{aud:'production'},{issued_ms:now-60001},{user_id:'forged'}])assert.throws(()=>verifyProgress(signed({...p,...patch},resultKey.privateKey),callbackKeys,now));
+  assert.throws(()=>verifyProgress(signed(p,transport.privateKey),callbackKeys,now));
 });

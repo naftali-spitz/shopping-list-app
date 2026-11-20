@@ -1,0 +1,18 @@
+{
+  "id": "57d7d2d7-493c-49a1-86ba-62ae61ff88bd",
+  "at": "2026-11-20T08:54:40.384Z",
+  "scope": "actual Chrome browsers on protected feature Vercel Preview; real Auth, broker, Debian PostgreSQL and HTTPS callbacks",
+  "checks": [
+    {
+      "name": "two independent real browser sessions in one household",
+      "status": "PASS"
+    }
+  ],
+  "operation_id": "6c389ce4-8b98-4a1c-828a-4e496031e60d",
+  "correlation_id": "e25b5d1a-5ea0-400f-abda-15c25ffdf887",
+  "status": "FAIL",
+  "error": {
+    "type": "Error",
+    "message": "Authoritative confirmation timeout"
+  }
+}

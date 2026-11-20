@@ -5,10 +5,12 @@ export class Store {
   constructor(config) { this.config=config; this.pool=new pg.Pool({ ...config.db,max:2,connectionTimeoutMillis:5000,statement_timeout:5000,idle_in_transaction_session_timeout:10000,application_name:'shopping-stage2-dev' }); }
   async close() { await this.pool.end(); }
   async execute(envelope, hooks = {}) {
+    const authStarted=performance.now();
     const { command:c,hash } = this.config.protocolVersion === 2
       ? await authenticateCommand(envelope,this.config)
       : authenticate(envelope,this.config);
     validateOperation(c);
+    const dbStarted=performance.now();
     const db=await this.pool.connect();
     try {
       await db.query('BEGIN');
@@ -70,7 +72,10 @@ export class Store {
       await db.query('ROLLBACK');
       if (e.code==='23505') return this.result(c,'operation_id_conflict');
       throw e;
-    } finally { db.release(); }
+    } finally {
+      db.release();
+      if(this.config.protocolVersion===2)console.log(JSON.stringify({event:'stage3_database_trace',operation_id:c.id,correlation_id:c.correlation_id,authentication_ms:Math.round(dbStarted-authStarted),database_ms:Math.round(performance.now()-dbStarted)}));
+    }
   }
   result(c,status,data=null) { return { operation_id:c.id,household_id:c.household_id,user_id:c.user_id,correlation_id:c.correlation_id,audience:this.config.audience,status,data }; }
   async mutate(db,c) {

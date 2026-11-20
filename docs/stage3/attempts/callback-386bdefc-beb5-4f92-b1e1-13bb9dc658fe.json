@@ -1,0 +1,11 @@
+{
+  "id": "386bdefc-beb5-4f92-b1e1-13bb9dc658fe",
+  "at": "2026-11-20T11:15:13.963Z",
+  "scope": "actual protected Preview callback and durable metadata adapter; existing committed result only",
+  "checks": [],
+  "status": "FAIL",
+  "error": {
+    "type": "Error",
+    "message": "Callback security assertion failed"
+  }
+}

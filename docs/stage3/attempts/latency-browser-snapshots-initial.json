@@ -1,0 +1,12 @@
+{
+  "status": "OBSERVED",
+  "scope": "Actual browser-issued PostgreSQL snapshots, durable Supabase acceptance to callback confirmation; both timestamps from the same database clock. Not synthetic MQTT transport or browser paint latency.",
+  "query_filter": "command.type=snapshot, accepted_at>=2026-11-20T08:54:00Z, result.status=snapshot, confirmed_at not null",
+  "samples": 26,
+  "p50_ms": 2051.8,
+  "empirical_p95_ms": 2462.0,
+  "min_ms": 1579.2,
+  "max_ms": 2549.0,
+  "p99_ms": null,
+  "interpretation": "P50 is descriptive. P95 has very few tail observations and is exploratory; no reliable P95/P99 service target is established from this sample. Individual actual write/browser confirmation and controlled fault recovery are reported separately."
+}

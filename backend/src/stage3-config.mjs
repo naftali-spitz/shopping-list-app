@@ -9,6 +9,7 @@ export function loadStage3Config() {
   const path = realpathSync('.stage0-runtime/stage3-config.json');
   assert.ok(path.startsWith(`${root}/.stage0-runtime/`));
   assert.equal(statSync(path).mode & 0o777,0o600);
+  assert.equal(statSync(path).uid,process.getuid());
   const extra = JSON.parse(readFileSync(path));
   assert.equal(extra.environment,'shopping-stage3-development');
   assert.equal(extra.identity.issuer,DEV_ISSUER);
