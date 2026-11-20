@@ -12,5 +12,6 @@
     "Durable pending IDs/status lookup/sync in Stage3-5; no saved UI on MQTT PUBACK",
     "Real dev authentication/frontends/multidevice/end-to-end/clock/key lifecycle testing in later stages"
   ],
-  "stage2_started": false
+  "stage2_started_at_decision": false,
+  "stage2_progress": "See ../stage2/gate.json"
 }

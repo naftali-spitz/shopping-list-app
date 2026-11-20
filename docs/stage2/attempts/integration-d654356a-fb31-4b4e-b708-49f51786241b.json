@@ -1,0 +1,20 @@
+{
+  "status": "FAIL",
+  "run_id": "d654356a-fb31-4b4e-b708-49f51786241b",
+  "tested_at": "2026-11-20T06:33:37.045Z",
+  "database": "shopping_stage0",
+  "port": 55439,
+  "actual_postgresql": true,
+  "identity": "Cryptographically verified synthetic issuer only; no real Google/browser sign-in.",
+  "checks": [
+    {
+      "test": "least-privilege runtime and database targets",
+      "passed": true,
+      "actual_postgresql": true
+    }
+  ],
+  "error": {
+    "type": "AssertionError",
+    "code": "ERR_ASSERTION"
+  }
+}

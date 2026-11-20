@@ -18,6 +18,6 @@
   "production_secret_values_compared": false,
   "production_value_evidence": "Scope-only PATCH requests supplied no value field; provider secret values are write-only and cannot be independently compared.",
   "browser_key_sha256": "983f2c7a5bf5593f86e7945fc27f67b017165dc85951a801ca1d585197ea5a92",
-  "verified_at": "2026-11-20T04:57:32.862292+00:00",
+  "verified_at": "2026-11-20T06:48:27.047068+00:00",
   "scope": "read-only provider metadata/config/HTML/static; not a Stage 0 GO"
 }

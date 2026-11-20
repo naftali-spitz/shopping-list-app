@@ -1,0 +1,124 @@
+{
+  "roles": [
+    {
+      "rolname": "shopping_stage2_dispatcher",
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolbypassrls": false,
+      "rolcanlogin": true
+    },
+    {
+      "rolname": "shopping_stage2_owner",
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolbypassrls": false,
+      "rolcanlogin": false
+    },
+    {
+      "rolname": "shopping_stage2_runtime",
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolbypassrls": false,
+      "rolcanlogin": true
+    }
+  ],
+  "tables": [
+    {
+      "relname": "categories",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "household_invites",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "household_members",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "households",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "operations",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "principals",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "products",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "result_outbox",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "schema_migrations",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false,
+      "owner": "shopping_stage2_owner"
+    },
+    {
+      "relname": "shopping_history",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "owner": "shopping_stage2_owner"
+    }
+  ],
+  "functions": [
+    {
+      "proname": "authorized",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog, shopping"
+      ]
+    },
+    {
+      "proname": "current_household_id",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog"
+      ]
+    },
+    {
+      "proname": "current_user_id",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog"
+      ]
+    }
+  ],
+  "privileges": {
+    "runtime_create_schema": false,
+    "dispatcher_update_business": false,
+    "runtime_connect_other_database": false
+  },
+  "settings": {
+    "port": "55439",
+    "listen": "127.0.0.1",
+    "version": "17.12 (Debian 17.12-0+deb13u1)"
+  },
+  "tested_at": "2026-11-20T06:48:39.954Z"
+}

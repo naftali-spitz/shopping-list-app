@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "encrypted_backup": "shopping-stage2-2026-11-20T06-48-05-201Z-2721e683-83b7-4922-b1b1-9f6dedbfb371.s2enc",
+  "encryption": "AES-256-GCM authenticated before restore",
+  "source_database": "shopping_stage0",
+  "port": 55439,
+  "retention": "7 encrypted local backups",
+  "off_host_copy": false,
+  "key_location": "owner-only co-located runtime; does not cover host/disk loss",
+  "actual_postgresql": true,
+  "restore_database": "shopping_stage2_restore",
+  "fingerprints": {
+    "schema_migrations": {
+      "digest": "d100b32189c488573909aa08eacc6a94",
+      "rows": 3
+    },
+    "principals": {
+      "digest": "bef87ab9a2587c652349e6eb3a52674f",
+      "rows": 3
+    },
+    "households": {
+      "digest": "d9ef72002068bc123b1bb133ef0a8636",
+      "rows": 2
+    },
+    "household_members": {
+      "digest": "ab034e6af7efd1e60bce0b52885e818f",
+      "rows": 3
+    },
+    "categories": {
+      "digest": "ee93b21a2c95c4d891b03dc4c6131016",
+      "rows": 11
+    },
+    "products": {
+      "digest": "bb4f1be3ebe2ab4a1f69885ee33b0306",
+      "rows": 22
+    },
+    "shopping_history": {
+      "digest": "94cd8297f8dda072e4a775cce195fa6d",
+      "rows": 7
+    },
+    "household_invites": {
+      "digest": "d751713988987e9331980363e24189ce",
+      "rows": 0
+    },
+    "operations": {
+      "digest": "b5dd9c95e0025502f186d1d75fcb4dd8",
+      "rows": 68
+    },
+    "result_outbox": {
+      "digest": "356ed17f46e6124d284f8411a889daf4",
+      "rows": 68
+    }
+  },
+  "integrity_match": true,
+  "tampered_ciphertext_rejected_before_restore": true,
+  "wrong_key_rejected_before_restore": true
+}

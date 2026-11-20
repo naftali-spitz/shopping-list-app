@@ -1,0 +1,25 @@
+{
+  "decision": "CONDITIONAL GO",
+  "scope": "Stage2 isolated PostgreSQL core complete; Stage3 not started; no production approval",
+  "decided_at": "2026-11-20T06:52:40.962643+00:00",
+  "stage1_gate": "NAF-165 Done2026-11-20T06:25:58Z",
+  "evidence": {
+    "integration": "docs/stage2/attempts/integration-e21d4433-b2b2-47d4-996f-98ca15ca1bda.json",
+    "mqtt": "docs/stage2/attempts/mqtt-f7709e96-449d-41c6-847c-e3ad940d4883.json",
+    "backup": "docs/stage2/attempts/backup-e3347338-7714-4dc5-a398-2201850c862f.json",
+    "service": "docs/stage2/attempts/service-6852c5cc-e96d-40a3-92f3-e857c2a0527e.json"
+  },
+  "offline_tests": 64,
+  "actual_postgresql_test_groups": 12,
+  "actual_live_mqtt_postgresql_test_groups": 5,
+  "migration_count": 4,
+  "known_limits": [
+    "Synthetic signed fixture issuer, not real browser/dev OAuth",
+    "No Vercel callback or browser pending/realtime/multidevice implementation yet",
+    "Household onboarding/invite/name-helper adapters remain Stage4 parity work",
+    "Backups/key local only; legacy owner-only plaintext dumps preserved; no off-host DR",
+    "Clock step detection does not prove cross-host initial skew; key/issuer/token lifecycle obligations remain",
+    "Owned-stream interruption tests are not real ISP/router/host reboot tests",
+    "Original2s broker-session diagnostic remains FAIL and exact cleanup mechanism is unconfirmed"
+  ]
+}

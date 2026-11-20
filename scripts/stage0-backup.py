@@ -12,6 +12,15 @@ BIN = Path('/usr/lib/postgresql/17/bin')
 
 def main():
     os.umask(0o077)
+    if (RUNTIME / 'stage2-config.json').exists():
+        # The existing dedicated timer now writes authenticated encrypted Stage2
+        # backups. The helper fixes all DB targets and never prints credentials.
+        result = subprocess.run(['/usr/bin/node', 'backend/scripts/backup.mjs'],
+                                cwd=ROOT, capture_output=True, text=True)
+        if result.returncode:
+            raise RuntimeError('Encrypted isolated Stage2 backup failed; inspect private runtime logs')
+        print(result.stdout.strip())
+        return
     # The source and login are fixed; no shell or caller-controlled DB target.
     env = {k: v for k, v in os.environ.items() if not k.startswith('PG')}
     env['PGPASSWORD'] = (RUNTIME / 'app-password').read_text()

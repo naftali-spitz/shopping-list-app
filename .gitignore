@@ -45,3 +45,4 @@ next-env.d.ts
 /.stage0-runtime*/
 
 /scripts/__pycache__/
+/backend/node_modules/

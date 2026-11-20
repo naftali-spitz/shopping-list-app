@@ -116,6 +116,31 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Evidence and review
 
+### Stage2 backend boundaries
+
+- Local backend code lives in backend/; it is excluded from Vercel uploads.
+  Use only .stage0-runtime/stage2-config.json (0600) and the fixed development
+  127.0.0.1:55439/shopping_stage0 target. Runtime/dispatcher roles are separate
+  non-superusers; schema owner is NOLOGIN. Never substitute system5432 or a URL.
+- Synthetic Ed25519 fixture JWT issuer is Stage2 test identity ONLY. Real browser
+  dev authentication/Vercel API/callback/pending UI/multi-device sync remain
+  Stage3–5. Never treat a supplied user/household or MQTT token as identity.
+- Normal recovery uses session expiry1800s and message expiry300s. Keep current
+  membership, canonical operation-ID binding, immutable durable results, expected
+  versions and atomic outbox mandatory. Broker ACK is never frontend saved.
+- New enabled user unit shopping-list-stage2-backend.service references this exact
+  worktree; preserve its private config/keys/ledger/backups. Stop/disable ONLY it
+  for backend rollback, leaving PostgreSQL and unrelated services intact.
+- Existing shopping-list-stage0-backup.timer now delegates to encrypted Stage2
+  snapshots through scripts/stage0-backup.py. New backups retain7 AES-GCM copies;
+  legacy owner-only Stage0 backups remain. Key is co-located; no off-host DR claim.
+- Fresh rebuild/restore may recreate ONLY marked shopping_stage2_rebuild and
+  shopping_stage2_restore in the isolated cluster, never overwrite the main dev
+  DB. Use additive checksum migrations, not destructive schema rollback.
+- Stage2 evidence and remaining integration obligations: docs/stage2/README.md,
+  inventory.md and gate.json. Do not claim full frontend consistency from these
+  database/transport tests or begin Stage3 work incidentally.
+
 - Record actual SHA/resource IDs, commands, test results, changes, failures,
   rollback and limitations in each Linear issue. Mark Done only on acceptance.
   Keep NAF-160 NO-GO while any critical broker/security prerequisite is missing.
