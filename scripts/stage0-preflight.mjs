@@ -165,7 +165,7 @@ function main() {
     process.exitCode = 1;
     return;
   }
-  console.log(JSON.stringify({ status: 'PASS', scope: `${offline ? 'offline placeholders' : 'verified dev configuration'} only; Stage 0 remains NO-GO until all prerequisites pass`, ...evidence }));
+  console.log(JSON.stringify({ status: 'PASS', scope: `${offline ? 'offline placeholders' : 'verified dev configuration'} only; Stage1 requires explicit GO/Done in Linear NAF-160`, ...evidence }));
   if (command.length) {
     const child = spawnSync(command[0], command.slice(1), { cwd, env, stdio: 'inherit' });
     process.exitCode = child.status ?? 1;

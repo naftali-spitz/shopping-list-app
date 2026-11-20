@@ -1,0 +1,29 @@
+{
+  "account_id": 2617576,
+  "counters": {
+    "mqtt": {
+      "messages": 2763,
+      "messages_limit": 20000,
+      "retained_storage": 128,
+      "retained_storage_limit": 102400,
+      "retained_storage_total": 128,
+      "sessions": 2,
+      "sessions_limit": 50,
+      "sessions_storage": 0,
+      "sessions_storage_limit": 102400,
+      "subscriptions_count": 0,
+      "subscriptions_count_limit": 0
+    },
+    "api": {
+      "calls": 0,
+      "calls_limit": 200,
+      "tokens": 5,
+      "tokens_limit": 100,
+      "traffic": 768023,
+      "traffic_limit": 52428800
+    }
+  },
+  "sla": 0,
+  "enabled": true,
+  "retrieved_at": "2026-11-20T01:03:29.782Z"
+}

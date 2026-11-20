@@ -19,7 +19,7 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: node --test scripts/stage0-preflight.test.mjs
-      - run: npx eslint scripts/stage0-preflight.mjs scripts/stage0-preflight.test.mjs scripts/stage0-mqtt.mjs
+      - run: npx eslint scripts/stage0-preflight.mjs scripts/stage0-preflight.test.mjs scripts/stage0-mqtt.mjs scripts/stage1-mqtt.mjs scripts/stage1-failures.mjs scripts/stage1-security.mjs
       # No provider credentials or secrets are exposed to this job. The existing
       # application compiles with an inert loopback endpoint for CI only.
       - run: npm run build

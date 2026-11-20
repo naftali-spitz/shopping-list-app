@@ -1,0 +1,19 @@
+{
+  "initial_connack": {
+    "session_present": false,
+    "reason_code": 0,
+    "maximum_qos": 1
+  },
+  "stale_id": "ac55e4d5-5fa1-46a8-b0f8-c575a0d19d2b",
+  "fresh_connack": {
+    "session_present": true,
+    "reason_code": 0,
+    "maximum_qos": 1
+  },
+  "control_id": "5d7cca05-d793-4c69-add7-8fbf6fba0742",
+  "seen": [
+    "ac55e4d5-5fa1-46a8-b0f8-c575a0d19d2b",
+    "5d7cca05-d793-4c69-add7-8fbf6fba0742"
+  ],
+  "tested_at": "2026-11-20T01:04:32.261Z"
+}

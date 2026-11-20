@@ -1,9 +1,9 @@
 # Stage 0 Environment Verification & Readiness
 
-2026-11-20. **All technical Stage 0 prerequisites pass. Final GO requires the
-NAF-160 decision after evidence review, prerequisite completion and feature CI.
-No Stage 1 work was performed to produce this report.** Earlier NO-GO snapshots
-remain in Git/Linear history; the final native Linear report records the gate.
+2026-11-20. **GO: all11 Stage0 prerequisites are Done; NAF-160 completed at
+00:54:50Z after feature CI/Preview passed on b843df7.** No Stage1 work preceded
+that decision. Earlier NO-GO snapshots remain in history. See gate.json and the
+final native Linear report. This does not authorize production migration.
 
 ## Verified environment
 
@@ -34,7 +34,7 @@ remain in Git/Linear history; the final native Linear report records the gate.
 | NAF-157 | PASS: actual cloud/env/DB and broker privileges, fixed expiry, private secret storage, TLS and denial matrix; see security.md |
 | NAF-158 | PASS: safe Preview rollback and return, custom-format synthetic DB restore, automatic crash recovery, scheduled local backups; off-host limitation documented |
 | NAF-159 | PASS: tooling/policy/build/browser checks and development CI pass; draft PR16 into develop |
-| NAF-160 | Technical checks PASS; final decision is recorded in Linear after all11 prerequisites are Done and feature CI passes |
+| NAF-160 | GO: all11 prerequisites Done; feature CI/Preview PASS, explicit decision in Linear |
 
 ## Access repair and approved scope changes
 

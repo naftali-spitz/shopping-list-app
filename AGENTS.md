@@ -26,7 +26,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
   Production: `inebdmynrfwmmxcyziyi` — NO writes or user-data copies.
   Supabase is an isolated interim baseline, not a required final dev backend.
 - NAF-149–159 must pass, then NAF-160 must record GO and be Done before Stage1+.
-  Broker authorization/ACL preflight now passes; consult NAF-160 for the final decision.
+  Stage0 passed: NAF-160 GO/Done2026-11-20T00:54:50Z, gate.json records evidence.
+  Stage1 NAF-165 is currently NO-GO: session-expiry discrepancy in NAF-162.
+  Do not begin Stage2 until NAF-161–164 pass and NAF-165 records GO/Done.
   Local guard/CI/build success alone does not authorize Stage1 or migration.
 - No main checkout/commit/push/merge, production deploy/promotion/domain/secret
   changes, shared token changes, paid plan or unrelated service disruption.
