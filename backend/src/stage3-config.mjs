@@ -17,6 +17,7 @@ export function loadStage3Config() {
   assert.equal(extra.protocolVersion,2);
   assert.match(extra.clientId,/^naf-s3-listener-[a-f0-9-]+$/);
   assert.ok(Object.keys(extra.commandKeys).length>0);
+  if(extra.resultKid!==undefined)assert.match(extra.resultKid,/^callback-[a-z0-9-]+$/);
   assert.ok(!JSON.stringify(extra.commandKeys).includes('PRIVATE KEY'));
   const config = { ...base, ...extra, db:base.db, dispatcher:base.dispatcher,
     mqtt:{...base.mqtt,clientId:extra.clientId}, healthFile:'.stage0-runtime/stage3-health.json' };

@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import urllib.request
 import urllib.error
+import time
 from uuid import uuid4
 from datetime import datetime, timezone
 
@@ -20,6 +21,7 @@ BRANCH = 'feature/flespi-home-backend'
 PREVIEW = 'https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app'
 SUPABASE = 'https://njomxqthjglqesxchlbm.supabase.co'
 OPERATION = '860fa6b5-f3db-49bf-a100-9e2fc6c98100'
+GIT_PREVIEW = 'https://shopping-list-hutr0s1wf-0012ab-5576s-projects.vercel.app'
 os.umask(0o077)
 report = {'id': str(uuid4()), 'at': datetime.now(timezone.utc).isoformat(), 'scope': 'actual feature-branch Preview flag disable/re-enable and deployments; production excluded', 'checks': []}
 private = ROOT / '.stage0-runtime'
@@ -39,7 +41,11 @@ def set_flag(value):
     cli(['env','update','SHOPPING_STAGE3_ENABLED','--environment','preview','--git-branch',BRANCH,'--project',PROJECT,'--type','config','--yes'], value)
 def deploy(phase):
     print(json.dumps({'phase': phase, 'status': 'deploying_feature_preview'}), flush=True)
-    raw = cli(['deploy','--environment','preview','--project',PROJECT,'--yes'])
+    # Preserve the verified GitHub deployment context and branch-scoped vars.
+    # Raw CLI uploads lack the required GitHub owner/repository environment.
+    source=json.loads(cli(['api','/v13/deployments/dpl_6XgtMiYa7i5zPo4BxskBsFVTugBP?teamId='+TEAM,'--method','GET']))
+    assert source['projectId']==PROJECT and source.get('target')!='production' and source['meta']['githubCommitRef']==BRANCH
+    raw = cli(['redeploy',GIT_PREVIEW,'--environment','preview'])
     (private / f'rollback-{report["id"]}-{phase}.log').write_text(raw)
     import re
     urls = re.findall(r'https://[a-z0-9-]+\.vercel\.app', raw)
@@ -48,6 +54,10 @@ def deploy(phase):
     dep = json.loads(cli(['inspect',url,'--json']))
     assert dep['readyState']=='READY' and dep.get('target')!='production'
     report[phase] = {'url': url, 'deployment_id': dep['id']}
+    # CLI uploads do not necessarily advance Git branch aliases. Explicitly
+    # switch only this verified development alias, never a production domain.
+    assert PREVIEW=='https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app'
+    cli(['alias','set',url,PREVIEW.removeprefix('https://')])
 def oidc():
     path=private/'stage3-callback.env'
     if not path.exists(): path=private/'audit-feature-flespi-home-backend.env'
@@ -73,13 +83,20 @@ def stored():
     assert code==200
     result=json.loads(body)['result'];assert result['status']=='committed'
     return hashlib.sha256(json.dumps(result,sort_keys=True).encode()).hexdigest()
+def api_state(expected):
+    deadline=time.monotonic()+30
+    while time.monotonic()<deadline:
+        code,body=request(PREVIEW+'/api/stage3',{'action':'status','id':OPERATION,'household_id':household})
+        if code==expected:return code,body
+        time.sleep(1)
+    raise AssertionError(f'Expected Preview API HTTP {expected}, got {code}')
 changed=False
 try:
     subprocess.run(['node','scripts/stage0-preflight.mjs'],cwd=ROOT,check=True,capture_output=True)
     first=project();assert first['id']==PROJECT and first['accountId']==TEAM and first['link']['productionBranch']=='main'
     baseline=production_metadata(first);fingerprint=stored()
     set_flag('0');changed=True;deploy('disabled')
-    code,_=request(PREVIEW+'/api/stage3',{'action':'status','id':OPERATION,'household_id':household});assert code==404
+    api_state(404)
     report['checks'].append({'name':'actual Preview API disabled by feature-only flag','status':'PASS'})
     code,body=request(PREVIEW+'/');assert code==200 and 'FutureCart' in body
     report['checks'].append({'name':'original development app remains available','status':'PASS'})
@@ -92,13 +109,16 @@ finally:
     if changed:
         try:
             set_flag('1');deploy('restored')
-            code,body=request(PREVIEW+'/api/stage3',{'action':'status','id':OPERATION,'household_id':household})
+            code,body=api_state(200)
             assert code==200 and json.loads(body)['result']['status']=='committed'
             assert stored()==fingerprint
             assert production_metadata(project())==baseline
             report['checks'].append({'name':'actual Preview restored and committed result still retrievable; production deployment/secret metadata unchanged','status':'PASS'})
         except Exception as error:
             report['status']='FAIL';report['restore_error']={'type':type(error).__name__,'message':str(error)}
+            # Fail closed on the test outcome, but recover the known-good alias.
+            cli(['alias','set',GIT_PREVIEW,PREVIEW.removeprefix('https://')])
+            report['fallback_alias_restored_to_verified_git_preview']=True
     (ROOT/f'docs/stage3/attempts/rollback-{report["id"]}.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report),flush=True)
     if report.get('status')!='PASS':raise SystemExit(1)

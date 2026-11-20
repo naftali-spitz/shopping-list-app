@@ -1,0 +1,9 @@
+{
+  "id": "f1d8572e-dd7b-4345-826e-a1adb76c91b9",
+  "at": "2026-11-20T11:26:12.052Z",
+  "scope": "actual feature Preview access-token rejection and official CLI refresh; no protection settings changed",
+  "status": "PASS",
+  "refreshed": true,
+  "callback": "existing committed result delivered idempotently",
+  "private_file_mode": "0600"
+}

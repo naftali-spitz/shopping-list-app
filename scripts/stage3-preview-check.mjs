@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFileSync,writeFileSync } from 'node:fs';
+import { readFileSync,writeFileSync,existsSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 export const PREVIEW='https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app';
 export function previewHeaders() {
-  const env=readFileSync('.stage0-runtime/audit-feature-flespi-home-backend.env','utf8');
+  const env=readFileSync(existsSync('.stage0-runtime/stage3-callback.env')?'.stage0-runtime/stage3-callback.env':'.stage0-runtime/audit-feature-flespi-home-backend.env','utf8');
   const raw=env.split('\n').find(l=>l.startsWith('VERCEL_OIDC_TOKEN='))?.split('=').slice(1).join('=');
   assert.ok(raw,'Missing short-lived protected Preview token');
   const token=raw.startsWith('"')?JSON.parse(raw):raw;
@@ -19,7 +19,7 @@ export function intent(h,type,payload,version) {
 }
 export async function confirmed(i,s,timeout=60000,observed=[]) {
   const deadline=Date.now()+timeout;
-  while(Date.now()<deadline){const response=await api({action:'status',id:i.id,household_id:i.household_id},s);observed.push(response.data.state||response.data.error);if(response.data.result)return response.data;await new Promise(resolve=>setTimeout(resolve,1000));}
+  while(Date.now()<deadline){const response=await api({action:'status',id:i.id,household_id:i.household_id},s);if([401,403].includes(response.status))throw new Error(`Authenticated status rejected HTTP ${response.status}`);observed.push(response.data.state||response.data.error);if(response.data.result)return response.data;await new Promise(resolve=>setTimeout(resolve,1000));}
   throw new Error('Authoritative confirmation timeout');
 }
 if(process.argv[1]?.endsWith('stage3-preview-check.mjs')) {

@@ -19,7 +19,7 @@ config['callbackUrl'] = 'https://shopping-list-app-git-feature-fles-b8db25-0012a
 (ROOT / '.stage0-runtime/stage3-config.json').write_text(json.dumps(config))
 server = {'projectId': PROJECT, 'topic': 'shopping-poc/naf-stage0-041d4f122bdd/commands',
           'publisherToken': flespi['publisher_token'], 'signer': signer,
-          'commandKeys': config['commandKeys'], 'callbackKeys': {'callback-1': config['resultPublicKey']}}
+          'commandKeys': config['commandKeys'], 'callbackKeys': {config.get('resultKid', 'callback-1'): config['resultPublicKey']}}
 (ROOT / '.stage0-runtime/stage3-vercel-config.json').write_text(json.dumps(server))
 for name, value, kind in [('SHOPPING_STAGE3_CONFIG', json.dumps(server), 'secret'), ('SHOPPING_STAGE3_ENABLED', '1', 'config')]:
     result = subprocess.run([CLI, 'env', 'add', name, '--environment', 'preview', '--git-branch', BRANCH,

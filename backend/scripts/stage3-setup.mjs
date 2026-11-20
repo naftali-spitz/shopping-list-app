@@ -17,7 +17,7 @@ if(!existsSync('.stage0-runtime/stage3-config.json')) {
   writeFileSync('.stage0-runtime/stage3-vercel-keys.json',JSON.stringify({kid:'command-1',privateKey:transport.privateKey}),{mode:0o600,flag:'wx'});
   writeFileSync('.stage0-runtime/stage3-config.json',JSON.stringify({environment:'shopping-stage3-development',protocolVersion:2,
     audience:COMMAND_AUDIENCE,identity:{issuer:DEV_ISSUER},publishableKey:variables.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    commandKeys:{'command-1':transport.publicKey},resultPrivateKey:result.privateKey,resultPublicKey:result.publicKey,
+    commandKeys:{'command-1':transport.publicKey},resultKid:'callback-1',resultPrivateKey:result.privateKey,resultPublicKey:result.publicKey,
     clientId:`naf-s3-listener-${randomUUID()}`}),{mode:0o600,flag:'wx'});
 }
 const pool=new Pool({host:'127.0.0.1',port:55439,database:'shopping_stage0',user:'stage0_owner',password:readFileSync('.stage0-runtime/admin-password','utf8').trim(),max:1});

@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { readFileSync,writeFileSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
-import { PREVIEW,previewHeaders,confirmed } from './stage3-preview-check.mjs';
+import { execFileSync } from 'node:child_process';
+import { PREVIEW,previewHeaders,confirmed,api,intent } from './stage3-preview-check.mjs';
 const require=createRequire('/home/naf-w/.local/share/shopping-list-tools/package.json');
 const {chromium}=require('playwright-core');
 const accounts=JSON.parse(readFileSync('.stage0-runtime/stage3-accounts.json'));
@@ -78,6 +79,24 @@ try {
   record('controlled out-of-order older snapshot cannot overwrite newer household revision');
   await b.page.unroute(PREVIEW+'/api/stage3');
   await b.page.reload();await b.page.getByText(name,{exact:true}).waitFor();record('refresh retrieves authoritative state after conflict');
+  const selectedHousehold=await b.page.getByLabel('Household',{exact:true}).inputValue();
+  const browserSession=await b.page.evaluate(()=>JSON.parse(localStorage.getItem('sb-njomxqthjglqesxchlbm-auth-token')));
+  let paused=false;
+  try {
+    execFileSync('python3',['scripts/stage3-service.py','stop'],{stdio:['ignore','pipe','pipe']});paused=true;
+    const expiredIntent=intent(selectedHousehold,'category.create',{id:randomUUID(),name:'Expired browser proof',icon:'general'},0);
+    expiredIntent.expires_ms=expiredIntent.issued_ms+15000;
+    assert.equal((await api({action:'command',intent:expiredIntent},browserSession)).status,202);
+    await new Promise(resolve=>setTimeout(resolve,Math.max(0,expiredIntent.expires_ms-Date.now()+1500)));
+    await b.page.evaluate(({key,intent})=>localStorage.setItem(key,JSON.stringify([{intent,state:'Offline/pending'}])),{key:`shopping-stage3-v2:${accounts[1].id}:${selectedHousehold}`,intent:expiredIntent});
+    await b.page.reload();await state(b.page,expiredIntent.id,'Conflict requiring reconciliation');
+    const reconciliationAccepted=b.page.waitForResponse(r=>{try{return r.url().endsWith('/api/stage3')&&r.request().postDataJSON().intent?.type==='operation.status'&&r.status()===202;}catch{return false;}});
+    await b.page.locator(`[data-operation-id="${expiredIntent.id}"]`).getByRole('button',{name:'Reconcile',exact:true}).click();
+    await reconciliationAccepted;
+    execFileSync('python3',['scripts/stage3-service.py','restart'],{stdio:['ignore','pipe','pipe']});paused=false;
+    await state(b.page,expiredIntent.id,'Failed');report.expired_operation_id=expiredIntent.id;report.expired_record_id=expiredIntent.payload.id;
+    record('controlled listener pause: expired unexecuted intent is safely reconciled and shown Failed');
+  }finally{if(paused)execFileSync('python3',['scripts/stage3-service.py','restart'],{stdio:['ignore','pipe','pipe']});}
   const c=await login(2);assert.equal(await c.page.getByText(name,{exact:true}).count(),0);record('other-household browser receives no shared-household product');
   await a.page.screenshot({path:`docs/stage3/attempts/browser-${report.id}.png`,fullPage:true});
   report.status='PASS';

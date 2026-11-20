@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "project": "njomxqthjglqesxchlbm",
+  "forced_rls": true,
+  "anon_table_select": false,
+  "authenticated_table_select": false,
+  "anon_session_rpc": false,
+  "authenticated_session_rpc": true,
+  "authenticated_accept_rpc": false,
+  "authenticated_finalize_rpc": false,
+  "authenticated_progress_rpc": false,
+  "rate_check": {
+    "scope": "Actual service-role durable acceptance RPC inside a rolled-back development SQL transaction; not an API load benchmark",
+    "fixture_rows": 60,
+    "next_new_operation": "rejected with SQLSTATE54000",
+    "fixture_rows_retained": 0
+  }
+}

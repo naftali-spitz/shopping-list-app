@@ -1,0 +1,14 @@
+{
+  "id": "70395755-635b-4b09-bb87-f00faa7dfeb6",
+  "at": "2026-11-20T12:02:09.500Z",
+  "operation_id": "4e87daeb-cdf9-4729-9be0-be78c9e86d56",
+  "correlation_id": "f77e6a1f-ec72-465b-997d-252910103fb2",
+  "scope": "controlled local publisher suppresses actual broker PUBACK; durable acceptance, real MQTT/DB/callback, hosted Preview same-ID retry. No hosted Vercel socket was manipulated.",
+  "counts": {
+    "ledger": 1,
+    "effect": 1
+  },
+  "broker_ack_observed_and_suppressed": true,
+  "hosted_same_id_retry": "prior authoritative commit",
+  "status": "PASS"
+}
