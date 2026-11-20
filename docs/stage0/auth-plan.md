@@ -86,9 +86,11 @@ cases before any later integration. Do not disable RLS to silence warnings.
 | Replayed request/callback, wrong audience | Reject or return prior durable result | Later integration test |
 | Cross-device event/result as B | No A payload or result leakage | Later integration test |
 
-No authentication bypass is proposed. Google provider visibility, preview scope
-and actual sign-in remain NAF-151/152/157/159 blockers; this issue's deliverable
-is the documented plan and inventory, not an implemented replacement.
+No authentication bypass is proposed. The later environment audit verified
+Preview isolation and disabled dev Google provider. Actual Google sign-in is an
+explicit nonblocking baseline limitation for this transport/environment stage;
+a working trusted identity flow remains required before application integration.
+This issue delivers a design and inventory, not an implemented replacement.
 
 Follow-up environment verification: dev `/auth/v1/settings` returns200 with
 Google provider disabled. Anonymous Preview shell smoke passes; no Google sign-in

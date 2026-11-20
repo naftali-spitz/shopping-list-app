@@ -24,5 +24,16 @@
     "Explicit expiry; no production/shared token changes",
     "Store credentials only in private0600 local file; never chat or Linear"
   ],
-  "state": "BLOCKED: existing token invalid; account-owner authorization required"
+  "state": "PASS: actual account, ACL, TLS, exchange/reconnect and negative delivery/publish tests verified",
+  "account_id": 2617576,
+  "publisher_token_id": 114509462,
+  "listener_token_id": 114509463,
+  "expire": 1795719394,
+  "ttl": 0,
+  "origins": [],
+  "evidence": [
+    "mqtt-preflight.json",
+    "flespi-limits.json"
+  ],
+  "rotation": "Renew only dedicated dev tokens before 2026-11-26T18:56:34Z; never change shared tokens"
 }

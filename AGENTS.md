@@ -26,7 +26,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
   Production: `inebdmynrfwmmxcyziyi` — NO writes or user-data copies.
   Supabase is an isolated interim baseline, not a required final dev backend.
 - NAF-149–159 must pass, then NAF-160 must record GO and be Done before Stage1+.
-  Current critical blocker is flespi authorization/ACL verification (NAF-154/157).
+  Broker authorization/ACL preflight now passes; consult NAF-160 for the final decision.
   Local guard/CI/build success alone does not authorize Stage1 or migration.
 - No main checkout/commit/push/merge, production deploy/promotion/domain/secret
   changes, shared token changes, paid plan or unrelated service disruption.
@@ -43,7 +43,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
   after six hours; regenerate with `python3 scripts/stage0-vercel-audit.py`.
   This supplementary local guard is not remote IAM or a Stage0 GO decision.
 - Preview/default, develop overrides and Development credentials are isolated.
-  Original production variables retain their IDs/values and production-only scope.
+  Original production variable records retain their IDs and production-only scope.
+  Scope-only requests submitted no value changes; write-only secret plaintext
+  cannot be independently compared. Never hash redacted values as content proof.
   Do not undo that isolation. Before any further change, inspect actual scopes
   without printing values; updating a shared row changes ALL of its environments.
 - Keep passwords, tokens, JWTs, env files, auth state and DB dumps out of Git,
@@ -59,6 +61,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
   expiry and denial outside the namespace. Credential input is a private local
   source only, never chat. No broker tests with shared/master credentials. Do not
   reuse existing listener IDs. QoS ACK is not proof of database commit.
+  Tokens114509462/114509463 expire2026-11-26T18:56:34Z, fixed expiry/ttl0,
+  backend-only ACLs. Renew only these dev credentials before expiry. Foreign
+  subscriptions may receive successful SUBACK; verify actual delivery filtering,
+  not SUBACK alone. Temporary auditor must have only the three exact probe topics
+  and short fixed expiry; validate metadata/permissions before sending probes.
 
 ## Autonomy and tools
 
@@ -66,13 +73,15 @@ This version has breaking changes — APIs, conventions, and file structure may 
   to the user. Read latest NAF-151/159/160 before access remediation.
 - Official Vercel CLI66.2.0 is pinned in the separate user-owned installation:
   `/home/naf-w/.local/share/shopping-list-tools/node_modules/.bin/vercel`.
-  Playwright-core1.65.1 uses installed Chrome. Keep CLI-only tooling out of app deps.
+  Playwright-core1.65.1 uses installed Chrome; MQTT5.16.1 is pinned alongside it.
+  Keep CLI-only tooling out of app deps.
   Installed `--help` is command syntax authority. Use explicit current project context.
 - Initiate official login yourself if needed. Involve the owner only for required
   browser OAuth/2FA/account authorization, privileged/repository-wide policy changes,
   financial commitments or production-related exceptions. Never ask for passwords,
-  PATs or 2FA codes in chat. The user CANNOT access the Debian desktop; do not depend
-  on a browser window there for future login approval.
+  PATs or 2FA codes in chat. The owner can access Debian through NoMachine from
+  their phone and approved flespi login there. Inspect only the intended service
+  page; never read unrelated browser tabs or account authentication inputs.
 - Prior explicit approvals: main/develop PR protections (administrators enforced,
   zero reviewers, force/deletion denied), removal of Preview from shared env scopes
   while retaining production values, and lingering for naf-w. Do not request these

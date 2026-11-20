@@ -78,7 +78,7 @@ test('CLI rejects original checkout before loading its .env.local', () => {
 });
 const now = Date.now();
 const link = { projectId: VERCEL_PROJECT_ID, orgId: VERCEL_TEAM_ID, projectName: 'shopping-list-app' };
-const provider = { status: 'PASS', project_id: VERCEL_PROJECT_ID, team_id: VERCEL_TEAM_ID, preview_url: DEV_URL, repository: 'naftali-spitz/shopping-list-app', production_branch: 'main', development_base: 'develop', preview_defaults_isolated: true, production_deployment_unchanged: true, production_secret_fingerprints_unchanged: true, bundle_supabase_hosts: [`${DEV_REF}.supabase.co`], verified_at: new Date(now).toISOString(), browser_key_sha256: createHash('sha256').update(dev.NEXT_PUBLIC_SUPABASE_ANON_KEY).digest('hex') };
+const provider = { status: 'PASS', project_id: VERCEL_PROJECT_ID, team_id: VERCEL_TEAM_ID, preview_url: DEV_URL, repository: 'naftali-spitz/shopping-list-app', production_branch: 'main', development_base: 'develop', preview_defaults_isolated: true, production_deployment_unchanged: true, production_secret_records_preserved: true, production_secret_values_compared: false, bundle_supabase_hosts: [`${DEV_REF}.supabase.co`], verified_at: new Date(now).toISOString(), browser_key_sha256: createHash('sha256').update(dev.NEXT_PUBLIC_SUPABASE_ANON_KEY).digest('hex') };
 test('fresh provider evidence and matching dev key pass scoped configuration checks', () => assert.deepEqual(validateProviderEvidence(provider, link, dev.NEXT_PUBLIC_SUPABASE_ANON_KEY, now), []));
 for (const [label, patch] of [
   ['no evidence', {}],
@@ -87,6 +87,7 @@ for (const [label, patch] of [
   ['wrong alias', { ...provider, preview_url: PROD_URL }],
   ['production bundle', { ...provider, bundle_supabase_hosts: ['inebdmynrfwmmxcyziyi.supabase.co'] }],
   ['shared preview scopes', { ...provider, preview_defaults_isolated: false }],
+  ['unsupported plaintext secret comparison claim', { ...provider, production_secret_values_compared: true }],
 ]) test(`${label} cannot authorize development execution`, () => assert.ok(validateProviderEvidence(patch, link, dev.NEXT_PUBLIC_SUPABASE_ANON_KEY, now).length));
 test('wrong local project linkage and a different opaque key are denied', () => {
   assert.ok(validateProviderEvidence(provider, { ...link, projectId: 'prj_other' }, dev.NEXT_PUBLIC_SUPABASE_ANON_KEY, now).length);

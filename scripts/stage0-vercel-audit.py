@@ -55,7 +55,7 @@ def main():
     for previous in baseline['env']:
         row = next(row for row in project['env'] if row['id'] == previous['id'])
         assert row['target'] == ['production']
-        assert hashlib.sha256(str(row.get('value')).encode()).hexdigest() == previous['opaque_value_digest']
+        assert all(row.get(key) == previous.get(key) for key in ['id', 'key', 'type', 'createdAt'])
     assert project['targets']['production']['id'] == baseline['productionDeploymentId']
     for branch in ['develop', 'feature/flespi-home-backend']:
         path = private / ('audit-' + branch.replace('/', '-') + '.env')
@@ -91,7 +91,9 @@ def main():
                 'development_base': 'develop', 'preview_url': DEV, 'deployment_id': deployment['id'],
                 'git_commit': source['gitSource']['sha'], 'static_bundles_inspected': len(paths),
                 'bundle_supabase_hosts': sorted(hosts), 'preview_defaults_isolated': True,
-                'production_deployment_unchanged': True, 'production_secret_fingerprints_unchanged': True,
+                'production_deployment_unchanged': True, 'production_secret_records_preserved': True,
+                'production_secret_values_compared': False,
+                'production_value_evidence': 'Scope-only PATCH requests supplied no value field; provider secret values are write-only and cannot be independently compared.',
                 'browser_key_sha256': hashlib.sha256(expected['NEXT_PUBLIC_SUPABASE_ANON_KEY'].encode()).hexdigest(),
                 'verified_at': datetime.now(timezone.utc).isoformat(),
                 'scope': 'read-only provider metadata/config/HTML/static; not a Stage 0 GO'}

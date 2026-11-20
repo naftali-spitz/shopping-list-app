@@ -1,8 +1,9 @@
 # Stage 0 Environment Verification & Readiness
 
-2026-11-19. **NO-GO: NAF-154 broker authorization and NAF-157 broker security
-checks remain incomplete. Stage 1 has not started.** This report supersedes the
-initial access-blocked snapshots, retained in Git/Linear history.
+2026-11-20. **All technical Stage 0 prerequisites pass. Final GO requires the
+NAF-160 decision after evidence review, prerequisite completion and feature CI.
+No Stage 1 work was performed to produce this report.** Earlier NO-GO snapshots
+remain in Git/Linear history; the final native Linear report records the gate.
 
 ## Verified environment
 
@@ -16,7 +17,7 @@ initial access-blocked snapshots, retained in Git/Linear history.
 | Supabase baseline | FutureCart Dev njomxqthjglqesxchlbm | inebdmynrfwmmxcyziyi never used for SQL/test writes |
 | Local PostgreSQL | 127.0.0.1:55439, shopping_stage0, shopping_stage0_app | Existing localhost:5432, shopping_poc and cashflow_engine untouched |
 | Debian | debian, Debian13.7, unprivileged uid1000 naf-w | No shared service stopped; no host reboot/firewall change |
-| flespi | Reserved shopping-poc/naf-stage0-041d4f122bdd | No broker message or token mutation; saved credential invalid |
+| flespi | Reserved shopping-poc/naf-stage0-041d4f122bdd | Only new dedicated dev ACL tokens and synthetic messages; shared tokens untouched |
 
 ## Issue results
 
@@ -27,13 +28,13 @@ initial access-blocked snapshots, retained in Git/Linear history.
 | NAF-151 | PASS: official CLI login repaired access; actual project/repository/branch/alias verified; Preview credentials separated; Preview rebuilt and browser/static smoke passes |
 | NAF-152 | PASS: explicit dev/prod matrix, dev-only key source, production-target denial, dev tenant-isolation SQL suite passed with zero residual rows/users; no production database change |
 | NAF-153 | PASS: dedicated user service, private directories, loopback-only port, resource controls, normal restart and crash recovery; owner approved Linger=yes for unattended startup |
-| NAF-154 | BLOCKED: existing token invalid; no valid dedicated publisher/listener credentials or ACL/connect/exchange/denial evidence |
+| NAF-154 | PASS: account2617576, dedicated directional ACL tokens, TLS1.3, synthetic exchange/reconnect and independent negative delivery/publish tests |
 | NAF-155 | PASS: installed PostgreSQL17.12, separate data/roles, SCRAM, least-privilege denials, transaction/commit/restart/backup/restore |
 | NAF-156 | PASS: inventory and trusted identity plan in auth-plan.md; no replacement auth implementation claimed |
-| NAF-157 | PARTIAL/BLOCKED: cloud/env/DB/credential boundaries verified; flespi ACL/account/expiry and negative tests still missing |
+| NAF-157 | PASS: actual cloud/env/DB and broker privileges, fixed expiry, private secret storage, TLS and denial matrix; see security.md |
 | NAF-158 | PASS: safe Preview rollback and return, custom-format synthetic DB restore, automatic crash recovery, scheduled local backups; off-host limitation documented |
 | NAF-159 | PASS: tooling/policy/build/browser checks and development CI pass; draft PR16 into develop |
-| NAF-160 | NO-GO; cannot mark Done or start Stage1 while critical broker prerequisites remain unresolved |
+| NAF-160 | Technical checks PASS; final decision is recorded in Linear after all11 prerequisites are Done and feature CI passes |
 
 ## Access repair and approved scope changes
 
@@ -61,8 +62,11 @@ testing of that build was prohibited.
 The user authorized removing/changing dev's Supabase connection while preserving
 production. Removed ONLY the Preview scope from original production entries
 Pf068enU5tISIkB4 and69Svu0hHDycdnoYb; no value field was submitted. Compared
-IDs/types/opaque stored-value fingerprints and production deployment ID before
-and after: unchanged. Added separate Development and Preview-only values from
+record IDs/types/creation timestamps and production deployment ID before and
+after: unchanged. Correction: earlier reports hashed redacted/empty values and
+called them secret fingerprints. That did not verify secret contents. Vercel
+secrets are write-only here; actual plaintext cannot be independently compared.
+The scope-only PATCH bodies supplied no value field. Added separate Development and Preview-only values from
 FutureCart Dev, plus develop-specific overrides. Feature-specific add initially
 failed because the branch was not remote; did not push into the unsafe fallback.
 After scope separation, effective feature Preview pull resolves to dev only.
@@ -114,7 +118,7 @@ correlation are the diagnosis paths; never log auth headers or full credentials.
 Node24.22.3/npm11.19.1/Git2.47.3/Next16.2.6; npm ci --ignore-scripts passed.
 Pinned external tools: Vercel66.2.0, Playwright-core1.65.1 with installed Chrome.
 Relevant installed Next docs read before edits; application TSX/business code is
-unchanged. Current dev-target build and type checking pass. 55 guard tests pass;
+unchanged. Current dev-target build and type checking pass. 56 guard tests pass;
 changed JS lint clean. Preflight verifies actual cwd/root, origin fetch+push,
 branch/upstream/develop ancestry, exact URL/project IDs, both env load orders,
 public key role/project, DB targets, external env symlinks, and fresh provider
@@ -125,7 +129,7 @@ Provider evidence expires after six hours; regenerate through the audit script.
 New .vercelignore excludes local credentials, databases and browser profiles from
 CLI uploads. No secrets go into CI or artifacts. Development-only GitHub Actions
 workflow targets PRs into develop, with pinned official action SHAs and Node,
-55 denial tests, changed-script lint, and an inert loopback-placeholder build.
+56 denial tests, changed-script lint, and an inert loopback-placeholder build.
 It does not deploy or run on main.
 
 Full application ESLint has a pre-existing17 errors/1 warning in unchanged files:
@@ -135,18 +139,49 @@ type-policy deviation for this infrastructure POC because build/typecheck,
 tenant isolation, guard tests and read-only smoke pass; no new app code depends
 on suppressing it. This does not waive broker/auth/security/recovery prerequisites.
 
-## Remaining authorization blocker
+## Broker authorization and minimum transport verification
 
-flespi account metadata rejects the saved POC token (HTTP400/code1004 invalid or
-non-existing token). No messages sent. No available flespi integration returned
-from directory searches. Official realm OAuth needs an existing configured realm;
-the user does not know one. Opened official account login in an isolated Debian
-browser; user cannot access that desktop, so that unauthenticated browser was
-closed. Credentials, not a login itself, are sufficient. Never ask for tokens,
-passwords or 2FA codes in chat. Reserved namespace and exact least-privilege role
-matrix are in flespi-authorization.json. Accept only a private credential source,
-then verify account/expiry/ACL, connect/pub/sub/ack/reconnect and foreign-topic
-denial. QoS ACK is not DB commit. Stage1 load/fault suites remain prohibited.
+Owner completed official flespi login through NoMachine. Used the intended
+flespi page only to provision NEW ACL tokens and read account counters. The
+owner's master session stayed in the private browser profile; it was never used
+as an MQTT client credential. Old invalid POC credentials and shared tokens
+remain unchanged. Account2617576; broker mqtts://mqtt.flespi.io:8883.
+
+Publisher114509462 publishes commands/subscribes results; listener114509463 has
+the inverse exact-topic ACL. Namespace shopping-poc/naf-stage0-041d4f122bdd.
+Both are backend-only, ACL access.type2, ttl0 and fixed expiry
+2026-11-26T18:56:34Z. Files are0600 under0700 runtime, excluded from Git/uploads.
+Renew only dedicated dev tokens before expiry; never broaden shared credentials.
+
+mqtt-preflight.json records verified TLS1.3, QoS1 connect/sub/pub/PUBACK,
+three synthetic request/response exchanges and a planned session resumption.
+Observed round trips148.3/254.7/2104ms, with2.1s after reconnect. These are NOT
+capacity/latency acceptance results and do NOT prove a database commit. Failure,
+load, replay and long-duration evaluation remain Stage1 behind the gate.
+
+Both roles are denied administration and browser-origin use (HTTP403).
+Foreign/wrong-direction publishes return MQTT reason135. Forbidden subscriptions
+receive successful SUBACK but delivery is filtered: independent auditor confirms
+probe publication, each role receives an allowed end-marker and receives zero
+forbidden messages in the1500ms post-control observation. Auditor114523424 had
+only the exact commands/results/foreign-probe topics, ttl0,10min fixed expiry
+2026-11-20T00:51:15Z. It cannot be reused after expiry. No retained messages were
+written; test client sessions close with expiry0. Existing sessions/data untouched.
+
+Two harness discrepancies were corrected rather than bypassed: Node fetch adds
+browser-style headers incompatible with backend-only credentials (use HTTPS
+backend requests), and SUBACK is not evidence of topic delivery authorization.
+The actual delivery test now validates positive controls and independent probes.
+
+flespi-limits.json captures live /platform/customer counters: Free/SLA0,
+50sessions,20000MQTT messages/min,102400KiB each session and retained storage,
+200API calls/min,100tokens,52428800bytes/min traffic. Raw subscription counter
+limit0 is recorded without claiming it means no subscriptions. No plan/billing
+changes. Original POC at /home/naf-w/projects/self/shopping-mqtt-poc remains
+untouched; its expired/invalid credentials prevent an identical historical rerun.
+This new isolated baseline is reproducible with current scoped credentials and
+a newly authorized short-lived auditor; historical performance is not carried
+forward as evidence. Detailed privilege/risk matrix: security.md.
 
 ## Reproduction and rollback (agent-owned operations)
 
@@ -178,8 +213,8 @@ path. Never operate on /var/lib/postgresql/17/main.
 To revert dev environment configuration, remove/replace only new Preview and
 Development entries with another isolated backend; do not reintroduce production
 credentials to Preview. Source rollback uses reviewed feature-only commits or
-patches, never resets the original checkout. Production branch/alias/secret
-values remain unchanged; owner-approved GitHub branch protections are intentional
+patches, never resets the original checkout. Production branch/alias remain unchanged; no production secret value update
+was submitted (plaintext comparison is unavailable); owner-approved GitHub branch protections are intentional
 policy changes and should not be removed incidentally.
 
 Draft PR: https://github.com/naftali-spitz/shopping-list-app/pull/16 (develop base, draft; no merge).
@@ -190,5 +225,6 @@ feature/flespi-home-backend provenance and dev-only served bundles. Main refs
 were not pushed or merged. HTTPS Git credential helper was configured through
 gh auth setup-git; origin URL itself remains unchanged.
 
-Every issue has evidence in Linear. Stage0 remains NO-GO until all critical
-prerequisites pass; a future GO is never production migration authorization.
+Every issue has evidence in Linear. Consult NAF-160 for the final gate decision;
+GO requires all11 prerequisite issues Done and verified feature CI. No Stage0
+GO authorizes production migration.
