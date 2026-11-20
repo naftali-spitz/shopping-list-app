@@ -1,10 +1,13 @@
 import pg from 'pg';
 import { authenticate, validateOperation } from './protocol.mjs';
+import { authenticateCommand } from '../../integration/stage3/protocol.mjs';
 export class Store {
   constructor(config) { this.config=config; this.pool=new pg.Pool({ ...config.db,max:2,connectionTimeoutMillis:5000,statement_timeout:5000,idle_in_transaction_session_timeout:10000,application_name:'shopping-stage2-dev' }); }
   async close() { await this.pool.end(); }
   async execute(envelope, hooks = {}) {
-    const { command:c,hash }=authenticate(envelope,this.config);
+    const { command:c,hash } = this.config.protocolVersion === 2
+      ? await authenticateCommand(envelope,this.config)
+      : authenticate(envelope,this.config);
     validateOperation(c);
     const db=await this.pool.connect();
     try {
@@ -14,16 +17,29 @@ export class Store {
       const principal=await db.query('SELECT id FROM shopping.principals WHERE id=$1::uuid AND issuer=$2 AND subject=$1::text AND active FOR SHARE',[c.user_id,this.config.identity.issuer]);
       const membership=await db.query('SELECT role FROM shopping.household_members WHERE household_id=$1 AND user_id=$2 AND active FOR SHARE',[c.household_id,c.user_id]);
       if (!principal.rowCount || !membership.rowCount) { await db.query('ROLLBACK'); return this.result(c,'forbidden'); }
+      const persist = async result => {
+        await db.query('INSERT INTO shopping.operations(id,household_id,user_id,canonical_hash,operation_type,correlation_id,result) VALUES($1,$2,$3,$4,$5,$6,$7)',[c.id,c.household_id,c.user_id,hash,c.type,c.correlation_id,result]);
+        await db.query('INSERT INTO shopping.result_outbox(operation_id,household_id,user_id,result) VALUES($1,$2,$3,$4)',[c.id,c.household_id,c.user_id,result]);
+        return result;
+      };
+      if(this.config.protocolVersion===2) {
+        const previous=(await db.query('SELECT canonical_hash,user_id,result FROM shopping.operations WHERE id=$1',[c.id])).rows[0];
+        if(previous){await db.query('COMMIT');return previous.canonical_hash===hash && previous.user_id===c.user_id?{...previous.result,replayed:true}:this.result(c,'operation_id_conflict');}
+      }
       if (['snapshot','operation.status'].includes(c.type) && c.expires_ms<=Date.now()) { await db.query('ROLLBACK'); return this.result(c,'expired'); }
       if (c.type==='operation.status') {
         const old=await db.query('SELECT result FROM shopping.operations WHERE id=$1 AND household_id=$2 AND user_id=$3',[c.payload.operation_id,c.household_id,c.user_id]);
-        await db.query('COMMIT'); return this.result(c,old.rowCount?'found':'not_found',old.rows[0]?.result??null);
+        const result=this.result(c,old.rowCount?'found':'not_found',old.rows[0]?.result??null);
+        if(this.config.protocolVersion===2)await persist(result);
+        await db.query('COMMIT'); return result;
       }
       if (c.type==='snapshot') {
         const snapshot={};
         for (const table of ['categories','products','shopping_history']) snapshot[table]=(await db.query(`SELECT * FROM shopping.${table} WHERE household_id=$1 AND deleted_at IS NULL ORDER BY id`,[c.household_id])).rows;
         snapshot.household=(await db.query('SELECT id,name,version FROM shopping.households WHERE id=$1 AND deleted_at IS NULL',[c.household_id])).rows[0];
-        await db.query('COMMIT'); return this.result(c,'snapshot',snapshot);
+        const result=this.result(c,'snapshot',snapshot);
+        if(this.config.protocolVersion===2)await persist(result);
+        await db.query('COMMIT'); return result;
       }
       // Check prior durable outcome before command deadline: retries may retrieve
       // already committed results, but never create effects after expiration.

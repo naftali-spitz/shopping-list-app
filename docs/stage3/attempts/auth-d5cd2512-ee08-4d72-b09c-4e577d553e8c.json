@@ -1,0 +1,16 @@
+{
+  "id": "d5cd2512-ee08-4d72-b09c-4e577d553e8c",
+  "at": "2026-11-20T07:44:51.088Z",
+  "scope": "actual development Supabase Auth and session RPC; no Vercel/MQTT/browser claim",
+  "checks": [
+    {
+      "name": "three real password logins with provider-issued sessions",
+      "status": "PASS"
+    }
+  ],
+  "status": "FAIL",
+  "error": {
+    "type": "AssertionError",
+    "message": "Auth check failed; no credential-bearing diagnostics published"
+  }
+}

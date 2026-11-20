@@ -46,3 +46,4 @@ next-env.d.ts
 
 /scripts/__pycache__/
 /backend/node_modules/
+/supabase/.temp/

@@ -20,7 +20,7 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm ci --prefix backend --ignore-scripts --no-audit --no-fund
       - run: node --test scripts/stage0-preflight.test.mjs scripts/stage1-validity.test.mjs
-      - run: node --test backend/test/*.test.mjs
+      - run: node --test backend/test/*.test.mjs integration/stage3/*.test.mjs
       - run: npx eslint scripts/stage0-preflight.mjs scripts/stage0-preflight.test.mjs scripts/stage0-mqtt.mjs scripts/stage1-mqtt.mjs scripts/stage1-failures.mjs scripts/stage1-security.mjs scripts/stage1-expiry.mjs scripts/stage1-expiry-hypotheses.mjs scripts/stage1-recovery.mjs scripts/stage1-validity.mjs scripts/stage1-validity.test.mjs backend/src/*.mjs backend/scripts/*.mjs backend/test/*.mjs
       # No provider credentials or secrets are exposed to this job. The existing
       # application compiles with an inert loopback endpoint for CI only.
