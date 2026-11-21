@@ -23,6 +23,11 @@ class ApiError extends Error { constructor(message: string, readonly status: num
 const logicalType = (type: string) => type.replace(/^stage4\./, '');
 const namespace = (type: string, mode: 'stage3' | 'stage4') => mode === 'stage3' ? type.replace(/^stage4\./, '') : type.startsWith('stage4.') ? type : `stage4.${type}`;
 const finishedState = (result: OperationResult): PendingOperation['state'] => result.status === 'committed' || result.status === 'snapshot' ? 'Saved' : result.status === 'version_conflict' ? 'Conflict requiring reconciliation' : 'Failed';
+const stableJson = (value: unknown): string => {
+  if (Array.isArray(value)) return '[' + value.map(stableJson).join(',') + ']';
+  if (value && typeof value === 'object') return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + stableJson((value as Record<string, unknown>)[key])).join(',') + '}';
+  return JSON.stringify(value);
+};
 const isSnapshot = (value: unknown): value is Snapshot => Boolean(value && typeof value === 'object' && 'household' in value && 'categories' in value && 'products' in value && 'shopping_history' in value);
 
 export function createIntent(householdId: string, type: string, payload: Record<string, unknown>, expectedVersion: number | null, mode: 'stage3' | 'stage4' = 'stage4'): Intent {
@@ -63,6 +68,19 @@ export class ShoppingClient {
   private lastError: Error | null = null;
   private requiresFullSnapshot = false;
   private readonly online = () => this.schedule(0);
+  private readonly storage = (event: StorageEvent) => {
+    if (this.mode !== 'stage4' || this.disposed || event.key !== this.storageKey && !event.key?.startsWith(this.operationPrefix())) return;
+    try {
+      const previous = new Map(this.queue.map(operation => [operation.intent.id, Boolean(operation.result)]));
+      this.queue = this.mergeStored(this.queue);
+      for (const operation of this.queue) if (operation.result && !previous.get(operation.intent.id)) {
+        this.apply(operation.result, operation.intent);
+        this.waiters.get(operation.intent.id)?.({ data: operation.result.data, error: operation.state === 'Saved' ? null : new Error(operation.result.status) });
+        this.waiters.delete(operation.intent.id);
+      }
+      this.notify(); this.schedule(0);
+    } catch { this.storageError = new Error('Pending operation storage changed unexpectedly. Preserve browser data before retrying.'); this.stopTimer(); this.notify(); }
+  };
 
   constructor(readonly userId: string, readonly householdId: string, readonly mode: 'stage3' | 'stage4' = 'stage4') {
     this.storageKey = `shopping-stage3-v2:${userId}:${householdId}${mode === 'stage4' ? ':stage4' : ''}`;
@@ -71,10 +89,12 @@ export class ShoppingClient {
       const stored = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
       if (!Array.isArray(stored)) throw new Error('Invalid pending storage');
       this.queue = stored.filter((p: PendingOperation) => p?.intent?.household_id === householdId && typeof p.intent.id === 'string');
+      if (mode === 'stage4') this.persist(this.queue);
       // Existing Stage3 queue entries may have been accepted before a page refresh.
       for (const pending of this.queue) if (!pending.result) pending.attempted = true;
     } catch { this.storageError = new Error('Pending storage could not be read. Preserve browser data before retrying.'); }
     window.addEventListener('online', this.online);
+    window.addEventListener('storage', this.storage);
   }
 
   current(): Snapshot | null { return this.snapshot; }
@@ -85,13 +105,53 @@ export class ShoppingClient {
     this.listeners.add(listener); this.schedule(0);
     return () => { this.listeners.delete(listener); if (!this.needed()) this.stopTimer(); };
   }
-  private needed() { return !this.disposed && (this.listeners.size > 0 || this.waiters.size > 0 || this.readers.size > 0); }
+  private needed() { return !this.disposed && !this.storageError && (this.listeners.size > 0 || this.waiters.size > 0 || this.readers.size > 0); }
   private notify() { for (const listener of this.listeners) listener(); }
+  private operationPrefix() { return this.storageKey + ':operation:'; }
+  private mergeStored(next: PendingOperation[]): PendingOperation[] {
+    const merged = new Map(next.map(operation => [operation.intent.id, operation]));
+    for (let index = 0; index < localStorage.length; index++) {
+      const key = localStorage.key(index);
+      if (!key?.startsWith(this.operationPrefix())) continue;
+      const operation: PendingOperation = JSON.parse(localStorage.getItem(key) || 'null');
+      if (!operation?.intent || operation.intent.household_id !== this.householdId || key !== this.operationPrefix() + operation.intent.id) throw new Error('Invalid pending record');
+      const local = merged.get(operation.intent.id);
+      if (!local) { merged.set(operation.intent.id, operation); continue; }
+      if (stableJson(local.intent) !== stableJson(operation.intent)) throw new Error('Pending intent changed');
+      if (local.result && operation.result && stableJson(local.result) !== stableJson(operation.result)) throw new Error('Pending result changed');
+      if (!local.result && operation.result) Object.assign(local, operation);
+      else if (!local.result) {
+        // A different tab may already have attempted this exact ID. Retrying
+        // status first avoids an unnecessary publish, never changes intent.
+        local.attempted ||= operation.attempted;
+        local.accepted ||= operation.accepted;
+        local.reconciliation ??= operation.reconciliation;
+      }
+    }
+    return [...merged.values()];
+  }
   private persist(next = this.queue) {
-    const unresolved = next.filter(p => !p.result), finished = next.filter(p => p.result).slice(-30);
+    // The compatibility queue is an index. Per-operation records are the durable
+    // Stage4 source, so interleaved tab writes cannot remove one another's IDs.
+    const all = this.mode === 'stage4' ? this.mergeStored(next) : next;
+    const unresolved = all.filter(p => !p.result), finished = all.filter(p => p.result).slice(-30);
     const trimmed = [...finished, ...unresolved];
-    // Update memory only after durable browser storage succeeded.
-    localStorage.setItem(this.storageKey, JSON.stringify(trimmed)); this.queue = trimmed;
+    if (this.mode === 'stage4') {
+      for (const operation of trimmed) {
+        const key = this.operationPrefix() + operation.intent.id, value = JSON.stringify(operation);
+        if (localStorage.getItem(key) !== value) localStorage.setItem(key, value);
+      }
+      // Only terminal records are eligible for retention cleanup. Unresolved
+      // records are never deleted, including records written by another tab.
+      const retained = new Set(trimmed.map(operation => operation.intent.id));
+      for (const operation of all) if (operation.result && !retained.has(operation.intent.id)) localStorage.removeItem(this.operationPrefix() + operation.intent.id);
+      this.queue = trimmed;
+      // A failed compatibility index cannot undo an already durable operation.
+      // Refresh can reconstruct every intent from its individual record.
+      try { localStorage.setItem(this.storageKey, JSON.stringify(trimmed)); } catch { /* Durable records remain authoritative. */ }
+    } else {
+      localStorage.setItem(this.storageKey, JSON.stringify(trimmed)); this.queue = trimmed;
+    }
   }
   private stopTimer() { if (this.timer) clearTimeout(this.timer); this.timer = null; }
   private schedule(delay: number) {
@@ -325,7 +385,7 @@ export class ShoppingClient {
     }
   }
   dispose() {
-    this.disposed = true; this.stopTimer(); window.removeEventListener('online', this.online);
+    this.disposed = true; this.stopTimer(); window.removeEventListener('online', this.online); window.removeEventListener('storage', this.storage);
     for (const reader of this.readers) reader.reject(new Error('Session changed.'));
     this.readers.clear();
     for (const resolve of this.waiters.values()) resolve({ data: null, error: new Error('Session changed. Pending operation IDs are preserved.') });

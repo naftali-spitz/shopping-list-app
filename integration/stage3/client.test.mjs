@@ -16,7 +16,7 @@ function snapshot(version = 1, quantity = 1) {
 }
 async function setup(fetcher = async () => Response.json({ state: 'accepted_pending' })) {
   const data = new Map();
-  globalThis.localStorage = { getItem: key => data.get(key) ?? null, setItem: (key, value) => data.set(key, value) };
+  globalThis.localStorage = { get length() { return data.size; }, key: index => [...data.keys()][index] ?? null, getItem: key => data.get(key) ?? null, setItem: (key, value) => data.set(key, value), removeItem: key => data.delete(key) };
   globalThis.window = { addEventListener() {}, removeEventListener() {} };
   Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { onLine: true } });
   globalThis.__shoppingAuth = { auth: { getSession: async () => ({ data: { session: { user: { id: user }, access_token: 'synthetic-not-a-real-token' } } }) } };
@@ -91,7 +91,7 @@ test('expired uncommitted intent fails only after authenticated lane reconciliat
     assert.equal(body.id, checkId); return Response.json({ result: { status: 'not_found', data: null } });
   });
   client.snapshot = snapshot(); const promise = client.mutateLatest('product.update', { id: productId, quantity: 2 });
-  const operation = client.operations()[0]; operation.intent.expires_ms = Date.now() - 1;
+  const operation = client.operations()[0]; operation.intent.expires_ms = Date.now() - 1; localStorage.setItem(client.storageKey + ':operation:' + operation.intent.id, JSON.stringify(operation));
   assert.equal(operation.state, 'Saving');
   await client.process(operation);
   assert.equal(operation.state, 'Failed'); assert.match((await promise).error.message, /expired/);
@@ -141,7 +141,7 @@ test('expired unresolved intent fails only after authenticated database operatio
     return Response.json({ result: { status: 'not_found', data: null } });
   });
   client.snapshot = snapshot(); const pending = client.mutateLatest('product.update', { id: productId, quantity: 2 });
-  const operation = client.operations()[0]; operation.intent.expires_ms = Date.now() - 1;
+  const operation = client.operations()[0]; operation.intent.expires_ms = Date.now() - 1; localStorage.setItem(client.storageKey + ':operation:' + operation.intent.id, JSON.stringify(operation));
   await client.process(operation);
   assert.equal(commands.length, 1); assert.equal(commands[0].type, 'stage4.operation.status');
   assert.equal(commands[0].payload.operation_id, operation.intent.id);
@@ -199,4 +199,51 @@ test('terminal snapshot denial clears authority and rejects initial or refresh r
   await denial;
   assert.equal(client.current(), null); assert.equal(client.view(), null);
   assert.match(client.error().message, /no longer authorized/);
+});
+
+
+test('same-user tabs preserve all unresolved IDs through interleaved writes and refresh', async () => {
+  const { clientModule, client, data } = await setup();
+  client.snapshot = snapshot();
+  const other = new clientModule.ShoppingClient(user, household); running.push(other); other.snapshot = snapshot();
+  const first = client.mutateLatest('product.update', { id: productId, quantity: 2 });
+  const firstId = client.operations()[0].intent.id;
+  const second = other.mutateLatest('category.update', { id: categoryId, name: 'Other tab category' });
+  const secondId = other.operations().find(operation => operation.intent.id !== firstId).intent.id;
+  // Reproduce each tab writing a stale index after the other already persisted.
+  client.persist(); other.persist();
+  const restored = new clientModule.ShoppingClient(user, household); running.push(restored);
+  assert.deepEqual(new Set(restored.operations().map(operation => operation.intent.id)), new Set([firstId, secondId]));
+  assert.ok(data.has(client.storageKey + ':operation:' + firstId));
+  assert.ok(data.has(client.storageKey + ':operation:' + secondId));
+  client.storage({ key: client.storageKey });
+  assert.equal(client.operations().length, 2);
+  client.dispose(); other.dispose(); await Promise.all([first, second]);
+});
+
+test('terminal storage event resolves another tabs waiter and cannot be overwritten by stale pending', async () => {
+  const { clientModule, client } = await setup(); client.snapshot = snapshot();
+  const promise = client.mutateLatest('product.update', { id: productId, quantity: 2 });
+  const other = new clientModule.ShoppingClient(user, household); running.push(other); other.snapshot = snapshot();
+  const pending = other.operations()[0];
+  other.settle(pending, { status: 'committed', data: { record: snapshot(2, 2).products[0], household_version: 2 } });
+  client.storage({ key: client.storageKey + ':operation:' + pending.intent.id });
+  assert.equal((await promise).error, null);
+  assert.equal(client.operations()[0].state, 'Saved');
+  assert.equal(client.current().products[0].quantity, 2);
+  client.persist();
+  assert.equal(JSON.parse(localStorage.getItem(client.storageKey + ':operation:' + pending.intent.id)).result.status, 'committed');
+});
+
+test('changed per-operation storage intent fails closed and preserves the original index', async () => {
+  const { client } = await setup(); client.snapshot = snapshot();
+  const promise = client.mutateLatest('product.update', { id: productId, quantity: 2 });
+  const pending = client.operations()[0], changed = structuredClone(pending);
+  changed.intent.payload.quantity = 999;
+  localStorage.setItem(client.storageKey + ':operation:' + pending.intent.id, JSON.stringify(changed));
+  client.storage({ key: client.storageKey + ':operation:' + pending.intent.id });
+  assert.match(client.error().message, /changed unexpectedly/);
+  assert.equal(client.view().products[0].quantity, 2);
+  assert.equal(JSON.parse(localStorage.getItem(client.storageKey))[0].intent.payload.quantity, 2);
+  client.dispose(); await promise;
 });
