@@ -1,4 +1,5 @@
 "use client";
+import { homeBackendEnabled } from "@/lib/backend/selection";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -20,6 +21,7 @@ type UseCurrentHouseholdOptions = {
 export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
   const { onError } = options;
   const { session } = useSession();
+  const storageKey = homeBackendEnabled() ? `${ACTIVE_HOUSEHOLD_STORAGE_KEY}:home:${session?.user?.id ?? "signed-out"}` : ACTIVE_HOUSEHOLD_STORAGE_KEY;
   const [households, setHouseholds] = useState<UserHousehold[]>([]);
   const [currentHouseholdId, setCurrentHouseholdIdState] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,17 +30,17 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
     setCurrentHouseholdIdState(householdId);
 
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(ACTIVE_HOUSEHOLD_STORAGE_KEY, householdId);
+      window.localStorage.setItem(storageKey, householdId);
     }
-  }, []);
+  }, [storageKey]);
 
   const clearCurrentHouseholdId = useCallback(() => {
     setCurrentHouseholdIdState(null);
 
     if (typeof window !== "undefined") {
-      window.localStorage.removeItem(ACTIVE_HOUSEHOLD_STORAGE_KEY);
+      window.localStorage.removeItem(storageKey);
     }
-  }, []);
+  }, [storageKey]);
 
   const refreshHouseholds = useCallback(async () => {
     if (!session?.user?.id) {
@@ -69,7 +71,7 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
 
     const storedHouseholdId =
       typeof window !== "undefined"
-        ? window.localStorage.getItem(ACTIVE_HOUSEHOLD_STORAGE_KEY)
+        ? window.localStorage.getItem(storageKey)
         : null;
     const nextCurrentHouseholdId =
       storedHouseholdId && userHouseholds.some((item) => item.id === storedHouseholdId)
@@ -78,7 +80,7 @@ export function useCurrentHousehold(options: UseCurrentHouseholdOptions = {}) {
 
     setCurrentHouseholdId(nextCurrentHouseholdId);
     setLoading(false);
-  }, [clearCurrentHouseholdId, onError, session?.user?.id, setCurrentHouseholdId]);
+  }, [clearCurrentHouseholdId, onError, session?.user?.id, setCurrentHouseholdId, storageKey]);
 
   useEffect(() => {
     void refreshHouseholds();

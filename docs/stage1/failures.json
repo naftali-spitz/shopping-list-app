@@ -1,0 +1,156 @@
+{
+  "status": "FAIL",
+  "stage": 1,
+  "run_id": "a56287f1-74a5-4cba-ac97-e2a291682b7e",
+  "checks": [
+    {
+      "test": "concurrent application duplicate requests",
+      "observed_at": "2026-11-20T01:09:34.046Z",
+      "passed": true,
+      "sent": 10,
+      "unique_synthetic_effects": 1,
+      "duplicate_results": 9,
+      "mitigation": "In-memory promise reserved before processing; production needs durable operation-ID uniqueness."
+    },
+    {
+      "test": "out-of-order application completion",
+      "observed_at": "2026-11-20T01:09:34.718Z",
+      "passed": true,
+      "received_order": [
+        2,
+        1
+      ],
+      "correlation_ids_preserved": true,
+      "mitigation": "Correlate operation IDs; use server versions/sequence rules for conflicting writes."
+    },
+    {
+      "test": "same-ID replay in one process lifetime",
+      "observed_at": "2026-11-20T01:09:35.053Z",
+      "passed": true,
+      "prior_quantity": 1,
+      "replay_quantity": 1,
+      "limitation": "Simulator returns prior result despite changed index; production must bind operation ID to canonical payload hash and reject conflicts."
+    },
+    {
+      "test": "lost application acknowledgment and retry after timeout",
+      "observed_at": "2026-11-20T01:09:36.148Z",
+      "passed": true,
+      "timeout_ms": 600,
+      "timed_out": true,
+      "same_id_retry_quantity": 4,
+      "broker_puback_was_successful": true,
+      "mitigation": "Broker ACK did not confirm processing/result. Retry same durable ID with bounded backoff."
+    },
+    {
+      "test": "listener process crash after synthetic effect, before result",
+      "observed_at": "2026-11-20T01:09:38.345Z",
+      "passed": true,
+      "own_child_pid": 1319299,
+      "signal": "SIGKILL",
+      "broker_session_resumed": true,
+      "quantity_before_crash": 5,
+      "quantity_after_restart_retry": 1,
+      "volatile_state_lost": true,
+      "database_commit": false,
+      "mitigation": "Transport recovers but in-memory dedup/effects do not survive. Stage2 must use transactional durable dedup/outbox."
+    },
+    {
+      "test": "actual QoS1 redelivery after withheld MQTT PUBACK and socket loss",
+      "observed_at": "2026-11-20T01:09:39.175Z",
+      "passed": true,
+      "session_present": true,
+      "deliveries": [
+        {
+          "duplicate_flag": false,
+          "message_id": 1
+        },
+        {
+          "duplicate_flag": true,
+          "message_id": 1
+        }
+      ],
+      "mitigation": "At-least-once delivery can duplicate effects. Never use MQTT packet IDs as durable business operation IDs."
+    },
+    {
+      "test": "broker-initiated disconnect on owned client-ID takeover",
+      "observed_at": "2026-11-20T01:09:40.671Z",
+      "passed": true,
+      "broker_reason": 142,
+      "old_connection_closed": true,
+      "new_session_present": true,
+      "mitigation": "Unique stable listener ownership; reconnect backoff and alerts. Shared broker restart is not authorized or simulated."
+    },
+    {
+      "test": "session expiry discards offline backlog",
+      "observed_at": "2026-11-20T01:09:45.067Z",
+      "passed": false,
+      "expiry_seconds": 2,
+      "offline_ms": 3500,
+      "session_present": true,
+      "stale_message_delivered": true,
+      "positive_control_received": true,
+      "mitigation": "Do not rely on broker session expiry as a security/work-validity deadline. Require verified application expiry/replay protection and clarify provider semantics before GO."
+    }
+  ],
+  "connections": [
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-7ccc09c3-e",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T01:09:33.697Z"
+    },
+    {
+      "event": "connect",
+      "role": "listener",
+      "client_id": "naf-s1-listener-0662dae0-a288-4fb9-9623-fe2669630b53",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T01:09:38.598Z"
+    },
+    {
+      "event": "connect",
+      "role": "listener",
+      "client_id": "naf-s1-listener-0662dae0-a288-4fb9-9623-fe2669630b53",
+      "tls": "TLSv1.3",
+      "session_present": true,
+      "at": "2026-11-20T01:09:38.988Z"
+    },
+    {
+      "event": "connect",
+      "role": "listener",
+      "client_id": "naf-s1-listener-3ab299bf-76a0-41c6-828f-37643fdc91cd",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T01:09:39.432Z"
+    },
+    {
+      "event": "connect",
+      "role": "listener",
+      "client_id": "naf-s1-listener-3ab299bf-76a0-41c6-828f-37643fdc91cd",
+      "tls": "TLSv1.3",
+      "session_present": true,
+      "at": "2026-11-20T01:09:40.670Z"
+    },
+    {
+      "event": "connect",
+      "role": "listener",
+      "client_id": "naf-s1-listener-4a30219c-d382-43dc-a0e8-9e360e77dbbe",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T01:09:40.923Z"
+    },
+    {
+      "event": "connect",
+      "role": "listener",
+      "client_id": "naf-s1-listener-4a30219c-d382-43dc-a0e8-9e360e77dbbe",
+      "tls": "TLSv1.3",
+      "session_present": true,
+      "at": "2026-11-20T01:09:44.819Z"
+    }
+  ],
+  "error_type": "AssertionError",
+  "error_code": "ERR_ASSERTION",
+  "notes": "Credential-bearing exception suppressed. Preserve completed checks and raw records; do not claim gate PASS."
+}

@@ -1,0 +1,34 @@
+{
+  "status": "FAIL",
+  "run_id": "547618a8-539e-4fa4-93ee-1a1fc42865f9",
+  "tested_at": "2026-11-20T06:37:35.040Z",
+  "checks": [
+    {
+      "test": "actual SIGKILL after PostgreSQL commit before MQTT ACK/application reply",
+      "passed": true,
+      "actual_postgresql": true,
+      "live_mqtt": true
+    },
+    {
+      "test": "restart redelivery returns committed result; durable outbox drains; effect remains once",
+      "passed": true,
+      "actual_postgresql": true,
+      "live_mqtt": true
+    }
+  ],
+  "error": {
+    "type": "Error"
+  },
+  "ready_packets": [
+    {
+      "event": "ready",
+      "session_present": false
+    },
+    {
+      "event": "ready",
+      "session_present": true
+    }
+  ],
+  "household": "20000000-0000-4000-8000-000000000001",
+  "scope": "Actual PostgreSQL and dedicated live MQTT; synthetic signed identities. No Vercel/browser path."
+}

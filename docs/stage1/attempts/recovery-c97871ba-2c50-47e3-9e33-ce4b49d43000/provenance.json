@@ -1,0 +1,6 @@
+{
+  "sources_sha256": {
+    "scripts/stage1-recovery.mjs": "47e38de085ee80e1047cd466e0e58dbc87c8c39b789209397c1fdcc4a1b060c7",
+    "scripts/stage1-mqtt.mjs": "44ec41729f4a9dff25cc025dfe43acb69d23b8d3af1978881bcfd10ffb14cd29"
+  }
+}

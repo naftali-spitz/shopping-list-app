@@ -1,0 +1,106 @@
+{
+  "id": "fa5977f8-07b5-4414-8625-2c831adc7d71",
+  "at": "2026-11-20T11:21:29.878Z",
+  "mode": "quick",
+  "scope": "actual Vercel API, live broker, Debian PostgreSQL, authenticated callback/status; controlled owned-process/stream fault injection, no ISP/router outage",
+  "cases": [
+    {
+      "name": "incorrect MQTT publisher credentials",
+      "status": "PASS",
+      "operation_id": "defd1c17-9fd4-4c4c-8ed0-ba23dc3614fa",
+      "effect": 0,
+      "classification": "actual broker authentication denial"
+    },
+    {
+      "name": "simultaneous duplicate API requests",
+      "status": "PASS",
+      "operation_id": "d627a54e-48dc-4f11-921e-eb88ae66a040",
+      "ledger": 1,
+      "effect": 1,
+      "attempts": 1
+    },
+    {
+      "name": "lost MQTT acknowledgment",
+      "status": "PASS",
+      "operation_id": "d4f04bb3-8842-49db-903d-a17b91590391",
+      "correlation_id": "dbe1990b-7019-45e7-9aa6-36bbc49b2483",
+      "recovery_confirmation_ms": 7588,
+      "observed_states": [
+        "processing",
+        "committed"
+      ],
+      "ledger": 1,
+      "effect": 1,
+      "attempts": 1,
+      "classification": "controlled dedicated listener fault"
+    },
+    {
+      "name": "listener crash before commit",
+      "status": "PASS",
+      "operation_id": "57e2a203-a374-44a7-8c7a-afed4b445a6d",
+      "correlation_id": "c7f367dd-07ea-41e0-97b8-a0e445a8208c",
+      "recovery_confirmation_ms": 15687,
+      "observed_states": [
+        "processing",
+        "committed"
+      ],
+      "ledger": 1,
+      "effect": 1,
+      "attempts": 1,
+      "classification": "controlled dedicated listener fault"
+    },
+    {
+      "name": "listener crash after commit before callback",
+      "status": "PASS",
+      "operation_id": "95262fad-a8da-46c5-98a9-3daab6c32c3c",
+      "correlation_id": "29923448-0798-4639-83b9-1318c3164675",
+      "recovery_confirmation_ms": 16723,
+      "observed_states": [
+        "processing",
+        "committed"
+      ],
+      "ledger": 1,
+      "effect": 1,
+      "attempts": 1,
+      "classification": "controlled dedicated listener fault"
+    },
+    {
+      "name": "failed database transaction then safe retry",
+      "status": "PASS",
+      "operation_id": "d820651b-d0b2-40c2-9cd2-b3eb591bdeee",
+      "correlation_id": "6759c8e5-54b4-4e55-a8a3-d1ebeaf10a0c",
+      "recovery_confirmation_ms": 9388,
+      "observed_states": [
+        "failed_retryable",
+        "processing",
+        "committed"
+      ],
+      "ledger": 1,
+      "effect": 1,
+      "attempts": 1,
+      "classification": "controlled dedicated listener fault"
+    },
+    {
+      "name": "callback unavailable after database commit",
+      "status": "PASS",
+      "operation_id": "74f67631-ceb9-428c-9995-b870a265fd85",
+      "durable_processing": true,
+      "older_progress_ignored": true,
+      "ledger": 1,
+      "effect": 1,
+      "attempts": 20,
+      "classification": "controlled outbound callback delivery refusal for22s; endpoint itself not taken down"
+    },
+    {
+      "name": "expired command cannot mutate database",
+      "status": "PASS",
+      "operation_id": "f713c2ef-8c51-4135-9ac5-c78f0135a40f",
+      "ledger": 1,
+      "effect": 0,
+      "attempts": 1,
+      "classification": "controlled owned-stream interruption; real application deadline"
+    }
+  ],
+  "postgres_pid_unchanged": true,
+  "status": "PASS"
+}

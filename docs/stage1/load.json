@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "stage": 1,
+  "mode": "load",
+  "run_id": "00037965-81d5-4cc3-8aca-55a3e2966a8f",
+  "broker": "mqtts://mqtt.flespi.io:8883",
+  "account_id": 2617576,
+  "namespace": "shopping-poc/naf-stage0-041d4f122bdd",
+  "qos": 1,
+  "simulated_processing_ms": 5,
+  "database_commit": false,
+  "environment": {
+    "node": "v24.22.3",
+    "mqtt": "5.16.1",
+    "host": "debian",
+    "same_host_processes": true
+  },
+  "tested_at": "2026-11-20T01:03:09.595Z",
+  "result": {
+    "requested": 1200,
+    "confirmed": 1200,
+    "missing": 0,
+    "duplicate_results": 0,
+    "latency_ms": {
+      "p50": 198.36,
+      "p95": 316.81,
+      "p99": 590.25,
+      "max": 817.45
+    },
+    "duration_seconds": 300,
+    "publisher_clients": 10,
+    "listener_clients": 1,
+    "response_timeouts": 0,
+    "batch_size": 10,
+    "batch_interval_ms": 2500,
+    "criteria": {
+      "missing": 0,
+      "p95_ms_lte": 1000,
+      "p99_ms_lte": 2000,
+      "duration_seconds_gte": 300
+    },
+    "notes": "10 backend client simulators; all share one dev namespace. Result fanout is broker traffic, not household isolation or browser architecture.",
+    "passed": true
+  },
+  "connections": [
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-40fa94e5-1",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:06.591Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-5abde366-4",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:06.910Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-f306b1c6-3",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:07.245Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-67f5520a-f",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:07.577Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-0edda2fc-2",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:07.888Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-7493da3e-e",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:08.252Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-85ec3259-e",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:08.566Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-091159ed-e",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:08.877Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-b5247d74-9",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:09.209Z"
+    },
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-d80c7789-0",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:58:09.517Z"
+    }
+  ],
+  "historical_source_sha256": "bd419ce8177efc35650d0b30c7635a8a243ec92a2f18e09a7232a719d611ec89"
+}

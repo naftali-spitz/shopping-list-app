@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchCategories } from "@/lib/db/categories";
 import { subscribeToProducts } from "@/lib/realtime/products-channel";
 import { Category } from "@/types/shopping";
 
 export function useSharedCategories(initialCategories: Category[], householdId: string | null) {
+  const activeHousehold = useRef(householdId);
+  activeHousehold.current = householdId;
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [loading, setLoading] = useState(true);
   const [loadedHouseholdId, setLoadedHouseholdId] = useState<string | null>(null);
@@ -20,6 +22,7 @@ export function useSharedCategories(initialCategories: Category[], householdId: 
       }
 
       const data = await fetchCategories(householdId);
+      if (activeHousehold.current !== householdId) return;
 
       setCategories(data);
       setLoadedHouseholdId(householdId);
@@ -41,7 +44,7 @@ export function useSharedCategories(initialCategories: Category[], householdId: 
 
     const channel = subscribeToProducts(() => {
       void refreshCategories();
-    });
+    }, householdId);
 
     return () => {
       channel.unsubscribe();

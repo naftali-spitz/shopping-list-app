@@ -1,0 +1,28 @@
+{
+  "id": "3cb4cc7f-ce2d-4258-9d09-7e31b001dc34",
+  "at": "2026-11-20T08:11:38.958Z",
+  "scope": "actual protected Vercel Preview API → flespi → Debian PostgreSQL → Vercel callback → durable status",
+  "checks": [
+    {
+      "name": "Preview durably accepted then published to real broker",
+      "status": "PASS"
+    }
+  ],
+  "acceptance": {
+    "status": 202,
+    "data": {
+      "id": "78a9580d-a950-46e7-b09e-80bf6712b000",
+      "result": null,
+      "duplicate": false,
+      "accepted_at": "2026-11-20T08:11:41.897391+00:00",
+      "state": "accepted_pending",
+      "transport": "puback"
+    }
+  },
+  "acceptance_ms": 3723,
+  "status": "FAIL",
+  "error": {
+    "type": "Error",
+    "message": "Authoritative confirmation timeout"
+  }
+}

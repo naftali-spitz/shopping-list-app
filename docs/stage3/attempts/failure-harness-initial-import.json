@@ -1,0 +1,1 @@
+{"status":"FAIL","scope":"module loading only; no tests executed","command":"node scripts/stage3-failures.mjs quick","error":"Named export Pool not found in direct CommonJS pg entrypoint","correction":"Use pg default export and pg.Pool; a corrective rerun gets its own report UUID."}

@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "database": "shopping_stage2_rebuild",
+  "host": "127.0.0.1",
+  "port": 55439,
+  "migrations": [
+    {
+      "version": 1,
+      "file": "001_core.sql",
+      "checksum": "c9afeb6c0945c1ffcff430cb92d958cb9058669b7eb3493e8541797347ea5f8b"
+    },
+    {
+      "version": 2,
+      "file": "002_authorization_row_locks.sql",
+      "checksum": "c107ae0dff84824395b98739ca80a08b235e8f0c6d007dff6f2a46e0148fa209"
+    },
+    {
+      "version": 3,
+      "file": "003_pin_context_function_paths.sql",
+      "checksum": "fd31f86ed188d9d0e989d5154b9fdce6525213ce35a34ae4c8b4f52e1183049f"
+    },
+    {
+      "version": 4,
+      "file": "004_immutable_results_and_narrow_updates.sql",
+      "checksum": "0b436036ab7700341f48f8d7fce82872851d9b8b822aa732d4d3b81785712cd1"
+    }
+  ],
+  "schema": [
+    {
+      "tablename": "categories",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "household_invites",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "household_members",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "households",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "operations",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "principals",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "products",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "result_outbox",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "schema_migrations",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "shopping_history",
+      "rowsecurity": true
+    }
+  ],
+  "identity": "Only synthetic fixture issuer/principals. No production user data or browser sign-in."
+}

@@ -1,12 +1,13 @@
 "use client";
 
+import { homeBackendEnabled } from "@/lib/backend/selection";
+import { HouseholdManagement } from "@/components/household-management";
 import { ReactNode, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown, Home, Link, LogOut, Mail, Menu, Moon, Plus, Settings, Sun, Trash2, Volume2, VolumeX, X } from "lucide-react";
 import { ConfirmModal } from "@/components/confirm-modal";
 import { LanguageSelector } from "@/components/language-selector";
-import { useCurrentHousehold } from "@/hooks/useCurrentHousehold";
-import { UserHousehold } from "@/lib/db/households";
+import { deleteHousehold, UserHousehold } from "@/lib/db/households";
 import { AppCopy, AppLanguage } from "@/lib/i18n";
 
 type ProfileSettingsModalProps = {
@@ -63,15 +64,14 @@ export function ProfileSettingsModal({
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [householdExpanded, setHouseholdExpanded] = useState(false);
   const [preferencesExpanded, setPreferencesExpanded] = useState(false);
-  const { deleteHousehold } = useCurrentHousehold();
   const currentHousehold = households.find((household) => household.id === currentHouseholdId) ?? null;
   const canDeleteCurrentHousehold = currentHousehold?.role === "owner";
   const otherHouseholds = households.filter((household) => household.id !== currentHouseholdId);
 
   const confirmDeleteHousehold = async () => {
     if (!currentHousehold || !canDeleteCurrentHousehold) return;
-    const deleted = await deleteHousehold(currentHousehold.id);
-    if (!deleted) return;
+    const { error } = await deleteHousehold(currentHousehold.id);
+    if (error) return;
     setDeleteConfirmOpen(false);
     onClose();
     window.location.reload();
@@ -163,6 +163,8 @@ export function ProfileSettingsModal({
                           </div>
                         </div>
                       )}
+
+                      {currentHousehold && homeBackendEnabled() ? <HouseholdManagement key={currentHousehold.id} household={currentHousehold} hebrew={language === "he"} /> : null}
 
                       {otherHouseholds.length > 0 && (
                         <div className="mt-3 space-y-2">

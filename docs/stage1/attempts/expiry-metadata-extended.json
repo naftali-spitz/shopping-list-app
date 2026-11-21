@@ -1,0 +1,56 @@
+{
+  "observations": [
+    {
+      "offline_ms": 0,
+      "sessions": [
+        {
+          "id": 52507752,
+          "connected": false,
+          "last_active": 1795136797,
+          "expiry_interval": 0,
+          "client_id": "naf-s1-listener-9ebf26c1-ad71-429c-bb64-cf75ec2ae608",
+          "bytes_out_queue": 0,
+          "expires": 1795136798
+        }
+      ]
+    },
+    {
+      "offline_ms": 6485,
+      "sessions": [
+        {
+          "id": 52507752,
+          "connected": false,
+          "last_active": 1795136797,
+          "expiry_interval": 0,
+          "client_id": "naf-s1-listener-9ebf26c1-ad71-429c-bb64-cf75ec2ae608",
+          "bytes_out_queue": 0,
+          "expires": 1795136798
+        }
+      ]
+    },
+    {
+      "offline_ms": 66590,
+      "sessions": [
+        {
+          "id": 52507752,
+          "connected": false,
+          "last_active": 1795136797,
+          "expiry_interval": 0,
+          "client_id": "naf-s1-listener-9ebf26c1-ad71-429c-bb64-cf75ec2ae608",
+          "bytes_out_queue": 0,
+          "expires": 1795136798
+        }
+      ]
+    }
+  ],
+  "wire_disconnect": [
+    {
+      "cmd": "disconnect",
+      "properties": {
+        "sessionExpiryInterval": 2
+      }
+    }
+  ],
+  "session_present_after_wait": true,
+  "tested_at": "2026-11-20T01:07:44.223Z"
+}

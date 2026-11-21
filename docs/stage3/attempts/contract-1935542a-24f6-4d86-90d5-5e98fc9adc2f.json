@@ -1,0 +1,21 @@
+{
+  "id": "1935542a-24f6-4d86-90d5-5e98fc9adc2f",
+  "at": "2026-11-20T08:01:03.783Z",
+  "scope": "actual provider identity + signed gateway + isolated PostgreSQL; direct execution, no MQTT/Vercel/browser claim",
+  "checks": [
+    {
+      "name": "command durable acceptance before database execution",
+      "status": "PASS"
+    },
+    {
+      "name": "PostgreSQL committed authenticated operation",
+      "status": "PASS"
+    }
+  ],
+  "status": "FAIL",
+  "error": {
+    "type": "Error",
+    "code": null,
+    "message": "unauthorized"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "10bfb0d9-8107-4335-8a89-e5c3c4330756",
+  "at": "2026-11-20T07:59:43.263Z",
+  "scope": "actual provider identity + signed gateway + isolated PostgreSQL; direct execution, no MQTT/Vercel/browser claim",
+  "checks": [
+    {
+      "name": "command durable acceptance before database execution",
+      "status": "PASS"
+    }
+  ],
+  "status": "FAIL",
+  "error": {
+    "type": "Error",
+    "code": null,
+    "message": "unauthorized"
+  }
+}

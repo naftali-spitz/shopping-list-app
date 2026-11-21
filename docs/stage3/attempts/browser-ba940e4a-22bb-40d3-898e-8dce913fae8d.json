@@ -1,0 +1,56 @@
+{
+  "id": "ba940e4a-22bb-40d3-898e-8dce913fae8d",
+  "at": "2026-11-20T11:43:04.866Z",
+  "scope": "actual Chrome browsers on protected feature Vercel Preview; real Auth, broker, Debian PostgreSQL and HTTPS callbacks",
+  "checks": [
+    {
+      "name": "two independent real browser sessions in one household",
+      "status": "PASS"
+    },
+    {
+      "name": "browser offline while PostgreSQL commits: optimistic change remains pending",
+      "status": "PASS"
+    },
+    {
+      "name": "browser reconnect retrieves authoritative commit and marks Saved",
+      "status": "PASS"
+    },
+    {
+      "name": "second authorized device synchronizes the same product",
+      "status": "PASS"
+    },
+    {
+      "name": "repeated result polls do not duplicate product effects",
+      "status": "PASS"
+    },
+    {
+      "name": "refresh while pending recovers the same persisted operation ID",
+      "status": "PASS"
+    },
+    {
+      "name": "concurrent quantity changes produce one commit, one visible conflict; both devices converge",
+      "status": "PASS"
+    },
+    {
+      "name": "controlled out-of-order older snapshot cannot overwrite newer household revision",
+      "status": "PASS"
+    },
+    {
+      "name": "refresh retrieves authoritative state after conflict",
+      "status": "PASS"
+    },
+    {
+      "name": "controlled listener pause: expired unexecuted intent is safely reconciled and shown Failed",
+      "status": "PASS"
+    },
+    {
+      "name": "other-household browser receives no shared-household product",
+      "status": "PASS"
+    }
+  ],
+  "operation_id": "658088ff-7337-49ae-9a9d-5a987a97bba7",
+  "correlation_id": "6479689c-7c3e-4811-8709-ff2e565abae7",
+  "browser_confirmation_ms": 10140,
+  "expired_operation_id": "3c7d5ad1-88c9-4dc6-aedb-8d9e7d49f608",
+  "status": "PASS"
+}

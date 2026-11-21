@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "account_id": 2617576,
+  "sla": 0,
+  "account_enabled": true,
+  "mqtt": {
+    "messages": 24,
+    "messages_limit": 20000,
+    "retained_storage": 128,
+    "retained_storage_limit": 102400,
+    "retained_storage_total": 128,
+    "sessions": 2,
+    "sessions_limit": 50,
+    "sessions_storage": 0,
+    "sessions_storage_limit": 102400,
+    "subscriptions_count": 0,
+    "subscriptions_count_limit": 0
+  },
+  "api": {
+    "calls": 3,
+    "calls_limit": 200,
+    "tokens": 6,
+    "tokens_limit": 100,
+    "traffic": 53636,
+    "traffic_limit": 52428800
+  },
+  "source": "Authenticated GET /platform/customer?fields=id,counters,sla,enabled",
+  "retrieved_at": "2026-11-20T00:45:34.741Z"
+}

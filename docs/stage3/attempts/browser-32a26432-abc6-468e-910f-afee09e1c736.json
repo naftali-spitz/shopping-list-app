@@ -1,0 +1,47 @@
+{
+  "id": "32a26432-abc6-468e-910f-afee09e1c736",
+  "at": "2026-11-20T09:23:20.027Z",
+  "scope": "actual Chrome browsers on protected feature Vercel Preview; real Auth, broker, Debian PostgreSQL and HTTPS callbacks",
+  "checks": [
+    {
+      "name": "two independent real browser sessions in one household",
+      "status": "PASS"
+    },
+    {
+      "name": "browser offline while PostgreSQL commits: optimistic change remains pending",
+      "status": "PASS"
+    },
+    {
+      "name": "browser reconnect retrieves authoritative commit and marks Saved",
+      "status": "PASS"
+    },
+    {
+      "name": "second authorized device synchronizes the same product",
+      "status": "PASS"
+    },
+    {
+      "name": "repeated result polls do not duplicate product effects",
+      "status": "PASS"
+    },
+    {
+      "name": "refresh while pending recovers the same persisted operation ID",
+      "status": "PASS"
+    },
+    {
+      "name": "concurrent quantity changes produce one commit, one visible conflict; both devices converge",
+      "status": "PASS"
+    },
+    {
+      "name": "refresh retrieves authoritative state after conflict",
+      "status": "PASS"
+    },
+    {
+      "name": "other-household browser receives no shared-household product",
+      "status": "PASS"
+    }
+  ],
+  "operation_id": "f37e0f2a-9077-42d4-959d-ea06b98fa242",
+  "correlation_id": "a25efd01-d346-4d34-a250-186268b884fb",
+  "browser_confirmation_ms": 7203,
+  "status": "PASS"
+}

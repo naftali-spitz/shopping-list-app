@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily isolated Shopping List development backup
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=5m
+Unit=shopping-list-stage0-backup.service
+
+[Install]
+WantedBy=timers.target

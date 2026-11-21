@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "project_id": "prj_jsqk7AsPGuxLmvWqYEsqyFClV1cM",
+  "team_id": "team_h5ZyD1rMpbgnak6COakN03nD",
+  "repository": "naftali-spitz/shopping-list-app",
+  "production_branch": "main",
+  "development_base": "develop",
+  "preview_url": "https://shopping-list-app-git-develop-0012ab-5576s-projects.vercel.app/",
+  "deployment_id": "dpl_EeL6gzAPKg9SY5r2TC5uZX4SvRjd",
+  "git_commit": "88af18681659fe69b0f2ca3122bc308de563e54f",
+  "static_bundles_inspected": 8,
+  "bundle_supabase_hosts": [
+    "njomxqthjglqesxchlbm.supabase.co"
+  ],
+  "preview_defaults_isolated": true,
+  "production_deployment_unchanged": true,
+  "production_secret_records_preserved": true,
+  "production_secret_values_compared": false,
+  "production_value_evidence": "Scope-only PATCH requests supplied no value field; provider secret values are write-only and cannot be independently compared.",
+  "browser_key_sha256": "983f2c7a5bf5593f86e7945fc27f67b017165dc85951a801ca1d585197ea5a92",
+  "verified_at": "2026-11-20T11:42:42.944779+00:00",
+  "scope": "read-only provider metadata/config/HTML/static; not a Stage 0 GO"
+}

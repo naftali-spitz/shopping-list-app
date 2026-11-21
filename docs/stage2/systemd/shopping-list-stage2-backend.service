@@ -1,0 +1,25 @@
+[Unit]
+Description=Shopping List Stage 2 development MQTT PostgreSQL backend
+After=shopping-list-stage0-postgres.service
+Requires=shopping-list-stage0-postgres.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend
+ExecStart=/usr/bin/node backend/src/listener.mjs
+Restart=on-failure
+RestartSec=3s
+TimeoutStopSec=20s
+KillSignal=SIGTERM
+UMask=0077
+NoNewPrivileges=true
+MemoryMax=128M
+CPUQuota=10%
+TasksMax=32
+LimitNOFILE=1024
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

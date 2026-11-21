@@ -1,0 +1,21 @@
+{
+  "sources_sha256": {
+    "backend/src/backup-format.mjs": "adfa5de181bb5a17ac399c7dc3ad4734a5c7c223da55eab64239b8f1491330ae",
+    "backend/src/listener.mjs": "1839176468c5902d4b2e2a5c09f3c614da887f0b11f063c5bea58313c7bab363",
+    "backend/src/protocol.mjs": "17c9564141a81b10368d0a5fa780868d875f1cd13f2324190f1da29a1d8bf018",
+    "backend/src/store.mjs": "ddd8bcbfc4e3f7679028ab195ded30275c4c2f68979a301200f9fdd39a3a3763",
+    "backend/src/config.mjs": "ea6b3a4081e3c5111cbb9d5792bb847e0a7f783af6fc94941beaa550cdd7bab9",
+    "backend/scripts/setup.mjs": "9d9194734c83b967f3aab8789df185fc5f5ebe583aa6a49eeb6f4a76bb1cf950",
+    "backend/scripts/backup.mjs": "435d990edb67c20e659a1d5587713f67f30c1f5d854e1330c95c4b4cc2897f99",
+    "backend/migrations/004_immutable_results_and_narrow_updates.sql": "0b436036ab7700341f48f8d7fce82872851d9b8b822aa732d4d3b81785712cd1",
+    "backend/migrations/002_authorization_row_locks.sql": "c107ae0dff84824395b98739ca80a08b235e8f0c6d007dff6f2a46e0148fa209",
+    "backend/migrations/003_pin_context_function_paths.sql": "fd31f86ed188d9d0e989d5154b9fdce6525213ce35a34ae4c8b4f52e1183049f",
+    "backend/migrations/001_core.sql": "c9afeb6c0945c1ffcff430cb92d958cb9058669b7eb3493e8541797347ea5f8b",
+    "backend/test/integration.mjs": "f88b9ca534a7034c93fc4f46af55d70712aa0624d83d40d23e16466e26e38dd0",
+    "backend/test/mqtt-integration.mjs": "0ca260f3e7be90b6137f73537d1baddfbf6fdd820aedbf1a1f26d770cc392e04",
+    "backend/test/protocol.test.mjs": "0179848caf85bb48bf05e7ea432d1217757af71c125a1408750dee31fe4f2562",
+    "backend/test/fixtures.mjs": "58acbc1227a27ae91f02a5c353b39d210b1bffbfa378c43b3abc16669e7c157b",
+    "scripts/stage2-service-check.py": "64425602f4da42cde00b4e531b0ea73d4191179ca4842242048c9423b620875b",
+    "scripts/stage0-backup.py": "e13420bf2d0ac1c07e8d9d059a16f71ffdc74f56b8c663ec22425fcc1f625a9e"
+  }
+}

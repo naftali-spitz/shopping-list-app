@@ -1,0 +1,50 @@
+{
+  "id": "0adc7979-380f-43d1-958b-95692674c876",
+  "at": "2026-11-20T08:01:36.373Z",
+  "scope": "actual provider identity + signed gateway + isolated PostgreSQL; direct execution, no MQTT/Vercel/browser claim",
+  "checks": [
+    {
+      "name": "command durable acceptance before database execution",
+      "status": "PASS"
+    },
+    {
+      "name": "PostgreSQL committed authenticated operation",
+      "status": "PASS"
+    },
+    {
+      "name": "real identity executes signed v2 command and stores durable authoritative callback",
+      "status": "PASS"
+    },
+    {
+      "name": "eight simultaneous duplicate executions return one immutable result",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate callback idempotent",
+      "status": "PASS"
+    },
+    {
+      "name": "signed wrong-household callback denied",
+      "status": "PASS"
+    },
+    {
+      "name": "forged callback denied",
+      "status": "PASS"
+    },
+    {
+      "name": "authoritative durable outcome retrievable by initiating identity",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong-household status lookup denied",
+      "status": "PASS"
+    },
+    {
+      "name": "second real user receives consistent household snapshot",
+      "status": "PASS"
+    }
+  ],
+  "operation_id": "3d02b53a-c0b5-4b3c-86d8-992c1d91b9cb",
+  "correlation_id": "35def2cc-22d5-48cd-bed4-f9a9ea489ef9",
+  "status": "PASS"
+}

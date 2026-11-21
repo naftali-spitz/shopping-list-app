@@ -1,0 +1,13 @@
+{
+  "status": "REVIEWED",
+  "project": "njomxqthjglqesxchlbm",
+  "observed_at": "2026-11-20T11:27:19Z",
+  "baseline_findings": {"anon_callable_definers":6,"authenticated_callable_definers":8,"households_rls_without_policy":1},
+  "stage3_findings": {
+    "stage3_dev_operations_rls_without_policy": "Intentional deny-all for browser roles: forced RLS and no anon/authenticated table grants. Access through verified Edge adapter and service-only invoker RPCs.",
+    "authenticated_callable_session_definer": "Narrow current-user session/membership lookup. PUBLIC/anon execution revoked; no identity/session/role argument; qualified objects and pg_catalog search_path. Live logout/expiry/household denial checks passed.",
+    "leaked_password_protection_disabled": "Development Auth setting remains disabled. Dedicated test passwords are cryptographically random36-byte secrets, not reused human passwords. No paid feature or plan was enabled. Resolve password-provider policy before broader password use; Google remains the intended later provider."
+  },
+  "remediation_references": ["https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy","https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable","https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection"],
+  "production_queries_or_writes": false
+}

@@ -1,0 +1,32 @@
+{
+  "id": "24b63c8c-8e8a-490e-aed0-28d6a976b2f1",
+  "at": "2026-11-20T11:35:12.135848+00:00",
+  "scope": "actual feature-branch Preview flag disable/re-enable and deployments; production excluded",
+  "checks": [
+    {
+      "name": "actual Preview API disabled by feature-only flag",
+      "status": "PASS"
+    },
+    {
+      "name": "original development app remains available",
+      "status": "PASS"
+    },
+    {
+      "name": "already committed result retained while experimental API disabled",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Preview restored and committed result still retrievable; production deployment/secret metadata unchanged",
+      "status": "PASS"
+    }
+  ],
+  "disabled": {
+    "url": "https://shopping-list-msmfeikwo-0012ab-5576s-projects.vercel.app",
+    "deployment_id": "dpl_6grEopz8Et3Mx5WZQ22osGYr36Wo"
+  },
+  "status": "PASS",
+  "restored": {
+    "url": "https://shopping-list-km095n062-0012ab-5576s-projects.vercel.app",
+    "deployment_id": "dpl_H4xqwFBgcPd6E41RhKopakHjB5HV"
+  }
+}

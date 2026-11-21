@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "stage": 1,
+  "mode": "baseline",
+  "run_id": "f8ecbcae-12e5-4bed-a50d-0aac67a586be",
+  "broker": "mqtts://mqtt.flespi.io:8883",
+  "account_id": 2617576,
+  "namespace": "shopping-poc/naf-stage0-041d4f122bdd",
+  "qos": 1,
+  "simulated_processing_ms": 5,
+  "database_commit": false,
+  "environment": {
+    "node": "v24.22.3",
+    "mqtt": "5.16.1",
+    "host": "debian",
+    "same_host_processes": true
+  },
+  "tested_at": "2026-11-20T00:57:32.381Z",
+  "result": {
+    "baseline": {
+      "requested": 600,
+      "confirmed": 600,
+      "missing": 0,
+      "duplicate_results": 0,
+      "latency_ms": {
+        "p50": 253.46,
+        "p95": 326.8,
+        "p99": 356.57,
+        "max": 406.04
+      },
+      "duration_seconds": 15.43,
+      "criteria": {
+        "confirmed": 600,
+        "missing": 0,
+        "p95_ms_lte": 1000
+      },
+      "historical_p95_ms": 662,
+      "historical_raw_logs_found": false,
+      "historical_equivalence": "Fresh timing need not equal historical662ms; old credentials invalid, no saved raw logs found.",
+      "passed": true
+    },
+    "offline": {
+      "requested": 100,
+      "confirmed": 100,
+      "missing": 0,
+      "session_present": true,
+      "latency_ms_including_outage": {
+        "p50": 5270.62,
+        "p95": 8682.08,
+        "p99": 8992.52,
+        "max": 8992.52
+      },
+      "passed": true
+    },
+    "passed": true
+  },
+  "connections": [
+    {
+      "event": "connect",
+      "role": "publisher",
+      "client_id": "naf-s1-publisher-0d6fd91e-f",
+      "tls": "TLSv1.3",
+      "session_present": false,
+      "at": "2026-11-20T00:57:07.665Z"
+    }
+  ],
+  "historical_source_sha256": "bd419ce8177efc35650d0b30c7635a8a243ec92a2f18e09a7232a719d611ec89"
+}

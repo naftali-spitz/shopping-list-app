@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "tested_at": "2026-11-20T06:47:15Z",
+  "unit": "shopping-list-stage2-backend.service",
+  "enabled": true,
+  "health_before": {
+    "pid": 1417389,
+    "at": "2026-11-20T06:46:55.184Z",
+    "connected": true,
+    "clock_healthy": true,
+    "database": "shopping_stage0",
+    "port": 55439,
+    "processed": 0
+  },
+  "health_after_restart": {
+    "pid": 1418707,
+    "at": "2026-11-20T06:47:03.914Z",
+    "connected": true,
+    "clock_healthy": true,
+    "database": "shopping_stage0",
+    "port": 55439,
+    "processed": 0
+  },
+  "health_after_sigkill_automatic_recovery": {
+    "pid": 1418814,
+    "at": "2026-11-20T06:47:14.609Z",
+    "connected": true,
+    "clock_healthy": true,
+    "database": "shopping_stage0",
+    "port": 55439,
+    "processed": 0
+  },
+  "database_business_fingerprint_unchanged": true,
+  "postgres_pid_unchanged": true,
+  "dedicated_encrypted_backup_service_exit": 0,
+  "backup_timer_active": true,
+  "linger": "yes",
+  "no_new_privileges": "yes",
+  "memory_max": "134217728",
+  "tasks_max": "32",
+  "host_reboot_performed": false,
+  "scope": "Actual dedicated user-service restart and SIGKILL recovery; no unrelated service/host restart."
+}

@@ -1,0 +1,8 @@
+{
+  "name": "shopping-home-backend-dev",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x" },
+  "dependencies": { "mqtt": "5.16.1", "pg": "8.16.3" },
+  "scripts": { "test": "node --test test/*.test.mjs" }
+}

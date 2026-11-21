@@ -17,7 +17,7 @@ export function getNewDisplayOrder(
   }
 
   if (previousOrder === null) {
-    return nextOrder! - ORDER_STEP;
+    return nextOrder! >= ORDER_STEP ? nextOrder! - ORDER_STEP : null;
   }
 
   if (nextOrder === null) {

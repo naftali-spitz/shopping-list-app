@@ -1,3 +1,5 @@
+import { homeBackendEnabled } from "@/lib/backend/selection";
+import { homeCategories, homeMutation } from "@/lib/backend/home";
 import { normalizeCategoryIcon } from "@/lib/category-icons";
 import { supabase } from "@/lib/supabase";
 import { Category } from "@/types/shopping";
@@ -5,6 +7,7 @@ import { Category } from "@/types/shopping";
 export async function fetchCategories(
   householdId: string
 ): Promise<Category[]> {
+  if (homeBackendEnabled()) return homeCategories(householdId);
   const { data, error } = await supabase
     .from("categories")
     .select("*, products(*)")
@@ -36,6 +39,7 @@ export async function createCategory(
   householdId: string,
   category: Pick<Category, "name" | "icon">
 ) {
+  if (homeBackendEnabled()) return homeMutation(householdId, "category.create", { id: crypto.randomUUID(), ...category });
   return supabase.from("categories").insert({
     household_id: householdId,
     name: category.name,
@@ -47,6 +51,7 @@ export async function updateCategory(
   categoryId: string,
   updates: Partial<Pick<Category, "name" | "icon">>
 ) {
+  if (homeBackendEnabled()) return homeMutation(undefined, "category.update", { id: categoryId, ...updates }, categoryId);
   const result = await supabase
     .from("categories")
     .update(updates)
@@ -70,5 +75,6 @@ export async function updateCategory(
 }
 
 export async function deleteCategory(categoryId: string) {
+  if (homeBackendEnabled()) return homeMutation(undefined, "category.delete", { id: categoryId }, categoryId);
   return supabase.from("categories").delete().eq("id", categoryId);
 }

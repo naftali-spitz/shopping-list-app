@@ -1,0 +1,13 @@
+{
+  "id": "c7fe33a1-7c98-4c0f-8f9a-0dc25b2dd430",
+  "at": "2026-11-20T08:04:49.140Z",
+  "mode": "revoked",
+  "scope": "real provider/session/membership with controlled development SQL revocation or session expiry; no browser claim",
+  "checks": [
+    {
+      "name": "revoked real session/membership denies pending execution with no ledger or business effect",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}

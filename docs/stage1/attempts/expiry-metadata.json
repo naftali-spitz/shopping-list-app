@@ -1,0 +1,56 @@
+{
+  "observations": [
+    {
+      "offline_ms": 0,
+      "sessions": [
+        {
+          "id": 52507751,
+          "connected": false,
+          "last_active": 1795136751,
+          "expiry_interval": 0,
+          "client_id": "naf-s1-listener-85ae3868-e312-4d17-a54c-1ba964fba662",
+          "bytes_out_queue": 0,
+          "expires": 1795136753
+        }
+      ]
+    },
+    {
+      "offline_ms": 6630,
+      "sessions": [
+        {
+          "id": 52507751,
+          "connected": false,
+          "last_active": 1795136751,
+          "expiry_interval": 0,
+          "client_id": "naf-s1-listener-85ae3868-e312-4d17-a54c-1ba964fba662",
+          "bytes_out_queue": 0,
+          "expires": 1795136753
+        }
+      ]
+    },
+    {
+      "offline_ms": 16719,
+      "sessions": [
+        {
+          "id": 52507751,
+          "connected": false,
+          "last_active": 1795136751,
+          "expiry_interval": 0,
+          "client_id": "naf-s1-listener-85ae3868-e312-4d17-a54c-1ba964fba662",
+          "bytes_out_queue": 0,
+          "expires": 1795136753
+        }
+      ]
+    }
+  ],
+  "wire_disconnect": [
+    {
+      "cmd": "disconnect",
+      "properties": {
+        "sessionExpiryInterval": 2
+      }
+    }
+  ],
+  "session_present_after_wait": true,
+  "tested_at": "2026-11-20T01:06:08.908Z"
+}

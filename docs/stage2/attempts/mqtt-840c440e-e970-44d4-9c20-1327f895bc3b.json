@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "run_id": "840c440e-e970-44d4-9c20-1327f895bc3b",
+  "tested_at": "2026-11-20T06:41:01.837Z",
+  "checks": [
+    {
+      "test": "actual SIGKILL after PostgreSQL commit before MQTT ACK/application reply",
+      "passed": true,
+      "actual_postgresql": true,
+      "live_mqtt": true
+    },
+    {
+      "test": "restart redelivery returns committed result; durable outbox drains; effect remains once",
+      "passed": true,
+      "actual_postgresql": true,
+      "live_mqtt": true
+    },
+    {
+      "test": "graceful process restart recovers actual queued valid operations into PostgreSQL",
+      "passed": true,
+      "actual_postgresql": true,
+      "live_mqtt": true
+    },
+    {
+      "test": "live same-ID conflict and signed status lookup after restart",
+      "passed": true,
+      "actual_postgresql": true,
+      "live_mqtt": true
+    },
+    {
+      "test": "live invalid signature is ACKed as rejected and cannot write PostgreSQL",
+      "passed": true,
+      "actual_postgresql": true,
+      "live_mqtt": true
+    }
+  ],
+  "ready_packets": [
+    {
+      "event": "ready",
+      "session_present": false
+    },
+    {
+      "event": "ready",
+      "session_present": true
+    },
+    {
+      "event": "ready",
+      "session_present": true
+    }
+  ],
+  "household": "20000000-0000-4000-8000-000000000001",
+  "scope": "Actual PostgreSQL and dedicated live MQTT; synthetic signed identities. No Vercel/browser path."
+}
