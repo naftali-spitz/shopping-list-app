@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "sha": "8c3bbd9c17f9bf1d723c849e725ec0625a97c12e",
+  "deployment": "FKCXdPoaKVDYHuCn7HPZwmJd1mFP",
+  "reason": "Unanchored .vercelignore backend/ also excluded lib/backend/; hosted Next build failed with module-not-found. Local build and GitHub CI did not apply upload exclusion.",
+  "correction": "Anchor /backend/ to repository root, keep service excluded while shipping typed browser adapter."
+}

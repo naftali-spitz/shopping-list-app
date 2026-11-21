@@ -11,7 +11,9 @@ export async function seedDefaultHouseholdData(
   language: DefaultHouseholdLanguage
 ) {
   if (homeBackendEnabled()) {
-    return (await homeClient(householdId)).mutateLatest("household.seed", { language });
+    const client = await homeClient(householdId);
+    await client.read();
+    return client.mutateLatest("household.seed", { language });
   }
 
   const template = getDefaultHouseholdTemplate(language);
