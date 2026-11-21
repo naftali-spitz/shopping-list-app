@@ -119,7 +119,8 @@ function getDocumentDirection(categories: NormalizedCategory[]): DocumentDirecti
 
 function paragraphDirection(direction: DocumentDirection) {
   return {
-    alignment: direction === "rtl" ? AlignmentType.RIGHT : AlignmentType.LEFT,
+    // Logical leading-edge alignment avoids bidi mirroring of physical left/right.
+    alignment: AlignmentType.START,
     bidirectional: direction === "rtl",
   };
 }
@@ -283,7 +284,8 @@ function arrangeCategories(categories: NormalizedCategory[], direction: Document
 }
 
 function createColumnTable(columns: Column[], direction: DocumentDirection) {
-  const orderedColumns = direction === "rtl" ? [...columns].reverse() : columns;
+  // bidiVisual places the first logical cell on the right for RTL tables.
+  const orderedColumns = columns;
   const emptyParagraph = new Paragraph({ ...paragraphDirection(direction), text: "" });
 
   return new Table({
