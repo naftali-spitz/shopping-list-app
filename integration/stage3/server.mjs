@@ -63,17 +63,22 @@ export async function handle(request) {
     if(body.action==='status')return json(await gateway(body,config,token));
     if(body.action!=='command')return json({error:'invalid_action'},400);
     if(typeof body.intent?.type==='string' && body.intent.type.startsWith('stage4.') && !stage4Enabled())return json({error:'disabled'},404);
+    const authStarted=performance.now();
     const context=await verifyDevelopmentIdentity(token,body.intent?.household_id,{publishableKey:config.publishableKey,sessionOnly:typeof body.intent?.type==='string'&&body.intent.type.startsWith('stage4.')});
+    const authFinished=performance.now();
     const command=signCommand(body.intent,context,token,config.signer);
     validateCommand(command,config.commandKeys);
+    const gatewayStarted=performance.now();
     const accepted=await gateway({action:'accept',command},config);
+    const gatewayFinished=performance.now();
     let transport='not_needed';
     if(!accepted.result && command.expires_ms>Date.now()) {
       console.log(JSON.stringify({event:'stage3_publish',operation_id:command.id,correlation_id:command.correlation_id,published_at_ms:Date.now()}));
       try {await publishCommand(command,config);transport='puback';}catch{transport='retry_pending';}
     }
-    console.log(JSON.stringify({event:'stage3_accepted',operation_id:command.id,correlation_id:command.correlation_id,acceptance_ms:Date.now()-started,transport,duplicate:accepted.duplicate}));
-    return json({...accepted,state:accepted.result?accepted.result.status:'accepted_pending',transport},accepted.result?200:202);
+    const timings={authentication_ms:Math.round(authFinished-authStarted),durable_gateway_ms:Math.round(gatewayFinished-gatewayStarted),mqtt_ms:Math.round(performance.now()-gatewayFinished),handler_ms:Date.now()-started};
+    console.log(JSON.stringify({event:'stage3_accepted',operation_id:command.id,correlation_id:command.correlation_id,acceptance_ms:Date.now()-started,transport,duplicate:accepted.duplicate,timings}));
+    return json({...accepted,state:accepted.result?accepted.result.status:'accepted_pending',transport,timings},accepted.result?200:202);
   } catch(error) {
     const known=['operation_conflict','rate_limited','too_large','invalid_action','store_unavailable'];
     const message=known.includes(error.message)?error.message:'request_rejected';

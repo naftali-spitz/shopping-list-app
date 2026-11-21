@@ -249,9 +249,14 @@ export class ShoppingClient {
       if (entity === 'category') this.snapshot.products = this.snapshot.products.filter(row => row.category_id !== record.id);
     } else if (index < 0) (rows as unknown[]).push(record);
     else if (Number(record.version) >= Number(rows[index].version)) Object.assign(rows[index], record);
-    // Never advance past an unknown remote revision using only a partial record patch.
-    if (revision === Number(this.snapshot.household.version) + 1) this.snapshot.household.version = revision;
-    this.snapshotDue = true;
+    // A contiguous full record result completely describes a single product or
+    // category mutation. Reuse it instead of downloading the entire list again.
+    // Revision gaps and mutations with other record effects still require a full
+    // snapshot, and an already-requested refresh is never cancelled here.
+    const contiguous = revision === Number(this.snapshot.household.version) + 1;
+    const alreadyIncluded = revision === Number(this.snapshot.household.version);
+    if (contiguous) this.snapshot.household.version = revision;
+    if ((!contiguous && !alreadyIncluded) || entity === 'history' || entity === 'category' && verb === 'delete') this.snapshotDue = true;
   }
   private settle(pending: PendingOperation, result: OperationResult) {
     pending.result = result; pending.state = finishedState(result); pending.confirmed_ms = Date.now();

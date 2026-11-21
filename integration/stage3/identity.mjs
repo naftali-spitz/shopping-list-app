@@ -16,13 +16,16 @@ export async function verifyDevelopmentIdentity(token, householdId, { publishabl
     if (!response.ok) throw new Error('unauthorized');
     return response.json();
   }
-  const user = await request('/auth/v1/user');
-  if (!isUuid(user.id) || user.is_anonymous !== false || !user.email_confirmed_at && !user.phone_confirmed_at) throw new Error('unauthorized');
   // getUser alone cannot prove logout: a signed access token may outlive the
-  // refresh session. The RPC checks the current session and current membership.
-  const context = await request('/rest/v1/rpc/'+(sessionOnly?'stage4_dev_session_context':'stage3_dev_session_context'), {
-    method: 'POST', body: JSON.stringify(sessionOnly?{}:{ p_household_id: householdId }),
-  });
+  // refresh session. Both independent provider checks must succeed for this
+  // request; run them concurrently, then bind their verified identities.
+  const [user, context] = await Promise.all([
+    request('/auth/v1/user'),
+    request('/rest/v1/rpc/'+(sessionOnly?'stage4_dev_session_context':'stage3_dev_session_context'), {
+      method: 'POST', body: JSON.stringify(sessionOnly?{}:{ p_household_id: householdId }),
+    }),
+  ]);
+  if (!isUuid(user.id) || user.is_anonymous !== false || !user.email_confirmed_at && !user.phone_confirmed_at) throw new Error('unauthorized');
   if (context.user_id !== user.id || !isUuid(context.session_id) || context.issuer !== DEV_ISSUER ||
       !sessionOnly && (context.household_id !== householdId || !['owner', 'member'].includes(context.role))) throw new Error('unauthorized');
   // Stage4 selects PostgreSQL as the business authority. This is identity only,

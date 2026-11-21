@@ -247,3 +247,27 @@ test('changed per-operation storage intent fails closed and preserves the origin
   assert.equal(JSON.parse(localStorage.getItem(client.storageKey))[0].intent.payload.quantity, 2);
   client.dispose(); await promise;
 });
+
+
+test('contiguous complete product and category results avoid unnecessary full snapshots', async () => {
+  const { client } = await setup(); client.snapshot = snapshot(); client.snapshotDue = false;
+  client.apply({ status: 'committed', data: { record: snapshot(2, 2).products[0], household_version: 2 } }, { type: 'stage4.product.update' });
+  assert.equal(client.current().household.version, 2); assert.equal(client.current().products[0].quantity, 2);
+  assert.equal(client.snapshotDue, false);
+  client.apply({ status: 'committed', data: { record: { ...snapshot().categories[0], name: 'Renamed', version: 2 }, household_version: 3 } }, { type: 'stage4.category.update' });
+  assert.equal(client.current().household.version, 3); assert.equal(client.current().categories[0].name, 'Renamed');
+  assert.equal(client.snapshotDue, false);
+  // Unknown remote work may include other records; a complete record is not a
+  // complete household snapshot when revisions are noncontiguous.
+  client.apply({ status: 'committed', data: { record: snapshot(4, 4).products[0], household_version: 5 } }, { type: 'stage4.product.update' });
+  assert.equal(client.snapshotDue, true); assert.equal(client.current().household.version, 3);
+});
+
+test('history deletion and category cascade retain full refresh and explicit refresh is never cancelled', async () => {
+  const { client } = await setup(); client.snapshot = snapshot(); client.snapshotDue = false;
+  client.apply({ status: 'committed', data: { record: { id: categoryId, version: 2 }, household_version: 2 } }, { type: 'stage4.category.delete' });
+  assert.equal(client.snapshotDue, true); assert.equal(client.current().products.length, 0);
+  client.snapshot = snapshot(); client.snapshotDue = true;
+  client.apply({ status: 'committed', data: { record: snapshot(2, 2).products[0], household_version: 2 } }, { type: 'stage4.product.update' });
+  assert.equal(client.snapshotDue, true);
+});

@@ -83,3 +83,19 @@ test('Stage4 operation prefix preserves strict legacy payload validation and sig
   assert.equal(seen,'stage4.product.update');
   for(const patch of [{type:'stage4.stage4.product.update'},{type:'stage4.product.update',payload:{id:c.payload.id,quantity:-1}},{type:'stage4.household.create',payload:{name:'Good',user_id:user},expected_version:0}])assert.throws(()=>validateCommand(resign({...c,...patch}),keys,now));
 });
+
+test('independent provider checks overlap but both verified identities must match',async()=>{
+  const sid='40000000-0000-4000-8000-000000000004';
+  const other='50000000-0000-4000-8000-000000000005';
+  const releases=[],started=[];
+  const fetcher=async url=>{
+    started.push(url);
+    await new Promise(resolve=>releases.push(resolve));
+    return Response.json(url.endsWith('/user')?{id:user,is_anonymous:false,email_confirmed_at:'today'}:{user_id:user,household_id:household,session_id:sid,issuer:DEV_ISSUER,role:'member'});
+  };
+  const verified=verifyDevelopmentIdentity('a.b.c',household,{publishableKey:'sb_publishable_test',fetcher});
+  await Promise.resolve();assert.equal(started.length,2);
+  for(const release of releases)release();
+  assert.equal((await verified).user_id,user);
+  await assert.rejects(()=>verifyDevelopmentIdentity('a.b.c',household,{publishableKey:'sb_publishable_test',fetcher:async url=>Response.json(url.endsWith('/user')?{id:user,is_anonymous:false,email_confirmed_at:'today'}:{user_id:other,household_id:household,session_id:sid,issuer:DEV_ISSUER,role:'member'})}));
+});
