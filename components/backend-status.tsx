@@ -6,12 +6,14 @@ import type { PendingOperation } from "@/integration/stage3/client";
 export function BackendStatus({ householdId, hebrew }: { householdId: string; hebrew: boolean }) {
   const [operations, setOperations] = useState<readonly PendingOperation[]>([]);
   const [revision, setRevision] = useState(0);
+  const [error, setError] = useState(false);
   useEffect(() => {
     let cancelled = false;
     let unsubscribe: (() => void) | undefined;
     void homeClient(householdId).then(client => {
       if (cancelled) return;
       const update = () => {
+        setError(Boolean(client.error()));
         setOperations([...client.operations()]);
         setRevision(Number(client.current()?.household.version ?? 0));
       };
@@ -21,7 +23,7 @@ export function BackendStatus({ householdId, hebrew }: { householdId: string; he
   }, [householdId]);
   const pending = operations.filter(operation => !operation.result);
   const failed = operations.filter(operation => operation.result && !["committed", "snapshot"].includes(operation.result.status));
-  const text = pending.length ? (hebrew ? `שומר… (${pending.length})` : `Saving… (${pending.length})`) : failed.length ? (hebrew ? "יש שינוי שלא נשמר — בדוק פרטים" : "A change was not saved — review details") : operations.length ? (hebrew ? "נשמר" : "Saved") : (hebrew ? "מחובר" : "Connected");
+  const text = error ? (hebrew ? "החיבור או ההרשאה השתנו. השינויים הממתינים נשמרו במכשיר." : "Connection or access changed. Pending IDs are preserved on this device.") : pending.length ? (hebrew ? `שומר… (${pending.length})` : `Saving… (${pending.length})`) : failed.length ? (hebrew ? "יש שינוי שלא נשמר — בדוק פרטים" : "A change was not saved — review details") : operations.length ? (hebrew ? "נשמר" : "Saved") : (hebrew ? "מחובר" : "Connected");
   return <div className="mt-2 text-xs opacity-70" data-backend="home" data-revision={revision}>
     <p role="status" aria-live="polite">{text}{pending.some(operation => operation.state === "Offline/pending") ? (hebrew ? " · ממתין לחיבור" : " · Offline/pending") : ""}</p>
     {operations.length ? <details className="mt-1"><summary className="cursor-pointer">{hebrew ? "פרטי שמירה" : "Save details"}</summary>

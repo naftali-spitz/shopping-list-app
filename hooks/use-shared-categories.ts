@@ -5,7 +5,8 @@ import { fetchCategories } from "@/lib/db/categories";
 import { subscribeToProducts } from "@/lib/realtime/products-channel";
 import { Category } from "@/types/shopping";
 
-export function useSharedCategories(initialCategories: Category[], householdId: string | null) {
+export function useSharedCategories(initialCategories: Category[], householdId: string | null, onError?: (message: string) => void) {
+  const lastError = useRef<string | null>(null);
   const activeHousehold = useRef(householdId);
   activeHousehold.current = householdId;
   const [categories, setCategories] = useState<Category[]>(initialCategories);
@@ -24,12 +25,21 @@ export function useSharedCategories(initialCategories: Category[], householdId: 
       const data = await fetchCategories(householdId);
       if (activeHousehold.current !== householdId) return;
 
+      lastError.current = null;
       setCategories(data);
       setLoadedHouseholdId(householdId);
+    } catch {
+      if (activeHousehold.current !== householdId) return;
+      setCategories([]);
+      setLoadedHouseholdId(householdId);
+      if (lastError.current !== householdId) {
+        lastError.current = householdId;
+        onError?.("Could not load this list. Your session or membership may have changed.");
+      }
     } finally {
       setLoading(false);
     }
-  }, [householdId, initialCategories]);
+  }, [householdId, initialCategories, onError]);
 
   useEffect(() => {
     if (!householdId) {

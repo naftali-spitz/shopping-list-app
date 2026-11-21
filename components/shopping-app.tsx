@@ -71,7 +71,7 @@ export default function ShoppingApp() {
   }, []);
 
   const { acceptInvite, createHousehold, createInviteLink, currentHouseholdId, households, loading: householdLoading, setCurrentHouseholdId } = useCurrentHousehold({ onError: showError });
-  const { categories, setCategories, loading: categoriesLoading, refreshCategories } = useSharedCategories(initialCategories, currentHouseholdId);
+  const { categories, setCategories, loading: categoriesLoading, refreshCategories } = useSharedCategories(initialCategories, currentHouseholdId, showError);
   const { decreaseQuantity, deleteHistoryEntry, exportDoc, history, increaseQuantity, isLoading, playSound, previewSound, quickAddItem, removeProductFromShoppingList, setShoppingList, shoppingList, shoppingProducts, soundOn, setSoundOn, toggleItem } = useShoppingState({ categories, householdId: currentHouseholdId, refreshCategories, setCategories, onError: showError });
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
