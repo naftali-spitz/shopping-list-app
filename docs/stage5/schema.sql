@@ -169,4 +169,3 @@ begin
     returning * into old;
   return jsonb_build_object('id',old.id,'accepted_at',old.accepted_at,'result',null,'duplicate',false,'monitoring_mode',old.monitoring_mode);
 end; $$;
-

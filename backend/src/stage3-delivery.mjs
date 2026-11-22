@@ -22,7 +22,7 @@ async function previewToken(refresh=false) {
   return raw.startsWith('"')?JSON.parse(raw):raw;
 }
 export async function deliverStage3(result,config) {
-  const started=performance.now();
+  const started=performance.now();let delivered=false;
   try {
   // Strip a transport-only replay marker: terminal business results are immutable.
   const {replayed:ignored,...authoritative}=result;
@@ -37,11 +37,11 @@ export async function deliverStage3(result,config) {
     const token=await previewToken(attempt===1);
     const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-vercel-trusted-oidc-idp-token':token},body:JSON.stringify({action:'callback',callback}),redirect:'manual',signal:AbortSignal.timeout(10000)});
     const isJson=response.headers.get('content-type')?.includes('application/json');
-    if(response.ok&&isJson&&(await response.json()).id===result.operation_id)return;
+    if(response.ok&&isJson&&(await response.json()).id===result.operation_id){delivered=true;return;}
     if(isJson&&response.status!==401)break;
   }
   throw new Error('callback_unavailable');
-  } finally {if(!['snapshot','found','not_found'].includes(result.status))config.monitoring?.capture({id:result.operation_id,correlation_id:result.correlation_id,type:'callback'},{callback_ms:performance.now()-started},[{stage:'callback',start_ms:0,duration_ms:performance.now()-started}]);}
+  } finally {if(!['snapshot','found','not_found'].includes(result.status))config.monitoring?.capture({id:result.operation_id,correlation_id:result.correlation_id,type:'callback'},{callback_ms:performance.now()-started,error_count:delivered?0:1},[{stage:'callback',start_ms:0,duration_ms:performance.now()-started}]);}
 }
 export async function reconcileStage3(config) {
   const request=signed({v:2,kind:'reconcile',kid:config.resultKid??'callback-1',iss:CALLBACK_ISSUER,aud:CALLBACK_AUDIENCE,issued_ms:Date.now(),id:randomUUID()},config.resultPrivateKey);

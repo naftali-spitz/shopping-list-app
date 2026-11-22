@@ -1,0 +1,14 @@
+{
+  "id": "ac47e58f-1232-4d86-962c-e066565e6af1",
+  "at": "2026-11-22T19:01:44.313Z",
+  "scope": "FutureCart Dev monitoring Edge endpoint, real current provider sessions, no production requests",
+  "checks": [
+    "current session + configured operator accepted",
+    "missing session denied",
+    "non-operator control denied (403, no change)",
+    "OFF/MID/ON changes persisted without redeployment; restored MID",
+    "different household query empty",
+    "forged Debian telemetry rejected"
+  ],
+  "status": "PASS"
+}

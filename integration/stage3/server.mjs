@@ -27,14 +27,17 @@ export async function gateway(action, config, token) {
 export async function publishCommand(command,config) {
   const client=mqtt.connect('mqtts://mqtt.flespi.io:8883',{username:config.publisherToken,clientId:'naf-s3-api-'+randomUUID(),protocolVersion:5,clean:true,properties:{sessionExpiryInterval:0},reconnectPeriod:0,connectTimeout:5000,rejectUnauthorized:true});
   client.on('error',()=>{});
-  let timeout;
+  let timeout,connectMs=0,pubackMs=0;const mqttStarted=performance.now();
   try {
     await Promise.race([(async()=>{
       await new Promise((resolve,reject)=>{client.once('connect',resolve);client.once('error',reject);});
+      connectMs=performance.now()-mqttStarted;
       if(!client.stream.authorized)throw new Error('broker_tls');
       const ack=await client.publishAsync(config.topic,JSON.stringify(command),{qos:1,retain:false,properties:{messageExpiryInterval:Math.max(1,Math.floor((command.expires_ms-Date.now())/1000))}});
+      pubackMs=performance.now()-mqttStarted-connectMs;
       if(ack?.reasonCode>=128)throw new Error('broker_refused');
     })(),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(new Error('broker_timeout')),7000);})]);
+    return {mqtt_connect_ms:connectMs,mqtt_puback_ms:pubackMs};
   } finally {clearTimeout(timeout);client.end(true);}
 }
 async function readJson(request) {
@@ -71,14 +74,14 @@ export async function handle(request) {
     const gatewayStarted=performance.now();
     const accepted=await gateway({action:'accept',command},config);
     const gatewayFinished=performance.now();
-    let transport='not_needed';
+    let transport='not_needed',mqttTimings={};
     if(!accepted.result && command.expires_ms>Date.now()) {
 
-      try {await publishCommand(command,config);transport='puback';}catch{transport='retry_pending';}
+      try {mqttTimings=await publishCommand(command,config);transport='puback';}catch{transport='retry_pending';}
     }
-    const timings={authentication_ms:Math.round(authFinished-authStarted),durable_gateway_ms:Math.round(gatewayFinished-gatewayStarted),mqtt_ms:Math.round(performance.now()-gatewayFinished),handler_ms:Date.now()-started};
+    const timings={...(accepted.monitoring_mode==='ON'?mqttTimings:{}),authentication_ms:Math.round(authFinished-authStarted),durable_gateway_ms:Math.round(gatewayFinished-gatewayStarted),mqtt_ms:Math.round(performance.now()-gatewayFinished),handler_ms:Date.now()-started};
 
-    return json({...accepted,state:accepted.result?accepted.result.status:'accepted_pending',transport,...(['MID','ON'].includes(accepted.monitoring_mode)?{timings}:{})},accepted.result?200:202);
+    return json({...accepted,state:accepted.result?accepted.result.status:'accepted_pending',transport,...(['MID','ON'].includes(accepted.monitoring_mode)?{timings,monitoring_version:process.env.VERCEL_GIT_COMMIT_SHA}:{})},accepted.result?200:202);
   } catch(error) {
     const known=['operation_conflict','rate_limited','too_large','invalid_action','store_unavailable'];
     const message=known.includes(error.message)?error.message:'request_rejected';

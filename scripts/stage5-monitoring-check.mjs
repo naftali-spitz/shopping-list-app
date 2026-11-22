@@ -11,7 +11,7 @@ async function call(body,session=sessions[0]){const r=await fetch(DEV_SUPABASE+'
 try {
  const state=await call({action:'config'});assert.equal(state.status,200);assert.equal(state.body.operator,true);report.checks.push('current session + configured operator accepted');
  assert.equal((await call({action:'config'},null)).status,403);report.checks.push('missing session denied');
- assert.equal((await call({action:'mode',mode:'OFF'},sessions[2])).status,503);report.checks.push('non-operator control denied (generic RPC failure, no change)');
+ assert.equal((await call({action:'mode',mode:'OFF'},sessions[2])).status,403);report.checks.push('non-operator control denied (403, no change)');
  for(const mode of ['OFF','MID','ON','MID']){const change=await call({action:'mode',mode});assert.equal(change.status,200);assert.equal((await call({action:'config'})).body.mode,mode);}report.checks.push('OFF/MID/ON changes persisted without redeployment; restored MID');
  const other=await call({action:'history',household_id:randomUUID()});assert.equal(other.status,200);assert.deepEqual(other.body.operations,[]);report.checks.push('different household query empty');
  const forged=await call({action:'signed',envelope:{}});assert.equal(forged.status,403);report.checks.push('forged Debian telemetry rejected');

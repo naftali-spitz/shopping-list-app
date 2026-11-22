@@ -22,6 +22,7 @@ export function BackendStatus({ householdId, hebrew }: { householdId: string; he
     });
     return () => { cancelled = true; unsubscribe?.(); };
   }, [householdId]);
+  useEffect(() => {void homeClient(householdId).then(client => {for(const operation of operations)client.confirmRendered(operation);}).catch(()=>{});},[householdId,operations]);
   const pending = operations.filter(operation => !operation.result);
   const failed = operations.filter(operation => operation.result && !["committed", "snapshot"].includes(operation.result.status));
   const text = error ? (hebrew ? "החיבור או ההרשאה השתנו. השינויים הממתינים נשמרו במכשיר." : "Connection or access changed. Pending IDs are preserved on this device.") : pending.length ? (hebrew ? `שומר… (${pending.length})` : `Saving… (${pending.length})`) : failed.length ? (hebrew ? "יש שינוי שלא נשמר — בדוק פרטים" : "A change was not saved — review details") : operations.length ? (hebrew ? "נשמר" : "Saved") : (hebrew ? "מחובר" : "Connected");

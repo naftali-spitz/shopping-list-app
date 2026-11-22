@@ -5,7 +5,7 @@ import ts from 'typescript';
 
 // Compile the actual client without Next's alias loader, substituting only the
 // external provider SDK. Protocol and persistence code remain unchanged.
-const source = readFileSync(new URL('./client.ts', import.meta.url), 'utf8').replace("import { supabase } from '@/lib/supabase';", 'const supabase = globalThis.__shoppingAuth;').replace("import { BrowserMonitoring } from '@/integration/monitoring/browser';", 'class BrowserMonitoring {begin(){} stage(){} metric(){} count(){} finish(){} dispose(){}}');
+const source = readFileSync(new URL('./client.ts', import.meta.url), 'utf8').replace("import { supabase } from '@/lib/supabase';", 'const supabase = globalThis.__shoppingAuth;').replace("import { BrowserMonitoring } from '@/integration/monitoring/browser';", 'class BrowserMonitoring {begin(){} stage(){} metric(){} version(){} rendered(){} count(){} finish(){} dispose(){}}');
 const javascript = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 let moduleSerial = 0;
 const running = [];

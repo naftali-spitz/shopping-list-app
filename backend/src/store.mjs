@@ -14,19 +14,22 @@ export class Store {
     validateOperation(c);
     const dbStarted=performance.now();
     const db=await this.pool.connect();
+    const acquired=performance.now();let lockStart=acquired,lockEnd=acquired,commitStart=acquired,commitEnd=acquired,failed=false;
+    const commit=async()=>{commitStart=performance.now();await db.query('COMMIT');commitEnd=performance.now();};
     try {
       await db.query('BEGIN');
       await db.query("SELECT set_config('shopping.user_id',$1,true),set_config('shopping.household_id',$2,true)",[c.user_id,c.household_id]);
-      await db.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[c.household_id]);
+      lockStart=performance.now();
+      await db.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[c.household_id]);lockEnd=performance.now();
       if(c.type==='stage4.operation.status') {
         const result=(await db.query('SELECT shopping.stage4_operation_status($1::jsonb,$2) AS result',[JSON.stringify(c),hash])).rows[0].result;
-        await db.query('COMMIT');return result;
+        await commit();return result;
       }
       if(lifecycleTypes.has(c.type)) {
         const starter=c.type==='stage4.household.seed'?getDefaultHouseholdTemplate(c.payload.language):[];
         const result=(await db.query('SELECT shopping.stage4_lifecycle($1::jsonb,$2,$3::jsonb) AS result',[JSON.stringify(c),hash,JSON.stringify(starter)])).rows[0].result;
         await hooks.beforeCommit?.(db);
-        await db.query('COMMIT');return result;
+        await commit();return result;
       }
       const principal=await db.query('SELECT id FROM shopping.principals WHERE id=$1::uuid AND issuer=$2 AND subject=$1::text AND active FOR SHARE',[c.user_id,this.config.identity.issuer]);
       const membership=await db.query('SELECT role FROM shopping.household_members WHERE household_id=$1 AND user_id=$2 AND active FOR SHARE',[c.household_id,c.user_id]);
@@ -38,7 +41,7 @@ export class Store {
       };
       if(this.config.protocolVersion===2) {
         const previous=(await db.query('SELECT canonical_hash,user_id,result FROM shopping.operations WHERE id=$1',[c.id])).rows[0];
-        if(previous){await db.query('COMMIT');return previous.canonical_hash===hash && previous.user_id===c.user_id?{...previous.result,replayed:true}:this.result(c,'operation_id_conflict');}
+        if(previous){await commit();return previous.canonical_hash===hash && previous.user_id===c.user_id?{...previous.result,replayed:true}:this.result(c,'operation_id_conflict');}
       }
       const operationType=c.type.startsWith('stage4.')?c.type.slice(7):c.type;
       if (['snapshot','operation.status'].includes(operationType) && c.expires_ms<=Date.now()) { await db.query('ROLLBACK'); return this.result(c,'expired'); }
@@ -46,7 +49,7 @@ export class Store {
         const old=await db.query('SELECT result FROM shopping.operations WHERE id=$1 AND household_id=$2 AND user_id=$3',[c.payload.operation_id,c.household_id,c.user_id]);
         const result=this.result(c,old.rowCount?'found':'not_found',old.rows[0]?.result??null);
         if(this.config.protocolVersion===2)await persist(result);
-        await db.query('COMMIT'); return result;
+        await commit(); return result;
       }
       if (operationType==='snapshot') {
         const snapshot={};
@@ -54,13 +57,13 @@ export class Store {
         snapshot.household=(await db.query('SELECT id,name,version FROM shopping.households WHERE id=$1 AND deleted_at IS NULL',[c.household_id])).rows[0];
         const result=this.result(c,'snapshot',snapshot);
         if(this.config.protocolVersion===2)await persist(result);
-        await db.query('COMMIT'); return result;
+        await commit(); return result;
       }
       // Check prior durable outcome before command deadline: retries may retrieve
       // already committed results, but never create effects after expiration.
       const old=await db.query('SELECT canonical_hash,user_id,result FROM shopping.operations WHERE id=$1',[c.id]);
       if (old.rowCount) {
-        await db.query('COMMIT');
+        await commit();
         return old.rows[0].canonical_hash===hash && old.rows[0].user_id===c.user_id ? { ...old.rows[0].result,replayed:true } : this.result(c,'operation_id_conflict');
       }
       const now=Date.now();
@@ -80,14 +83,14 @@ export class Store {
       await db.query('INSERT INTO shopping.operations(id,household_id,user_id,canonical_hash,operation_type,correlation_id,result) VALUES($1,$2,$3,$4,$5,$6,$7)',[c.id,c.household_id,c.user_id,hash,c.type,c.correlation_id,result]);
       await db.query('INSERT INTO shopping.result_outbox(operation_id,household_id,user_id,result) VALUES($1,$2,$3,$4)',[c.id,c.household_id,c.user_id,result]);
       await hooks.beforeCommit?.(db);
-      await db.query('COMMIT'); return result;
+      await commit(); return result;
     } catch(e) {
-      await db.query('ROLLBACK');
+      failed=true;await db.query('ROLLBACK');
       if (e.code==='23505') return this.result(c,'operation_id_conflict');
       throw e;
     } finally {
       db.release();
-      this.config.monitoring?.capture(c,{listener_authentication_ms:dbStarted-authStarted,database_ms:performance.now()-dbStarted},[{stage:'listener_authentication',start_ms:0,duration_ms:dbStarted-authStarted},{stage:'database',start_ms:dbStarted-authStarted,duration_ms:performance.now()-dbStarted}]);
+      this.config.monitoring?.capture(c,{listener_authentication_ms:dbStarted-authStarted,database_ms:performance.now()-dbStarted,db_pool_wait_ms:acquired-dbStarted,household_lock_wait_ms:lockEnd-lockStart,commit_confirmation_ms:Math.max(0,commitEnd-commitStart),error_count:failed?1:0},[{stage:'listener_authentication',start_ms:0,duration_ms:dbStarted-authStarted},{stage:'database',start_ms:dbStarted-authStarted,duration_ms:performance.now()-dbStarted},{stage:'db_pool_wait',start_ms:dbStarted-authStarted,duration_ms:acquired-dbStarted},{stage:'household_lock_wait',start_ms:lockStart-authStarted,duration_ms:lockEnd-lockStart},...(commitEnd>commitStart?[{stage:'commit_confirmation',start_ms:commitStart-authStarted,duration_ms:commitEnd-commitStart}]:[])]);
     }
   }
   result(c,status,data=null) { return { operation_id:c.id,household_id:c.household_id,user_id:c.user_id,correlation_id:c.correlation_id,audience:this.config.audience,status,data }; }

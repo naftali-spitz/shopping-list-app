@@ -15,6 +15,7 @@ const cli='/home/naf-w/.local/share/shopping-list-tools/node_modules/.bin/vercel
 const deployment=JSON.parse(execFileSync(cli,['inspect',PREVIEW,'--json','--scope','0012ab-5576s-projects','--non-interactive'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
 const source=JSON.parse(execFileSync(cli,['api',`/v13/deployments/${deployment.id}?teamId=team_h5ZyD1rMpbgnak6COakN03nD`,'--method','GET','--scope','0012ab-5576s-projects','--non-interactive'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
 assert.equal(source.projectId,'prj_jsqk7AsPGuxLmvWqYEsqyFClV1cM');assert.notEqual(source.target,'production');
+if(process.env.STAGE5_EXPECT_SHA)assert.equal(source.gitSource.sha,process.env.STAGE5_EXPECT_SHA,'Benchmark requires the exact verified application source');
 report.harness_sha=report.sha;delete report.sha;report.deployment={id:source.id,sha:source.gitSource.sha,url:source.url};
 
 const db=new pg.Pool({host:'127.0.0.1',port:55439,database:'shopping_stage0',user:'stage0_owner',password:readFileSync('.stage0-runtime/admin-password','utf8').trim(),max:1});
@@ -24,8 +25,11 @@ try{
  const h=randomUUID(),create=intent(h,'stage4.household.create',{name:'Performance '+report.id.slice(0,8)},0);assert.equal((await api({action:'command',intent:create},session)).status,202);assert.equal((await confirmed(create,session)).result.status,'committed');report.household_id=h;
  browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome',args:['--no-sandbox']});context=await browser.newContext({viewport:{width:1440,height:1000}});
  await context.route(PREVIEW+'/**',route=>route.continue({headers:{...route.request().headers(),...previewHeaders()}}));
+ if(process.env.STAGE5_EXPECT_SHA)await context.addInitScript(()=>{globalThis.__stage5LongTasks={count:0,total_ms:0};try{new PerformanceObserver(list=>{for(const e of list.getEntries()){globalThis.__stage5LongTasks.count++;globalThis.__stage5LongTasks.total_ms+=e.duration;}}).observe({type:'longtask',buffered:true});}catch{}});
  await context.addInitScript(({session,h})=>{localStorage.setItem('sb-njomxqthjglqesxchlbm-auth-token',JSON.stringify(session));localStorage.setItem(`futurecart.activeHouseholdId:home:${session.user.id}`,h);localStorage.setItem('futurecart.appLanguage','en');localStorage.setItem('futurecart.soundOn','false');},{session,h});
- const page=await context.newPage();page.setDefaultTimeout(90000);const load=Date.now();await page.goto(PREVIEW+'/');await page.getByRole('button',{name:'New category',exact:true}).waitFor();report.loads.push({kind:'first-browser-context',navigation_to_ready_ms:Date.now()-load,cold_function_instance_known:false});
+ const page=await context.newPage();const cdp=process.env.STAGE5_EXPECT_SHA?await context.newCDPSession(page):null;if(cdp)await cdp.send('Performance.enable');
+ if(cdp){report.network={business:{requests:0,bytes:0},monitoring:{requests:0,bytes:0}};page.on('requestfinished',async request=>{try{const key=request.url()===PREVIEW+'/api/dev-performance'?'monitoring':request.url()===PREVIEW+'/api/stage3'?'business':null;if(!key)return;const sizes=await request.sizes();report.network[key].requests++;report.network[key].bytes+=sizes.requestBodySize+sizes.responseBodySize;}catch{}});}
+ page.setDefaultTimeout(90000);const load=Date.now();await page.goto(PREVIEW+'/');await page.getByRole('button',{name:'New category',exact:true}).waitFor();report.loads.push({kind:'first-browser-context',navigation_to_ready_ms:Date.now()-load,cold_function_instance_known:false});
  const responses=new Map();page.on('response',async r=>{try{if(r.url()===PREVIEW+'/api/stage3'){const body=r.request().postDataJSON();if(body.action==='command')responses.set(body.intent.id,{received:Date.now(),body:await r.json()});}}catch{}});
  async function measure(kind,logicalType,predicate,action,visible){
   const request=page.waitForRequest(r=>{try{const b=r.postDataJSON();return r.url()===PREVIEW+'/api/stage3'&&b.action==='command'&&b.intent.type==='stage4.'+logicalType&&predicate(b.intent);}catch{return false;}});
@@ -55,6 +59,7 @@ try{
  for(let x=0;x<count;x++){
   const quantity=x+2;await measure('product.quantity','product.update',i=>i.payload.id===productId&&i.payload.quantity===quantity,()=>page.getByRole('button',{name:'Increase '+name,exact:true}).filter({visible:true}).click(),()=>page.waitForFunction(({name,quantity})=>document.querySelector(`button[aria-label="Increase ${name}"]`)?.parentElement.querySelector('span')?.textContent===String(quantity),{name,quantity}));
  }
+ if(cdp){report.browser_resources={long_tasks:await page.evaluate(()=>globalThis.__stage5LongTasks),cdp_metrics:(await cdp.send('Performance.getMetrics')).metrics.filter(m=>['TaskDuration','ScriptDuration','JSHeapUsedSize','JSHeapTotalSize'].includes(m.name))};}
  await page.screenshot({path:folder+'/desktop.png',fullPage:true});const reload=Date.now();await page.reload();await page.getByRole('button',{name:'New category',exact:true}).waitFor();report.loads.push({kind:'warm-browser-reload',navigation_to_ready_ms:Date.now()-reload,cold_function_instance_known:false});
  report.summary={};for(const kind of new Set(report.samples.map(s=>s.kind))){const s=report.samples.filter(s=>s.kind===kind);report.summary[kind]={n:s.length,median_visible_feedback_ms:median(s.map(x=>x.tap_to_visible_feedback_ms)),median_api_acceptance_ms:median(s.map(x=>x.tap_to_api_acceptance_ms)),median_saved_ms:median(s.map(x=>x.tap_to_saved_ms)),tail_percentiles:'Not reported: exploratory small cohort'};}
  report.status='PASS';

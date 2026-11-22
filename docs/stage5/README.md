@@ -1,4 +1,4 @@
-# Stage 5 development observability — implementation in verification
+# Stage 5 development observability — persistent monitoring, acceptance still incomplete
 
 NAF-197 remains incomplete. No Stage 5 gate, production readiness, or <2% overhead
 claim is made. This work is only on feature/flespi-home-backend; PR16 stays draft.
@@ -58,8 +58,8 @@ in the buffer constructor / collector options; dashboard configuration of limits
 is not implemented. Overflow drops optional measurements, increments counters,
 and never alters the business outcome. Failed/unacknowledged delivery retains the
 same immutable IDs. Server-side IDs deduplicate retried batches. Source records
-are capped at 100 per operation. Telemetry capacity defaults: 200k operations /
-1m source records; reaching the cap rejects optional history, not shopping writes.
+are capped at 100 per operation. Telemetry capacity defaults: 10k operations /
+30k source records with conservative 32 MiB storage admission; reaching the cap rejects optional history, not shopping writes.
 
 Browser timestamps and capture use performance.now. JSON/localStorage/network
 work runs on the independent flush task. Per-record scoped storage keys permit
@@ -87,17 +87,24 @@ it. Independent observability restore rehearsal remains unverified.
 
 Integrated into root home-backend Save details area for authorized operators.
 Supports 24h/7d/30d/90d/custom UTC bounds; route/mode/type/outcome/UUID filters;
-pagination; build/latency page filters; hourly median metric bars; operation
-metrics/local waterfalls; redacted current-page JSON/CSV. Layout supports narrow
+pagination; build/latency history filters; full-range hourly median and outcome metric bars; operation
+metrics/local waterfalls; redacted full-range JSON/CSV (5 MiB limit). Layout supports narrow
 screens and RTL, with translated primary labels. Some technical labels remain
 English. Direct LAN is clearly future/unmeasured and has no implementation.
 
-Statistics/charts/exports currently cover the loaded 200-row page, labelled as
-such, rather than an entire multi-page query. P95 requires 100 samples; P99 1000
-and therefore is unavailable on a single page. Client notifications are measured,
-not an actual optimistic paint. Tap→Saved is recorded only for locally observed
-committed outcomes, with one document's monotonic clock. A refresh loses that
-local timeline and does not invent a duration using clocks from different pages.
+Statistics and trends cover the whole authorized filtered date range in PostgreSQL,
+independent of the 200-row history pagination. Version/latency filters currently
+apply to history/export only, not the aggregate tiles. P95 requires 100 samples;
+P99 requires 1000. A rollback-only 250-operation fixture verifies full-range counts,
+duplicate source evidence, percentile interpolation, route isolation and access.
+Exports paginate with fixed time bounds and fail explicitly above 5 MiB.
+Client notification and post-React-commit frame opportunities are separate metrics.
+Two animation frames after the status component's commit provide optimistic and
+Saved frame evidence; this is not a hardware paint timestamp. Background documents
+omit frame evidence. Saved does not wait for telemetry or frames. Tap→client Saved
+is recorded only for locally observed committed outcomes, with one document's
+monotonic clock. Refresh loses that timeline and does not invent a duration using
+clocks from different pages. Verified Vercel build SHA is carried in browser records.
 Vercel high-level timings relayed by the browser are client-reported provenance,
 not an independently durable server trace. Cross-host transit remains unknown.
 Spans overlap and are never summed to create an end-to-end total.
@@ -105,19 +112,54 @@ Spans overlap and are never summed to create an end-to-end total.
 ## Open acceptance work
 
 - Complete independent durable Vercel phase evidence; gateway internal spans;
-  listener queue/progress/lock/pool/COMMIT breakdown; outbox queue; callback durable
-  write; browser reconciliation/render/paint confirmation. Current DB metric spans
-  pool wait through transaction completion including rollback, so a duration is
-  not proof of commit. Durable outcome is the proof.
+  listener broker/parser queue; outbox queue; callback durable
+  write; browser full-snapshot reconciliation detail and exact hardware paint confirmation. The parent DB metric spans
+  pool wait through transaction completion including rollback; separate pool, lock
+  and COMMIT acknowledgement spans are now recorded. A duration alone is
+  not proof of a committed business outcome. Durable outcome is the proof.
 - Capture pre-acceptance rejection/offline-never-accepted history safely without
   confusing browser reports with authoritative business outcomes.
 - Persist detailed attempts and collector loss/health across process restarts;
   detect absent source batches, not only buffer overflow/missing operation rows.
-- Full-range analytics, latency aggregates, period comparison, whole-query exports,
-  richer outcome/retry trends, slowest-stage diagnosis and complete translation.
-- Representative OFF/MID/ON browser/concurrent-device CPU/memory/network/database
-  write-volume benchmark, valid tail samples, storage-failure business continuity,
+- Retired latency aggregates, period comparison, richer retry/attempt attribution,
+  slowest-stage diagnosis, whole-range version/latency statistic filters and complete translation.
+- Representative concurrent-device OFF/MID/ON CPU/memory/network/database
+  write-volume benchmark, valid tail samples, independent storage-failure recovery,
   extended soak/capacity audit, Android device and independent backup rehearsal.
 
 These are incomplete requirements, not passes. Existing Stage 4 failure/recovery
 reports remain prior evidence; they are not reruns with this instrumentation.
+
+
+## Executed evidence
+
+- 111 offline tests pass (95 prior regression + 16 monitoring tests); source lint,
+  TypeScript and inert-endpoint Next build pass.
+- Live Dev schema tests and 250-operation analytics tests are transactionally
+  rolled back. Retention preserves all shopping/gateway correctness evidence.
+- Dedicated monitoring Edge v6 enforces real current sessions, operator controls,
+  signed Debian batches and source-record ownership. New metric vocabulary is
+  deployed separately as v6 before final browser validation.
+- Initial real-root UI OFF/MID/ON comparison: 14 operations each at source
+  54e47d6, same verified Preview, sequential paced cohorts. Medians and limits in
+  performance.md. This is exploratory, not a <2% or tail-latency acceptance.
+- Initial inspector 80b15cad passes desktop, Android viewport RTL, persisted
+  PostgreSQL history/export in fresh browser contexts, and committed Saved while
+  diagnostic HTTP requests are blocked. Physical Android remains untested.
+- Invalid initial alias cohort is retained as failed/invalid, never benchmark data.
+
+
+Latest expanded instrumentation includes separate MQTT connect/PUBACK, listener
+validation/progress/processing, DB pool/household-lock/COMMIT acknowledgement,
+callback errors and durable outbox attempt counters. Source IDs distinguish
+attempts. Duplicate callback receipts remain distinct from proof of retry.
+Detailed read responses are bounded to one operation (100 source records max);
+list pages contain at most three compact records per operation. Full trace JSON
+can be exported from the detail view. Monitoring history access is actor-scoped.
+
+The capacity guard is conservative admission, not a disk reservation: table/index
+allocation is inspected outside the shopping transaction, with headroom for each
+batch. Aggregation/vacuum and record-size variability can affect physical size;
+no claim of a hard filesystem byte quota is made. The max-record limits are hard
+admission bounds. PostgreSQL autovacuum/reuse and independent capacity monitoring
+remain required for a long soak.

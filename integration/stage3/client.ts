@@ -19,7 +19,7 @@ export type PendingOperation = {
   reconciliation?: Intent; reconcileRequested?: boolean; reserved_household_version?: number; tap_ms?: number; acceptance_ms?: number;
 };
 export type MutationResponse = { data: unknown; error: Error | null };
-type ApiStatus = { timings?: Record<string, number>; result?: OperationResult; state?: string; error?: string; duplicate?: boolean };
+type ApiStatus = { monitoring_version?: string; timings?: Record<string, number>; result?: OperationResult; state?: string; error?: string; duplicate?: boolean };
 class ApiError extends Error { constructor(message: string, readonly status: number) { super(message); } }
 const logicalType = (type: string) => type.replace(/^stage4\./, '');
 const namespace = (type: string, mode: 'stage3' | 'stage4') => mode === 'stage3' ? type.replace(/^stage4\./, '') : type.startsWith('stage4.') ? type : `stage4.${type}`;
@@ -265,13 +265,15 @@ export class ShoppingClient {
   }
   private settle(pending: PendingOperation, result: OperationResult) {
     pending.result = result; pending.state = finishedState(result); pending.confirmed_ms = Date.now();
-    this.apply(result, pending.intent);
+    const applyStarted=performance.now();this.apply(result, pending.intent);this.telemetry.stage(pending.intent.id,'client_apply',applyStarted);
     if (result.status === 'forbidden') this.invalidateSnapshot(new Error('Household access is no longer authorized.'));
     this.persist(); this.notify();
     this.telemetry.finish(pending.intent,result.status==='committed');
     this.waiters.get(pending.intent.id)?.({ data: result.data, error: pending.state === 'Saved' ? null : new Error(result.status) });
     this.waiters.delete(pending.intent.id);
   }
+  confirmRendered(operation: PendingOperation) {this.telemetry.rendered(operation.intent,operation.state==='Saved');}
+  monitoringHealth() { return { mode: this.telemetry.buffer.mode, ...this.telemetry.buffer.health() }; }
   private async api(body: unknown) { return authenticatedApi(body, this.userId); }
   reconcileOperation(operationId: string) {
     const pending = this.queue.find(p => p.intent.id === operationId && !p.result);
@@ -279,6 +281,7 @@ export class ShoppingClient {
     pending.reconcileRequested = true; this.persist(); this.schedule(0);
   }
   private async reconcile(pending: PendingOperation) {
+    const started=performance.now();try {
     if (!pending.reconciliation || pending.reconciliation.expires_ms <= Date.now()) {
       pending.reconciliation = createIntent(this.householdId, 'operation.status', { operation_id: pending.intent.id }, null, this.mode);
       this.persist(); await this.api({ action: 'command', intent: pending.reconciliation });
@@ -292,11 +295,13 @@ export class ShoppingClient {
     if (check.result?.status === 'found') this.settle(pending, check.result.data as OperationResult);
     else if (check.result?.status === 'not_found' && pending.intent.expires_ms <= pending.reconciliation.issued_ms) this.settle(pending, { status: 'expired', data: null });
     else pending.state = 'Conflict requiring reconciliation';
+    }finally{this.telemetry.stage(pending.intent.id,'reconciliation',started);}
   }
   private async sendIntent(pending: PendingOperation): Promise<ApiStatus> {
     const start=performance.now();
     try { const response=await this.api({ action: 'command', intent: pending.intent });
-      for(const [key,value] of Object.entries(response.timings??{}))if(['authentication_ms','durable_gateway_ms','mqtt_ms'].includes(key)&&Number.isFinite(value))this.telemetry.metric(pending.intent.id,key,value);
+      if(response.monitoring_version)this.telemetry.version(pending.intent.id,response.monitoring_version);
+      for(const [key,value] of Object.entries(response.timings??{}))if(['authentication_ms','durable_gateway_ms','mqtt_ms','mqtt_connect_ms','mqtt_puback_ms'].includes(key)&&Number.isFinite(value))this.telemetry.metric(pending.intent.id,key,value);
       return response; }
     catch (error) {
       // This call is made only for a never-sent intent or after an authenticated

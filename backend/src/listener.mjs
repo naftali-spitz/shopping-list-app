@@ -58,16 +58,17 @@ client.on('connect',async packet=>{
 client.handleMessage=(packet,done)=>{
   if(stopping){client.stream.destroy();return;}
   (async()=>{
+    const received=performance.now();let validated=received,progressed=received;
     let command;
     if(packet.payload.length>16384){event('oversized_command');done();return;}
     try {command=JSON.parse(packet.payload.toString());}catch{done();return;}
     if(packet.topic!==config.mqtt.commands || command.aud!==config.audience) {done();return;}
-    if(config.protocolVersion===2)event('stage3_received',{operation_id:command.id,correlation_id:command.correlation_id,received_ms:Date.now(),mqtt_duplicate:packet.dup,remaining_message_expiry_seconds:packet.properties?.messageExpiryInterval??null});
     if(!healthyClock() || config.mqtt.expire<=Date.now()/1000)throw new Error('Clock or credential health');
     let result;
     if(config.protocolVersion===2){
       try{validateCommand(command,config.commandKeys);}catch{event('invalid_command');done();return;}
-      await progressStage3(command,'processing',config).catch(()=>event('progress_pending'));
+      validated=performance.now();
+      await progressStage3(command,'processing',config).catch(()=>event('progress_pending'));progressed=performance.now();
     }
     try {result=await store.execute(command,{beforeCommit:async()=>{
       if(consumeFault(config,'crashBeforeCommitId',command.id)){event('controlled_crash_before_commit',{operation_id:command.id,correlation_id:command.correlation_id});process.kill(process.pid,'SIGKILL');}
@@ -82,8 +83,9 @@ client.handleMessage=(packet,done)=>{
       event('invalid_command');done();return;
       }
     }
+    config.monitoring?.capture(command,{server_validation_ms:validated-received,gateway_progress_ms:progressed-validated,listener_processing_ms:performance.now()-received,mqtt_duplicate_count:packet.dup?1:0},[{stage:'server_validation',start_ms:0,duration_ms:validated-received},{stage:'gateway_progress',start_ms:validated-received,duration_ms:progressed-validated},{stage:'listener_processing',start_ms:0,duration_ms:performance.now()-received}]);
     processed++;
-    event('operation_result',{operation_id:result.operation_id,correlation_id:result.correlation_id,status:result.status,replayed:result.replayed??false});
+    if(!['snapshot','found','not_found'].includes(result.status))event('operation_result',{operation_id:result.operation_id,correlation_id:result.correlation_id,status:result.status,replayed:result.replayed??false});
     if((config.testing?.crashAfterCommitId===command.id || consumeFault(config,'crashAfterCommitId',command.id)) && result.status==='committed') {
       process.send?.({event:'committed_before_crash',operation_id:command.id});
       process.kill(process.pid,'SIGKILL');return;
@@ -108,8 +110,7 @@ async function tick() {
       const rows=(await dispatch.query("SELECT operation_id,result,attempts,created_at FROM shopping.result_outbox WHERE delivered_at IS NULL AND result->>'audience'=$1 ORDER BY created_at LIMIT 20",[config.audience])).rows;
       for(const row of rows) {
         await dispatch.query('UPDATE shopping.result_outbox SET attempts=attempts+1 WHERE operation_id=$1',[row.operation_id]);
-        const deliveryStarted=performance.now();await reply(row.result);
-        if(config.protocolVersion===2)event('stage3_outbox_delivery',{operation_id:row.operation_id,correlation_id:row.result.correlation_id,attempt:row.attempts+1,delivery_ms:Math.round(performance.now()-deliveryStarted),age_since_result_ms:Date.now()-new Date(row.created_at).getTime()});
+        try{await reply(row.result);}finally{config.monitoring?.capture({id:row.operation_id,correlation_id:row.result.correlation_id,type:['snapshot','found','not_found'].includes(row.result.status)?'snapshot':'outbox'},{outbox_attempt_count:row.attempts+1});}
         await dispatch.query('UPDATE shopping.result_outbox SET delivered_at=now() WHERE operation_id=$1',[row.operation_id]);
       }
     }

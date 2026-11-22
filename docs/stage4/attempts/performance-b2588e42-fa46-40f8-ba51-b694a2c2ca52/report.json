@@ -1,0 +1,20 @@
+{
+  "id": "b2588e42-fa46-40f8-ba51-b694a2c2ca52",
+  "at": "2026-11-22T18:40:57.809Z",
+  "label": "stage5-monitoring-OFF",
+  "scope": "actual original UI, experimental development Preview; own synthetic list; correlated browser and PostgreSQL timings, no fault injection",
+  "samples": [],
+  "loads": [],
+  "harness_sha": "54e47d6100a92831a28f435121b0ac83c446c914",
+  "deployment": {
+    "id": "dpl_2nhJvAXJwgZDZFMfCC7wYjEhfrU3",
+    "sha": "481c9fe2b60eb559faa60713602f9c9bd0b674dc",
+    "url": "shopping-list-n4orxawx8-0012ab-5576s-projects.vercel.app"
+  },
+  "household_id": "7c7d25b1-d35e-41c6-a2c7-482edf086870",
+  "status": "FAIL",
+  "error": {
+    "name": "Error",
+    "message": "locator.waitFor: Target page, context or browser has been closed\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'New category', exact: true }) to be visible\u001b[22m\n"
+  }
+}
