@@ -23,7 +23,7 @@ server = {'projectId': PROJECT, 'topic': 'shopping-poc/naf-stage0-041d4f122bdd/c
 (ROOT / '.stage0-runtime/stage3-vercel-config.json').write_text(json.dumps(server))
 for name, value, kind in [('SHOPPING_STAGE3_CONFIG', json.dumps(server), 'secret'), ('SHOPPING_STAGE3_ENABLED', '1', 'config')]:
     result = subprocess.run([CLI, 'env', 'add', name, '--environment', 'preview', '--git-branch', BRANCH,
-                             '--project', PROJECT, '--scope', SCOPE, '--type', kind, '--yes', '--non-interactive'],
+                             '--project', PROJECT, '--scope', SCOPE, '--type', kind, '--force', '--yes', '--non-interactive'],
                             input=value, cwd=ROOT, text=True, capture_output=True)
     assert result.returncode == 0, 'Feature Preview variable configuration failed; output suppressed'
     print(json.dumps({'variable': name, 'target': 'preview', 'branch': BRANCH, 'type': kind, 'status': 'PASS'}))
