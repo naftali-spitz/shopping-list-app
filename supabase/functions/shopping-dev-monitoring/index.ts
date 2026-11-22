@@ -1,7 +1,7 @@
 import { verifyDevelopmentIdentity, DEV_SUPABASE } from '../../../integration/stage3/identity.mjs';
 import { sanitizeRecord } from '../../../integration/monitoring/contract.mjs';
 import { verifyMonitoring } from '../../../integration/monitoring/signature.mjs';
-const keys={'callback-1':'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAGX+fRSih6snwRf7CMu7uVmfiHzoUz/S8Ghb2ugRS/Ss=\n-----END PUBLIC KEY-----\n'};
+const keys={'callback-1':'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEARSm25md8hfvOgn/mliEOGOLfQTcx/lZMGjfCAyc09q8=\n-----END PUBLIC KEY-----\n'};
 const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{'Cache-Control':'no-store'}});
 Deno.serve(async req=>{
  if(Deno.env.get('SUPABASE_URL')!==DEV_SUPABASE||req.method!=='POST')return json({error:'disabled'},404);

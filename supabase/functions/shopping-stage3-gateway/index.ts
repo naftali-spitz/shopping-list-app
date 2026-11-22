@@ -3,7 +3,7 @@
 import { authenticateCommand, verifyCallback, verifyReconciliation, verifyProgress, uuid } from '../../../integration/stage3/protocol.mjs';
 import { verifyDevelopmentIdentity, DEV_SUPABASE } from '../../../integration/stage3/identity.mjs';
 const commandKeys = {'command-1':'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAaA3cpm3ZA/Trm2meHSXGreP8lWMMsIhZ5q1uCifLQsI=\n-----END PUBLIC KEY-----\n'};
-const callbackKeys = {'callback-1':'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAGX+fRSih6snwRf7CMu7uVmfiHzoUz/S8Ghb2ugRS/Ss=\n-----END PUBLIC KEY-----\n'};
+const callbackKeys = {'callback-1':'-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEARSm25md8hfvOgn/mliEOGOLfQTcx/lZMGjfCAyc09q8=\n-----END PUBLIC KEY-----\n'};
 const json = (body: unknown,status=200) => Response.json(body,{status,headers:{'Cache-Control':'no-store'}});
 Deno.serve(async req => {
   if (Deno.env.get('SUPABASE_URL')!==DEV_SUPABASE || req.method!=='POST')return json({error:'disabled'},403);
