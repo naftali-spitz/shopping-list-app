@@ -1,7 +1,8 @@
 # Stage 4 — Real Shopping List functional POC
 
-Stage 4 is in progress. No readiness or parity pass is implied by implementation
-or this inventory. All work belongs to `feature/flespi-home-backend`, draft
+Stage 4 records **CONDITIONAL GO** for the bounded development POC. See
+[readiness](readiness.md), [gate](gate.json), and [acceptance evidence](test-results.md)
+for the demonstrated scope and remaining conditions. All work belongs to `feature/flespi-home-backend`, draft
 [PR #16](https://github.com/naftali-spitz/shopping-list-app/pull/16) targeting
 `develop`; production migration, production writes and automatic merge are excluded.
 
@@ -57,4 +58,5 @@ Completed functional evidence is indexed in [test-results.md](test-results.md),
 with a [backend comparison](feature-comparison.md) and [reproducible walkthrough](demo.md).
 Focused final browser checks cover same-user tabs, actual elapsed expiry, UI
 logout, search/custom drag, bounded dedicated listener faults and actual deployed
-rollback. Final gate review is pending exact-source CI/Preview checks.
+rollback. Exact-source CI/Preview and final authenticated root-app verification pass;
+the gate records the remaining conditions without starting Stage 5.

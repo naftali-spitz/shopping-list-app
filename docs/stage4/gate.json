@@ -1,0 +1,108 @@
+{
+  "decision": "CONDITIONAL GO",
+  "recorded_at": "2026-11-22T16:24:46.156871+00:00",
+  "scope": "Stage 4 bounded real-root-application development POC; no complete parity, production readiness, migration, merge, or Stage 5 execution in this session",
+  "repository": "naftali-spitz/shopping-list-app",
+  "branch": "feature/flespi-home-backend",
+  "base": "develop",
+  "draft_pr": "https://github.com/naftali-spitz/shopping-list-app/pull/16",
+  "application_implementation_commit": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "verified_source_commit": "ee885a323db892ddb34d5c941062d156b917f1d6",
+  "verified_preview": {
+    "id": "dpl_7yjesvBxch1SjxxLd75MCDxJhWDf",
+    "url": "shopping-list-fsmobfxyc-0012ab-5576s-projects.vercel.app",
+    "sha": "ee885a323db892ddb34d5c941062d156b917f1d6",
+    "ref": "feature/flespi-home-backend"
+  },
+  "proof_url": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app/",
+  "source_checks": [
+    {
+      "name": "Vercel",
+      "state": "pass",
+      "link": "https://vercel.com/0012ab-5576s-projects/shopping-list-app/7yjesvBxch1SjxxLd75MCDxJhWDf"
+    },
+    {
+      "name": "Vercel Preview Comments",
+      "state": "pass",
+      "link": "https://vercel.com/github"
+    },
+    {
+      "name": "guard-and-build",
+      "state": "pass",
+      "link": "https://github.com/naftali-spitz/shopping-list-app/actions/runs/45043225990/job/137272075549"
+    }
+  ],
+  "final_verification_report": "attempts/final-check-554583fd-dc63-43d4-b8b4-13bb5b0e8613.json",
+  "accepted_issue_states": {
+    "NAF-178": "Done",
+    "NAF-179": "Done",
+    "NAF-180": "Done",
+    "NAF-181": "Done",
+    "NAF-182": "Done",
+    "NAF-194": "Done",
+    "NAF-195": "Done",
+    "NAF-196": "Done"
+  },
+  "gate_issue": "NAF-183",
+  "evidence_index": "test-results.md",
+  "walkthrough": "demo.md",
+  "comparison": "feature-comparison.md",
+  "focused_final_reports": [
+    "attempts/reliability-browser-5e212db7-77a7-460f-af79-c6f0a9a7877a/report.json",
+    "attempts/reliability-browser-45984ea1-8066-4e6e-94f1-1ca3f4383692/report.json",
+    "attempts/expiry-browser-3cc95db1-321d-4400-b227-87805d42f1aa/report.json",
+    "attempts/parity-browser-6f84864e-e86a-4701-b93f-e3c537eabbca/report.json",
+    "attempts/fault-browser-0871e9d2-0fdb-44a2-9b71-120796e22ffe/report.json",
+    "attempts/rollback-17ad4958-8833-4712-b897-bf4b0593f77e/report.json"
+  ],
+  "offline_security_regression_tests": {
+    "passed": 95,
+    "failed": 0,
+    "log": "attempts/security-tests-stage4-final.log"
+  },
+  "actual_postgresql_regression_groups": 12,
+  "performance": {
+    "cohort": "small separate solo before/after, generally n=3",
+    "product_create_median_saved_seconds": {
+      "before": 11.803,
+      "after": 7.809
+    },
+    "quantity_median_saved_seconds": {
+      "before": 12.044,
+      "after": 5.747
+    },
+    "p95_p99_or_slo_claim": false,
+    "controlled_platform_cold_start_proven": false,
+    "details": "performance.md"
+  },
+  "conditions": [
+    "Google Dev OAuth remains unconfigured; preserve the existing Google path and use the documented owner-backed Dev setup before claiming Google parity or fresh Google-only fallback login.",
+    "Confirmation remains several seconds. Review actual UX before broader use; controlled cold-start, representative concurrent/soak samples and valid tail-latency targets remain unproven. No P95/P99/SLO claim.",
+    "Implement pagination/deltas and safe pending/result/outbox metadata retention before larger households or extended use. Current 300-product fixture is bounded evidence, not scale proof.",
+    "Member display uses stable principal IDs; display-name mapping is not implemented.",
+    "Choose unattended Preview/deployment identity and exercise live key rollover, session refresh/revocation maintenance and independent clock-skew evidence without weakening signatures or Deployment Protection.",
+    "Broader field/ISP/router interruptions, long-running quota/capacity/health tests and off-host encrypted backup/key recovery remain unproven.",
+    "Genuine LibreOffice rendering passed; Microsoft Word itself was not executed. Existing Linux title-emoji glyph limitation remains.",
+    "One retained in-place rollback transition timed out loading the browser; exact cause is not fully isolated. The corrected complete rollback passed, but broader rollback/reload repeatability remains an operational obligation.",
+    "Comparison combines source-grounded parity, actual Supabase Dev paced edits/fallback write and feature functional suites; not every baseline flow was independently repeated on both backends. Existing partial translations and current-quantity history restore are documented."
+  ],
+  "critical_failed_final_acceptance_runs_outstanding": [],
+  "failed_attempts_preserved": true,
+  "prior_failed_runs_are_not_relabelled_as_passed": true,
+  "development_database": "127.0.0.1:55439/shopping_stage0",
+  "fault_injection_enabled": false,
+  "production_audit": "../stage0/vercel-isolation.json",
+  "production_metadata_unchanged": true,
+  "production_secret_values_read_or_compared": false,
+  "production_writes_or_deployments": false,
+  "original_checkout_modified": false,
+  "original_checkout_env_loaded": false,
+  "paid_resources_created": false,
+  "automatic_merge": false,
+  "stage5_started": false,
+  "handoff_issues": [
+    "NAF-187",
+    "NAF-188"
+  ],
+  "stop_after_stage4_gate": true
+}

@@ -1,3 +1,25 @@
+# Final Stage 4 handoff — CONDITIONAL GO, 2026-11-22
+
+Stage 4 functional verification and gate are complete. Read readiness.md and
+gate.json for exact evidence, conditions and verified source. Eight acceptance
+issues are Done; NAF-183 records the conditional gate. Stop here: Stage 5 is not
+started, production is untouched, and PR16 remains draft/unmerged into develop.
+
+All remaining browser checks passed, including actual 300s expiry, cross-tab
+storage, UI logout, search/custom drag, bounded listener faults and deployed
+Supabase Dev fallback/write/reload/failback retaining the same pending ID.
+Final source ee885a3 CI/Preview and actual root-app check554583fd pass. Faults are
+disabled; dedicated services and the original checkout's unrelated edits remain.
+Failures/diagnostics and the unresolved transition-load repeatability limit are
+preserved honestly. No full parity, Google, tail-latency or production claim.
+
+Handoff obligations only: NAF-187/188; see readiness.md. No automatic merge or
+production migration. SSH push was unavailable in this session; existing gh
+credentials supported a one-command HTTPS Git credential helper without changing
+origin or global auth settings. No new credentials or account resets were needed.
+
+The earlier continuation notes below are historical and superseded.
+
 # Latest continuation — 2026-11-22
 
 Remaining functional verification is complete: focused cross-tab5e212db7, UI

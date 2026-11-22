@@ -24,7 +24,7 @@ narrow evidence for that group, never a relabeling of the whole run.
 | Real reliability before cross-tab continuation | reliability-browser-b26c7b7d-0b0f-4a14-9418-295cecf4f16c/report.json: 9 passing groups in FAIL run | Rapid checks/quantities, offline, duplicate, refresh pending, concurrent conflict, stale snapshot; failure was exiting-modal harness reuse |
 | Small-sample save improvement | performance-5e56cd02-5c95-4ee9-a6fc-74f84e5349ac vs performance-1a018cc5-c7a4-4391-a962-6f52077a7547 | Generally n=3; create median 11.803s → 7.809s, quantity 12.044s → 5.747s; no P95/P99/SLO/cold-start claim |
 | Baseline comparison | baseline-performance-81b0cdbc-dd2d-4e2c-a0e8-dce3c9968aa1/report.json | Actual Supabase Dev UI, 41 paced edits; windows differ from durable confirmation |
-| Existing PostgreSQL regression | ../stage2/attempts/integration-c87e5b8e-f299-4ef1-b689-c493eec60a88.json | 12 groups PASS; fixed loopback development target |
+| Existing PostgreSQL regression | ../../stage2/attempts/integration-c87e5b8e-f299-4ef1-b689-c493eec60a88.json | 12 groups PASS; fixed loopback development target |
 | Final offline security/regression tests | security-tests-stage4-final.log | 95 tests PASS; includes actual compiled shared client, auth overlap and protocol/guard cases |
 
 ## Final focused verification
@@ -45,7 +45,7 @@ narrow evidence for that group, never a relabeling of the whole run.
 Focused cross-tab continuation
 `reliability-browser-5e212db7-77a7-460f-af79-c6f0a9a7877a/report.json` passes
 all three groups at deployed 6f499ab. The remaining completed focused reports
-follow. Gate review awaits final exact-source CI/Preview verification.
+follow. Final exact-source verification passes; the decision and conditions are in gate.json.
 
 Actual elapsed expiry continuation
 `expiry-browser-3cc95db1-321d-4400-b227-87805d42f1aa/report.json` passes two
@@ -89,3 +89,11 @@ retained under rollback-diagnostic-*. No app authentication or deployment guard
 was weakened. The exact cause of the intermittent transition-load timeout is
 not fully isolated; the corrected full pass does not establish broad operational
 repeatability. Broader rollback/reload testing is an explicit remaining limit.
+
+Final source verification
+`final-check-554583fd-dc63-43d4-b8b4-13bb5b0e8613.json` passes four groups at
+source ee885a3 / Git Preview dpl_7yjesvBxch1SjxxLd75MCDxJhWDf. It verifies
+actual alias SHA, draft develop PR and passing CI/Preview, authenticated root
+home UI, unchanged one-effect rollback commit/zero-effect expired ID, active
+dedicated services, disabled faults and production audit. [readiness.md](readiness.md)
+and [gate.json](gate.json) record CONDITIONAL GO and the exact limits.

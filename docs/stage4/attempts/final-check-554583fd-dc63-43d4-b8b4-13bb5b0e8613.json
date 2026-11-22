@@ -1,0 +1,62 @@
+{
+  "id": "554583fd-dc63-43d4-b8b4-13bb5b0e8613",
+  "at": "2026-11-22T16:21:21.247Z",
+  "scope": "final exact-source CI/Preview, real root UI and retained rollback/expiry database outcomes; no new business mutations",
+  "sha": "ee885a323db892ddb34d5c941062d156b917f1d6",
+  "checks": [
+    {
+      "name": "exact feature alias SHA, draft develop PR and relevant source checks verified",
+      "status": "PASS",
+      "checks": [
+        {
+          "name": "Vercel",
+          "state": "pass",
+          "link": "https://vercel.com/0012ab-5576s-projects/shopping-list-app/7yjesvBxch1SjxxLd75MCDxJhWDf"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "state": "pass",
+          "link": "https://vercel.com/github"
+        },
+        {
+          "name": "guard-and-build",
+          "state": "pass",
+          "link": "https://github.com/naftali-spitz/shopping-list-app/actions/runs/45043225990/job/137272075549"
+        }
+      ]
+    },
+    {
+      "name": "actual root app loads authenticated home backend at verified final source",
+      "status": "PASS",
+      "revision": "103"
+    },
+    {
+      "name": "rollback commit retained exactly once; expired neveraccepted operation remains absent",
+      "status": "PASS",
+      "rollback_report": "rollback-17ad4958-8833-4712-b897-bf4b0593f77e",
+      "committed_counts": {
+        "ledger": 1,
+        "outbox": 1,
+        "products": 1
+      },
+      "expiry_report": "expiry-browser-3cc95db1-321d-4400-b227-87805d42f1aa",
+      "expired_counts": {
+        "ledger": 0,
+        "outbox": 0,
+        "products": 0
+      }
+    },
+    {
+      "name": "dedicated services healthy, faults disabled, production metadata audit passes",
+      "status": "PASS",
+      "audit_at": "2026-11-22T16:16:28.761769+00:00"
+    }
+  ],
+  "deployment": {
+    "id": "dpl_7yjesvBxch1SjxxLd75MCDxJhWDf",
+    "url": "shopping-list-fsmobfxyc-0012ab-5576s-projects.vercel.app",
+    "sha": "ee885a323db892ddb34d5c941062d156b917f1d6",
+    "ref": "feature/flespi-home-backend"
+  },
+  "status": "PASS"
+}
