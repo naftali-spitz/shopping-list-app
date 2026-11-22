@@ -1,0 +1,302 @@
+{
+  "id": "17ad4958-8833-4712-b897-bf4b0593f77e",
+  "at": "2026-11-22T16:14:00.197Z",
+  "scope": "actual feature Preview Stage4 flag off/on; original Supabase Dev UI and retained PostgreSQL outcomes; no production deploy or data change",
+  "checks": [
+    {
+      "name": "real app pending ID retained while PostgreSQL already committed",
+      "status": "PASS",
+      "operation_id": "cc45e368-50c1-4293-82fe-0d8085a28f04"
+    },
+    {
+      "name": "flag off restores original Supabase Dev UI and actual write/reload with zero dual PostgreSQL write",
+      "status": "PASS"
+    },
+    {
+      "name": "flag off preserves pending browser IDs and authenticated prior outcome retrieval",
+      "status": "PASS"
+    },
+    {
+      "name": "re-enabled feature recovers identical committed outcome and production metadata unchanged",
+      "status": "PASS"
+    }
+  ],
+  "source_sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "browser_responses": [
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://vercel.live",
+      "path": "/_next-live/feedback/feedback.js",
+      "status": 204
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://vercel.live",
+      "path": "/_next-live/feedback/feedback.js",
+      "status": 204
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/rpc/list_my_households",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/categories",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/shopping_history",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/categories",
+      "status": 201
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/categories",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://vercel.live",
+      "path": "/_next-live/feedback/feedback.js",
+      "status": 204
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/rpc/list_my_households",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/shopping_history",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/categories",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://vercel.live",
+      "path": "/_next-live/feedback/feedback.js",
+      "status": 204
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    }
+  ],
+  "pending_operation_id": "cc45e368-50c1-4293-82fe-0d8085a28f04",
+  "browser_paused_during_rebuild": true,
+  "disabled": {
+    "id": "dpl_EyhF3oeNMex5ysUa38XyL4ZPSHL7",
+    "url": "https://shopping-list-lbq0gp0qf-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896"
+  },
+  "alias_selection_verified": "home",
+  "fallback_navigation": {
+    "url": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app/",
+    "status": 200,
+    "backend_hint": [
+      "backend\\\":\\\"supabase\\\",\\\"children\\\":["
+    ]
+  },
+  "restored": {
+    "id": "dpl_5EJL7cPGcy3gjYsPd8TjvjKVWVy4",
+    "url": "https://shopping-list-a97hjz1b2-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896"
+  }
+}

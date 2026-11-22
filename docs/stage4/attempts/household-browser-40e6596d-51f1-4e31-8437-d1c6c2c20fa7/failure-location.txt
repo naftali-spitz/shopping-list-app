@@ -1,0 +1,6 @@
+locator.fill: Timeout 90000ms exceeded.
+Call log:
+[2m  - waiting for getByLabel('Email', { exact: true })[22m
+
+    at login (/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage4-household-browser.mjs:27:47)
+    at async file:///home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage4-household-browser.mjs:73:11

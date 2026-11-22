@@ -1,0 +1,39 @@
+{
+  "id": "8d67755f-7992-4025-919d-009541a9ac8c",
+  "at": "2026-11-21T21:12:47.439Z",
+  "mode": "check-expiry",
+  "scope": "dedicated current Dev provider session for existing account; no global logout, reset or production write",
+  "checks": [
+    {
+      "name": "current session RPC rejects still-signed provider token",
+      "status": "PASS"
+    },
+    {
+      "name": "previously signed pending intent cannot execute after session invalidation",
+      "status": "PASS"
+    },
+    {
+      "name": "durable gateway refuses new acceptance for invalidated session",
+      "status": "PASS"
+    },
+    {
+      "name": "actual protected Vercel API rejects invalidated session",
+      "status": "PASS",
+      "http": 401
+    },
+    {
+      "name": "invalidated-session request leaves zero PostgreSQL business/journal/outbox effects",
+      "status": "PASS",
+      "operation_id": "fecd5497-c56a-475f-b40c-bda465ca9772",
+      "correlation_id": "e04bf88d-5f3e-44af-befa-dad4529c91d6",
+      "counts": {
+        "households": 0,
+        "operations": 0,
+        "outbox": 0
+      }
+    }
+  ],
+  "session_id": "64621a7c-1c19-46fe-8279-51ccab244f72",
+  "controlled_expiry": "Dedicated auth.sessions.not_after was advanced by exact ID+user in Dev only; no access token mutation.",
+  "status": "PASS"
+}

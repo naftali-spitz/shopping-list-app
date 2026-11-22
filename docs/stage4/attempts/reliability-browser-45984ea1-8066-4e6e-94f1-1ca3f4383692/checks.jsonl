@@ -1,0 +1,1 @@
+{"name":"actual UI global logout clears household rendering, returns to login and invalidates prior authenticated API access","status":"PASS","prior_session_api_status":401}

@@ -1,0 +1,5 @@
+{
+  "status": "ABORTED",
+  "at": "2026-11-21T21:17:47.345281+00:00",
+  "reason": "Parent requested focused cross-tab continuation instead of repeating nine already passing groups. Only this owned harness process interrupted; expiry browser and services untouched."
+}

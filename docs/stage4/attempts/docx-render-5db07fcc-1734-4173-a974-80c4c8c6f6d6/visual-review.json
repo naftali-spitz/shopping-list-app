@@ -1,0 +1,12 @@
+{
+  "status": "FAIL",
+  "review": "Genuine LibreOffice PDF and raster image inspected: Hebrew first category is leftmost, contrary to RTL reading order; title and paragraphs aligned to physical left.",
+  "hebrew_heading_x_points": {
+    "1": 38.9,
+    "3": 233.9,
+    "5": 428.9,
+    "7": 623.85
+  },
+  "cause": "source reversed XML cell array while bidiVisual also reversed physical cells; physical right justification mirrored with bidi.",
+  "app_source_changed_during_this_render": false
+}

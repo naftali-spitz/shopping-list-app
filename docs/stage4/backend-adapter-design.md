@@ -37,8 +37,9 @@ delete local data, pending IDs or gateway results; existing callback/status
 recovery stays available while new Stage4 command intake is disabled. Stage3's
 independently tested infrastructure rollback remains a separate option.
 
-Known limitations pending verification: same-namespace browser tabs need storage
-event coordination; snapshots remain bounded by the existing callback limit;
-physical Word column order needs visual inspection; Google Dev OAuth is not
-configured. See feature inventory and test plan for acceptance, not this design
-narrative.
+Same-user browser tabs use per-operation storage and storage-event reconciliation;
+see cross-tab-persistence.md and test-results.md for actual evidence. Snapshots
+remain bounded by the existing callback limit. Genuine LibreOffice visual review
+proved the corrected column order; Microsoft Word itself was not run. Google Dev
+OAuth remains unconfigured. See test-results.md and gate.json for acceptance,
+not this design narrative.

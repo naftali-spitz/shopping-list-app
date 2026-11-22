@@ -1,0 +1,72 @@
+{
+  "id": "45984ea1-8066-4e6e-94f1-1ca3f4383692",
+  "at": "2026-11-22T15:47:51.604Z",
+  "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "focused actual UI logout; other feature browser tests idle",
+  "checks": [
+    {
+      "name": "actual UI global logout clears household rendering, returns to login and invalidates prior authenticated API access",
+      "status": "PASS",
+      "prior_session_api_status": 401
+    }
+  ],
+  "operations": [],
+  "requests": [
+    {
+      "at": "2026-11-22T15:47:59.898Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:48:02.557Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:48:04.015Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:48:06.243Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:48:07.945Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:48:09.771Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    }
+  ],
+  "focused_cross_tab_continuation": false,
+  "deployment": {
+    "id": "dpl_Hr7RToM69ob52HAz6e2rtA4upyD6",
+    "url": "shopping-list-321ljd788-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+    "git_ref": "feature/flespi-home-backend",
+    "state": "READY",
+    "target": null
+  }
+}

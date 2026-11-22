@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "project_id": "njomxqthjglqesxchlbm",
+  "scope": "exact dedicated freshly created account2 session only; no global session mutation",
+  "session_id": "64621a7c-1c19-46fe-8279-51ccab244f72",
+  "user_id": "130e8995-f628-4620-ad58-496049ca465a",
+  "updated_rows": 1,
+  "not_after": "2026-11-21T21:12:45.956262Z",
+  "operation": "Set not_after to clock_timestamp()-1second WHERE id and user_id match verified dedicated session",
+  "production_touched": false
+}

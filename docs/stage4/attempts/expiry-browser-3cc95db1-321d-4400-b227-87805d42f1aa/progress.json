@@ -1,0 +1,87 @@
+{
+  "id": "3cc95db1-321d-4400-b227-87805d42f1aa",
+  "at": "2026-11-22T15:47:57.459Z",
+  "target": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "local_harness_head": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "scope": "actual original app UI; real five-minute neveraccepted intent expiry during owned-browser offline only; no service faults or clock changes",
+  "checks": [
+    {
+      "name": "offline product creation persists original immutable ID and renders pending before any acceptance",
+      "status": "PASS",
+      "counts": {
+        "ledger": 0,
+        "products": 0
+      }
+    }
+  ],
+  "progress": [
+    {
+      "at": "2026-11-22T15:49:19.827Z",
+      "elapsed_offline_ms": 50011,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-22T15:50:09.831Z",
+      "elapsed_offline_ms": 100015,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-22T15:50:59.839Z",
+      "elapsed_offline_ms": 150023,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-22T15:51:49.864Z",
+      "elapsed_offline_ms": 200048,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-22T15:52:39.914Z",
+      "elapsed_offline_ms": 250098,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-22T15:53:29.969Z",
+      "elapsed_offline_ms": 300153,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-22T15:53:30.536Z",
+      "elapsed_offline_ms": 300720,
+      "state": "Offline/pending",
+      "saved": false
+    }
+  ],
+  "deployment": {
+    "id": "dpl_Hr7RToM69ob52HAz6e2rtA4upyD6",
+    "url": "shopping-list-321ljd788-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+    "git_ref": "feature/flespi-home-backend",
+    "state": "READY",
+    "target": null
+  },
+  "browser_assets": [
+    "/_next/static/chunks/0dgq26a5_oy.a.js",
+    "/_next/static/chunks/10u3y4bw1ayzs.js",
+    "/_next/static/chunks/0na3km2dz.8qk.js",
+    "/_next/static/chunks/turbopack-0pwt-s3xp.zlw.js",
+    "/_next/static/chunks/01xlw8hd842-c.js",
+    "/_next/static/chunks/0d3shmwh5_nmn.js",
+    "/_next/static/chunks/0focb.7ui.327.js",
+    "/_next/static/chunks/04ajfai64ymrz.js",
+    "/_next/static/chunks/03~yq9q893hmn.js",
+    "/_next-live/feedback/feedback.js",
+    "/_next/static/chunks/11qk_vpw_zwkf.js"
+  ],
+  "operation_id": "f7d54d10-c79b-4f6e-b82e-c4c412b9ba4f",
+  "correlation_id": "355e66fc-9def-4fa2-9768-bb342582d7c9",
+  "product_id": "1ea5ef52-0c6d-4e53-8904-11924bbb23be",
+  "intent_issued_ms": 1795362508930,
+  "intent_expires_ms": 1795362808930
+}

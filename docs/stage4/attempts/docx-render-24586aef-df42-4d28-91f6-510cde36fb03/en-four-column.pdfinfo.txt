@@ -1,0 +1,18 @@
+Author:          Un-named
+Creator:         Writer
+Producer:        LibreOffice 25.2.3.2 (X86_64) / LibreOffice Community
+CreationDate:    Sat Nov 21 23:11:38 2026 IST
+Custom Metadata: no
+Metadata Stream: yes
+Tagged:          yes
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           1
+Encrypted:       no
+Page size:       841.89 x 595.304 pts (A4)
+Page rot:        0
+File size:       57132 bytes
+Optimized:       no
+PDF version:     1.7

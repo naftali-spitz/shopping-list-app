@@ -1,0 +1,90 @@
+{
+  "id": "efca70b9-b657-4ef7-991d-79cb1da4c870",
+  "at": "2026-11-20T13:06:33.953Z",
+  "scope": "real development provider/gateway/DB account reconciliation and exact trusted starter ordering; no browser claim",
+  "checks": [
+    {
+      "name": "read actual development Auth provider setting without changing Google or test accounts",
+      "status": "PASS"
+    },
+    {
+      "name": "English starter category order and all27product display orders exactly match trusted template after atomic commit",
+      "status": "PASS"
+    },
+    {
+      "name": "account-scoped discovery status reconciles and same-ID status replay is immutable",
+      "status": "PASS"
+    },
+    {
+      "name": "reconciliation in a never-created household scope returns authoritative not_found without manufacturing a household",
+      "status": "PASS"
+    },
+    {
+      "name": "another verified account cannot retrieve original actor immutable lifecycle result",
+      "status": "PASS"
+    },
+    {
+      "name": "after membership deletion only own immutable historic outcome remains recoverable; fresh household snapshot denies",
+      "status": "PASS"
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "76ff2700-5667-4943-9ffb-b32a59970b8b",
+      "correlation_id": "515e57bc-4f0c-4051-bf48-95e33b552cbe",
+      "type": "stage4.household.create",
+      "status": "committed"
+    },
+    {
+      "operation_id": "0ffc4823-1386-45d0-99eb-e460c4c6c3a5",
+      "correlation_id": "4bbde783-bb53-4d17-bb22-685f2aa71edc",
+      "type": "stage4.household.seed",
+      "status": "committed"
+    },
+    {
+      "operation_id": "e5ff178c-2fac-4d88-91b1-ae41d5cfe204",
+      "correlation_id": "3db95250-427c-4654-8601-ae4f0660366f",
+      "type": "stage4.household.list",
+      "status": "snapshot"
+    },
+    {
+      "operation_id": "ddbe844f-cc78-4230-9076-e0ee267d6262",
+      "correlation_id": "6da9b023-830c-4986-bf06-ca8dc99e884a",
+      "type": "stage4.operation.status",
+      "status": "found"
+    },
+    {
+      "operation_id": "7ec3c9e4-5d11-4128-a0df-072caa5b33bf",
+      "correlation_id": "a2c28282-4724-4fab-b218-57b0da2baddb",
+      "type": "stage4.operation.status",
+      "status": "not_found"
+    },
+    {
+      "operation_id": "9147e8b2-f774-4e0f-a363-4d809dd91228",
+      "correlation_id": "e21e3b10-8e80-4dce-be0f-e7fd8956e4e7",
+      "type": "stage4.operation.status",
+      "status": "not_found"
+    },
+    {
+      "operation_id": "076f3a0c-b78f-44af-983b-02f429a81107",
+      "correlation_id": "845bc033-9a81-4348-93e0-e4fa0ee39a98",
+      "type": "stage4.household.delete",
+      "status": "committed"
+    },
+    {
+      "operation_id": "0842ef41-5aeb-416d-a00a-380a368716f2",
+      "correlation_id": "a60cc74f-fb7a-45d5-8978-359199678b3c",
+      "type": "stage4.operation.status",
+      "status": "found"
+    },
+    {
+      "operation_id": "f8497473-d00f-4f88-bd06-4942f0412a63",
+      "correlation_id": "35cc41d6-b272-453a-92e4-0d38f07af956",
+      "type": "stage4.snapshot",
+      "status": "forbidden"
+    }
+  ],
+  "google_development_enabled": false,
+  "household_id": "bea3a50d-d41f-4ca2-8392-0b41f3a280f3",
+  "status": "PASS"
+}

@@ -1,0 +1,4 @@
+{"name":"category-local search filters products and A-Z sorting preserves names","status":"PASS"}
+{"name":"actual custom drag persists PostgreSQL display order and survives reload","status":"PASS","operation_id":"6f452e27-38f9-4092-951f-f6d9e754b188","ordered":[{"name":"Zulu 6f84864e","display_order":100},{"name":"Alpha 6f84864e","display_order":null},{"name":"Middle 6f84864e","display_order":null}]}
+{"name":"actual global search quick-add checks existing product with one authoritative effect","status":"PASS","operation_id":"ed527199-e855-472f-8137-ec4a9671e126"}
+{"name":"actual unmatched global search creates checked product in selected category exactly once","status":"PASS","operation_id":"c9711f4a-984d-4d8f-b3c8-6aa809928c48","category_id":"06b713bf-b18a-4de6-94e0-328c68cc17ad"}

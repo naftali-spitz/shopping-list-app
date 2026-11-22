@@ -1,0 +1,36 @@
+✔ intent and queue persist before optimistic rendering; PUBACK never means Saved (32.389154ms)
+✔ rapid quantity intents reserve successive versions without changing IDs or payloads (4.856963ms)
+✔ stale snapshot and older commit cannot revert a newer authoritative record (3.429155ms)
+✔ pending refresh retries precisely the original intent after verified missing status (6.550936ms)
+✔ expired uncommitted intent fails only after authenticated lane reconciliation (5.629645ms)
+✔ storage failure refuses changes and logout preserves pending IDs without sending another identity (3.412092ms)
+✔ stage3 legacy and stage4 namespace share implementation without sharing queue writes (3.162678ms)
+✔ lost command acknowledgement retries the original immutable ID after verified missing acceptance (7.542635ms)
+✔ expired unresolved intent fails only after authenticated database operation.status says not_found (6.125072ms)
+✔ changed provider identity cannot issue or reconcile another users pending command (5.362977ms)
+✔ household-version operations reserve prior local mutations but read queries do not advance it (5.293995ms)
+✔ list export never returns cached pre-export history while its full authoritative effect is missing (5.861374ms)
+✔ terminal snapshot denial clears authority and rejects initial or refresh readers (5.029161ms)
+✔ same-user tabs preserve all unresolved IDs through interleaved writes and refresh (4.840467ms)
+✔ terminal storage event resolves another tabs waiter and cannot be overwritten by stale pending (6.41892ms)
+✔ changed per-operation storage intent fails closed and preserves the original index (3.381672ms)
+✔ contiguous complete product and category results avoid unnecessary full snapshots (3.245577ms)
+✔ history deletion and category cascade retain full refresh and explicit refresh is never cancelled (2.662409ms)
+✔ signed intent binds every field; parser rejects tampering and unknown fields (5.801935ms)
+✔ expiry, audience, issuer, schema and payload checks cannot be bypassed with a valid signer (2.415106ms)
+✔ key rotation preserves logical hash; removing old key revokes its signature (1.242393ms)
+✔ execution requires current identity and household verification, including revocation (1.649055ms)
+✔ callback identity is separate; callback tuple, timestamp and schema are verified (3.852883ms)
+✔ provider adapter pins URLs and requires current session RPC as well as getUser (28.446492ms)
+✔ diagnostic progress is separately signed, time bounded and cannot claim terminal success (1.52335ms)
+✔ Stage4 verifies the same live session but makes no provider business-membership claim (1.773718ms)
+✔ Stage4 operation prefix preserves strict legacy payload validation and signed identity dispatch (2.033176ms)
+✔ independent provider checks overlap but both verified identities must match (1.261416ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 642.324659

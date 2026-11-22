@@ -1,0 +1,46 @@
+{
+  "id": "437418ed-6122-4548-8ce4-d5f93ad04aa2",
+  "at": "2026-11-21T21:12:23.473Z",
+  "mode": "logout",
+  "scope": "dedicated current Dev provider session for existing account; no global logout, reset or production write",
+  "checks": [
+    {
+      "name": "existing account fresh dedicated session verified before boundary",
+      "status": "PASS",
+      "session_id": "55478147-c006-427f-9598-49e9b4bb9b00"
+    },
+    {
+      "name": "only dedicated test session logged out with scope local",
+      "status": "PASS"
+    },
+    {
+      "name": "current session RPC rejects still-signed provider token",
+      "status": "PASS"
+    },
+    {
+      "name": "previously signed pending intent cannot execute after session invalidation",
+      "status": "PASS"
+    },
+    {
+      "name": "durable gateway refuses new acceptance for invalidated session",
+      "status": "PASS"
+    },
+    {
+      "name": "actual protected Vercel API rejects invalidated session",
+      "status": "PASS",
+      "http": 401
+    },
+    {
+      "name": "invalidated-session request leaves zero PostgreSQL business/journal/outbox effects",
+      "status": "PASS",
+      "operation_id": "44ff57df-9710-47ce-acbc-ceb59d040b88",
+      "correlation_id": "f359c267-bb95-430e-9f52-00be8637fe3d",
+      "counts": {
+        "households": 0,
+        "operations": 0,
+        "outbox": 0
+      }
+    }
+  ],
+  "status": "PASS"
+}

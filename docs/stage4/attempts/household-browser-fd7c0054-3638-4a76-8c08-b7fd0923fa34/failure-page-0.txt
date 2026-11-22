@@ -1,0 +1,88 @@
+FutureCart
+
+Smart shopping companion
+
+Saving… (1)
+
+Save details
+Choose category
+New category
+Contract evidence
+Browser proof 57d7d2d7
+Browser proof 32a26432
+Refresh proof 32a26432
+Contract evidence
+No products in this category
+Contract evidence
+No products in this category
+Preview integration
+No products in this category
+Preview integration
+No products in this category
+Fault 8222cffa
+No products in this category
+Fault 7c49798f
+No products in this category
+Fault 7d81d1cb
+No products in this category
+Fault ad0beec4
+No products in this category
+Fault 023becc9
+No products in this category
+Fault 92358210
+No products in this category
+Fault c22e049a
+No products in this category
+Fault 844358a8
+No products in this category
+Fault 09a01430
+No products in this category
+Fault c790ddf4
+No products in this category
+Fault e91df0f1
+No products in this category
+Fault 8d4013f1
+No products in this category
+Fault 26d50f53
+No products in this category
+Fault 4dd2a344
+No products in this category
+Fault 6a2da4e5
+No products in this category
+Fault 8419eaee
+No products in this category
+Fault 06ca5fa1
+No products in this category
+Fault c61e6aea
+No products in this category
+Fault fbb8e0bd
+No products in this category
+Fault 903ef4ff
+Refresh proof ba940e4a
+Browser proof ba940e4a
+Trace proof
+No products in this category
+Publisher ACK loss proof
+No products in this category
+Preview integration
+No products in this category
+Stage4 browser ba8f460d
+No products in this category
+Shopping list
+0 products
+
+The list is currently empty.
+
+Export document
+Create household
+
+Start a separate shared shopping list.
+
+Household name
+Starter products
+Create basic categories and products so the household starts ready.
+Starter list language
+עברית
+English
+Cancel
+Create

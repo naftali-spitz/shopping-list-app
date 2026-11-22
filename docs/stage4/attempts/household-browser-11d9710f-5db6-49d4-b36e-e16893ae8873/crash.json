@@ -1,0 +1,8 @@
+{
+  "status": "FAIL",
+  "scope": "Incomplete browser run; Chrome/page closed during second-household creation. Cleanup threw before final report; do not count as a passing suite. Prior observed checks are not substituted for a completed report.",
+  "failure_location": "failure-location.txt",
+  "screenshot": "owner-members-en.png",
+  "cause": "Browser process closure; cause not established.",
+  "correction": "Harness now writes incremental raw checks/in-progress report and final report before best-effort cleanup."
+}

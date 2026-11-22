@@ -1,0 +1,14 @@
+{"name":"three existing password identities log into original application without provisioning","status":"PASS"}
+{"name":"en starter list created through existing modal; PostgreSQL preserves5categories/27products and category order","status":"PASS","household_id":"06ba0aaa-94e1-460b-acce-29d78a1c0df1","create_operation":"09e2659a-1fd8-4340-8d6a-b396ad5575fd","seed_operation":"6e961588-820a-486a-b570-185615798bae"}
+{"name":"owner rename through profile is persisted and survives automatic reload","status":"PASS","operation_id":"20e2c6bb-0d3e-44bb-944d-c461aeda0a9c"}
+{"name":"member invitation copied in original profile and accepted by second authenticated browser; membership verified in PostgreSQL","status":"PASS","invite_id":"aa9cb333-9f40-447e-8339-55e629b50184","join_operation":"259b1457-980b-44e4-8d78-528b5d3cb3b9"}
+{"name":"duplicate reusable invitation acceptance retains exactly one membership","status":"PASS","operation_id":"7498dcf9-af4a-40a3-9b64-2e3d3f8015ee"}
+{"name":"invalid invitation through original app rejects enrollment","status":"PASS","operation_id":"d1795d1e-ede6-4750-b956-d05e4e015c5e"}
+{"name":"controlled expiry of this run invitation is rejected by original app with no membership effect","status":"PASS","operation_id":"920c1450-be98-4f9f-acdf-45d80fe13412"}
+{"name":"owner profile lists both connected principal identities","status":"PASS"}
+{"name":"third authenticated browser cannot retrieve new foreign household","status":"forbidden","operation_id":"c5a27ca1-275a-4102-88d2-9c79ac14cf89"}
+{"name":"owner removal persists and removed browser new snapshot is denied","status":"PASS","remove_operation":"a53319dd-533e-4c92-9ce7-b068eba57806","denied_operation":"92c80e49-4937-401b-a46e-62b03ba2b22a"}
+{"name":"removed member refresh discovers only authorized remaining lists","status":"PASS"}
+{"name":"he starter list created through existing modal; PostgreSQL preserves5categories/27products and category order","status":"PASS","household_id":"08c1fdea-faad-43fd-bc4d-b4e3175e2b22","create_operation":"145af9b0-fa1f-4a34-a06b-ff0c7ee4bf24","seed_operation":"c21f0fd1-b635-4f68-8105-843ac997a0ea"}
+{"name":"Hebrew starter list survives refresh","status":"PASS"}
+{"name":"existing household switch control retrieves selected authoritative list","status":"PASS"}

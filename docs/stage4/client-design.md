@@ -23,12 +23,17 @@ reader/subscriber/mutation waiter leaves. Pending operation status is targeted;
 idle snapshots refresh at a bounded interval. Result versions and household
 revisions prevent a delayed snapshot or older result reverting newer authority.
 A committed partial result also establishes a minimum allowed snapshot revision.
-List-wide effects require a fresh full snapshot. Snapshot commands currently use
+List-wide effects require a fresh full snapshot. A subsequent read waits until
+that complete snapshot reaches the committed revision, including history and
+usage-count side effects. Terminal snapshot denial clears cached data and
+rejects waiting readers. Snapshot commands currently use
 the existing bounded payload transport; pagination/deltas remain a separate
 Stage 4/5 obligation, not an implemented guarantee of this extraction.
 
 `mutateLatest()` reserves consecutive expected versions for preceding local
-queued record mutations, and sends own commands serially. It does not silently
+queued record mutations, and sends own commands serially. Pending mutations
+also reserve household revisions for queued list export/restore/seed; read-only
+queries do not advance that reservation. It does not silently
 rebase queued changes over another user’s write: a conflict remains visible.
 Mutation promises resolve only on terminal confirmation (or explicit pre-acceptance
 HTTP validation rejection). Network errors leave the operation pending. Expired

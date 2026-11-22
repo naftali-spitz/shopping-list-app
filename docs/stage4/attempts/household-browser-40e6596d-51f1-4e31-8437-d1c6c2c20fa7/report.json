@@ -1,0 +1,20 @@
+{
+  "id": "40e6596d-51f1-4e31-8437-d1c6c2c20fa7",
+  "at": "2026-11-21T15:50:24.671Z",
+  "harness_sha": "6c416f2a2248dba4cad6e154fe6cb5cc0785df67",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "actual original app household controls through protected Preview, real provider identity, flespi and isolated PostgreSQL; no service faults",
+  "checks": [],
+  "operations": [],
+  "deployment": {
+    "id": "dpl_H4xqwFBgcPd6E41RhKopakHjB5HV",
+    "url": "shopping-list-km095n062-0012ab-5576s-projects.vercel.app",
+    "target": "preview",
+    "ready_state": "READY"
+  },
+  "status": "FAIL",
+  "error": {
+    "type": "TimeoutError",
+    "message": "Browser household assertion or selector failed; credential-bearing diagnostics omitted"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "scope": "Harness process crashed after five console PASS groups; full report was not emitted.",
+  "error": {
+    "name": "Error",
+    "message": "route.fulfill: Route is already handled!",
+    "location": "scripts/stage4-reliability-browser.mjs:131"
+  },
+  "observed_pass_groups": [
+    "two authenticated original app views",
+    "three immediate check taps",
+    "offline pending same-ID recovery",
+    "same-ID duplicate returns prior commit",
+    "refresh while committed browser status response delayed"
+  ],
+  "evidence_limit": "Console observations only; do not treat as a completed acceptance run."
+}

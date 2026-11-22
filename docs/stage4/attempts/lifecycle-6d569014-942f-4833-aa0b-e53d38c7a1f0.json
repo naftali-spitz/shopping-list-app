@@ -1,0 +1,197 @@
+{
+  "id": "6d569014-942f-4833-aa0b-e53d38c7a1f0",
+  "at": "2026-11-20T13:01:34.100Z",
+  "scope": "real Supabase Dev session + gateway acceptance + isolated PostgreSQL lifecycle, not browser/MQTT latency",
+  "checks": [
+    {
+      "name": "reuse all three existing accounts without password reset or reprovisioning",
+      "status": "PASS"
+    },
+    {
+      "name": "current-session account discovery has no Supabase business-household requirement",
+      "status": "PASS"
+    },
+    {
+      "name": "new PostgreSQL household and owner membership commit atomically; same-ID duplicate one ledger",
+      "status": "PASS"
+    },
+    {
+      "name": "Hebrew trusted starter seed has5categories/27products; duplicate ID replays and reseed refuses replacement",
+      "status": "PASS"
+    },
+    {
+      "name": "owner rename uses authoritative expected household revision",
+      "status": "PASS"
+    },
+    {
+      "name": "reusable14day invite grants one authenticated membership; member listing isolated and owner-only rename",
+      "status": "PASS"
+    },
+    {
+      "name": "forged and explicitly revoked invitations deny enrollment",
+      "status": "PASS"
+    },
+    {
+      "name": "controlled expiry of this run own invitation denies acceptance",
+      "status": "PASS"
+    },
+    {
+      "name": "membership removed while accepted mutation pending denies mutation and future snapshots with zero product effect",
+      "status": "PASS"
+    },
+    {
+      "name": "logout revokes dedicated test session and denies signed pending command despite valid token expiry",
+      "status": "PASS"
+    },
+    {
+      "name": "lifecycle uses private fixed-search-path definer; runtime has no direct membership INSERT or bypass RLS",
+      "status": "PASS"
+    },
+    {
+      "name": "owner deletion tombstones household, revokes memberships/invites, preserves business data/ledgers",
+      "status": "PASS"
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "43773156-2ce8-48df-8f91-7dc466dfceaf",
+      "correlation_id": "50f7f910-e78e-4d1e-8da2-69068fe0f41a",
+      "type": "stage4.household.list",
+      "status": "snapshot"
+    },
+    {
+      "operation_id": "f6071a82-1e14-49d2-9ef8-a823e8a2afe3",
+      "correlation_id": "d4f9dc6a-790a-4361-a5c5-a48ab0d0af0e",
+      "type": "stage4.household.list",
+      "status": "snapshot"
+    },
+    {
+      "operation_id": "e23a785f-b839-4041-a207-219dbea85079",
+      "correlation_id": "69534b60-1c81-4b6d-9ed7-b5308dfddc3f",
+      "type": "stage4.household.list",
+      "status": "snapshot"
+    },
+    {
+      "operation_id": "fff8dbba-50cd-4cca-b891-1f88e2006579",
+      "correlation_id": "d65f6e90-063f-4246-a2cf-4d9bd0279615",
+      "type": "stage4.household.create",
+      "status": "committed"
+    },
+    {
+      "operation_id": "418a0c5f-fc3f-4077-b04a-27aed3a11f0e",
+      "correlation_id": "a508aed5-056a-4b38-ab23-66ecfdd19c17",
+      "type": "stage4.household.seed",
+      "status": "committed"
+    },
+    {
+      "operation_id": "9de43dd7-a9cf-412b-b556-7a4bf1228f6b",
+      "correlation_id": "c1bcae7d-8081-4d63-96f8-909a881bbc8e",
+      "type": "stage4.household.seed",
+      "status": "record_id_conflict"
+    },
+    {
+      "operation_id": "52108e64-833f-4e83-a10f-00d09a6f3ef3",
+      "correlation_id": "1097d289-b8ae-4a13-9a5f-fce5e43457b7",
+      "type": "stage4.household.rename",
+      "status": "committed"
+    },
+    {
+      "operation_id": "7780d989-70dd-493e-a60c-ccacabefce4b",
+      "correlation_id": "94125f31-2a48-49d1-b934-b8e5afc4ec4f",
+      "type": "stage4.household.rename",
+      "status": "version_conflict"
+    },
+    {
+      "operation_id": "8ff20caa-6d06-4dd2-bf57-f9aee57260ca",
+      "correlation_id": "881449b6-67b1-4fae-a1a3-6fbe64306ee6",
+      "type": "stage4.invite.create",
+      "status": "committed"
+    },
+    {
+      "operation_id": "2f7a5289-a2c6-40fa-bfbb-03ab56b270b8",
+      "correlation_id": "d62beb63-5a10-4735-9d39-03d4cc1ae35d",
+      "type": "stage4.invite.accept",
+      "status": "committed"
+    },
+    {
+      "operation_id": "6e24e0b8-8d90-4702-8249-dad55843ec75",
+      "correlation_id": "93cc6679-c393-42f1-a834-b138240f42f1",
+      "type": "stage4.invite.accept",
+      "status": "committed"
+    },
+    {
+      "operation_id": "c853426d-a7c6-4937-becf-ddf8b791feae",
+      "correlation_id": "30dd72f9-273a-4e66-86ae-3d34b1995e72",
+      "type": "stage4.household.members",
+      "status": "snapshot"
+    },
+    {
+      "operation_id": "a9e31954-f994-4328-99f5-b421ba18364e",
+      "correlation_id": "cfad25c7-d8ed-4ec4-a9e0-780b71830b0f",
+      "type": "stage4.household.members",
+      "status": "forbidden"
+    },
+    {
+      "operation_id": "417f4f82-6e53-4e8b-8519-84ecd0a451e7",
+      "correlation_id": "b3128de4-0866-4095-ac9e-1a454f2bf3b3",
+      "type": "stage4.household.rename",
+      "status": "forbidden"
+    },
+    {
+      "operation_id": "73f7dff2-07df-4cbf-b52b-d359999d2826",
+      "correlation_id": "62e1cfcb-ddcd-4162-9bd2-6d9b79cebdb3",
+      "type": "stage4.invite.accept",
+      "status": "not_found"
+    },
+    {
+      "operation_id": "82a68858-a162-40f0-9f34-6a1b86cda2f3",
+      "correlation_id": "9e75c887-462d-4d3d-bad0-67568db45ff8",
+      "type": "stage4.invite.revoke",
+      "status": "committed"
+    },
+    {
+      "operation_id": "027f7e68-8208-4d4e-9504-4ebd29f83d55",
+      "correlation_id": "70a7b8d3-ed9a-4362-8b21-7b850a295f69",
+      "type": "stage4.invite.accept",
+      "status": "not_found"
+    },
+    {
+      "operation_id": "7398f5f7-e27b-4949-8955-3fc102ae66b4",
+      "correlation_id": "49a8c7ed-8c08-477c-91be-eab36fe36236",
+      "type": "stage4.invite.create",
+      "status": "committed"
+    },
+    {
+      "operation_id": "379eda24-1ac7-4bcb-99a0-ad425a538a2c",
+      "correlation_id": "130ad13d-f825-4672-9802-607b94f17908",
+      "type": "stage4.invite.accept",
+      "status": "not_found"
+    },
+    {
+      "operation_id": "19f502ff-1e95-400c-ad3b-a3b3be712bbb",
+      "correlation_id": "b8099101-270a-4f23-82b6-3ee0cf82764f",
+      "type": "stage4.membership.remove",
+      "status": "committed"
+    },
+    {
+      "operation_id": "b0d5025a-78c5-465e-a4ba-09007c35c754",
+      "correlation_id": "d9dc771a-a07b-4459-bdb7-83c9733586eb",
+      "type": "stage4.snapshot",
+      "status": "forbidden"
+    },
+    {
+      "operation_id": "ff5f1ee3-298a-4e57-af4c-0e9015019693",
+      "correlation_id": "04059afe-1164-4cfa-bb33-6bfbcce83e4b",
+      "type": "stage4.household.delete",
+      "status": "committed"
+    },
+    {
+      "operation_id": "a207edd1-8317-4119-a4e9-63bdcf3cedae",
+      "correlation_id": "a7ce5935-e10b-4b2b-a1ec-e2bd61254d99",
+      "type": "stage4.snapshot",
+      "status": "forbidden"
+    }
+  ],
+  "household_id": "bda0ffea-50a2-4839-8c47-b4e8dad8691c",
+  "status": "PASS"
+}

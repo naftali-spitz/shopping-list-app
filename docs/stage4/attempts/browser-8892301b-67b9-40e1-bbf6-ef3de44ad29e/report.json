@@ -1,0 +1,282 @@
+{
+  "id": "8892301b-67b9-40e1-bbf6-ef3de44ad29e",
+  "at": "2026-11-21T16:01:03.796Z",
+  "sha": "5c3014949271d46a349a3b3b45f91d0a1061bf0f",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "real original Shopping List UI, protected feature Preview, real development identity and isolated PostgreSQL; no service faults",
+  "checks": [
+    {
+      "name": "isolated household and two memberships established through verified lifecycle commands",
+      "status": "PASS"
+    },
+    {
+      "name": "two real password sessions open original root UI without credential reprovisioning",
+      "status": "PASS"
+    },
+    {
+      "name": "category created using original modal and localized icon dropdown, persisted in PostgreSQL",
+      "status": "PASS",
+      "operation_id": "dbf59d3f-7fc5-471d-8aae-7b41013a3296",
+      "record": {
+        "name": "Stage4 browser 8892301b",
+        "icon": "fruit",
+        "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+        "version": 1,
+        "deleted_at": null
+      }
+    },
+    {
+      "name": "second authenticated original UI receives category creation",
+      "status": "PASS"
+    },
+    {
+      "name": "original category modal product create commits once",
+      "status": "PASS",
+      "operation_id": "42dc957a-f247-464c-a3a1-4529a0534962",
+      "product_id": "a22db86f-05c2-44f8-9780-68ffc33b82eb"
+    },
+    {
+      "name": "original check and quantity drawer controls match authoritative PostgreSQL",
+      "status": "PASS"
+    },
+    {
+      "name": "refresh retains authoritative checked state and quantity",
+      "status": "PASS"
+    },
+    {
+      "name": "category created using original modal and localized icon dropdown, persisted in PostgreSQL",
+      "status": "PASS",
+      "operation_id": "f665e8ae-b471-41f3-b210-1f94be811e36",
+      "record": {
+        "name": "Stage4 destination 8892301b",
+        "icon": "fruit",
+        "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+        "version": 1,
+        "deleted_at": null
+      }
+    },
+    {
+      "name": "product edit and category move persisted and synchronized",
+      "status": "PASS"
+    },
+    {
+      "name": "actual browser DOCX download includes committed selection/quantity and PostgreSQL history",
+      "status": "PASS",
+      "history_id": "e31652aa-60d2-4a0f-afbc-46066a986d81",
+      "document": {
+        "file": "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/browser-export.docx",
+        "columns": 1,
+        "landscape": true,
+        "table_visually_rtl": false,
+        "item_count": 1,
+        "cell_text_in_xml_order": [
+          [
+            "Stage4 destination 8892301b",
+            "☐ Stage4 product 8892301b moved ×2",
+            ""
+          ]
+        ],
+        "title": "🛒 FutureCart Shopping List",
+        "physical_column_rendering_verified": false
+      }
+    },
+    {
+      "name": "preacceptance rejected history deletion stays visible after refresh and has zero PostgreSQL effects",
+      "status": "PASS",
+      "operation_id": "dd290cac-54cf-476a-8b79-d16a2e154d4d",
+      "history_id": "e31652aa-60d2-4a0f-afbc-46066a986d81"
+    },
+    {
+      "name": "history delete commits tombstone and usage decrement, retained after refresh",
+      "status": "PASS",
+      "history_id": "e31652aa-60d2-4a0f-afbc-46066a986d81"
+    },
+    {
+      "name": "third real account receives no other-household browser data",
+      "status": "PASS"
+    },
+    {
+      "name": "product delete through existing confirmation persists PostgreSQL tombstone and disappears on second client",
+      "status": "PASS"
+    },
+    {
+      "name": "category rename and delete persist across refresh with tombstone and synchronize to second client",
+      "status": "PASS"
+    },
+    {
+      "name": "original mobile Hebrew RTL, profile collapsed preferences and light/dark screens captured",
+      "status": "PASS"
+    }
+  ],
+  "operations": [
+    {
+      "id": "dbf59d3f-7fc5-471d-8aae-7b41013a3296",
+      "correlation_id": "db9ed456-05b8-43d0-af62-5c1cd000dd63",
+      "type": "stage4.category.create",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "281e38bf-f4e4-4f57-9528-f7c43478fea2",
+      "expected_version": 0,
+      "ui_commit_confirmation_ms": 7575,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "42dc957a-f247-464c-a3a1-4529a0534962",
+      "correlation_id": "032fda23-81a3-4c83-a345-9185cc60ea36",
+      "type": "stage4.product.create",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "a22db86f-05c2-44f8-9780-68ffc33b82eb",
+      "expected_version": 0,
+      "ui_commit_confirmation_ms": 10382,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "f492195a-42c8-45be-8b89-5ae149c0190c",
+      "correlation_id": "1d3c3cbb-2ce2-440d-a509-b0d3b547048f",
+      "type": "stage4.product.update",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "a22db86f-05c2-44f8-9780-68ffc33b82eb",
+      "expected_version": 1,
+      "ui_commit_confirmation_ms": 6836,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "6444c2ff-3431-44c0-8589-e983ae91e285",
+      "correlation_id": "c7f0c4e7-d5cc-4003-accd-094ffec876cb",
+      "type": "stage4.product.update",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "a22db86f-05c2-44f8-9780-68ffc33b82eb",
+      "expected_version": 2,
+      "ui_commit_confirmation_ms": 8106,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "f665e8ae-b471-41f3-b210-1f94be811e36",
+      "correlation_id": "2d7a668d-a715-4159-9b0b-0a0d59d2a1b4",
+      "type": "stage4.category.create",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "533d4825-9933-4783-b842-c5ce82aacc59",
+      "expected_version": 0,
+      "ui_commit_confirmation_ms": 8732,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "caae8b4a-9ece-4878-be61-fe21359e5b47",
+      "correlation_id": "549be119-fcef-407d-adf5-945ddc93ceca",
+      "type": "stage4.product.update",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "a22db86f-05c2-44f8-9780-68ffc33b82eb",
+      "expected_version": 3,
+      "ui_commit_confirmation_ms": 6047,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "1c4086fd-1aec-4fa5-ba88-37c9e5c0c2fa",
+      "correlation_id": "4ff85b5f-015a-48f5-8c5b-0e8c7da73960",
+      "type": "stage4.list.export",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "expected_version": 9,
+      "ui_commit_confirmation_ms": 7188,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "d0dc67da-a0ce-4b6e-93d8-ea287f49ee29",
+      "correlation_id": "23a1e605-0696-4143-b164-9bc82373869a",
+      "type": "stage4.history.delete",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "e31652aa-60d2-4a0f-afbc-46066a986d81",
+      "expected_version": 1,
+      "ui_commit_confirmation_ms": 8918,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "ac54aa33-2eac-4d0f-9a41-35f26fb5bcbd",
+      "correlation_id": "5304362a-13f3-4d0c-a445-c9213fc188a6",
+      "type": "stage4.product.delete",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "a22db86f-05c2-44f8-9780-68ffc33b82eb",
+      "expected_version": 6,
+      "ui_commit_confirmation_ms": 9147,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "a430868a-2cc5-4d3b-aa9e-a1f1eb6c25aa",
+      "correlation_id": "b23de894-6aff-4a41-bab0-fea49148e55c",
+      "type": "stage4.category.update",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "533d4825-9933-4783-b842-c5ce82aacc59",
+      "expected_version": 1,
+      "ui_commit_confirmation_ms": 7301,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "id": "81c8f899-84b9-49d2-a7ca-ddaeb7aa336f",
+      "correlation_id": "25d3769a-fb0f-4707-b2a9-6b12ee0db3a6",
+      "type": "stage4.category.delete",
+      "household_id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+      "record_id": "533d4825-9933-4783-b842-c5ce82aacc59",
+      "expected_version": 2,
+      "ui_commit_confirmation_ms": 7470,
+      "counts": {
+        "ledger": 1,
+        "outbox": 1
+      }
+    }
+  ],
+  "test_household": {
+    "id": "bfe9cdea-7c39-4037-a083-d1828ab9fce5",
+    "creation_operation": "8aa8c96a-47b8-4216-916a-11809800d3e9",
+    "invitation_operation": "85cd9125-9b75-4b7e-a599-ac7f96dc5a50",
+    "join_operation": "77e601bd-3b59-4821-93ad-70da3497d68b",
+    "scope": "isolated per-run household created and joined through real authenticated API; browser logins remain real password UI"
+  },
+  "screenshots": [
+    "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/desktop-en-baseline.png",
+    "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/desktop-en-selected-quantity.png",
+    "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/desktop-en-crud.png",
+    "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/mobile-he-light.png",
+    "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/mobile-he-dark.png"
+  ],
+  "icon_picker_screenshot": "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/desktop-en-icon-dropdown.png",
+  "rejected_history_delete": {
+    "id": "dd290cac-54cf-476a-8b79-d16a2e154d4d",
+    "correlation_id": "3df0abbb-173d-4b96-8aaf-f6c1d856bcf6",
+    "history_id": "e31652aa-60d2-4a0f-afbc-46066a986d81",
+    "classification": "controlled HTTP400 before durable acceptance; no PostgreSQL execution",
+    "counts": {
+      "ledger": 0,
+      "outbox": 0
+    },
+    "screenshot": "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/history-delete-rejected.png"
+  },
+  "status": "PASS"
+}

@@ -31,7 +31,7 @@ assert before['link']['org'] == 'naftali-spitz' and before['link']['productionBr
 matching = [r for r in before['env'] if r['key'] == KEY]
 assert len(matching) <= 1
 for row in matching:
-    assert row['target'] == ['preview'] and row.get('gitBranch') == BRANCH and row['type'] == 'plain'
+    assert row['target'] == ['preview'] and row.get('gitBranch') == BRANCH and row['type'] in ('plain', 'encrypted')
 args = ['env', 'add', KEY, '--environment', 'preview', '--git-branch', BRANCH,
         '--project', PROJECT, '--type', 'config', '--yes']
 if matching:

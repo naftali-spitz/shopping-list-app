@@ -64,10 +64,14 @@ font redesign was introduced.
 
 ## Remaining boundaries
 
-Physical four-column rendering is now demonstrated for the actual source route.
-A focused actual-app300-product/80-checked fixture export is planned after the
-corrected route reaches Preview, with snapshot-size and SQL/history evidence.
-Its result must be recorded separately before claiming that larger browser path.
+Physical four-column rendering is demonstrated for the actual source route.
+The completed actual-app report
+`attempts/docx-browser-6c9fb3a1-d137-4b3f-b7cd-2d02ae9a7241/report.json`
+passes five groups on deployed `6f499ab`: a SQL fixture of 300 products, an actual
+99,794-byte authenticated snapshot, an 80-checked-item four-column Hebrew DOCX
+download, one PostgreSQL export effect with immutable history/usage updates, and
+History Add Selected restoration. Fixture setup is SQL, not claimed browser CRUD.
+The download is separate from the genuine LibreOffice source-render evidence.
 Google OAuth and principal display names are identity-task limitations, not DOCX
 features. History restore uses existing name matching and preserves current
 product quantities; it does not invent historical quantity restoration that the
