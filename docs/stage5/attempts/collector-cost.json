@@ -1,0 +1,77 @@
+{
+  "at": "2026-11-22T21:22:13.351Z",
+  "scope": "actual BrowserMonitoring class, Node/V8 synthetic operation lifecycle, no UI/network/database, not tap-to-Saved overhead",
+  "runs": [
+    {
+      "mode": "OFF",
+      "n": 5000,
+      "capture_microseconds": {
+        "n": 5000,
+        "average": 1.959343400000099,
+        "p50": 1.5300000000024738,
+        "p95": 3.2570000000191612,
+        "p99": 6.3279999999963366
+      },
+      "serialization_ms": 0,
+      "serialized_bytes": 0,
+      "batches": 0,
+      "cpu_ms": 22.791,
+      "heap_delta_bytes": 8927200,
+      "health": {
+        "depth": 0,
+        "dropped": 0,
+        "failures": 0,
+        "delivered": 0
+      }
+    },
+    {
+      "mode": "MID",
+      "n": 5000,
+      "capture_microseconds": {
+        "n": 5000,
+        "average": 10.833695400000437,
+        "p50": 8.965999999986707,
+        "p95": 21.915999999976066,
+        "p99": 34.266999999999825
+      },
+      "serialization_ms": 7.569247999999845,
+      "serialized_bytes": 3264623,
+      "batches": 100,
+      "cpu_ms": 112.902,
+      "heap_delta_bytes": -2798208,
+      "health": {
+        "depth": 0,
+        "dropped": 0,
+        "failures": 0,
+        "delivered": 5000
+      }
+    },
+    {
+      "mode": "ON",
+      "n": 5000,
+      "capture_microseconds": {
+        "n": 5000,
+        "average": 13.082340800000797,
+        "p50": 11.30399999999554,
+        "p95": 22.55400000001373,
+        "p99": 37.96999999997297
+      },
+      "serialization_ms": 22.116334999999992,
+      "serialized_bytes": 5117203,
+      "batches": 100,
+      "cpu_ms": 161.154,
+      "heap_delta_bytes": 4245144,
+      "health": {
+        "depth": 0,
+        "dropped": 0,
+        "failures": 0,
+        "delivered": 5000
+      }
+    }
+  ],
+  "limitations": [
+    "Node/V8 on Debian, not Chrome main thread or physical Android.",
+    "No business transactions, browser storage or network; not a user-visible overhead percentage.",
+    "Warm-up/GC/order effects remain; heap delta is not peak memory."
+  ]
+}

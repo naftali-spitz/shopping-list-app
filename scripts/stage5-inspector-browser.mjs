@@ -11,7 +11,7 @@ const folder='docs/stage5/attempts/inspector-'+report.id;mkdirSync(folder,{recur
 try{
  browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome',args:['--no-sandbox']});
  for(const [label,viewport,language] of [['desktop',{width:1440,height:1000},'en'],['android-rtl',{width:412,height:915},'he']]){
-  const context=await browser.newContext({viewport,...(label==='android-rtl'?{isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36'}:{})});
+  const context=await browser.newContext({viewport,timezoneId:'Asia/Jerusalem',...(label==='android-rtl'?{isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36'}:{})});
   try{
    await context.route(PREVIEW+'/**',route=>route.continue({headers:{...route.request().headers(),...previewHeaders()}}));
    await context.addInitScript(({session,h,language})=>{localStorage.setItem('sb-njomxqthjglqesxchlbm-auth-token',JSON.stringify(session));localStorage.setItem(`futurecart.activeHouseholdId:home:${session.user.id}`,h);localStorage.setItem('futurecart.appLanguage',language);localStorage.setItem('futurecart.soundOn','false');},{session,h,language});
@@ -22,9 +22,12 @@ try{
    await page.getByRole('region',{name:'Operation details'}).waitFor();
    await page.screenshot({path:folder+'/'+label+'.png',fullPage:true});
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth);assert.equal(overflow,false,'Dashboard must fit mobile viewport');
+   const traceEvent=page.waitForEvent('download');await page.getByRole('button',{name:'Trace JSON',exact:true}).click();const traceDownload=await traceEvent;await traceDownload.saveAs(folder+'/'+label+'-trace.json');const trace=JSON.parse(readFileSync(folder+'/'+label+'-trace.json'));assert.equal(trace.operation_id,operation);assert.ok(trace.records.some(r=>r.spans.length>0));
+   const csvEvent=page.waitForEvent('download');await page.getByRole('button',{name:'CSV',exact:true}).click();const csvDownload=await csvEvent;await csvDownload.saveAs(folder+'/'+label+'.csv');const csv=readFileSync(folder+'/'+label+'.csv','utf8');assert.ok(csv.includes(operation)&&!csv.includes(session.user.email));
    const downloadEvent=page.waitForEvent('download');await page.getByRole('button',{name:'JSON',exact:true}).click();const download=await downloadEvent;await download.saveAs(folder+'/'+label+'.json');
    const exported=JSON.parse(readFileSync(folder+'/'+label+'.json'));assert.ok(exported.operations.some(o=>o.operation_id===operation));const text=JSON.stringify(exported);assert.ok(!text.includes('access_token')&&!text.includes(session.user.email)&&!text.includes('payload'));assert.ok(exported.operations.some(o=>o.records.length));
-   report.checks.push(label+': PostgreSQL history loaded in fresh browser, trace detail, redacted JSON export, viewport fit');
+   const bar=page.locator('[aria-label="Latency trend"] button').first();if(await bar.count()){const bucket=(await bar.getAttribute('aria-label')).slice(0,13)+':00:00.000Z';await bar.click();const query=page.waitForRequest(r=>{try{return r.url()===PREVIEW+'/api/dev-performance'&&r.postDataJSON().action==='history';}catch{return false;}});await page.getByRole('button',{name:language==='en'?'Apply / refresh':'סינון / רענון',exact:true}).click();assert.equal((await query).postDataJSON().from,bucket,'UTC chart bucket must survive local Jerusalem date-input conversion');}
+   report.checks.push(label+': PostgreSQL history loaded in fresh browser, trace detail, full trace JSON, redacted CSV/JSON range exports, viewport fit');
    if(label==='desktop'){
     await page.route('**/api/dev-performance',route=>route.abort('failed'));
     const button=page.getByRole('button',{name:/^Increase Measured item/}).filter({visible:true}).first();

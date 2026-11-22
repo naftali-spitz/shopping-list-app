@@ -217,7 +217,7 @@ export default function ShoppingApp() {
       <AnimatedBackground />
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8">
         <TopBar copy={copy} cardClass={cardClass} onOpenHistory={() => { playSound("open"); setHistoryOpen(true); }} onOpenProfile={() => { playSound("open"); setProfileOpen(true); }} />
-        {experimental && currentHouseholdId ? <BackendStatus key={currentHouseholdId} householdId={currentHouseholdId} hebrew={language === "he"} /> : null}
+        {experimental && currentHouseholdId ? <BackendStatus key={`${session.user.id}:${currentHouseholdId}`} userId={session.user.id} householdId={currentHouseholdId} hebrew={language === "he"} /> : null}
         <GlobalSearchSection copy={copy} cardClass={cardClass} globalSearch={globalSearch} globalResults={globalResults} onGlobalSearchChange={setGlobalSearch} onQuickAdd={(item) => { void quickAddItem(item); setGlobalSearch(""); }} onAddMissingProduct={(name) => { playSound("open"); openAddMissingProduct(name); }} />
         <CategoriesSection copy={copy} cardClass={cardClass} categories={categories} darkMode={darkMode} onCreateCategory={handleOpenCreateCategory} onDeleteCategory={(categoryId, categoryName) => { playSound("open"); setEditingCategoryId(categoryId); setEditingCategoryName(categoryName); }} onOpenCategory={(categoryId) => { playSound("open"); setSelectedCategoryId(categoryId); setSearchTerm(""); }} />
       </div>

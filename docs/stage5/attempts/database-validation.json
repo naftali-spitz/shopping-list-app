@@ -16,6 +16,21 @@
       "script": "../capacity-tests.sql",
       "transaction": "BEGIN / ROLLBACK",
       "result": "PASS: isolated capacity rejection leaves durable shopping acceptance intact; no successful persistence acknowledgement"
+    },
+    {
+      "script": "../read-outcomes-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: snapshot/found read outcomes counted as successful"
+    },
+    {
+      "script": "../archive-backfill-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: archive sums/counts across cleanup passes, post-OFF durable-header backfill, no business deletion"
+    },
+    {
+      "script": "../action-boundary-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: action-entry and legacy operation-creation latency distributions remain separate"
     }
   ],
   "advisors": {

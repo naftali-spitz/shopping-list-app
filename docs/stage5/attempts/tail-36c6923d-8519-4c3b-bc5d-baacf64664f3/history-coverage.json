@@ -1,0 +1,36 @@
+{
+  "source": "4dd003e1ac2fb31813eb298c418c04eb5910e361",
+  "note": "OFF has no monitoring summaries by policy; all 300 business operations committed independently of monitoring.",
+  "coverage": [
+    {
+      "mode": "MID",
+      "spans": 0,
+      "samples": 100,
+      "summaries": 100,
+      "source_records": 725,
+      "source_json_bytes": 413916,
+      "browser_operations": 96,
+      "committed_summaries": 100
+    },
+    {
+      "mode": "OFF",
+      "spans": 0,
+      "samples": 100,
+      "summaries": 0,
+      "source_records": 0,
+      "source_json_bytes": 0,
+      "browser_operations": 0,
+      "committed_summaries": 0
+    },
+    {
+      "mode": "ON",
+      "spans": 1831,
+      "samples": 100,
+      "summaries": 100,
+      "source_records": 728,
+      "source_json_bytes": 576685,
+      "browser_operations": 97,
+      "committed_summaries": 100
+    }
+  ]
+}

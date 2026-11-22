@@ -1,0 +1,14 @@
+{
+  "id": "dpl_EVkAxGUmQpDSGy8vaTv6TVW6tv4Z",
+  "url": "shopping-list-eeu0p0qau-0012ab-5576s-projects.vercel.app",
+  "target": null,
+  "source": {
+    "ref": "feature/flespi-home-backend",
+    "repoId": 1239195094,
+    "sha": "4dd003e1ac2fb31813eb298c418c04eb5910e361",
+    "type": "github",
+    "prId": null
+  },
+  "projectId": "prj_jsqk7AsPGuxLmvWqYEsqyFClV1cM",
+  "state": "READY"
+}

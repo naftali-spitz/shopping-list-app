@@ -57,8 +57,9 @@ export async function homeHistory(householdId: string) {
 }
 
 export async function homeMutation(householdId: string | undefined, type: string, payload: Record<string, unknown>, recordId?: string) {
+  const started = performance.now();
   try {
     const client = recordId ? await homeRecordClient(recordId) : await homeClient(householdId);
-    return await client.mutateLatest(type, payload);
+    return await client.mutateLatest(type, payload, { started, identityReady: performance.now() });
   } catch (error) { return { data: null, error: error as Error }; }
 }

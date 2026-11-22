@@ -44,7 +44,8 @@ configuration and Deployment Protection were not weakened.
 Exactly OFF / MID / ON, persisted globally in Dev settings with actor/time audit.
 MID is the initial default. OFF rejects ingestion and stops summary derivation
 immediately. Config polling remains necessary for runtime re-enablement. Browser
-mode refresh is at most every 10 seconds; Debian polling is every 5 seconds.
+mode cache TTL is 10 seconds, checked on a 5-second timer; I/O and scheduling can
+delay refresh. Debian polls on a 5-second timer. The server rejects OFF ingestion immediately.
 OFF advances an epoch: delayed old batches cannot reappear after re-enabling.
 Turning OFF during an operation deliberately leaves a partial historical trace.
 
@@ -53,7 +54,10 @@ pending/failing/conflicting/expired outcomes, independently of browser survival.
 Internal snapshot/status commands are excluded. ON adds source-local spans for
 all observed operations; there is no intentional sampling. Both modes use the
 same asynchronous batch buffer. Debian: capacity 500, batch 50, flush 5s. Browser:
-capacity 200 per user/household/client, batch 50, flush 5s. Limits can be configured
+capacity 200 per user/household/client, batch 50, flush 5s. Both buffers also cap
+each serialized batch at 96,000 UTF-8 bytes before transport; byte sizing runs
+only in the asynchronous flush task. Oversized/unserializable records are dropped
+and counted, so one bad event cannot block the delivery lane. Limits can be configured
 in the buffer constructor / collector options; dashboard configuration of limits
 is not implemented. Overflow drops optional measurements, increments counters,
 and never alters the business outcome. Failed/unacknowledged delivery retains the
@@ -78,10 +82,9 @@ within capacity bounds in settings. Hourly collector maintenance aggregates old
 volume/outcomes/callback receipt counts, then deletes only monitoring operations
 (and cascading optional records). It never deletes gateway or business evidence.
 The timer runs in the dedicated Debian process; no cleanup runs while it is down
-or monitoring is OFF. Capacity caps remain in force after restart. Aggregates
-currently preserve counts, not latency distributions. Use existing Supabase Dev
-backup coverage for this schema; existing Debian business backups do not include
-it. Independent observability restore rehearsal remains unverified.
+or monitoring is OFF. Capacity caps remain in force after restart. Aggregates preserve exact latency sums/sample counts and daily means, plus volume and outcomes; detailed quantiles are not reconstructed after retention. The schema uses standard PostgreSQL tables/indexes/functions, but Supabase Dev
+backup coverage has not been verified. Existing Debian business backups do not
+include this schema. Independent observability restore rehearsal remains unverified.
 
 ## UI and clocks
 
@@ -104,7 +107,7 @@ Saved frame evidence; this is not a hardware paint timestamp. Background documen
 omit frame evidence. Saved does not wait for telemetry or frames. Tap→client Saved
 is recorded only for locally observed committed outcomes, with one document's
 monotonic clock. Refresh loses that timeline and does not invent a duration using
-clocks from different pages. Verified Vercel build SHA is carried in browser records.
+clocks from different pages. The verified Vercel API build SHA is carried in browser records; stale-tab frontend bundle versions are not independently tagged.
 Vercel high-level timings relayed by the browser are client-reported provenance,
 not an independently durable server trace. Cross-host transit remains unknown.
 Spans overlap and are never summed to create an end-to-end total.
@@ -121,7 +124,7 @@ Spans overlap and are never summed to create an end-to-end total.
   confusing browser reports with authoritative business outcomes.
 - Persist detailed attempts and collector loss/health across process restarts;
   detect absent source batches, not only buffer overflow/missing operation rows.
-- Retired latency aggregates, period comparison, richer retry/attempt attribution,
+- Retired latency distributions/quantiles, period comparison, richer retry/attempt attribution,
   slowest-stage diagnosis, whole-range version/latency statistic filters and complete translation.
 - Representative concurrent-device OFF/MID/ON CPU/memory/network/database
   write-volume benchmark, valid tail samples, independent storage-failure recovery,
@@ -137,9 +140,9 @@ reports remain prior evidence; they are not reruns with this instrumentation.
   TypeScript and inert-endpoint Next build pass.
 - Live Dev schema tests and 250-operation analytics tests are transactionally
   rolled back. Retention preserves all shopping/gateway correctness evidence.
-- Dedicated monitoring Edge v6 enforces real current sessions, operator controls,
+- Dedicated monitoring Edge v8 enforces real current sessions, operator controls,
   signed Debian batches and source-record ownership. New metric vocabulary is
-  deployed separately as v6 before final browser validation.
+  deployed separately as v8 before final browser validation.
 - Initial real-root UI OFF/MID/ON comparison: 14 operations each at source
   54e47d6, same verified Preview, sequential paced cohorts. Medians and limits in
   performance.md. This is exploratory, not a <2% or tail-latency acceptance.
@@ -163,3 +166,29 @@ batch. Aggregation/vacuum and record-size variability can affect physical size;
 no claim of a hard filesystem byte quota is made. The max-record limits are hard
 admission bounds. PostgreSQL autovacuum/reuse and independent capacity monitoring
 remain required for a long soak.
+
+
+Expanded evidence at application source 4dd003e: actual OFF/MID/ON 14-operation
+cohorts, Chrome CPU/heap/long-task and browser API size counters, collector CPU and
+serialization micro-experiment, 14/14 durable summaries in MID and ON, plus 250
+ON spans. One browser trace upload is missing per enabled mode; completeness is
+not asserted. Final inspector eb865dd3 passed fresh-context desktop/Android RTL
+history and export, including real Saved with diagnostic requests blocked.
+Concurrent actors 1be84869, bounded MQTT/callback recovery 5d031f5b and callback
+replay 7c7c55b4 pass. These are bounded checks, not the full Stage 5 soak/gate.
+Read snapshots/found outcomes are classified as successful reads in analytics;
+this avoids inflating failure rates for household query operations.
+
+
+Final safeguards: 116 offline tests pass, including offline local persistence,
+page-hide buffering, collector replacement, batch byte bounds, actor-bound access
+and distinct action-entry timing. Browser source records report Saved/Failed/
+Conflict separately from authoritative gateway outcomes. React diagnostics remount
+on actor and household changes; detail exports reauthorize before download. Mode
+OFF immediately refuses optional ingestion on the server; client configuration
+polling may lag. Local persistence is best effort and never a remote persistence
+acknowledgement. Full independent server traces, long soak, physical Android,
+backup restore and the proposed <2% causal overhead target remain open.
+
+The 300-operation crossover is documented in performance.md with its original
+automation action-start boundary. It must not be relabeled as exact tap latency.

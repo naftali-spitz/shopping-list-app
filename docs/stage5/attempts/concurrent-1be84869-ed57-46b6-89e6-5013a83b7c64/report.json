@@ -1,0 +1,30 @@
+{
+  "id": "1be84869-ed57-46b6-89e6-5013a83b7c64",
+  "at": "2026-11-22T19:49:01.425Z",
+  "scope": "two real Dev actors in separate browser contexts; synthetic fixture; no host/network faults; exploratory concurrent latency, not capacity",
+  "checks": [
+    "shared synthetic household joined through verified invitation, no admin membership bypass",
+    "simultaneous UI edits produce one committed save and one explicit version conflict, one business increment",
+    "simultaneous identical-ID API/MQTT publication has one ledger row and one business effect",
+    "persistent history remains actor-isolated even inside a shared household; retries have one history operation"
+  ],
+  "samples": [
+    {
+      "actor": 1,
+      "operation_id": "bebb906f-aafa-40af-9a8a-ad16c10a5be4",
+      "correlation_id": "d92bf204-ca1c-41e4-a188-7012dc643773",
+      "outcome": "version_conflict",
+      "tap_to_terminal_ms": 9371
+    },
+    {
+      "actor": 0,
+      "operation_id": "ed9d2498-4865-4f78-b872-d1f80c5b1b83",
+      "correlation_id": "a79dd27b-5e6f-4557-9742-7844d4277116",
+      "outcome": "committed",
+      "tap_to_terminal_ms": 9753
+    }
+  ],
+  "household_id": "146b0be0-b1b5-405a-b8a0-27cd16e584cd",
+  "duplicate_operation_id": "15b08240-c3bf-48e4-ab47-c70c978b8866",
+  "status": "PASS"
+}

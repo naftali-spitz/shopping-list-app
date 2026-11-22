@@ -18,6 +18,7 @@ export type PendingOperation = {
   result?: OperationResult; confirmed_ms?: number; attempted?: boolean; accepted?: boolean;
   reconciliation?: Intent; reconcileRequested?: boolean; reserved_household_version?: number; tap_ms?: number; acceptance_ms?: number;
 };
+export type ClientTiming = { started: number; identityReady?: number };
 export type MutationResponse = { data: unknown; error: Error | null };
 type ApiStatus = { monitoring_version?: string; timings?: Record<string, number>; result?: OperationResult; state?: string; error?: string; duplicate?: boolean };
 class ApiError extends Error { constructor(message: string, readonly status: number) { super(message); } }
@@ -77,6 +78,7 @@ export class ShoppingClient {
       this.queue = this.mergeStored(this.queue);
       for (const operation of this.queue) if (operation.result && !previous.get(operation.intent.id)) {
         this.apply(operation.result, operation.intent);
+        this.telemetry.finish(operation.intent,operation.result.status==='committed',operation.result.status);
         this.waiters.get(operation.intent.id)?.({ data: operation.result.data, error: operation.state === 'Saved' ? null : new Error(operation.result.status) });
         this.waiters.delete(operation.intent.id);
       }
@@ -168,29 +170,31 @@ export class ShoppingClient {
     this.snapshotDue = true;
     return new Promise((resolve, reject) => { this.readers.add({ resolve, reject }); this.schedule(0); });
   }
-  mutate(type: string, payload: Record<string, unknown>, expectedVersion: number | null): Promise<MutationResponse> {
+  mutate(type: string, payload: Record<string, unknown>, expectedVersion: number | null, timing: ClientTiming = { started: performance.now() }): Promise<MutationResponse> {
     if (this.disposed || this.storageError) return Promise.resolve({ data: null, error: this.storageError || new Error('Session changed.') });
     const intent = createIntent(this.householdId, type, payload, expectedVersion, this.mode);
-    const pending: PendingOperation = { intent, state: navigator.onLine ? 'Saving' : 'Offline/pending', tap_ms: performance.now(), reserved_household_version: this.view()?.household.version };
+    const pending: PendingOperation = { intent, state: navigator.onLine ? 'Saving' : 'Offline/pending', tap_ms: timing.started, reserved_household_version: this.view()?.household.version };
     try { this.persist([...this.queue, pending]); }
     catch { return Promise.resolve({ data: null, error: new Error('Cannot persist pending operation. Free browser storage before changing this list.') }); }
-    this.telemetry.begin(intent,pending.tap_ms);
+    this.telemetry.begin(intent,pending.tap_ms,timing.identityReady===undefined?'operation_creation':'home_action_entry');
+    if(timing.identityReady!==undefined)this.telemetry.stage(intent.id,'client_identity',timing.started,timing.identityReady);
+    this.telemetry.stage(intent.id,'operation_creation',timing.identityReady??timing.started);this.telemetry.queued(intent.id);
     const feedbackStart = performance.now();
     const result = new Promise<MutationResponse>(resolve => this.waiters.set(pending.intent.id, resolve));
     this.notify(); this.telemetry.stage(intent.id, 'optimistic_notification', feedbackStart); this.schedule(0); return result;
   }
   getOperations(): readonly PendingOperation[] { return this.queue; }
   /** Reserve versions for prior local queued changes; never silently rebase over another user's edit. */
-  mutateLatest(type: string, payload: Record<string, unknown>): Promise<MutationResponse> {
+  mutateLatest(type: string, payload: Record<string, unknown>, timing: ClientTiming = { started: performance.now() }): Promise<MutationResponse> {
     const logical = logicalType(type), view = this.view();
-    if (logical.endsWith('.create') && !logical.startsWith('invite.')) return this.mutate(type, payload, 0);
-    if (logical.startsWith('invite.') || logical === 'household.list' || logical === 'household.members') return this.mutate(type, payload, null);
+    if (logical.endsWith('.create') && !logical.startsWith('invite.')) return this.mutate(type, payload, 0, timing);
+    if (logical.startsWith('invite.') || logical === 'household.list' || logical === 'household.members') return this.mutate(type, payload, null, timing);
     if (!view) return Promise.resolve({ data: null, error: new Error('Load the authoritative list before changing it.') });
     const entity = logical.split('.')[0];
     const rows = entity === 'product' ? view.products : entity === 'category' ? view.categories : entity === 'history' ? view.shopping_history : null;
     const version = rows ? Number(rows.find(row => row.id === payload.id)?.version) : Number(view.household.version);
     if (!Number.isSafeInteger(version) || version <= 0) return Promise.resolve({ data: null, error: new Error('Record is no longer available. Refresh the list.') });
-    return this.mutate(type, payload, version);
+    return this.mutate(type, payload, version, timing);
   }
 
   /** Pending patches are presentation only; current() remains authoritative. */
@@ -268,7 +272,7 @@ export class ShoppingClient {
     const applyStarted=performance.now();this.apply(result, pending.intent);this.telemetry.stage(pending.intent.id,'client_apply',applyStarted);
     if (result.status === 'forbidden') this.invalidateSnapshot(new Error('Household access is no longer authorized.'));
     this.persist(); this.notify();
-    this.telemetry.finish(pending.intent,result.status==='committed');
+    this.telemetry.finish(pending.intent,result.status==='committed',result.status);
     this.waiters.get(pending.intent.id)?.({ data: result.data, error: pending.state === 'Saved' ? null : new Error(result.status) });
     this.waiters.delete(pending.intent.id);
   }
@@ -322,7 +326,7 @@ export class ShoppingClient {
     }
     let status: ApiStatus;
     if (!pending.attempted) {
-      this.telemetry.stage(pending.intent.id, 'client_queue', pending.tap_ms ?? performance.now());
+      this.telemetry.queueWait(pending.intent.id);
       pending.attempted = true; this.persist();
       status = await this.sendIntent(pending);
       if (pending.result) return;

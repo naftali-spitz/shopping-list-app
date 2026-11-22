@@ -5,7 +5,7 @@ import ts from 'typescript';
 
 // Compile the actual client without Next's alias loader, substituting only the
 // external provider SDK. Protocol and persistence code remain unchanged.
-const source = readFileSync(new URL('./client.ts', import.meta.url), 'utf8').replace("import { supabase } from '@/lib/supabase';", 'const supabase = globalThis.__shoppingAuth;').replace("import { BrowserMonitoring } from '@/integration/monitoring/browser';", 'class BrowserMonitoring {begin(){} stage(){} metric(){} version(){} rendered(){} count(){} finish(){} dispose(){}}');
+const source = readFileSync(new URL('./client.ts', import.meta.url), 'utf8').replace("import { supabase } from '@/lib/supabase';", 'const supabase = globalThis.__shoppingAuth;').replace("import { BrowserMonitoring } from '@/integration/monitoring/browser';", 'class BrowserMonitoring {begin(){} queued(){} queueWait(){} stage(){} metric(){} version(){} rendered(){} count(){} finish(intent,committed){globalThis.__monitorSettlements?.push([intent.id,committed]);} dispose(){}}');
 const javascript = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 let moduleSerial = 0;
 const running = [];
@@ -227,7 +227,9 @@ test('terminal storage event resolves another tabs waiter and cannot be overwrit
   const other = new clientModule.ShoppingClient(user, household); running.push(other); other.snapshot = snapshot();
   const pending = other.operations()[0];
   other.settle(pending, { status: 'committed', data: { record: snapshot(2, 2).products[0], household_version: 2 } });
+  globalThis.__monitorSettlements=[];
   client.storage({ key: client.storageKey + ':operation:' + pending.intent.id });
+  assert.deepEqual(globalThis.__monitorSettlements,[[pending.intent.id,true]],'initiating tab records its own local Saved boundary after another tab confirms');
   assert.equal((await promise).error, null);
   assert.equal(client.operations()[0].state, 'Saved');
   assert.equal(client.current().products[0].quantity, 2);
@@ -270,4 +272,10 @@ test('history deletion and category cascade retain full refresh and explicit ref
   client.snapshot = snapshot(); client.snapshotDue = true;
   client.apply({ status: 'committed', data: { record: snapshot(2, 2).products[0], household_version: 2 } }, { type: 'stage4.product.update' });
   assert.equal(client.snapshotDue, true);
+});
+test('home action timing retains the earlier same-document identity boundary without changing intent',async()=>{
+ const {client}=await setup();client.snapshot=snapshot();const started=performance.now()-100;
+ const result=client.mutateLatest('product.update',{id:productId,quantity:2},{started,identityReady:started+80});
+ assert.equal(client.operations()[0].tap_ms,started);assert.equal(client.operations()[0].intent.expected_version,1);
+ client.settle(client.operations()[0],{status:'committed',data:{record:snapshot(2,2).products[0],household_version:2}});assert.equal((await result).error,null);
 });

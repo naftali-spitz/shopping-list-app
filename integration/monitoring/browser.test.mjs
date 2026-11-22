@@ -46,3 +46,11 @@ test('render evidence follows UI commit/frame callbacks without delaying confirm
   assert.equal(c.buffer.items[1].correlation_id,i.correlation_id);
  }finally{delete globalThis.requestAnimationFrame;delete globalThis.document;}
 });
+test('offline persistence survives collector replacement and delivers only after authentication returns',async()=>{
+ const s=await setup(),c=s.create();c.buffer.setMode('MID');navigator.onLine=false;const i=intent();c.begin(i);c.finish(i,true);const id=c.buffer.items[0].id;
+ await c.flush();assert.equal(s.requests.length,0);assert.equal(s.data.size,1);c.dispose();const restored=s.create();await restored.flush();assert.equal(s.data.size,1);
+ navigator.onLine=true;await restored.flush();assert.ok(s.requests.some(r=>r.records?.some(x=>x.id===id)));assert.equal(s.data.size,0);
+});
+test('pagehide preserves pending records locally without an unacknowledged network claim',async()=>{
+ const s=await setup(),c=s.create();c.buffer.setMode('ON');const i=intent();c.begin(i);c.finish(i,false,'version_conflict');c.pagehide();assert.equal(s.data.size,1);assert.equal(s.requests.length,0);assert.equal(c.buffer.delivered,0);assert.equal(c.buffer.items[0].browser_state,'Conflict');
+});
