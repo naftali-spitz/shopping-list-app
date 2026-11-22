@@ -309,7 +309,7 @@ try {
   let message = String(error.message);
   for (const account of accounts) message = message.split(account.password).join('[REDACTED]');
   message = message.replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[REDACTED]');
-  report.status = 'FAIL'; report.error = { name: error.name, message: message.slice(0, 2000), stack: String(error.stack).split('\n').slice(0, 5).join('\n') }; process.exitCode = 1;
+  report.status = 'FAIL'; report.error = { name: error.name, message: message.slice(0, 2000), stack: String(error.stack).split('\n').slice(1, 5).join('\n') }; process.exitCode = 1;
   try { if (lastPage) report.final_client_records = await lastPage.evaluate(() => Object.keys(localStorage).filter(key => key.startsWith('shopping-stage3-v2:') && key.endsWith(':stage4')).flatMap(key => { try { return JSON.parse(localStorage.getItem(key)).map(p => ({id:p.intent.id,type:p.intent.type,state:p.state,outcome:p.result?.status})); } catch { return []; } })); } catch { /* Best-effort redacted failure evidence only. */ }
   try { if (lastPage) await lastPage.screenshot({ path: `${output}/failure.png`, fullPage: true }); } catch {}
 } finally {

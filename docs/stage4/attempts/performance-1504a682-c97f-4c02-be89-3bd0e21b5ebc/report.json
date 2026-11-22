@@ -1,0 +1,449 @@
+{
+  "id": "1504a682-c97f-4c02-be89-3bd0e21b5ebc",
+  "at": "2026-11-22T21:32:12.277Z",
+  "label": "stage5-monitoring-MID",
+  "scope": "actual original UI, experimental development Preview; own synthetic list; correlated browser and PostgreSQL timings, no fault injection",
+  "samples": [
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6653,
+      "automation_action_to_visible_ms": 729,
+      "kind": "category.create",
+      "operation_id": "84635296-285d-411d-b185-44f25e659c38",
+      "correlation_id": "c857fdcc-5c9d-4676-ace6-e9076b7c24f4",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 86,
+      "tap_to_api_acceptance_ms": 2003,
+      "tap_to_saved_ms": 6012,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 642,
+        "durable_gateway_ms": 539,
+        "mqtt_ms": 490,
+        "handler_ms": 1674
+      },
+      "database_commit_at": "2026-11-22T21:32:37.358Z",
+      "outbox_created_at": "2026-11-22T21:32:37.358Z",
+      "outbox_delivered_at": "2026-11-22T21:32:39.281Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 8304,
+      "automation_action_to_visible_ms": 740,
+      "kind": "product.create",
+      "operation_id": "80fbaefe-a5dc-4696-89e4-28e5fa1cc624",
+      "correlation_id": "9fee7821-eca0-4e5b-a80f-9dc855a73a56",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 89,
+      "tap_to_api_acceptance_ms": 5397,
+      "tap_to_saved_ms": 7656.099999904633,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 695,
+        "durable_gateway_ms": 1440,
+        "mqtt_ms": 378,
+        "handler_ms": 2515
+      },
+      "database_commit_at": "2026-11-22T21:32:47.161Z",
+      "outbox_created_at": "2026-11-22T21:32:47.161Z",
+      "outbox_delivered_at": "2026-11-22T21:32:48.448Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 5071,
+      "automation_action_to_visible_ms": 247,
+      "kind": "product.create",
+      "operation_id": "4067ab56-0afc-4607-99a3-ab203b3817d9",
+      "correlation_id": "710a284d-ad9a-4a6e-b5bd-d02a6d5934e5",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 88,
+      "tap_to_api_acceptance_ms": 1470,
+      "tap_to_saved_ms": 4912.900000095367,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 241,
+        "durable_gateway_ms": 529,
+        "mqtt_ms": 381,
+        "handler_ms": 1152
+      },
+      "database_commit_at": "2026-11-22T21:32:51.052Z",
+      "outbox_created_at": "2026-11-22T21:32:51.052Z",
+      "outbox_delivered_at": "2026-11-22T21:32:52.059Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 11771,
+      "automation_action_to_visible_ms": 252,
+      "kind": "product.create",
+      "operation_id": "ef55a563-ed9f-4a73-a2cf-08cac28c9347",
+      "correlation_id": "d79abf63-62b8-409e-b5d7-779fa8eb2d07",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 85,
+      "tap_to_api_acceptance_ms": 7623,
+      "tap_to_saved_ms": 11609.900000095367,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 709,
+        "durable_gateway_ms": 1483,
+        "mqtt_ms": 387,
+        "handler_ms": 2580
+      },
+      "database_commit_at": "2026-11-22T21:33:02.322Z",
+      "outbox_created_at": "2026-11-22T21:33:02.322Z",
+      "outbox_delivered_at": "2026-11-22T21:33:04.641Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 8839,
+      "automation_action_to_visible_ms": 266,
+      "kind": "product.check",
+      "operation_id": "a51ac472-80e3-4bca-a156-c499f4d479e3",
+      "correlation_id": "825769ad-248c-4eae-adbe-c8c9fd05ec54",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 98,
+      "tap_to_api_acceptance_ms": 1898,
+      "tap_to_saved_ms": 8672.599999904633,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 649,
+        "durable_gateway_ms": 522,
+        "mqtt_ms": 363,
+        "handler_ms": 1536
+      },
+      "database_commit_at": "2026-11-22T21:33:08.484Z",
+      "outbox_created_at": "2026-11-22T21:33:08.484Z",
+      "outbox_delivered_at": "2026-11-22T21:33:10.731Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 10569,
+      "automation_action_to_visible_ms": 260,
+      "kind": "product.uncheck",
+      "operation_id": "99e1712f-359b-4dc7-8178-0fc5e0532518",
+      "correlation_id": "c3d218b4-826a-4564-9cc7-551c61efd682",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 90,
+      "tap_to_api_acceptance_ms": 3948,
+      "tap_to_saved_ms": 10399.699999809265,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 660,
+        "durable_gateway_ms": 1406,
+        "mqtt_ms": 384,
+        "handler_ms": 2453
+      },
+      "database_commit_at": "2026-11-22T21:33:19.393Z",
+      "outbox_created_at": "2026-11-22T21:33:19.393Z",
+      "outbox_delivered_at": "2026-11-22T21:33:21.682Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6748,
+      "automation_action_to_visible_ms": 256,
+      "kind": "product.check",
+      "operation_id": "24687bbd-45a7-4bfa-b832-7bc7d4dd5e69",
+      "correlation_id": "b34793b1-4a82-4328-8be6-a60de9b78f6d",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 84,
+      "tap_to_api_acceptance_ms": 3557,
+      "tap_to_saved_ms": 6577.5,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 250,
+        "durable_gateway_ms": 1434,
+        "mqtt_ms": 377,
+        "handler_ms": 2061
+      },
+      "database_commit_at": "2026-11-22T21:33:29.932Z",
+      "outbox_created_at": "2026-11-22T21:33:29.932Z",
+      "outbox_delivered_at": "2026-11-22T21:33:31.394Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 8357,
+      "automation_action_to_visible_ms": 264,
+      "kind": "product.uncheck",
+      "operation_id": "af17bc97-db7b-4617-8ac7-3f112ec2c0cf",
+      "correlation_id": "4b3d8ca0-bcd2-488e-a101-59e0f35cbf85",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 88,
+      "tap_to_api_acceptance_ms": 5887,
+      "tap_to_saved_ms": 8182.200000047684,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 701,
+        "durable_gateway_ms": 575,
+        "mqtt_ms": 379,
+        "handler_ms": 1656
+      },
+      "database_commit_at": "2026-11-22T21:33:38.602Z",
+      "outbox_created_at": "2026-11-22T21:33:38.602Z",
+      "outbox_delivered_at": null,
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 8732,
+      "automation_action_to_visible_ms": 264,
+      "kind": "product.check",
+      "operation_id": "ec5e4c09-9480-4f49-98f6-3b84ff796430",
+      "correlation_id": "e8a5d1fa-5352-41dc-adcb-da102ef866eb",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 88,
+      "tap_to_api_acceptance_ms": 2314,
+      "tap_to_saved_ms": 8557.200000047684,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 629,
+        "durable_gateway_ms": 968,
+        "mqtt_ms": 380,
+        "handler_ms": 1978
+      },
+      "database_commit_at": "2026-11-22T21:33:43.416Z",
+      "outbox_created_at": "2026-11-22T21:33:43.416Z",
+      "outbox_delivered_at": "2026-11-22T21:33:45.068Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6863,
+      "automation_action_to_visible_ms": 260,
+      "kind": "product.uncheck",
+      "operation_id": "4dc9863e-d2d6-4ef8-b51b-0de420c36dc1",
+      "correlation_id": "278570e9-e46c-4d9b-ac4f-abfcb2a4b93a",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 87,
+      "tap_to_api_acceptance_ms": 3220,
+      "tap_to_saved_ms": 6691.400000095367,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 676,
+        "durable_gateway_ms": 535,
+        "mqtt_ms": 371,
+        "handler_ms": 1584
+      },
+      "database_commit_at": "2026-11-22T21:33:53.030Z",
+      "outbox_created_at": "2026-11-22T21:33:53.030Z",
+      "outbox_delivered_at": "2026-11-22T21:33:54.571Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 11842,
+      "automation_action_to_visible_ms": 175,
+      "kind": "product.check",
+      "operation_id": "36d011e1-acf1-4d20-a845-6e82bfb69ab8",
+      "correlation_id": "c4d8a91f-68f0-4a62-bb8b-69cff2eae34f",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 3,
+      "tap_to_api_acceptance_ms": 9397,
+      "tap_to_saved_ms": 11673.399999856949,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 661,
+        "durable_gateway_ms": 4578,
+        "mqtt_ms": 360,
+        "handler_ms": 5600
+      },
+      "database_commit_at": "2026-11-22T21:34:06.059Z",
+      "outbox_created_at": "2026-11-22T21:34:06.059Z",
+      "outbox_delivered_at": "2026-11-22T21:34:07.280Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 8268,
+      "automation_action_to_visible_ms": 781,
+      "kind": "product.quantity",
+      "operation_id": "e248eadf-581e-4909-a5d9-54bf05c755bd",
+      "correlation_id": "1acd32bd-28b9-4ea0-9c3d-b84a2e2648e6",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 61,
+      "tap_to_api_acceptance_ms": 1474,
+      "tap_to_saved_ms": 7549.5,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 246,
+        "durable_gateway_ms": 551,
+        "mqtt_ms": 362,
+        "handler_ms": 1160
+      },
+      "database_commit_at": "2026-11-22T21:34:10.758Z",
+      "outbox_created_at": "2026-11-22T21:34:10.758Z",
+      "outbox_delivered_at": "2026-11-22T21:34:12.046Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 11738,
+      "automation_action_to_visible_ms": 90,
+      "kind": "product.quantity",
+      "operation_id": "3970c57a-8bb6-4aab-b575-0a89278d2a04",
+      "correlation_id": "6d147caf-c504-43f2-8e75-5cab8e60a141",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 43,
+      "tap_to_api_acceptance_ms": 5075,
+      "tap_to_saved_ms": 11692.200000047684,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 663,
+        "durable_gateway_ms": 1426,
+        "mqtt_ms": 360,
+        "handler_ms": 2450
+      },
+      "database_commit_at": "2026-11-22T21:34:22.439Z",
+      "outbox_created_at": "2026-11-22T21:34:22.439Z",
+      "outbox_delivered_at": "2026-11-22T21:34:24.789Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 7261,
+      "automation_action_to_visible_ms": 88,
+      "kind": "product.quantity",
+      "operation_id": "5e56916f-d672-4220-aa9e-d7ff20206da8",
+      "correlation_id": "7b15063c-ba78-4ec1-b0ad-1bfcdb55ac9a",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 44,
+      "tap_to_api_acceptance_ms": 3864,
+      "tap_to_saved_ms": 7218.599999904633,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "authentication_ms": 696,
+        "durable_gateway_ms": 606,
+        "mqtt_ms": 378,
+        "handler_ms": 1681
+      },
+      "database_commit_at": "2026-11-22T21:34:32.407Z",
+      "outbox_created_at": "2026-11-22T21:34:32.407Z",
+      "outbox_delivered_at": "2026-11-22T21:34:34.276Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    }
+  ],
+  "loads": [
+    {
+      "kind": "first-browser-context",
+      "navigation_to_ready_ms": 12819,
+      "cold_function_instance_known": false
+    },
+    {
+      "kind": "warm-browser-reload",
+      "navigation_to_ready_ms": 10221,
+      "cold_function_instance_known": false
+    }
+  ],
+  "harness_sha": "de51af84e99655538f12347be932da4f066624ed",
+  "deployment": {
+    "id": "dpl_GHMiX6HCdhpyrC1o88hKbpTzVGDi",
+    "sha": "4e0d4213315261e478e55c09cbc02c1ed38967e0",
+    "url": "shopping-list-r7nsg1egr-0012ab-5576s-projects.vercel.app"
+  },
+  "household_id": "0aff0fd4-5bd9-46fb-9b65-ba442ff78836",
+  "network": {
+    "business": {
+      "requests": 77,
+      "bytes": 52844
+    },
+    "monitoring": {
+      "requests": 36,
+      "bytes": 28857
+    }
+  },
+  "browser_resources": {
+    "long_tasks": {
+      "count": 0,
+      "total_ms": 0
+    },
+    "cdp_metrics": [
+      {
+        "name": "ScriptDuration",
+        "value": 1.31312
+      },
+      {
+        "name": "TaskDuration",
+        "value": 4.453082
+      },
+      {
+        "name": "JSHeapUsedSize",
+        "value": 8679000
+      },
+      {
+        "name": "JSHeapTotalSize",
+        "value": 13770752
+      }
+    ]
+  },
+  "summary": {
+    "category.create": {
+      "n": 1,
+      "median_visible_feedback_ms": 86,
+      "median_api_acceptance_ms": 2003,
+      "median_saved_ms": 6012,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.create": {
+      "n": 3,
+      "median_visible_feedback_ms": 88,
+      "median_api_acceptance_ms": 5397,
+      "median_saved_ms": 7656.099999904633,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.check": {
+      "n": 4,
+      "median_visible_feedback_ms": 86,
+      "median_api_acceptance_ms": 2935.5,
+      "median_saved_ms": 8614.899999976158,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.uncheck": {
+      "n": 3,
+      "median_visible_feedback_ms": 88,
+      "median_api_acceptance_ms": 3948,
+      "median_saved_ms": 8182.200000047684,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.quantity": {
+      "n": 3,
+      "median_visible_feedback_ms": 44,
+      "median_api_acceptance_ms": 3864,
+      "median_saved_ms": 7549.5,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    }
+  },
+  "status": "PASS"
+}

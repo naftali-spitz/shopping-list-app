@@ -1,0 +1,382 @@
+{
+  "id": "1e644ab6-d1a8-4a5d-86a5-2acadd33523d",
+  "at": "2026-11-22T21:45:03.977Z",
+  "sha": "603daf7e0c48c8f9974b5202c57e8ba93f45ec2d",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "actual original UI; browser-only offline, refresh, duplicate request, concurrent quantity, stale snapshot and logout tests; no Debian/service faults",
+  "checks": [
+    {
+      "name": "two authenticated original app views receive real created/checked product",
+      "status": "PASS",
+      "category_id": "e3a506b7-352d-4191-a6ae-15d471e3c635",
+      "product_id": "6b95aca7-719b-4970-9f23-2e9f4ba971f0"
+    },
+    {
+      "name": "three immediate check taps preserve existing pending guard and produce one intended committed check",
+      "status": "PASS",
+      "operation_id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "committed_checked_updates": 1
+    }
+  ],
+  "operations": [
+    {
+      "id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "correlation_id": "af80f1e8-58cf-4993-9e6b-aa45896efead",
+      "type": "stage4.category.create",
+      "expected_version": 0
+    },
+    {
+      "id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "correlation_id": "9a7d761c-4221-43f6-be10-6885d9cffd76",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    },
+    {
+      "id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "correlation_id": "c2f7456c-3fc9-4c31-a01f-6f54e0f683a9",
+      "type": "stage4.product.update",
+      "expected_version": 1
+    }
+  ],
+  "requests": [
+    {
+      "at": "2026-11-22T21:45:14.264Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "5cdfec0e-c4a9-46ff-aa72-7a894d65a476",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:16.248Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "5cdfec0e-c4a9-46ff-aa72-7a894d65a476",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:18.059Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "5cdfec0e-c4a9-46ff-aa72-7a894d65a476",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:20.150Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "aa2425ae-8528-4b22-bf18-dd5150fc4a5c",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:21.375Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa2425ae-8528-4b22-bf18-dd5150fc4a5c",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:22.948Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa2425ae-8528-4b22-bf18-dd5150fc4a5c",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:26.923Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "ca2edd4a-d2c6-4b97-a928-d2e8b9c7d66d",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:28.347Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "ca2edd4a-d2c6-4b97-a928-d2e8b9c7d66d",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:29.761Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "ca2edd4a-d2c6-4b97-a928-d2e8b9c7d66d",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:30.398Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "715408f2-42fc-4994-8eaa-6040f82a3f0c",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:31.612Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "1cea7817-3a33-4f85-a427-c3bff0c316d9",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:31.615Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "715408f2-42fc-4994-8eaa-6040f82a3f0c",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:32.930Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1cea7817-3a33-4f85-a427-c3bff0c316d9",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:33.097Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "715408f2-42fc-4994-8eaa-6040f82a3f0c",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:34.376Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1cea7817-3a33-4f85-a427-c3bff0c316d9",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:38.024Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "type": "stage4.category.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:39.514Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:40.928Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "aa04372a-8708-4ba1-8fc7-2cfeaf3942d1",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:41.410Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "d843f1ea-2707-4359-a1ad-b790f0f2618a",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:42.153Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa04372a-8708-4ba1-8fc7-2cfeaf3942d1",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:42.278Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "d843f1ea-2707-4359-a1ad-b790f0f2618a",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:43.575Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:45:43.780Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "d843f1ea-2707-4359-a1ad-b790f0f2618a",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:44.929Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa04372a-8708-4ba1-8fc7-2cfeaf3942d1",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:46.993Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:48.796Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:50.201Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "cebf89d9-236c-45eb-8368-5b2220473565",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:50.224Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:45:51.008Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "cebf89d9-236c-45eb-8368-5b2220473565",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:52.163Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "03206729-102e-416e-b899-f3ca59bf188d",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:52.430Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "cebf89d9-236c-45eb-8368-5b2220473565",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:52.934Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "03206729-102e-416e-b899-f3ca59bf188d",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:54.918Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:55.762Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "03206729-102e-416e-b899-f3ca59bf188d",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:57.186Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:45:58.897Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "1076d8bb-33c1-4229-83e5-03b93f2fc53f",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:59.689Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1076d8bb-33c1-4229-83e5-03b93f2fc53f",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:04.761Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1076d8bb-33c1-4229-83e5-03b93f2fc53f",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    }
+  ],
+  "focused_cross_tab_continuation": true,
+  "deployment": {
+    "id": "dpl_EJhuBnSYCd89oUhsmi14ZbsAxJPX",
+    "url": "shopping-list-jolgxfd6c-0012ab-5576s-projects.vercel.app",
+    "sha": "603daf7e0c48c8f9974b5202c57e8ba93f45ec2d",
+    "git_ref": "feature/flespi-home-backend",
+    "state": "READY",
+    "target": null
+  }
+}

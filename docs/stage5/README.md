@@ -68,9 +68,9 @@ are capped at 100 per operation. Telemetry capacity defaults: 10k operations /
 Browser timestamps and capture use performance.now. JSON/localStorage/network
 work runs on the independent flush task. Per-record scoped storage keys permit
 concurrent-tab delivery without replacing another tab's queue. Buffered uploads
-retry with a current matching session. Browser closure before the next flush can
-lose up to 5s of optional client measurements; local storage exhaustion also loses
-persistence. No persistence is claimed without acknowledgement. Browser history
+retry with a current matching session. Page-hide and collector disposal attempt a local queue snapshot; abrupt process
+termination before a flush can still lose optional client measurements. Local
+storage exhaustion also loses persistence. No persistence is claimed without acknowledgement. Browser history
 itself comes from PostgreSQL and survives refresh/logout/testing sessions.
 Debian optional in-memory spans can be lost on crash/restart; durable operation
 summaries can be recovered from gateway facts. This is explicitly a partial trace.
@@ -130,65 +130,25 @@ Spans overlap and are never summed to create an end-to-end total.
   write-volume benchmark, valid tail samples, independent storage-failure recovery,
   extended soak/capacity audit, Android device and independent backup rehearsal.
 
-These are incomplete requirements, not passes. Existing Stage 4 failure/recovery
-reports remain prior evidence; they are not reruns with this instrumentation.
+These are incomplete requirements, not passes. The bounded Stage 5 reruns are
+listed below; older Stage 4 reports remain prior evidence.
 
 
-## Executed evidence
+## Executed evidence and handoff
 
-- 111 offline tests pass (95 prior regression + 16 monitoring tests); source lint,
-  TypeScript and inert-endpoint Next build pass.
-- Live Dev schema tests and 250-operation analytics tests are transactionally
-  rolled back. Retention preserves all shopping/gateway correctness evidence.
-- Dedicated monitoring Edge v8 enforces real current sessions, operator controls,
-  signed Debian batches and source-record ownership. New metric vocabulary is
-  deployed separately as v8 before final browser validation.
-- Initial real-root UI OFF/MID/ON comparison: 14 operations each at source
-  54e47d6, same verified Preview, sequential paced cohorts. Medians and limits in
-  performance.md. This is exploratory, not a <2% or tail-latency acceptance.
-- Initial inspector 80b15cad passes desktop, Android viewport RTL, persisted
-  PostgreSQL history/export in fresh browser contexts, and committed Saved while
-  diagnostic HTTP requests are blocked. Physical Android remains untested.
-- Invalid initial alias cohort is retained as failed/invalid, never benchmark data.
+See [HANDOFF.md](HANDOFF.md) for the current application SHA/verified Preview,
+117 offline tests,12 PostgreSQL regression groups, six Dev SQL suites, live
+mode/security/callback tests, all 10 browser reliability groups, pinned desktop/
+Android viewport RTL inspector and failure checks. Prior failed attempts are
+retained. Create→update validation exposed a pre-existing shared-object mutation
+of immutable queued results;6db258a clones live-view data and keeps the checks.
 
+[performance.md](performance.md) separates the100-operation/mode crossover from
+the corrected14/mode trusted-click cohort. The latter's MID median is 7.7% above
+OFF; the proposed 2% overhead target is not verified. Detailed historical source
+coverage and counters are retained, including missing browser uploads. The
+correctness clone's final-source overhead is not independently benchmarked.
 
-Latest expanded instrumentation includes separate MQTT connect/PUBACK, listener
-validation/progress/processing, DB pool/household-lock/COMMIT acknowledgement,
-callback errors and durable outbox attempt counters. Source IDs distinguish
-attempts. Duplicate callback receipts remain distinct from proof of retry.
-Detailed read responses are bounded to one operation (100 source records max);
-list pages contain at most three compact records per operation. Full trace JSON
-can be exported from the detail view. Monitoring history access is actor-scoped.
-
-The capacity guard is conservative admission, not a disk reservation: table/index
-allocation is inspected outside the shopping transaction, with headroom for each
-batch. Aggregation/vacuum and record-size variability can affect physical size;
-no claim of a hard filesystem byte quota is made. The max-record limits are hard
-admission bounds. PostgreSQL autovacuum/reuse and independent capacity monitoring
-remain required for a long soak.
-
-
-Expanded evidence at application source 4dd003e: actual OFF/MID/ON 14-operation
-cohorts, Chrome CPU/heap/long-task and browser API size counters, collector CPU and
-serialization micro-experiment, 14/14 durable summaries in MID and ON, plus 250
-ON spans. One browser trace upload is missing per enabled mode; completeness is
-not asserted. Final inspector eb865dd3 passed fresh-context desktop/Android RTL
-history and export, including real Saved with diagnostic requests blocked.
-Concurrent actors 1be84869, bounded MQTT/callback recovery 5d031f5b and callback
-replay 7c7c55b4 pass. These are bounded checks, not the full Stage 5 soak/gate.
-Read snapshots/found outcomes are classified as successful reads in analytics;
-this avoids inflating failure rates for household query operations.
-
-
-Final safeguards: 116 offline tests pass, including offline local persistence,
-page-hide buffering, collector replacement, batch byte bounds, actor-bound access
-and distinct action-entry timing. Browser source records report Saved/Failed/
-Conflict separately from authoritative gateway outcomes. React diagnostics remount
-on actor and household changes; detail exports reauthorize before download. Mode
-OFF immediately refuses optional ingestion on the server; client configuration
-polling may lag. Local persistence is best effort and never a remote persistence
-acknowledgement. Full independent server traces, long soak, physical Android,
-backup restore and the proposed <2% causal overhead target remain open.
-
-The 300-operation crossover is documented in performance.md with its original
-automation action-start boundary. It must not be relabeled as exact tap latency.
+Mode is restored MID; fault injection disabled; dedicated listener healthy.
+NAF-197 remains In Progress and gate.json records partial acceptance. Dev signing
+key rotation and its passing callback checks are documented in attempts/key-rotation.json.

@@ -1,0 +1,45 @@
+{
+  "scope": "NAF-197 development observability only; not a Stage5 or production gate",
+  "status": "PARTIAL_IMPLEMENTATION_ACCEPTANCE_OPEN",
+  "branch": "feature/flespi-home-backend",
+  "pr16": "DRAFT_UNMERGED",
+  "production_writes": false,
+  "runtime_modes": [
+    "OFF",
+    "MID",
+    "ON"
+  ],
+  "batching": "bounded async browser and Debian batches; no serverless fire-and-forget",
+  "history": "isolated Supabase Dev PostgreSQL, actor and household authorized",
+  "tests": {
+    "offline": 117,
+    "real_postgresql_groups": 12,
+    "sql_suites": 6,
+    "final_browser_recovery": "pending corrected-client deployment verification",
+    "browser_reliability": "PASS:3172a6d8,10 groups after immutable-result fix; prior failures retained",
+    "inspector": "PASS:b40501b4, pinned SHA, desktop/Android viewport RTL"
+  },
+  "benchmark": {
+    "crossover_samples_per_mode": 100,
+    "crossover_boundary": "automation action start to client storage Saved",
+    "trusted_click_samples_per_mode": 14,
+    "trusted_click_saved_p50_ms": {
+      "OFF": 7109,
+      "MID": 7656,
+      "ON": 6273
+    },
+    "p99": "not reported",
+    "mid_under_two_percent": "UNVERIFIED",
+    "source": "4e0d421"
+  },
+  "remaining": [
+    "Independent durable Vercel/gateway traces",
+    "Pre-acceptance diagnostics",
+    "Complete loss accounting across restart",
+    "Representative sustained concurrency and physical Android",
+    "Independent backup restore and soak",
+    "Full final-source overhead budget validation"
+  ],
+  "next": "Close NAF-197 gaps before broader NAF-187 work; keep NAF-198 deferred",
+  "application": "6db258ae3ed89dcffd564c5516679734eebb4333"
+}

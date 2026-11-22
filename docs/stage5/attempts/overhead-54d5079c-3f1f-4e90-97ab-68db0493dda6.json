@@ -1,0 +1,8 @@
+{
+  "id": "54d5079c-3f1f-4e90-97ab-68db0493dda6",
+  "at": "2026-11-22T21:23:52.111Z",
+  "scope": "same real root UI workload, sequential OFF/MID/ON cohorts, synthetic households, no faults, no production",
+  "runs": [],
+  "status": "FAIL",
+  "error": "Actual UI benchmark failed; inspect retained Stage4 attempt reports."
+}

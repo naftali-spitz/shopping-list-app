@@ -97,8 +97,7 @@ is recorded in expanded-history-coverage.json.
 Node/V8, 5,000 synthetic lifecycles per mode with asynchronous flush every 50.
 Capture P50: OFF 1.530 microseconds, MID 8.966, ON 11.304. MID/ON each delivered
 5,000 records in 100 batches, depth/drop/failure 0. Batched JSON serialization:
-MID 7.57ms for 3.26MB, ON 22.12ms for 5.12MB. Warm-up/order/GC effects explain why
-ON capture need not exceed MID in this small experiment. This excludes UI,
+MID 7.57ms for 3.26MB, ON 22.12ms for 5.12MB. Warm-up/order/GC effects remain in this small experiment. This excludes UI,
 network and browser storage, and is not a browser latency percentage.
 
 ## Concurrent and failure observations
@@ -119,10 +118,10 @@ checks. Monitoring attempts can lose optional tail records on service restart;
 the durable business outbox remains authoritative. No router/ISP/firewall or
 shared-provider outage was injected.
 
-At the final audit, Dev PostgreSQL occupied about 19.3MB and the monitoring schema
+At an earlier point-in-time audit, Dev PostgreSQL occupied about 19.3MB and the monitoring schema
 0.934MB (89 operations / 459 source records), no capacity or missing-summary
 rejections. This is a point-in-time capacity observation, not a long-run forecast.
-Independent Vercel spans, retired latency distributions, large randomized cohorts,
+Independent Vercel spans, retired latency distributions, randomized cohorts,
 physical Android, sustained concurrency and backup restore remain unverified.
 
 
@@ -158,3 +157,67 @@ The corrected harness records a trusted DOM click timestamp and waits for both
 committed local storage and the React Saved state. This still does not establish
 physical display paint. Instrumentation distinguishes home action entry from
 legacy operation creation, keeping their distributions and archived sums separate.
+
+
+Additional crossover resource observations (100 operations/mode):
+
+| Mode | Listener CPU delta s | Chrome task seconds (two cohorts) | Long tasks | Monitoring HTTP requests/body bytes |
+| --- | ---: | --- | --- | --- |
+| OFF | 6.009 | 11.548 / 10.162 | 0 | 106 / 27332 |
+| MID | 5.903 | 10.637 / 9.813 | 1, 59ms | 197 / 168746 |
+| ON | 5.883 | 9.805 / 10.578 | 1, 66ms | 194 / 230274 |
+
+OFF's config reads are required to discover runtime re-enablement; it performs no
+optional diagnostic ingest/history writes. HTTP sizes cover completed browser
+request/response bodies, excluding transport headers/MQTT/callback traffic.
+Listener counters are process-wide; Chrome task/heap counters are document-wide,
+not per-operation attribution. Listener end-RSS ranges were 64.4–69.6MB OFF,
+65.2–69.4MB MID and 66.0–67.1MB ON. End-RSS is not peak memory. Source record bytes
+are not total database WAL/index write volume. These counters and source insert
+counts give bounded overhead visibility, not a causal concurrency/soak acceptance.
+
+
+## Final corrected trusted-click cohort
+
+Report: `attempts/overhead-6e3df5dd-5ef2-479c-ba1f-e9d730925fb4.json`.
+Verified application4e0d421, replacement-key preview r7nsg1egr; Debian de51af8.
+All42 real UI operations committed with no exclusions. Start is a trusted DOM
+click captured in the page; end requires committed local storage and observed
+React Saved DOM. Playwright observation can lag the UI commit; physical paint is
+not measured. Sequential cohorts remain small and provider/time effects uncontrolled.
+
+| Mode | n | Click → observed Saved P50 ms | Mean ms | Visible feedback P50 ms |
+| --- | ---: | ---: | ---: | ---: |
+| OFF | 14 | 7109 | 7829 | 82 |
+| MID | 14 | 7656 | 8386 | 86 |
+| ON | 14 | 6273 | 6437 | 84 |
+
+P95/P99 are suppressed. MID median is about7.7% above OFF in this small run;
+ON is lower. This is not enough to isolate monitoring overhead, and the proposed
+<2% budget is explicitly **not verified**. It must not be hidden by reporting only
+the earlier crossover where enabled-mode medians happened to be lower.
+
+Authoritative history audit: OFF0 optional records; MID14/14 durable summaries
+and14/14 operations with browser evidence,104 records,0 spans,62184 source bytes;
+ON14/14 summaries and14/14 browser operations,102 records,287 spans,86610 bytes.
+Best-effort page-hide persistence improved this observed coverage, without a
+loss-free guarantee. The old96%/97% cohorts remain valid evidence of prior gaps.
+
+Final inspector b2ac1c6b passes fresh-context desktop/Android viewport RTL,
+full trace JSON, redacted range JSON/CSV, viewport fit, Jerusalem chart-hour
+roundtrip, and actual Saved while diagnostic HTTP requests are aborted. Physical
+Android remains untested. Visual inspection found two misleading labels:
+rejected source records were called missing summaries, and Debian origins were
+called legacy operation creation. These labels are corrected without changing
+collection or business behavior; the final preview smoke check follows that edit.
+
+
+Final application 6db258a separates live snapshot objects from immutable queued
+results, fixing a reproduced Saved-confirmation failure without weakening checks.
+Full browser reliability3172a6d8 passes10 groups; pinned inspector b40501b4 passes
+on its verified Preview. Baseline timings above remain source 4e0d421, before this
+separate correctness fix. Its cost and final-source causal budget are unverified.
+The final point-in-time Dev monitoring audit at21:55UTC has392 operations,
+2480 source records,3080192 table/index bytes,0 capacity rejections and14 rejected
+source records. Rejected records are not missing summaries. This is not a
+long-run storage forecast or total WAL/write amplification measurement.

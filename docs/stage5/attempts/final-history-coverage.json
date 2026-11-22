@@ -1,0 +1,37 @@
+{
+  "application": "4e0d4213315261e478e55c09cbc02c1ed38967e0",
+  "worker": "de51af8",
+  "note": "All 42 business operations committed; OFF summary count zero is deliberate. Browser evidence exists for each enabled-mode sample, but trace completeness is still partial.",
+  "coverage": [
+    {
+      "mode": "MID",
+      "samples": 14,
+      "summaries": 14,
+      "committed_summaries": 14,
+      "source_records": "104",
+      "browser_operations": 14,
+      "spans": "0",
+      "source_json_bytes": "62184"
+    },
+    {
+      "mode": "OFF",
+      "samples": 14,
+      "summaries": 0,
+      "committed_summaries": 0,
+      "source_records": "0",
+      "browser_operations": 0,
+      "spans": "0",
+      "source_json_bytes": "0"
+    },
+    {
+      "mode": "ON",
+      "samples": 14,
+      "summaries": 14,
+      "committed_summaries": 14,
+      "source_records": "102",
+      "browser_operations": 14,
+      "spans": "287",
+      "source_json_bytes": "86610"
+    }
+  ]
+}

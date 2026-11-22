@@ -1,0 +1,16 @@
+{
+  "id": "b40501b4-e7da-4b80-a1b5-325076e4af8b",
+  "at": "2026-11-22T21:52:30.808Z",
+  "scope": "actual protected Dev Preview inspector; desktop and Android viewport emulation, not a physical Android device",
+  "checks": [
+    "desktop: PostgreSQL history loaded in fresh browser, trace detail, full trace JSON, redacted CSV/JSON range exports, viewport fit",
+    "aborted diagnostic requests do not prevent real committed Saved",
+    "android-rtl: PostgreSQL history loaded in fresh browser, trace detail, full trace JSON, redacted CSV/JSON range exports, viewport fit"
+  ],
+  "deployment": {
+    "id": "dpl_hsTwoHi1XRS2j34PnhkkDRP1gSFE",
+    "sha": "6db258ae3ed89dcffd564c5516679734eebb4333",
+    "url": "shopping-list-4tm7s1psu-0012ab-5576s-projects.vercel.app"
+  },
+  "status": "PASS"
+}

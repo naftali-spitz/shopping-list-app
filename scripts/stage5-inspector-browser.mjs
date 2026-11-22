@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {randomUUID} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {PREVIEW,previewHeaders} from './stage3-preview-check.mjs';
 const require=createRequire('/home/naf-w/.local/share/shopping-list-tools/package.json');const {chromium}=require('playwright-core');
@@ -9,6 +10,13 @@ const session=JSON.parse(readFileSync('.stage0-runtime/stage3-sessions.json'))[0
 const report={id:randomUUID(),at:new Date().toISOString(),scope:'actual protected Dev Preview inspector; desktop and Android viewport emulation, not a physical Android device',checks:[]};
 const folder='docs/stage5/attempts/inspector-'+report.id;mkdirSync(folder,{recursive:true});let browser;
 try{
+ if(process.env.STAGE5_EXPECT_SHA){
+  const cli='/home/naf-w/.local/share/shopping-list-tools/node_modules/.bin/vercel';
+  const inspected=JSON.parse(execFileSync(cli,['inspect',PREVIEW,'--json','--scope','0012ab-5576s-projects','--non-interactive'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
+  const dep=JSON.parse(execFileSync(cli,['api',`/v13/deployments/${inspected.id}?teamId=team_h5ZyD1rMpbgnak6COakN03nD`,'--method','GET','--scope','0012ab-5576s-projects','--non-interactive'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));
+  assert.equal(dep.projectId,'prj_jsqk7AsPGuxLmvWqYEsqyFClV1cM');assert.notEqual(dep.target,'production');assert.equal(dep.gitSource.sha,process.env.STAGE5_EXPECT_SHA);assert.equal(dep.readyState,'READY');
+  report.deployment={id:dep.id,sha:dep.gitSource.sha,url:dep.url};
+ }
  browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome',args:['--no-sandbox']});
  for(const [label,viewport,language] of [['desktop',{width:1440,height:1000},'en'],['android-rtl',{width:412,height:915},'he']]){
   const context=await browser.newContext({viewport,timezoneId:'Asia/Jerusalem',...(label==='android-rtl'?{isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/130.0.0.0 Mobile Safari/537.36'}:{})});

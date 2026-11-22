@@ -1,0 +1,15 @@
+{
+  "id": "dpl_GHMiX6HCdhpyrC1o88hKbpTzVGDi",
+  "url": "shopping-list-r7nsg1egr-0012ab-5576s-projects.vercel.app",
+  "target": null,
+  "readyState": "READY",
+  "projectId": "prj_jsqk7AsPGuxLmvWqYEsqyFClV1cM",
+  "gitSource": {
+    "ref": "feature/flespi-home-backend",
+    "repoId": 1239195094,
+    "sha": "4e0d4213315261e478e55c09cbc02c1ed38967e0",
+    "type": "github",
+    "prId": null
+  },
+  "configuration": "feature-only preview, replacement Dev public verification key"
+}
