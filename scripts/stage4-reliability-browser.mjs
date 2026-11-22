@@ -58,7 +58,7 @@ async function login(index) {
     if (response.url() !== PREVIEW + '/api/stage3') return;
     try {
       const request = response.request().postDataJSON(), body = await response.json();
-      report.requests.push({ at: new Date().toISOString(), account: index, action: request.action, type: request.intent?.type, status: response.status(), error: body.error, state: body.state, result: body.result?.status });
+      report.requests.push({ at: new Date().toISOString(), account: index, action: request.action, operation_id: request.intent?.id ?? request.id, type: request.intent?.type, status: response.status(), error: body.error, state: body.state, result: body.result?.status });
     } catch { /* No headers, tokens or raw bodies in evidence. */ }
   });
   await page.goto(PREVIEW + '/');
@@ -74,13 +74,14 @@ async function persisted(page, id, state = 'committed') {
   }), { id, state }, { timeout: 120000 });
 }
 async function operation(page, type, predicate, action, wait = true) {
+  lastPage = page;
   const requestPromise = page.waitForRequest(request => {
     if (request.url() !== PREVIEW + '/api/stage3') return false;
     try { const body = request.postDataJSON(); return body.action === 'command' && body.intent?.type === 'stage4.' + type && predicate(body.intent); } catch { return false; }
   });
   await action(); const intent = (await requestPromise).postDataJSON().intent;
-  if (wait) await persisted(page, intent.id);
   report.operations.push({ id: intent.id, correlation_id: intent.correlation_id, type: intent.type, expected_version: intent.expected_version });
+  if (wait) await persisted(page, intent.id);
   return intent;
 }
 async function product(id) {
@@ -308,7 +309,8 @@ try {
   let message = String(error.message);
   for (const account of accounts) message = message.split(account.password).join('[REDACTED]');
   message = message.replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[REDACTED]');
-  report.status = 'FAIL'; report.error = { name: error.name, message: message.slice(0, 2000) }; process.exitCode = 1;
+  report.status = 'FAIL'; report.error = { name: error.name, message: message.slice(0, 2000), stack: String(error.stack).split('\n').slice(0, 5).join('\n') }; process.exitCode = 1;
+  try { if (lastPage) report.final_client_records = await lastPage.evaluate(() => Object.keys(localStorage).filter(key => key.startsWith('shopping-stage3-v2:') && key.endsWith(':stage4')).flatMap(key => { try { return JSON.parse(localStorage.getItem(key)).map(p => ({id:p.intent.id,type:p.intent.type,state:p.state,outcome:p.result?.status})); } catch { return []; } })); } catch { /* Best-effort redacted failure evidence only. */ }
   try { if (lastPage) await lastPage.screenshot({ path: `${output}/failure.png`, fullPage: true }); } catch {}
 } finally {
   for (const context of contexts) { try { await context.close(); } catch { report.cleanup_warnings = (report.cleanup_warnings ?? 0) + 1; } }

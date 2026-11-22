@@ -279,3 +279,27 @@ test('home action timing retains the earlier same-document identity boundary wit
  assert.equal(client.operations()[0].tap_ms,started);assert.equal(client.operations()[0].intent.expected_version,1);
  client.settle(client.operations()[0],{status:'committed',data:{record:snapshot(2,2).products[0],household_version:2}});assert.equal((await result).error,null);
 });
+
+test('create followed by update preserves the immutable committed result while advancing the snapshot', async () => {
+  const { client, data } = await setup(); client.snapshot = snapshot();
+  const id = '55555555-5555-4555-8555-555555555555';
+  const created = client.mutateLatest('product.create', { id, category_id: categoryId, name: 'Synthetic new item' });
+  const first = client.operations().at(-1);
+  const record = { ...snapshot().products[0], id, checked: false, version: 1 };
+  const initialResult = { status: 'committed', data: { record, household_version: 2 } };
+  client.settle(first, initialResult); assert.equal((await created).error, null);
+  const immutable = JSON.stringify(first.result);
+  const updated = client.mutateLatest('product.update', { id, checked: true });
+  const second = client.operations().at(-1);
+  client.settle(second, { status: 'committed', data: { record: { ...record, checked: true, version: 2 }, household_version: 3 } });
+  assert.equal((await updated).error, null);
+  assert.equal(JSON.stringify(first.result), immutable);
+  assert.equal(client.current().products.find(p => p.id === id).checked, true);
+  assert.equal(JSON.parse(data.get(client.storageKey)).find(p => p.intent.id === second.intent.id).state, 'Saved');
+  // Later snapshot updates cannot mutate even an earlier snapshot response.
+  const result = { status: 'snapshot', data: snapshot(4, 4) };
+  const frozen = JSON.stringify(result);
+  client.apply(result, { type: 'stage4.snapshot' });
+  client.apply({ status: 'committed', data: { record: snapshot(5, 5).products[0], household_version: 5 } }, { type: 'stage4.product.update' });
+  assert.equal(JSON.stringify(result), frozen);
+});

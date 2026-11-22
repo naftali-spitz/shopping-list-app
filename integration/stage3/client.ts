@@ -232,7 +232,7 @@ export class ShoppingClient {
 
   private apply(result: OperationResult, intent: Intent) {
     if (result.status === 'snapshot' && isSnapshot(result.data)) {
-      const next = result.data;
+      const next = structuredClone(result.data);
       if (Number(next.household.version) < this.minimumRevision) return;
       if (!this.snapshot || Number(next.household.version) >= Number(this.snapshot.household.version)) this.snapshot = next;
       this.requiresFullSnapshot = false;
@@ -249,7 +249,8 @@ export class ShoppingClient {
     const rows = entity === 'product' ? this.snapshot.products : entity === 'category' ? this.snapshot.categories : entity === 'history' ? this.snapshot.shopping_history : null;
     // List-wide mutations require their full authoritative snapshot before advancing revision.
     if (!rows) { this.requiresFullSnapshot = true; this.snapshotDue = true; return; }
-    const record = data.record as { id?: string; version?: number } | undefined;
+    // Live view updates must never mutate immutable queued result evidence.
+    const record = structuredClone(data.record) as { id?: string; version?: number } | undefined;
     if (!record?.id) { this.snapshotDue = true; return; }
     const index = rows.findIndex(row => row.id === record.id);
     if (verb === 'delete') {
