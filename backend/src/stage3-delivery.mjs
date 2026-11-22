@@ -22,6 +22,8 @@ async function previewToken(refresh=false) {
   return raw.startsWith('"')?JSON.parse(raw):raw;
 }
 export async function deliverStage3(result,config) {
+  const started=performance.now();
+  try {
   // Strip a transport-only replay marker: terminal business results are immutable.
   const {replayed:ignored,...authoritative}=result;
   void ignored;
@@ -39,6 +41,7 @@ export async function deliverStage3(result,config) {
     if(isJson&&response.status!==401)break;
   }
   throw new Error('callback_unavailable');
+  } finally {if(!['snapshot','found','not_found'].includes(result.status))config.monitoring?.capture({id:result.operation_id,correlation_id:result.correlation_id,type:'callback'},{callback_ms:performance.now()-started},[{stage:'callback',start_ms:0,duration_ms:performance.now()-started}]);}
 }
 export async function reconcileStage3(config) {
   const request=signed({v:2,kind:'reconcile',kid:config.resultKid??'callback-1',iss:CALLBACK_ISSUER,aud:CALLBACK_AUDIENCE,issued_ms:Date.now(),id:randomUUID()},config.resultPrivateKey);

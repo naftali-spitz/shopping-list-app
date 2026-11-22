@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { PerformanceInspector } from "./performance-inspector";
 import { homeClient } from "@/lib/backend/home";
 import type { PendingOperation } from "@/integration/stage3/client";
 
@@ -29,5 +30,6 @@ export function BackendStatus({ householdId, hebrew }: { householdId: string; he
     {operations.length ? <details className="mt-1"><summary className="cursor-pointer">{hebrew ? "פרטי שמירה" : "Save details"}</summary>
       <ul className="max-h-32 overflow-auto">{operations.slice(-10).map(operation => <li key={operation.intent.id} data-operation-id={operation.intent.id} data-state={operation.state}>{operation.state} · {operation.intent.type.replace("stage4.", "")} · <span dir="ltr">{operation.intent.id.slice(0, 8)}</span></li>)}</ul>
     </details> : null}
+    <PerformanceInspector householdId={householdId} hebrew={hebrew} />
   </div>;
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { supabase } from '@/lib/supabase';
+import { BrowserMonitoring } from '@/integration/monitoring/browser';
 
 export type Intent = {
   id: string; household_id: string; type: string;
@@ -18,7 +19,7 @@ export type PendingOperation = {
   reconciliation?: Intent; reconcileRequested?: boolean; reserved_household_version?: number; tap_ms?: number; acceptance_ms?: number;
 };
 export type MutationResponse = { data: unknown; error: Error | null };
-type ApiStatus = { result?: OperationResult; state?: string; error?: string; duplicate?: boolean };
+type ApiStatus = { timings?: Record<string, number>; result?: OperationResult; state?: string; error?: string; duplicate?: boolean };
 class ApiError extends Error { constructor(message: string, readonly status: number) { super(message); } }
 const logicalType = (type: string) => type.replace(/^stage4\./, '');
 const namespace = (type: string, mode: 'stage3' | 'stage4') => mode === 'stage3' ? type.replace(/^stage4\./, '') : type.startsWith('stage4.') ? type : `stage4.${type}`;
@@ -52,6 +53,7 @@ export async function authenticatedApi(body: unknown, userId?: string): Promise<
 /** Shared durable Stage3 protocol client for the original app and development proof surface. */
 export class ShoppingClient {
   readonly storageKey: string;
+  private telemetry: BrowserMonitoring;
   private snapshot: Snapshot | null = null;
   private queue: PendingOperation[] = [];
   private listeners = new Set<() => void>();
@@ -83,6 +85,7 @@ export class ShoppingClient {
   };
 
   constructor(readonly userId: string, readonly householdId: string, readonly mode: 'stage3' | 'stage4' = 'stage4') {
+    this.telemetry = new BrowserMonitoring(userId, householdId);
     this.storageKey = `shopping-stage3-v2:${userId}:${householdId}${mode === 'stage4' ? ':stage4' : ''}`;
     if (typeof window === 'undefined') throw new Error('ShoppingClient requires a browser.');
     try {
@@ -171,8 +174,10 @@ export class ShoppingClient {
     const pending: PendingOperation = { intent, state: navigator.onLine ? 'Saving' : 'Offline/pending', tap_ms: performance.now(), reserved_household_version: this.view()?.household.version };
     try { this.persist([...this.queue, pending]); }
     catch { return Promise.resolve({ data: null, error: new Error('Cannot persist pending operation. Free browser storage before changing this list.') }); }
+    this.telemetry.begin(intent,pending.tap_ms);
+    const feedbackStart = performance.now();
     const result = new Promise<MutationResponse>(resolve => this.waiters.set(pending.intent.id, resolve));
-    this.notify(); this.schedule(0); return result;
+    this.notify(); this.telemetry.stage(intent.id, 'optimistic_notification', feedbackStart); this.schedule(0); return result;
   }
   getOperations(): readonly PendingOperation[] { return this.queue; }
   /** Reserve versions for prior local queued changes; never silently rebase over another user's edit. */
@@ -263,6 +268,7 @@ export class ShoppingClient {
     this.apply(result, pending.intent);
     if (result.status === 'forbidden') this.invalidateSnapshot(new Error('Household access is no longer authorized.'));
     this.persist(); this.notify();
+    this.telemetry.finish(pending.intent,result.status==='committed');
     this.waiters.get(pending.intent.id)?.({ data: result.data, error: pending.state === 'Saved' ? null : new Error(result.status) });
     this.waiters.delete(pending.intent.id);
   }
@@ -288,7 +294,10 @@ export class ShoppingClient {
     else pending.state = 'Conflict requiring reconciliation';
   }
   private async sendIntent(pending: PendingOperation): Promise<ApiStatus> {
-    try { return await this.api({ action: 'command', intent: pending.intent }); }
+    const start=performance.now();
+    try { const response=await this.api({ action: 'command', intent: pending.intent });
+      for(const [key,value] of Object.entries(response.timings??{}))if(['authentication_ms','durable_gateway_ms','mqtt_ms'].includes(key)&&Number.isFinite(value))this.telemetry.metric(pending.intent.id,key,value);
+      return response; }
     catch (error) {
       // This call is made only for a never-sent intent or after an authenticated
       // missing-acceptance lookup. A schema/validation HTTP rejection occurs before
@@ -296,8 +305,8 @@ export class ShoppingClient {
       if (error instanceof ApiError && error.status === 400) {
         this.settle(pending, { status: 'request_rejected', data: null }); return {};
       }
-      throw error;
-    }
+      this.telemetry.count(pending.intent.id, 'error_count'); throw error;
+    } finally {this.telemetry.stage(pending.intent.id, 'api_request', start);}
   }
   private async process(pending: PendingOperation) {
     if (pending.intent.expires_ms <= Date.now()) {
@@ -308,16 +317,17 @@ export class ShoppingClient {
     }
     let status: ApiStatus;
     if (!pending.attempted) {
+      this.telemetry.stage(pending.intent.id, 'client_queue', pending.tap_ms ?? performance.now());
       pending.attempted = true; this.persist();
       status = await this.sendIntent(pending);
       if (pending.result) return;
       pending.accepted = true; pending.acceptance_ms = performance.now();
     } else {
-      try { status = await this.api({ action: 'status', household_id: this.householdId, id: pending.intent.id }); }
+      try { const started=performance.now(); status = await this.api({ action: 'status', household_id: this.householdId, id: pending.intent.id }); this.telemetry.stage(pending.intent.id, 'polling', started); this.telemetry.count(pending.intent.id, 'poll_count'); }
       catch (error) {
         if (!(error instanceof ApiError) || error.status !== 404) throw error;
         // A verified missing durable acceptance permits retry of precisely the same intent and ID.
-        status = await this.sendIntent(pending); if (pending.result) return; pending.accepted = true;
+        this.telemetry.count(pending.intent.id, 'retry_count'); status = await this.sendIntent(pending); if (pending.result) return; pending.accepted = true;
       }
     }
     if (this.disposed) return;
@@ -390,7 +400,7 @@ export class ShoppingClient {
     }
   }
   dispose() {
-    this.disposed = true; this.stopTimer(); window.removeEventListener('online', this.online); window.removeEventListener('storage', this.storage);
+    this.telemetry.dispose(); this.disposed = true; this.stopTimer(); window.removeEventListener('online', this.online); window.removeEventListener('storage', this.storage);
     for (const reader of this.readers) reader.reject(new Error('Session changed.'));
     this.readers.clear();
     for (const resolve of this.waiters.values()) resolve({ data: null, error: new Error('Session changed. Pending operation IDs are preserved.') });

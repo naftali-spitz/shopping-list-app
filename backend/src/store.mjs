@@ -87,7 +87,7 @@ export class Store {
       throw e;
     } finally {
       db.release();
-      if(this.config.protocolVersion===2)console.log(JSON.stringify({event:'stage3_database_trace',operation_id:c.id,correlation_id:c.correlation_id,authentication_ms:Math.round(dbStarted-authStarted),database_ms:Math.round(performance.now()-dbStarted)}));
+      this.config.monitoring?.capture(c,{listener_authentication_ms:dbStarted-authStarted,database_ms:performance.now()-dbStarted},[{stage:'listener_authentication',start_ms:0,duration_ms:dbStarted-authStarted},{stage:'database',start_ms:dbStarted-authStarted,duration_ms:performance.now()-dbStarted}]);
     }
   }
   result(c,status,data=null) { return { operation_id:c.id,household_id:c.household_id,user_id:c.user_id,correlation_id:c.correlation_id,audience:this.config.audience,status,data }; }

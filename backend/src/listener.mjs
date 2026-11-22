@@ -1,4 +1,5 @@
 import mqtt from 'mqtt';
+import { startMonitoring } from './monitoring.mjs';
 import pg from 'pg';
 import { writeFileSync,renameSync,mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -13,6 +14,8 @@ import { PassThrough } from 'node:stream';
 import { faults,consumeFault } from './stage3-faults.mjs';
 async function main(){
 const config=process.env.SHOPPING_STAGE3_CONFIG==='1'?loadStage3Config():loadConfig(),store=new Store(config);
+const monitoring=config.protocolVersion===2?startMonitoring(config):null;
+config.monitoring=monitoring;
 const dispatch=new pg.Pool({...config.db,...config.dispatcher,max:1,connectionTimeoutMillis:5000,statement_timeout:5000});
 process.umask(0o077);
 const health=resolve(config.healthFile);
@@ -23,7 +26,7 @@ const startWall=Date.now(),startMono=performance.now();
 const healthyClock=()=>Math.abs(Date.now()-(startWall+performance.now()-startMono))<2000;
 const client=mqtt.connect(config.mqtt.url,{username:config.mqtt.token,clientId:config.mqtt.clientId,protocolVersion:5,
   clean:false,properties:{sessionExpiryInterval:1800,maximumPacketSize:32768},reconnectPeriod:1500,connectTimeout:10000,keepalive:15,resubscribe:false,rejectUnauthorized:true});
-const event=(name,fields={})=>console.log(JSON.stringify({at:new Date().toISOString(),event:name,...fields}));
+const event=(name,fields={})=>{if(['stage3_received','stage3_outbox_delivery'].includes(name))return;console.log(JSON.stringify({at:new Date().toISOString(),event:name,...fields}));};
 if(config.protocolVersion===2) {
   const builder=client.streamBuilder;
   client.streamBuilder=(...args)=>{
@@ -80,7 +83,7 @@ client.handleMessage=(packet,done)=>{
       }
     }
     processed++;
-    event('operation_result',{operation_id:result.operation_id,correlation_id:result.correlation_id,status:result.status,replayed:result.replayed??false,command_age_ms:Date.now()-command.issued_ms});
+    event('operation_result',{operation_id:result.operation_id,correlation_id:result.correlation_id,status:result.status,replayed:result.replayed??false});
     if((config.testing?.crashAfterCommitId===command.id || consumeFault(config,'crashAfterCommitId',command.id)) && result.status==='committed') {
       process.send?.({event:'committed_before_crash',operation_id:command.id});
       process.kill(process.pid,'SIGKILL');return;
@@ -126,7 +129,7 @@ const reconciliationTimer=config.protocolVersion===2?setInterval(async()=>{
   }catch{event('reconciliation_pending');}finally{reconciling=false;}
 },15000):null;
 async function stop(){
-  if(stopping)return;stopping=true;clearInterval(timer);clearInterval(reconciliationTimer);
+  if(stopping)return;stopping=true;monitoring?.stop();clearInterval(timer);clearInterval(reconciliationTimer);
   // Preserve a long session for real service restart/offline queue recovery.
   await new Promise(resolve=>{
     const timer=setTimeout(()=>{client.end(true);resolve();},3000);

@@ -56,7 +56,7 @@ export async function handle(request) {
       const r=body.callback?.result;
       verifyCallback(body.callback,config.callbackKeys,{id:r?.operation_id,user_id:r?.user_id,household_id:r?.household_id,correlation_id:r?.correlation_id});
       const stored=await gateway(body,config);
-      console.log(JSON.stringify({event:'stage3_callback',operation_id:r.operation_id,correlation_id:r.correlation_id,duplicate:stored.duplicate,delivery_ms:Date.now()-body.callback.issued_ms}));
+
       return json(stored);
     }
     const token=(request.headers.get('authorization')||'').replace(/^Bearer /,'');
@@ -73,12 +73,12 @@ export async function handle(request) {
     const gatewayFinished=performance.now();
     let transport='not_needed';
     if(!accepted.result && command.expires_ms>Date.now()) {
-      console.log(JSON.stringify({event:'stage3_publish',operation_id:command.id,correlation_id:command.correlation_id,published_at_ms:Date.now()}));
+
       try {await publishCommand(command,config);transport='puback';}catch{transport='retry_pending';}
     }
     const timings={authentication_ms:Math.round(authFinished-authStarted),durable_gateway_ms:Math.round(gatewayFinished-gatewayStarted),mqtt_ms:Math.round(performance.now()-gatewayFinished),handler_ms:Date.now()-started};
-    console.log(JSON.stringify({event:'stage3_accepted',operation_id:command.id,correlation_id:command.correlation_id,acceptance_ms:Date.now()-started,transport,duplicate:accepted.duplicate,timings}));
-    return json({...accepted,state:accepted.result?accepted.result.status:'accepted_pending',transport,timings},accepted.result?200:202);
+
+    return json({...accepted,state:accepted.result?accepted.result.status:'accepted_pending',transport,...(['MID','ON'].includes(accepted.monitoring_mode)?{timings}:{})},accepted.result?200:202);
   } catch(error) {
     const known=['operation_conflict','rate_limited','too_large','invalid_action','store_unavailable'];
     const message=known.includes(error.message)?error.message:'request_rejected';
