@@ -4,6 +4,18 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+# ARCHITECTURE HOLD — 2026-11-23 (OVERRIDES OUTDATED STAGE 3/4/5 INSTRUCTIONS BELOW)
+
+**The original project objective is to eliminate Supabase ENTIRELY.** Prior Stage 3/4 implementation and tests reused Supabase Dev for Auth, durable gateway/callback/results and Stage 5 historical monitoring. Those old gates are *historical passes for a different architecture*, **not** approval of the Supabase-free migration. **Stop Stage 5/6 and do not merge draft PR #16** until the new 4R blocking gate NAF-206 passes.
+
+**Accepted target:** Vercel hosts FutureCart/PWA (optional limited secure login/bootstrap only). Browser/phone communicates **directly** with flespi via secure MQTT over WebSockets for mutations and subscribed results. Private Debian MQTT listener authenticates/authorizes each operation and uses its own PostgreSQL for **all** business data, user/household/session state, durable results, and OFF/MID/ON performance history. Browser shows Saved only after Debian DB COMMIT. Reconnect/resubscribe with idempotent operation IDs and server snapshot replay. No public Debian inbound port.
+
+**No Supabase anywhere in accepted runtime:** not Auth, Realtime, gateway, callback/status, RPC, storage, monitoring or silent fallback; no replacement hosted durable cloud DB without owner approval. Do **not** expose master/shared flespi token in browser. Require short-lived, scoped/revocable tokens and proven secure OAuth/bootstrap mechanism; if infeasible, report NO-GO rather than weaken security. Full final E2E must pass with Supabase entirely inaccessible.
+
+**Binding architecture ADR:** `docs/architecture/ADR-2026-11-23-zero-supabase.md`. Linear issues NAF-199 through NAF-206 define audit, design, implementation and signoff. Follow their dependency sequence before returning to NAF-197 or NAF-184…189. Keep production and original checkout untouched. Preserve reusable POC work/evidence; no destructive cleanup in Dev without separate authorization.
+
+---
+
 # Shopping List — Home Backend & flespi POC
 
 ## Mandatory targets and gates
