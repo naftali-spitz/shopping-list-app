@@ -1,0 +1,56 @@
+{
+  "id": "24586aef-df42-4d28-91f6-510cde36fb03",
+  "at": "2026-11-21T21:11:37.516673+00:00",
+  "label": "corrected-real-route",
+  "renderer": "LibreOffice 25.2.3.2 520(Build:2)",
+  "renderer_scope": "LibreOffice-compatible visual rendering; Microsoft Word not executed",
+  "system_install": false,
+  "private_profile": true,
+  "cases": [
+    {
+      "source": "docs/stage4/attempts/export-1e336eb6-da2a-4056-95c7-019447b5c69f/he-four-column.docx",
+      "source_sha256": "5a5767ef5fd170b59390eba4987ee9225c1ddf9be4c7aee715f13b3f5f3f4aad",
+      "conversion_returncode": 0,
+      "pdf": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/he-four-column.pdf",
+      "pdf_exists": true,
+      "raster_returncode": 0,
+      "bbox_returncode": 0,
+      "image": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/he-four-column.png",
+      "bbox": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/he-four-column.html"
+    },
+    {
+      "source": "docs/stage4/attempts/export-1e336eb6-da2a-4056-95c7-019447b5c69f/en-four-column.docx",
+      "source_sha256": "c1fda969d012c9b835a611f29d77b610e05cccf80a6ad0a09ced42bd22e23de9",
+      "conversion_returncode": 0,
+      "pdf": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/en-four-column.pdf",
+      "pdf_exists": true,
+      "raster_returncode": 0,
+      "bbox_returncode": 0,
+      "image": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/en-four-column.png",
+      "bbox": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/en-four-column.html"
+    },
+    {
+      "source": "docs/stage4/attempts/export-1e336eb6-da2a-4056-95c7-019447b5c69f/he-small.docx",
+      "source_sha256": "4ffc00584c1e869fbbee200ec370626ab3ba79bb2e8f8209f63a9168ef6fe905",
+      "conversion_returncode": 0,
+      "pdf": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/he-small.pdf",
+      "pdf_exists": true,
+      "raster_returncode": 0,
+      "bbox_returncode": 0,
+      "image": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/he-small.png",
+      "bbox": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/he-small.html"
+    },
+    {
+      "source": "docs/stage4/attempts/browser-8892301b-67b9-40e1-bbf6-ef3de44ad29e/browser-export.docx",
+      "source_sha256": "70481e91ebff978f253530e7c3c60e9ae9569510feedb9d0a9de924bebb5ae7a",
+      "conversion_returncode": 0,
+      "pdf": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/browser-export.pdf",
+      "pdf_exists": true,
+      "raster_returncode": 0,
+      "bbox_returncode": 0,
+      "image": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/browser-export.png",
+      "bbox": "docs/stage4/attempts/docx-render-24586aef-df42-4d28-91f6-510cde36fb03/browser-export.html"
+    }
+  ],
+  "status": "RENDERED_PENDING_VISUAL_REVIEW"
+}

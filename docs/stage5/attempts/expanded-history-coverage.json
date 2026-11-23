@@ -1,0 +1,36 @@
+{
+  "source": "4dd003e1ac2fb31813eb298c418c04eb5910e361",
+  "scope": "14 measured operations per mode from overhead-a6e58202; OFF committed=0 refers only to absent monitoring summaries, all real business operations passed.",
+  "modes": [
+    {
+      "mode": "MID",
+      "spans": 0,
+      "samples": 14,
+      "committed": 14,
+      "summaries": 14,
+      "debian_records": 72,
+      "browser_records": 26,
+      "source_json_bytes": 55844
+    },
+    {
+      "mode": "OFF",
+      "spans": 0,
+      "samples": 14,
+      "committed": 0,
+      "summaries": 0,
+      "debian_records": 0,
+      "browser_records": 0,
+      "source_json_bytes": 0
+    },
+    {
+      "mode": "ON",
+      "spans": 250,
+      "samples": 14,
+      "committed": 14,
+      "summaries": 14,
+      "debian_records": 74,
+      "browser_records": 26,
+      "source_json_bytes": 78937
+    }
+  ]
+}

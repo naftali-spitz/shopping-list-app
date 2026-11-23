@@ -1,0 +1,11 @@
+{
+  "status": "PRESERVED_INITIAL_FAILURES",
+  "scope": "Isolated Stage2 setup only, after Stage1 conditional GO; private raw diagnostics remain excluded",
+  "failures": [
+    {"test":"first connection to target after role setup","error":"SCRAM password must be a string","cause":"pg Pool options hide password from object spread","fix":"use explicit private admin connection options, not spread Pool.options"},
+    {"test":"fixture principal seed","postgres_code":"42P08","cause":"same placeholder inferred as UUID and text","fix":"explicit UUID/text casts"},
+    {"test":"initial authorized integration write","report":"integration-d654356a-fb31-4b4e-b708-49f51786241b.json","cause":"FOR SHARE also needs matching UPDATE RLS policy","fix":"additive migration002 with identity-column-only lock permissions"},
+    {"test":"initial live MQTT restart/result tests","reports":["mqtt-547618a8-539e-4fa4-93ee-1a1fc42865f9.json","mqtt-8caae49b-06e3-49dc-8d6a-1437b9fe7dab.json"],"cause":"awaiting outgoing result PUBACK while holding incoming MQTT parser prevents ACK parsing","fix":"release incoming callback after DB commit, then publish asynchronously with durable outbox and bounded waits"}
+  ],
+  "original_stage1_diagnostic_failures": "untouched; revised application requirements do not reclassify 2-second session expiry as PASS"
+}

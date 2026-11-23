@@ -1,0 +1,14 @@
+FutureCart
+
+Smart shopping companion
+
+Connected
+
+Choose category
+New category
+Shopping list
+0 products
+
+The list is currently empty.
+
+Export document

@@ -1,0 +1,212 @@
+[
+  {
+    "file": "app/page.tsx",
+    "errors": 1,
+    "warnings": 1,
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 65,
+        "column": 16,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/app/page.tsx:65:16\n  63 |     if (typeof window === \"undefined\") return;\n  64 |     const token = new URLSearchParams(window.location.search).get(\"invite\");\n> 65 |     if (token) setPendingInviteToken(token);\n     |                ^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  66 |   }, []);\n  67 |\n  68 |   const { acceptInvite, createHousehold, createInviteLink, currentHouseholdId, households, loading: householdLoading, setCurrentHouseholdId } = useCurrentHousehold({ onError: showError });"
+      },
+      {
+        "ruleId": "@typescript-eslint/no-unused-expressions",
+        "severity": 1,
+        "line": 225,
+        "column": 372,
+        "message": "Expected an assignment or function call and instead saw an expression."
+      }
+    ]
+  },
+  {
+    "file": "components/category-card.tsx",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "react-hooks/static-components",
+        "severity": 2,
+        "line": 51,
+        "column": 14,
+        "message": "Error: Cannot create components during render\n\nComponents created during render will reset their state each time they are created. Declare components outside of render.\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/components/category-card.tsx:51:14\n  49 |         <div className=\"mb-4 flex items-center justify-between\">\n  50 |           <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${iconBg}`}>\n> 51 |             <Icon className={iconColor} />\n     |              ^^^^ This component is created during render\n  52 |           </div>\n  53 |\n  54 |           <button\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/components/category-card.tsx:28:16\n  26 |   onDelete,\n  27 | }: CategoryCardProps) {\n> 28 |   const Icon = getCategoryIconComponent(category.icon);\n     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here\n  29 |   const iconColor = darkMode ? \"text-cyan-300\" : \"text-cyan-600\";\n  30 |   const iconBg = darkMode ? \"bg-white/10\" : \"bg-cyan-100\";\n  31 |   const editBg = darkMode"
+      }
+    ]
+  },
+  {
+    "file": "components/category-modal.tsx",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 212,
+        "column": 5,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/components/category-modal.tsx:212:5\n  210 |\n  211 |   useEffect(() => {\n> 212 |     setReorderedProducts(products);\n      |     ^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  213 |     latestOrderRef.current = products;\n  214 |   }, [products]);\n  215 |"
+      }
+    ]
+  },
+  {
+    "file": "components/history-modal.tsx",
+    "errors": 2,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 55,
+        "column": 7,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/components/history-modal.tsx:55:7\n  53 |   useEffect(() => {\n  54 |     if (!selectedEntry) {\n> 55 |       setSelectedItems([]);\n     |       ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  56 |       return;\n  57 |     }\n  58 |"
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 68,
+        "column": 7,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/components/history-modal.tsx:68:7\n  66 |\n  67 |     if (!freshEntry) {\n> 68 |       setSelectedEntry(null);\n     |       ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  69 |       return;\n  70 |     }\n  71 |"
+      }
+    ]
+  },
+  {
+    "file": "hooks/use-app-language.ts",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 21,
+        "column": 5,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/hooks/use-app-language.ts:21:5\n  19 |     const storedLanguage = window.localStorage.getItem(APP_LANGUAGE_STORAGE_KEY);\n  20 |\n> 21 |     setLanguageState(\n     |     ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  22 |       isAppLanguage(storedLanguage) ? storedLanguage : getBrowserDefaultLanguage()\n  23 |     );\n  24 |   }, []);"
+      }
+    ]
+  },
+  {
+    "file": "hooks/use-category-management.ts",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 63,
+        "column": 5,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/hooks/use-category-management.ts:63:5\n  61 |   useEffect(() => {\n  62 |     if (!editingCategory) return;\n> 63 |     setEditingCategoryIcon(editingCategory.icon ?? DEFAULT_CATEGORY_ICON);\n     |     ^^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  64 |   }, [editingCategory]);\n  65 |\n  66 |   const addCategory = useCallback(async () => {"
+      }
+    ]
+  },
+  {
+    "file": "hooks/use-session.ts",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "line": 7,
+        "column": 42,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "file": "hooks/use-shared-categories.ts",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 33,
+        "column": 7,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/hooks/use-shared-categories.ts:33:7\n  31 |   useEffect(() => {\n  32 |     if (!householdId) {\n> 33 |       setCategories(initialCategories);\n     |       ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  34 |       setLoadedHouseholdId(null);\n  35 |       setLoading(false);\n  36 |       return;"
+      }
+    ]
+  },
+  {
+    "file": "hooks/use-shopping-state.ts",
+    "errors": 4,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "line": 44,
+        "column": 31,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "line": 54,
+        "column": 37,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "line": 55,
+        "column": 27,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 125,
+        "column": 5,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/hooks/use-shopping-state.ts:125:5\n  123 |\n  124 |   useEffect(() => {\n> 125 |     setCheckedOverrides((prev) => {\n      |     ^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  126 |       const entries = Object.entries(prev);\n  127 |       if (!entries.length) return prev;\n  128 |"
+      }
+    ]
+  },
+  {
+    "file": "hooks/useCurrentHousehold.ts",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 84,
+        "column": 10,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/hooks/useCurrentHousehold.ts:84:10\n  82 |\n  83 |   useEffect(() => {\n> 84 |     void refreshHouseholds();\n     |          ^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  85 |   }, [refreshHouseholds]);\n  86 |\n  87 |   const createHousehold = useCallback("
+      }
+    ]
+  },
+  {
+    "file": "lib/app-sounds.ts",
+    "errors": 1,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "line": 144,
+        "column": 39,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  },
+  {
+    "file": "lib/db/categories.ts",
+    "errors": 2,
+    "warnings": 0,
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "line": 19,
+        "column": 30,
+        "message": "Unexpected any. Specify a different type."
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "line": 23,
+        "column": 55,
+        "message": "Unexpected any. Specify a different type."
+      }
+    ]
+  }
+]

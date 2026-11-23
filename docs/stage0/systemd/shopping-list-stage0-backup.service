@@ -1,0 +1,13 @@
+[Unit]
+Description=Shopping List isolated development database backup
+Requires=shopping-list-stage0-postgres.service
+After=shopping-list-stage0-postgres.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage0-backup.py
+WorkingDirectory=/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend
+UMask=0077
+NoNewPrivileges=true
+MemoryMax=128M
+TasksMax=16

@@ -1,0 +1,14 @@
+{
+  "id": "0e730a55-7e53-4670-aca6-5fc19f461202",
+  "at": "2026-11-22T15:55:21.690Z",
+  "scope": "actual feature Preview Stage4 flag off/on; original Supabase Dev UI and retained PostgreSQL outcomes; no production deploy or data change",
+  "checks": [
+    {
+      "name": "real app pending ID retained while PostgreSQL already committed",
+      "status": "PASS",
+      "operation_id": "1b97ca79-adf8-4820-bb17-22db20463bfc"
+    }
+  ],
+  "source_sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "pending_operation_id": "1b97ca79-adf8-4820-bb17-22db20463bfc"
+}

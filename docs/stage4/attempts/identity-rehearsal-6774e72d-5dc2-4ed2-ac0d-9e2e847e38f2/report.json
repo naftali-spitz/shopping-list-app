@@ -1,0 +1,69 @@
+{
+  "id": "6774e72d-5dc2-4ed2-ac0d-9e2e847e38f2",
+  "at": "2026-11-21T16:01:08.772Z",
+  "scope": "first-seen verified existing provider identity maps automatically in marked isolated disposable rebuild; not new-account or browser evidence",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 55439,
+    "database": "shopping_stage2_rebuild"
+  },
+  "checks": [
+    {
+      "name": "marked disposable database verified; real provider principal initially absent",
+      "status": "PASS",
+      "marker": {
+        "database": "shopping_stage2_rebuild",
+        "port": 55439,
+        "marker": "Shopping Stage2 disposable rebuild"
+      },
+      "principal_count_before": 0
+    },
+    {
+      "name": "real verified provider discovery maps previously unseen issuer/subject without manual local provisioning",
+      "status": "PASS",
+      "principal": {
+        "id": "130e8995-f628-4620-ad58-496049ca465a",
+        "issuer": "https://njomxqthjglqesxchlbm.supabase.co/auth/v1",
+        "subject": "130e8995-f628-4620-ad58-496049ca465a",
+        "active": true
+      }
+    },
+    {
+      "name": "first mapped identity creates household/owner atomically; duplicate same-ID has one mapping/membership/ledger/outbox",
+      "status": "PASS",
+      "household_id": "09af610d-5c00-4b31-bc4d-810d4911a821",
+      "counts": {
+        "principals": 1,
+        "memberships": 1,
+        "ledger": 1,
+        "outbox": 1
+      }
+    },
+    {
+      "name": "new local household is discoverable without a Supabase business-household mirror",
+      "status": "PASS"
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "0012883d-8341-4a93-aa0c-c78ba8355ed9",
+      "correlation_id": "31104f3c-d0f1-4ba5-b6fa-f0273aa26bcf",
+      "type": "stage4.household.list",
+      "status": "snapshot"
+    },
+    {
+      "operation_id": "0d0ca99d-e4d3-4f90-870b-2fcd50130ca0",
+      "correlation_id": "0ea174c9-f458-42de-9a25-a90f8ef18e91",
+      "type": "stage4.household.create",
+      "status": "committed"
+    },
+    {
+      "operation_id": "96e496ad-6e97-4c24-a045-13db3203414d",
+      "correlation_id": "3bf44e54-66e8-448d-8739-a1734a690540",
+      "type": "stage4.household.list",
+      "status": "snapshot"
+    }
+  ],
+  "status": "PASS",
+  "previous_stage2_evidence_preserved": true
+}

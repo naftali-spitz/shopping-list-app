@@ -1,0 +1,13 @@
+{
+  "id": "d2bf6e38-df8d-43a9-b272-f15f6506b67a",
+  "at": "2026-11-20T08:05:02.881Z",
+  "mode": "expired",
+  "scope": "real provider/session/membership with controlled development SQL revocation or session expiry; no browser claim",
+  "checks": [
+    {
+      "name": "expired real session/membership denies pending execution with no ledger or business effect",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}

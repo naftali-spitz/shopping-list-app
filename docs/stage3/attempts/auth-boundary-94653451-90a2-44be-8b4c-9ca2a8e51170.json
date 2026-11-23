@@ -1,0 +1,16 @@
+{
+  "id": "94653451-90a2-44be-8b4c-9ca2a8e51170",
+  "at": "2026-11-20T08:04:36.690Z",
+  "mode": "arm",
+  "scope": "real provider/session/membership with controlled development SQL revocation or session expiry; no browser claim",
+  "checks": [
+    {
+      "name": "pending command durably accepted before controlled revocation",
+      "status": "PASS"
+    }
+  ],
+  "user_id": "edfd6138-3df6-4c87-8f31-63c461d44602",
+  "household_id": "577e1506-59f3-49ba-9b3f-9431d309c73a",
+  "session_id": "74d656d3-3bd2-476b-b70d-03c11b6c999f",
+  "status": "PASS"
+}

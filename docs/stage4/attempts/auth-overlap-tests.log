@@ -1,0 +1,18 @@
+✔ signed intent binds every field; parser rejects tampering and unknown fields (6.18907ms)
+✔ expiry, audience, issuer, schema and payload checks cannot be bypassed with a valid signer (4.1209ms)
+✔ key rotation preserves logical hash; removing old key revokes its signature (1.762706ms)
+✔ execution requires current identity and household verification, including revocation (2.430696ms)
+✔ callback identity is separate; callback tuple, timestamp and schema are verified (5.928056ms)
+✔ provider adapter pins URLs and requires current session RPC as well as getUser (29.330475ms)
+✔ diagnostic progress is separately signed, time bounded and cannot claim terminal success (6.94566ms)
+✔ Stage4 verifies the same live session but makes no provider business-membership claim (8.312201ms)
+✔ Stage4 operation prefix preserves strict legacy payload validation and signed identity dispatch (6.935025ms)
+✔ independent provider checks overlap but both verified identities must match (2.949641ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 197.965551

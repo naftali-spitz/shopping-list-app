@@ -1,0 +1,71 @@
+{
+  "id": "d92df90e-5913-4178-b193-4a7e1062dec5",
+  "at": "2026-11-20T11:42:13.544Z",
+  "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+  "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+  "scope": "actual Vercel API/MQTT/PostgreSQL/callback trace and client status confirmation; browser paint latency is separate",
+  "api_acceptance_ms": 5529,
+  "client_status_confirmation_ms": 9559,
+  "debian_events": [
+    {
+      "at": "2026-11-20T11:42:18.927Z",
+      "event": "stage3_received",
+      "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+      "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+      "received_ms": 1795174938927,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 294
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+      "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+      "authentication_ms": 1180,
+      "database_ms": 62
+    },
+    {
+      "at": "2026-11-20T11:42:20.593Z",
+      "event": "operation_result",
+      "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+      "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 7049
+    },
+    {
+      "at": "2026-11-20T11:42:25.463Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+      "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+      "attempt": 1,
+      "delivery_ms": 4181,
+      "age_since_result_ms": 4931
+    }
+  ],
+  "vercel_events": [
+    {
+      "event": "stage3_callback",
+      "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+      "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+      "duplicate": false,
+      "delivery_ms": 1849
+    },
+    {
+      "event": "stage3_accepted",
+      "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+      "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+      "acceptance_ms": 4350,
+      "transport": "puback",
+      "duplicate": false
+    },
+    {
+      "event": "stage3_publish",
+      "operation_id": "9de62448-d107-4fc2-ba59-10b2517a0535",
+      "correlation_id": "20fd26f9-20b3-4644-a44f-06743ffdbece",
+      "published_at_ms": 1795174938411
+    }
+  ],
+  "observed_mqtt_transit_ms": 516,
+  "transit_clock_limit": "Cross-host wall-clock delta, not a sub-millisecond latency claim. Database and local outbox durations use monotonic local timing.",
+  "status": "PASS"
+}

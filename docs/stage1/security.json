@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "stage": 1,
+  "tested_at": "2026-11-20T01:04:02.473Z",
+  "checks": [
+    {
+      "test": "invalid credential rejected",
+      "http_status": 400,
+      "provider_error_codes": [
+        1004
+      ],
+      "mqtt": {
+        "connected": false,
+        "reason": 134
+      },
+      "passed": true
+    },
+    {
+      "test": "expired-own-auditor credential rejected",
+      "http_status": 400,
+      "provider_error_codes": [
+        1004
+      ],
+      "mqtt": {
+        "connected": false,
+        "reason": 134
+      },
+      "passed": true
+    },
+    {
+      "test": "publisher exact ACL/account/expiry/admin/browser restriction",
+      "token_id": 114509462,
+      "expire": 1795719394,
+      "ttl": 0,
+      "acl": [
+        {
+          "actions": [
+            "publish"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/commands",
+          "uri": "mqtt"
+        },
+        {
+          "actions": [
+            "subscribe"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/results",
+          "uri": "mqtt"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "test": "listener exact ACL/account/expiry/admin/browser restriction",
+      "token_id": 114509463,
+      "expire": 1795719394,
+      "ttl": 0,
+      "acl": [
+        {
+          "actions": [
+            "publish"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/results",
+          "uri": "mqtt"
+        },
+        {
+          "actions": [
+            "subscribe"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/commands",
+          "uri": "mqtt"
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "acl_delivery_evidence": {
+    "path": "../stage0/mqtt-preflight.json",
+    "tested_at": "2026-11-20T00:42:28.556Z",
+    "note": "Same dedicated token IDs/ACL reconfirmed above. Independent foreign/wrong-direction delivery controls and publish reason135 were actually tested there; SUBACK alone is not authorization."
+  },
+  "tls": "TLS certificate validation enabled on every connection; earlier positive connections negotiatedTLS1.3.",
+  "unresolved_design_requirements": [
+    "MQTT transport credentials do not authenticate household identity.",
+    "Use server-only signed envelopes, exact audience/body hash/timestamps and durable replay/idempotency records before application integration.",
+    "Production payload collision and process-restart persistence must be rejected/resolved transactionally in Stage2.",
+    "No client/browser credential, shared/master broker token, production secret reuse or secret logging."
+  ]
+}

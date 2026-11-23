@@ -1,0 +1,21 @@
+✖ create followed by update preserves the immutable committed result while advancing the snapshot (6.709524ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 409.843733
+
+✖ failing tests:
+
+test at integration/stage3/client.test.mjs:283:1
+✖ create followed by update preserves the immutable committed result while advancing the snapshot (6.709524ms)
+  Error: Pending result changed
+      at ShoppingClient.mergeStored ([actual transpiled client]:156:23)
+      at ShoppingClient.persist ([actual transpiled client]:172:51)
+      at ShoppingClient.settle ([actual transpiled client]:369:14)
+      at TestContext.<anonymous> (file:///home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/integration/stage3/client.test.mjs:294:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

@@ -1,0 +1,13 @@
+{
+  "id": "1103aa35-dc05-4b56-bfb0-b14e28c8a9a5",
+  "at": "2026-11-20T13:03:55.591Z",
+  "scope": "additive isolated127.0.0.1:55439/shopping_stage0 migrations only; no fixture provisioning",
+  "migrations": [
+    {
+      "file": "006_stage4_account_reconciliation.sql",
+      "version": 6,
+      "checksum": "f839254a21f1f1efba61d06ff334f596d9795396f4b36f241b009c9cdc05a2df"
+    }
+  ],
+  "status": "PASS"
+}

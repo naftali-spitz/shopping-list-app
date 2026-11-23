@@ -1,0 +1,60 @@
+{
+  "target": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+  "at": "2026-11-22T16:11:34.414Z",
+  "responses": [
+    {
+      "origin": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://vercel.live",
+      "path": "/_next-live/feedback/feedback.js",
+      "status": 204
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/rpc/list_my_households",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+      "path": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/shopping_history",
+      "status": 200
+    },
+    {
+      "origin": "https://njomxqthjglqesxchlbm.supabase.co",
+      "path": "/rest/v1/categories",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "text": "FutureCart\n\nSmart shopping companion\n\nChoose category\nNew category\nTest1\nTest1\nStage4 baseline 6005856b\nBaseline 6005856b 1\nStage4 baseline 0501ce89\nBaseline 0501ce89 1\nBaseline 0501ce89 2\nBaseline 0501ce89 3\nStage4 baseline 81b0cdbc\nBaseline 81b0cdbc 1\nBaseline 81b0cdbc 2\nBaseline 81b0cdbc 3\nStage4 baseline e7a39a82\nBaseline e7a39a82 1\nBaseline e7a39a82 2\nBaseline e7a39a82 3\nShopping list\n3 products\nBaseline 0501ce89 1\n3\nBaseline 81b0cdbc 1\n11\nBaseline e7a39a82 1\n11\nExport document",
+  "home_status_count": 0,
+  "new_category_count": 1
+}

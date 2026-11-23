@@ -1,0 +1,2129 @@
+{
+  "schema_version": 1,
+  "scope": "current filtered page, at most 200 operations",
+  "operations": [
+    {
+      "mode": "MID",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "9feae0af-4984-496e-9ffa-c7c1184dea75",
+          "mode": "MID",
+          "clock": "monotonic",
+          "spans": [],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 5.61,
+            "listener_authentication_ms": 354.24
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "0c14da5b-54f6-4ff8-921d-98513b0b8c0a",
+          "correlation_id": "bb8fe754-1840-4c24-af85-82110473d84a",
+          "schema_version": 1
+        },
+        {
+          "id": "5b16e9d7-bf6c-4114-b35f-57e973417ea5",
+          "mode": "MID",
+          "clock": "monotonic",
+          "spans": [],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1006.67
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "0c14da5b-54f6-4ff8-921d-98513b0b8c0a",
+          "correlation_id": "bb8fe754-1840-4c24-af85-82110473d84a",
+          "schema_version": 1
+        },
+        {
+          "id": "d8f39eec-4ace-4218-82a6-8a5f0896853f",
+          "mode": "MID",
+          "clock": "monotonic",
+          "spans": [],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1006.47
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "0c14da5b-54f6-4ff8-921d-98513b0b8c0a",
+          "correlation_id": "bb8fe754-1840-4c24-af85-82110473d84a",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:50:45.921047+00:00",
+      "started_at": "2026-11-22T18:50:42.555+00:00",
+      "accepted_at": "2026-11-22T18:50:43.833831+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:50:49.373002+00:00",
+      "operation_id": "0c14da5b-54f6-4ff8-921d-98513b0b8c0a",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "bb8fe754-1840-4c24-af85-82110473d84a",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "f0c2ae00-0220-4b43-b25f-75460ee3ff21",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 336.37701900000684
+            },
+            {
+              "stage": "database",
+              "start_ms": 336.37701900000684,
+              "duration_ms": 5.5213849999709055
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 5.52,
+            "listener_authentication_ms": 336.38
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "728773e2-de05-44ba-a0ed-4ea16d1c457d",
+          "correlation_id": "b84c7fbb-2e92-4c73-8c1d-05f9142d9c21",
+          "schema_version": 1
+        },
+        {
+          "id": "1e115a09-f7dd-48ae-9aac-466eac21a69d",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 770.1305479999864
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 770.13
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "728773e2-de05-44ba-a0ed-4ea16d1c457d",
+          "correlation_id": "b84c7fbb-2e92-4c73-8c1d-05f9142d9c21",
+          "schema_version": 1
+        },
+        {
+          "id": "4f87d538-2816-424b-b888-d8ea12001c0e",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1079.8285479999613
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1079.83
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "728773e2-de05-44ba-a0ed-4ea16d1c457d",
+          "correlation_id": "b84c7fbb-2e92-4c73-8c1d-05f9142d9c21",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:49:17.650233+00:00",
+      "started_at": "2026-11-22T18:49:13.328+00:00",
+      "accepted_at": "2026-11-22T18:49:15.548498+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:49:19.373283+00:00",
+      "operation_id": "728773e2-de05-44ba-a0ed-4ea16d1c457d",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "b84c7fbb-2e92-4c73-8c1d-05f9142d9c21",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "7f8b2ae4-aa83-4a4e-ba47-4948771598e3",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 327.83431900001597
+            },
+            {
+              "stage": "database",
+              "start_ms": 327.83431900001597,
+              "duration_ms": 6.13706199999433
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 6.13,
+            "listener_authentication_ms": 327.83
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "4c967ced-ae76-4bdb-b1d1-1640e44ee42a",
+          "correlation_id": "f880f910-ba09-4b18-a045-b0b0a9431cb4",
+          "schema_version": 1
+        },
+        {
+          "id": "e8402180-3b98-4829-98fb-fd5c4ba02c3c",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 769.1076309999917
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 769.11
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "4c967ced-ae76-4bdb-b1d1-1640e44ee42a",
+          "correlation_id": "f880f910-ba09-4b18-a045-b0b0a9431cb4",
+          "schema_version": 1
+        },
+        {
+          "id": "ac3aea6e-022d-4513-a297-6333f29e0de1",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1091.2570309999865
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1091.25
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "4c967ced-ae76-4bdb-b1d1-1640e44ee42a",
+          "correlation_id": "f880f910-ba09-4b18-a045-b0b0a9431cb4",
+          "schema_version": 1
+        },
+        {
+          "id": "0f21aa6e-9fe5-4635-b24c-99e23b8b1d4d",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 1.2000000476837158,
+              "duration_ms": 0.10000014305114746
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 1.7000000476837158
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 2.9000000953674316,
+              "duration_ms": 2331.2000000476837
+            },
+            {
+              "stage": "polling",
+              "start_ms": 2985.300000190735,
+              "duration_ms": 816.2999999523163
+            },
+            {
+              "stage": "polling",
+              "start_ms": 7258.5,
+              "duration_ms": 775.2000000476837
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 363,
+            "poll_count": 2,
+            "polling_ms": 1591.5,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 8034.9,
+            "api_request_ms": 2331.2,
+            "client_queue_ms": 1.7,
+            "authentication_ms": 670,
+            "durable_gateway_ms": 1016,
+            "optimistic_notification_ms": 0.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "4c967ced-ae76-4bdb-b1d1-1640e44ee42a",
+          "correlation_id": "f880f910-ba09-4b18-a045-b0b0a9431cb4",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:49:08.603539+00:00",
+      "started_at": "2026-11-22T18:49:05.214+00:00",
+      "accepted_at": "2026-11-22T18:49:06.914596+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:49:09.310904+00:00",
+      "operation_id": "4c967ced-ae76-4bdb-b1d1-1640e44ee42a",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "f880f910-ba09-4b18-a045-b0b0a9431cb4",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "21bc0ef5-bfe9-44cd-957c-c159589e09a5",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 306.9538300000131
+            },
+            {
+              "stage": "database",
+              "start_ms": 306.9538300000131,
+              "duration_ms": 6.732099000015296
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 6.73,
+            "listener_authentication_ms": 306.95
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "f805b93d-7c31-454f-82b8-b338730c8f8e",
+          "correlation_id": "460f1f10-01ed-4207-9ab0-e97c64700d82",
+          "schema_version": 1
+        },
+        {
+          "id": "d94c68da-bfe8-447e-a588-0b9079813591",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 764.8731579999439
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 764.87
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "f805b93d-7c31-454f-82b8-b338730c8f8e",
+          "correlation_id": "460f1f10-01ed-4207-9ab0-e97c64700d82",
+          "schema_version": 1
+        },
+        {
+          "id": "7db56897-ae1e-4cc7-934d-e61a36ad42f1",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 1.9000000953674316,
+              "duration_ms": 0.19999980926513672
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 1966
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 1966.7000000476837,
+              "duration_ms": 2007.8999998569489
+            },
+            {
+              "stage": "polling",
+              "start_ms": 5506.400000095367,
+              "duration_ms": 850.0999999046326
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 384,
+            "poll_count": 1,
+            "polling_ms": 850.1,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 6357.4,
+            "api_request_ms": 2007.9,
+            "client_queue_ms": 1966,
+            "authentication_ms": 669,
+            "durable_gateway_ms": 672,
+            "optimistic_notification_ms": 0.2
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "f805b93d-7c31-454f-82b8-b338730c8f8e",
+          "correlation_id": "460f1f10-01ed-4207-9ab0-e97c64700d82",
+          "schema_version": 1
+        },
+        {
+          "id": "e432b1dc-4ab2-4112-b60e-cb7f505cc7bf",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 822.3428160001058
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 822.34
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "f805b93d-7c31-454f-82b8-b338730c8f8e",
+          "correlation_id": "460f1f10-01ed-4207-9ab0-e97c64700d82",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:49:03.759217+00:00",
+      "started_at": "2026-11-22T18:48:58.744+00:00",
+      "accepted_at": "2026-11-22T18:49:02.039378+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:49:09.31052+00:00",
+      "operation_id": "f805b93d-7c31-454f-82b8-b338730c8f8e",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "460f1f10-01ed-4207-9ab0-e97c64700d82",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "b798fbbb-ffff-411e-a46d-5e63f9bbde53",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 326.80228199996054
+            },
+            {
+              "stage": "database",
+              "start_ms": 326.80228199996054,
+              "duration_ms": 8.00425300002098
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 8,
+            "listener_authentication_ms": 326.8
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "dc9ae445-fdd8-47b9-9a0e-5c89071fa391",
+          "correlation_id": "e0a2fbad-4444-454b-99bd-11783a960668",
+          "schema_version": 1
+        },
+        {
+          "id": "e0084734-64e4-4362-bcde-b23b9609d62f",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 851.162314999965
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 851.16
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "dc9ae445-fdd8-47b9-9a0e-5c89071fa391",
+          "correlation_id": "e0a2fbad-4444-454b-99bd-11783a960668",
+          "schema_version": 1
+        },
+        {
+          "id": "7e3f6f3f-77a6-4ec6-8ffa-e0fc3b8ca6b8",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 819.3218979999656
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 819.32
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "dc9ae445-fdd8-47b9-9a0e-5c89071fa391",
+          "correlation_id": "e0a2fbad-4444-454b-99bd-11783a960668",
+          "schema_version": 1
+        },
+        {
+          "id": "7badd993-3358-45c0-9262-e1275ce12594",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.5999999046325684,
+              "duration_ms": 0
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 1
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 1.5,
+              "duration_ms": 1576.2000000476837
+            },
+            {
+              "stage": "polling",
+              "start_ms": 2229.5,
+              "duration_ms": 769.2000000476837
+            },
+            {
+              "stage": "polling",
+              "start_ms": 3650.2000000476837,
+              "duration_ms": 779.2999999523163
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 379,
+            "poll_count": 2,
+            "polling_ms": 1548.5,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 4430.6,
+            "api_request_ms": 1576.2,
+            "client_queue_ms": 1,
+            "authentication_ms": 366,
+            "durable_gateway_ms": 530,
+            "optimistic_notification_ms": 0
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "dc9ae445-fdd8-47b9-9a0e-5c89071fa391",
+          "correlation_id": "e0a2fbad-4444-454b-99bd-11783a960668",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:48:56.068441+00:00",
+      "started_at": "2026-11-22T18:48:53.375+00:00",
+      "accepted_at": "2026-11-22T18:48:54.295567+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:48:59.314212+00:00",
+      "operation_id": "dc9ae445-fdd8-47b9-9a0e-5c89071fa391",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "e0a2fbad-4444-454b-99bd-11783a960668",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "e9ec33bf-eabd-4892-8b6c-0701ee284163",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 306.5999450000236
+            },
+            {
+              "stage": "database",
+              "start_ms": 306.5999450000236,
+              "duration_ms": 5.875936000025831
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 5.87,
+            "listener_authentication_ms": 306.6
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7c4bb6e1-acda-4301-a276-0dc3c896120f",
+          "correlation_id": "401036ce-0ce2-4ed1-95a0-3ea325b0f488",
+          "schema_version": 1
+        },
+        {
+          "id": "8b61ab5e-1cd9-4037-8aeb-eed01a8c21ef",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 314.1394599999767
+            },
+            {
+              "stage": "database",
+              "start_ms": 314.1394599999767,
+              "duration_ms": 3.4826100000645965
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 3.48,
+            "listener_authentication_ms": 314.14
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7c4bb6e1-acda-4301-a276-0dc3c896120f",
+          "correlation_id": "401036ce-0ce2-4ed1-95a0-3ea325b0f488",
+          "schema_version": 1
+        },
+        {
+          "id": "42b874e6-fbc8-42da-a961-464734a6edcd",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 788.0430090000154
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 788.04
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7c4bb6e1-acda-4301-a276-0dc3c896120f",
+          "correlation_id": "401036ce-0ce2-4ed1-95a0-3ea325b0f488",
+          "schema_version": 1
+        },
+        {
+          "id": "9188c71f-779f-471c-ab7a-695855d6d0e5",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 874.0084570000181
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 874.01
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7c4bb6e1-acda-4301-a276-0dc3c896120f",
+          "correlation_id": "401036ce-0ce2-4ed1-95a0-3ea325b0f488",
+          "schema_version": 1
+        },
+        {
+          "id": "e758a514-c2f8-4965-87a7-227ef54d5ae4",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 759.2828769999323
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 759.28
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7c4bb6e1-acda-4301-a276-0dc3c896120f",
+          "correlation_id": "401036ce-0ce2-4ed1-95a0-3ea325b0f488",
+          "schema_version": 1
+        },
+        {
+          "id": "43e5a7a1-b362-4724-9ed7-87f3f5ce65b1",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.5999999046325684,
+              "duration_ms": 0
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 2568.7000000476837
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 2569.2000000476837,
+              "duration_ms": 1455.7999999523163
+            },
+            {
+              "stage": "polling",
+              "start_ms": 5488.899999856949,
+              "duration_ms": 818.9000000953674
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 385,
+            "poll_count": 1,
+            "polling_ms": 818.9,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 6308.8,
+            "api_request_ms": 1455.8,
+            "client_queue_ms": 2568.7,
+            "authentication_ms": 276,
+            "durable_gateway_ms": 535,
+            "optimistic_notification_ms": 0
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7c4bb6e1-acda-4301-a276-0dc3c896120f",
+          "correlation_id": "401036ce-0ce2-4ed1-95a0-3ea325b0f488",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:48:51.849629+00:00",
+      "started_at": "2026-11-22T18:48:46.779+00:00",
+      "accepted_at": "2026-11-22T18:48:50.146075+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:48:54.377981+00:00",
+      "operation_id": "7c4bb6e1-acda-4301-a276-0dc3c896120f",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 3,
+      "correlation_id": "401036ce-0ce2-4ed1-95a0-3ea325b0f488",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "7935c8b1-a74c-47f3-916d-f8d03afd9b01",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 325.87169800000265
+            },
+            {
+              "stage": "database",
+              "start_ms": 325.87169800000265,
+              "duration_ms": 6.944619999965653
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 6.94,
+            "listener_authentication_ms": 325.87
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "df2a390d-f246-4f5b-94d5-bd4539455d5e",
+          "correlation_id": "f3aa1f24-5a7a-412f-8178-b9a7c03cb3fb",
+          "schema_version": 1
+        },
+        {
+          "id": "a07a36ba-2d9f-453c-859d-bd88819e6c36",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1424.3665330000222
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1424.36
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "df2a390d-f246-4f5b-94d5-bd4539455d5e",
+          "correlation_id": "f3aa1f24-5a7a-412f-8178-b9a7c03cb3fb",
+          "schema_version": 1
+        },
+        {
+          "id": "83a31ea0-3f9b-4f3e-99e5-7a6de46eff4d",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 998.6998880000319
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 998.7
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "df2a390d-f246-4f5b-94d5-bd4539455d5e",
+          "correlation_id": "f3aa1f24-5a7a-412f-8178-b9a7c03cb3fb",
+          "schema_version": 1
+        },
+        {
+          "id": "570add0f-1830-494b-a732-4757b258d41a",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.5999999046325684,
+              "duration_ms": 0
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 1245.0999999046326
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 1245.5999999046326,
+              "duration_ms": 1474.4000000953674
+            },
+            {
+              "stage": "polling",
+              "start_ms": 3370.899999856949,
+              "duration_ms": 1864.9000000953674
+            },
+            {
+              "stage": "polling",
+              "start_ms": 5886.399999856949,
+              "duration_ms": 833.7999999523163
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 371,
+            "poll_count": 2,
+            "polling_ms": 2698.7,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 6721.4,
+            "api_request_ms": 1474.4,
+            "client_queue_ms": 1245.1,
+            "authentication_ms": 248,
+            "durable_gateway_ms": 565,
+            "optimistic_notification_ms": 0
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "df2a390d-f246-4f5b-94d5-bd4539455d5e",
+          "correlation_id": "f3aa1f24-5a7a-412f-8178-b9a7c03cb3fb",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:48:44.694067+00:00",
+      "started_at": "2026-11-22T18:48:39.777+00:00",
+      "accepted_at": "2026-11-22T18:48:41.847739+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:48:49.314658+00:00",
+      "operation_id": "df2a390d-f246-4f5b-94d5-bd4539455d5e",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "f3aa1f24-5a7a-412f-8178-b9a7c03cb3fb",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "15dfa395-cef2-4dfd-bca3-52a09bf71035",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 315.98138300003484
+            },
+            {
+              "stage": "database",
+              "start_ms": 315.98138300003484,
+              "duration_ms": 9.384151000063866
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 9.38,
+            "listener_authentication_ms": 315.98
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "c99038a0-b272-43a5-9f4a-375d0a504b6c",
+          "correlation_id": "806dc943-0ed5-4dcd-a1f4-34cad4af94ac",
+          "schema_version": 1
+        },
+        {
+          "id": "175b3d48-092c-41db-9453-19b13a9e5226",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 812.1281329999911
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 812.13
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "c99038a0-b272-43a5-9f4a-375d0a504b6c",
+          "correlation_id": "806dc943-0ed5-4dcd-a1f4-34cad4af94ac",
+          "schema_version": 1
+        },
+        {
+          "id": "e9099b5a-94f0-47f2-ac2e-81876cdabe4e",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1020.4943280000007
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1020.49
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "c99038a0-b272-43a5-9f4a-375d0a504b6c",
+          "correlation_id": "806dc943-0ed5-4dcd-a1f4-34cad4af94ac",
+          "schema_version": 1
+        },
+        {
+          "id": "e6231987-e155-41ec-9b5d-32a17d818dc6",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.7000000476837158,
+              "duration_ms": 0
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 1.1000001430511475
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 1.5,
+              "duration_ms": 1870.4000000953674
+            },
+            {
+              "stage": "polling",
+              "start_ms": 2522.7000000476837,
+              "duration_ms": 787.7000000476837
+            },
+            {
+              "stage": "polling",
+              "start_ms": 7224.600000143051,
+              "duration_ms": 1266.0999999046326
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 381,
+            "poll_count": 2,
+            "polling_ms": 2053.8,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 8491.7,
+            "api_request_ms": 1870.4,
+            "client_queue_ms": 1.1,
+            "authentication_ms": 643,
+            "durable_gateway_ms": 522,
+            "optimistic_notification_ms": 0
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "c99038a0-b272-43a5-9f4a-375d0a504b6c",
+          "correlation_id": "806dc943-0ed5-4dcd-a1f4-34cad4af94ac",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:48:34.006645+00:00",
+      "started_at": "2026-11-22T18:48:31.046+00:00",
+      "accepted_at": "2026-11-22T18:48:32.231673+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:48:39.317534+00:00",
+      "operation_id": "c99038a0-b272-43a5-9f4a-375d0a504b6c",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "806dc943-0ed5-4dcd-a1f4-34cad4af94ac",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "2e819877-e7dc-4f9e-a572-575b4337cab9",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 317.770961000002
+            },
+            {
+              "stage": "database",
+              "start_ms": 317.770961000002,
+              "duration_ms": 7.224869000026956
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 7.22,
+            "listener_authentication_ms": 317.77
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "79958292-6542-4434-bc69-03c21f732ec1",
+          "correlation_id": "830d3b5a-6108-42f3-b817-78b6227d9c8c",
+          "schema_version": 1
+        },
+        {
+          "id": "f1c75061-d4d8-4f9c-8c4c-41e53944523a",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.8000001907348633,
+              "duration_ms": 0
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 3430.9000000953674
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 3431.4000000953674,
+              "duration_ms": 2030
+            },
+            {
+              "stage": "polling",
+              "start_ms": 6951.200000047684,
+              "duration_ms": 809.7000000476837
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 366,
+            "poll_count": 1,
+            "polling_ms": 809.7,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 7761.7,
+            "api_request_ms": 2030,
+            "client_queue_ms": 3430.9,
+            "authentication_ms": 734,
+            "durable_gateway_ms": 674,
+            "optimistic_notification_ms": 0
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "79958292-6542-4434-bc69-03c21f732ec1",
+          "correlation_id": "830d3b5a-6108-42f3-b817-78b6227d9c8c",
+          "schema_version": 1
+        },
+        {
+          "id": "30be21bb-f121-4aff-85f7-65140f3ee0f9",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 760.5215379999718
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 760.52
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "79958292-6542-4434-bc69-03c21f732ec1",
+          "correlation_id": "830d3b5a-6108-42f3-b817-78b6227d9c8c",
+          "schema_version": 1
+        },
+        {
+          "id": "2d833938-d8e5-4219-8735-6e0a60be0893",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 814.3250450000633
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 814.32
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "79958292-6542-4434-bc69-03c21f732ec1",
+          "correlation_id": "830d3b5a-6108-42f3-b817-78b6227d9c8c",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:48:29.44479+00:00",
+      "started_at": "2026-11-22T18:48:22.983+00:00",
+      "accepted_at": "2026-11-22T18:48:27.793967+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:48:34.347065+00:00",
+      "operation_id": "79958292-6542-4434-bc69-03c21f732ec1",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "830d3b5a-6108-42f3-b817-78b6227d9c8c",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "0aed1504-00c1-4a95-9427-87fe090a7ac1",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 343.35134499997366
+            },
+            {
+              "stage": "database",
+              "start_ms": 343.35134499997366,
+              "duration_ms": 7.21341600001324
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 7.21,
+            "listener_authentication_ms": 343.35
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "614efee0-9373-4fce-ad62-587ee3149143",
+          "correlation_id": "dd933ddb-a984-4749-94ec-033403c0e94c",
+          "schema_version": 1
+        },
+        {
+          "id": "cb097ce5-7000-4214-b5e2-6d64275131ab",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1047.2113560000435
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1047.21
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "614efee0-9373-4fce-ad62-587ee3149143",
+          "correlation_id": "dd933ddb-a984-4749-94ec-033403c0e94c",
+          "schema_version": 1
+        },
+        {
+          "id": "6f703696-b273-43ec-97ec-7b79043aac57",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1045.1572620000225
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1045.16
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "614efee0-9373-4fce-ad62-587ee3149143",
+          "correlation_id": "dd933ddb-a984-4749-94ec-033403c0e94c",
+          "schema_version": 1
+        },
+        {
+          "id": "f613bc01-74ae-4208-84be-77a0eaa07b7b",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.40000009536743164,
+              "duration_ms": 0.09999990463256836
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 1143.6000001430511
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 1144.1000001430511,
+              "duration_ms": 1449.7999999523163
+            },
+            {
+              "stage": "polling",
+              "start_ms": 3245.5,
+              "duration_ms": 1214.8000001907349
+            },
+            {
+              "stage": "polling",
+              "start_ms": 5111.200000047684,
+              "duration_ms": 922.9000000953674
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 378,
+            "poll_count": 2,
+            "polling_ms": 2137.7,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 6034.7,
+            "api_request_ms": 1449.8,
+            "client_queue_ms": 1143.6,
+            "authentication_ms": 254,
+            "durable_gateway_ms": 526,
+            "optimistic_notification_ms": 0.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "614efee0-9373-4fce-ad62-587ee3149143",
+          "correlation_id": "dd933ddb-a984-4749-94ec-033403c0e94c",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:48:20.736512+00:00",
+      "started_at": "2026-11-22T18:48:16.702+00:00",
+      "accepted_at": "2026-11-22T18:48:18.648683+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:48:24.305388+00:00",
+      "operation_id": "614efee0-9373-4fce-ad62-587ee3149143",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "dd933ddb-a984-4749-94ec-033403c0e94c",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "389b1918-a9ba-4245-bbe8-b1623e16a84e",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 328.3141029999824
+            },
+            {
+              "stage": "database",
+              "start_ms": 328.3141029999824,
+              "duration_ms": 6.60462799994275
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 6.6,
+            "listener_authentication_ms": 328.31
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "40790dcc-35fd-4524-bdf2-7d23b2edd72b",
+          "correlation_id": "8e8c1182-7aa0-493d-bccb-a09a608722b1",
+          "schema_version": 1
+        },
+        {
+          "id": "b59fc772-1b2b-44eb-98b7-6c521854e435",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 998.3654409999726
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 998.36
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "40790dcc-35fd-4524-bdf2-7d23b2edd72b",
+          "correlation_id": "8e8c1182-7aa0-493d-bccb-a09a608722b1",
+          "schema_version": 1
+        },
+        {
+          "id": "395ea39d-376d-41c4-9a64-288bcf655f8d",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1138.1018080000067
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1138.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "40790dcc-35fd-4524-bdf2-7d23b2edd72b",
+          "correlation_id": "8e8c1182-7aa0-493d-bccb-a09a608722b1",
+          "schema_version": 1
+        },
+        {
+          "id": "e7c9e885-1751-4469-8c72-4b8eae7fec0f",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.40000009536743164,
+              "duration_ms": 0.09999990463256836
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 0.7000000476837158
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 1.0999999046325684,
+              "duration_ms": 1854.2000000476837
+            },
+            {
+              "stage": "polling",
+              "start_ms": 2505.7999999523163,
+              "duration_ms": 1186.9000000953674
+            },
+            {
+              "stage": "polling",
+              "start_ms": 8378.099999904633,
+              "duration_ms": 1166.9000000953674
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 376,
+            "poll_count": 2,
+            "polling_ms": 2353.8,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 9545.6,
+            "api_request_ms": 1854.2,
+            "client_queue_ms": 0.7,
+            "authentication_ms": 642,
+            "durable_gateway_ms": 555,
+            "optimistic_notification_ms": 0.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "40790dcc-35fd-4524-bdf2-7d23b2edd72b",
+          "correlation_id": "8e8c1182-7aa0-493d-bccb-a09a608722b1",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:48:09.920867+00:00",
+      "started_at": "2026-11-22T18:48:06.808+00:00",
+      "accepted_at": "2026-11-22T18:48:07.991865+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:48:14.351155+00:00",
+      "operation_id": "40790dcc-35fd-4524-bdf2-7d23b2edd72b",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "8e8c1182-7aa0-493d-bccb-a09a608722b1",
+      "operation_type": "stage4.product.update",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "86865575-4f98-4d9c-9c9b-170708bd7f6f",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 440.5468589999946
+            },
+            {
+              "stage": "database",
+              "start_ms": 440.5468589999946,
+              "duration_ms": 7.744972000014968
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 7.74,
+            "listener_authentication_ms": 440.55
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "92f86c67-5b6e-481a-a5d9-d9c8a9780df8",
+          "correlation_id": "87b788d3-ea74-4137-ac87-e82d4f1b8834",
+          "schema_version": 1
+        },
+        {
+          "id": "2e7ff104-9692-4328-93f5-517105d2f40b",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1084.851842999924
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1084.85
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "92f86c67-5b6e-481a-a5d9-d9c8a9780df8",
+          "correlation_id": "87b788d3-ea74-4137-ac87-e82d4f1b8834",
+          "schema_version": 1
+        },
+        {
+          "id": "bcc98ae3-d420-4cc6-8c9a-d66329c796dd",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1472.2145980000496
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1472.21
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "92f86c67-5b6e-481a-a5d9-d9c8a9780df8",
+          "correlation_id": "87b788d3-ea74-4137-ac87-e82d4f1b8834",
+          "schema_version": 1
+        },
+        {
+          "id": "2e1921c3-956a-4264-8a12-b9e958c1bf71",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.3000001907348633,
+              "duration_ms": 0.09999990463256836
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 0.6000001430511475
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 1.5,
+              "duration_ms": 2285.9000000953674
+            },
+            {
+              "stage": "polling",
+              "start_ms": 2938.4000000953674,
+              "duration_ms": 1285.2000000476837
+            },
+            {
+              "stage": "polling",
+              "start_ms": 11853,
+              "duration_ms": 874.1000001430511
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 376,
+            "poll_count": 2,
+            "polling_ms": 2159.3,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 12727.7,
+            "api_request_ms": 2285.9,
+            "client_queue_ms": 0.6,
+            "authentication_ms": 672,
+            "durable_gateway_ms": 954,
+            "optimistic_notification_ms": 0.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "92f86c67-5b6e-481a-a5d9-d9c8a9780df8",
+          "correlation_id": "87b788d3-ea74-4137-ac87-e82d4f1b8834",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:47:57.595026+00:00",
+      "started_at": "2026-11-22T18:47:53.789+00:00",
+      "accepted_at": "2026-11-22T18:47:55.417867+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:47:59.312517+00:00",
+      "operation_id": "92f86c67-5b6e-481a-a5d9-d9c8a9780df8",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "87b788d3-ea74-4137-ac87-e82d4f1b8834",
+      "operation_type": "stage4.product.create",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "5ddecf89-4f61-44c0-b015-dc12c082a1d9",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 303.51863800000865
+            },
+            {
+              "stage": "database",
+              "start_ms": 303.51863800000865,
+              "duration_ms": 6.193268999923021
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 6.19,
+            "listener_authentication_ms": 303.52
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "749ccebf-e96e-455c-b41c-3b483b253bda",
+          "correlation_id": "ccb2df87-d9ce-4b7c-bf9d-432ce08c25c4",
+          "schema_version": 1
+        },
+        {
+          "id": "73b6bd28-0d87-4092-90eb-3a366f0e659c",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 802.7775439999532
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 802.78
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "749ccebf-e96e-455c-b41c-3b483b253bda",
+          "correlation_id": "ccb2df87-d9ce-4b7c-bf9d-432ce08c25c4",
+          "schema_version": 1
+        },
+        {
+          "id": "a5bd9e98-b85e-42ca-9123-ecd92c0db7c4",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 788.5605900000082
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 788.56
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "749ccebf-e96e-455c-b41c-3b483b253bda",
+          "correlation_id": "ccb2df87-d9ce-4b7c-bf9d-432ce08c25c4",
+          "schema_version": 1
+        },
+        {
+          "id": "391465f6-60f1-4a9f-a914-cdcb1eff93ab",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.19999980926513672,
+              "duration_ms": 0.10000014305114746
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 3408.5
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 3409.0999999046326,
+              "duration_ms": 1448.5999999046326
+            },
+            {
+              "stage": "polling",
+              "start_ms": 6778.199999809265,
+              "duration_ms": 1621.6000001430511
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 394,
+            "poll_count": 1,
+            "polling_ms": 1621.6,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 8400.3,
+            "api_request_ms": 1448.6,
+            "client_queue_ms": 3408.5,
+            "authentication_ms": 232,
+            "durable_gateway_ms": 505,
+            "optimistic_notification_ms": 0.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "749ccebf-e96e-455c-b41c-3b483b253bda",
+          "correlation_id": "ccb2df87-d9ce-4b7c-bf9d-432ce08c25c4",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:47:51.019399+00:00",
+      "started_at": "2026-11-22T18:47:45.113+00:00",
+      "accepted_at": "2026-11-22T18:47:49.287204+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:47:54.304549+00:00",
+      "operation_id": "749ccebf-e96e-455c-b41c-3b483b253bda",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "ccb2df87-d9ce-4b7c-bf9d-432ce08c25c4",
+      "operation_type": "stage4.product.create",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "b5b33b77-94f7-4da2-8925-9d6bfc2786de",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 339.7579880000558
+            },
+            {
+              "stage": "database",
+              "start_ms": 339.7579880000558,
+              "duration_ms": 6.814143999945372
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 6.81,
+            "listener_authentication_ms": 339.76
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "023004c5-a158-4657-b27f-ed9039c5922e",
+          "correlation_id": "b2e504a2-a0f9-46e7-ae2a-30c81ee14304",
+          "schema_version": 1
+        },
+        {
+          "id": "fea80eac-2933-4217-9918-90cc43f6e13c",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1042.2176990000298
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1042.22
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "023004c5-a158-4657-b27f-ed9039c5922e",
+          "correlation_id": "b2e504a2-a0f9-46e7-ae2a-30c81ee14304",
+          "schema_version": 1
+        },
+        {
+          "id": "154b7862-3ab7-42ec-98ce-aa4c5d65936b",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1012.3428040000144
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1012.34
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "023004c5-a158-4657-b27f-ed9039c5922e",
+          "correlation_id": "b2e504a2-a0f9-46e7-ae2a-30c81ee14304",
+          "schema_version": 1
+        },
+        {
+          "id": "f5776e5c-98f0-4dc3-886c-aec6f718738c",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0.09999990463256836,
+              "duration_ms": 0.10000014305114746
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 967
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 967.2000000476837,
+              "duration_ms": 2226.199999809265
+            },
+            {
+              "stage": "polling",
+              "start_ms": 3844.0999999046326,
+              "duration_ms": 1151.9000000953674
+            },
+            {
+              "stage": "polling",
+              "start_ms": 5646.5,
+              "duration_ms": 1247.5
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 380,
+            "poll_count": 2,
+            "polling_ms": 2399.4,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 6894.5,
+            "api_request_ms": 2226.2,
+            "client_queue_ms": 967,
+            "authentication_ms": 629,
+            "durable_gateway_ms": 962,
+            "optimistic_notification_ms": 0.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "023004c5-a158-4657-b27f-ed9039c5922e",
+          "correlation_id": "b2e504a2-a0f9-46e7-ae2a-30c81ee14304",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:47:42.415048+00:00",
+      "started_at": "2026-11-22T18:47:37.906+00:00",
+      "accepted_at": "2026-11-22T18:47:40.442049+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:47:44.293012+00:00",
+      "operation_id": "023004c5-a158-4657-b27f-ed9039c5922e",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "b2e504a2-a0f9-46e7-ae2a-30c81ee14304",
+      "operation_type": "stage4.product.create",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "d4d0516e-777a-45f9-a07d-3d3199fb159e",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 305.1289829999441
+            },
+            {
+              "stage": "database",
+              "start_ms": 305.1289829999441,
+              "duration_ms": 6.251743000000715
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 6.25,
+            "listener_authentication_ms": 305.13
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "59683fa2-4f10-400e-83a4-0e9d1161634e",
+          "correlation_id": "b280b5de-3a07-4136-8a99-810f6b420f36",
+          "schema_version": 1
+        },
+        {
+          "id": "880d0b55-e5a3-4d3d-b506-6b66e61daaa1",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 997.2683079999406
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 997.27
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "59683fa2-4f10-400e-83a4-0e9d1161634e",
+          "correlation_id": "b280b5de-3a07-4136-8a99-810f6b420f36",
+          "schema_version": 1
+        },
+        {
+          "id": "a4d38812-8fa2-44bb-b94a-d064810369dc",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1032.43501799996
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1032.43
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "59683fa2-4f10-400e-83a4-0e9d1161634e",
+          "correlation_id": "b280b5de-3a07-4136-8a99-810f6b420f36",
+          "schema_version": 1
+        },
+        {
+          "id": "0461df36-548f-4cc4-9e08-4060c7c7eb4e",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "optimistic_notification",
+              "start_ms": 0,
+              "duration_ms": 0.10000014305114746
+            },
+            {
+              "stage": "client_queue",
+              "start_ms": 0,
+              "duration_ms": 0.6000001430511475
+            },
+            {
+              "stage": "api_request",
+              "start_ms": 0.7000000476837158,
+              "duration_ms": 2867.7000000476837
+            },
+            {
+              "stage": "polling",
+              "start_ms": 3519.100000143051,
+              "duration_ms": 1157
+            },
+            {
+              "stage": "polling",
+              "start_ms": 8010.200000047684,
+              "duration_ms": 1653.5999999046326
+            }
+          ],
+          "device": "desktop",
+          "source": "browser",
+          "metrics": {
+            "mqtt_ms": 577,
+            "poll_count": 2,
+            "polling_ms": 2810.6,
+            "error_count": 0,
+            "retry_count": 0,
+            "tap_saved_ms": 9664.2,
+            "api_request_ms": 2867.7,
+            "client_queue_ms": 0.6,
+            "authentication_ms": 603,
+            "durable_gateway_ms": 1407,
+            "optimistic_notification_ms": 0.1
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "59683fa2-4f10-400e-83a4-0e9d1161634e",
+          "correlation_id": "b280b5de-3a07-4136-8a99-810f6b420f36",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:47:31.037476+00:00",
+      "started_at": "2026-11-22T18:47:26.857+00:00",
+      "accepted_at": "2026-11-22T18:47:28.867952+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:47:34.395194+00:00",
+      "operation_id": "59683fa2-4f10-400e-83a4-0e9d1161634e",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "b280b5de-3a07-4136-8a99-810f6b420f36",
+      "operation_type": "stage4.category.create",
+      "trace_completeness": "partial"
+    },
+    {
+      "mode": "ON",
+      "outcome": "committed",
+      "records": [
+        {
+          "id": "75838562-143b-48a1-b188-8c73d09a09ab",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "listener_authentication",
+              "start_ms": 0,
+              "duration_ms": 388.0247170000803
+            },
+            {
+              "stage": "database",
+              "start_ms": 388.0247170000803,
+              "duration_ms": 4.57493100001011
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "database_ms": 4.57,
+            "listener_authentication_ms": 388.02
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7ca95903-473e-43bd-9c20-0b35d91c619f",
+          "correlation_id": "0e82a3ef-76ff-4911-ba66-211c664463fc",
+          "schema_version": 1
+        },
+        {
+          "id": "4f71fbfc-9e9a-4b7a-990f-ed110bebed01",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1031.9203060000436
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1031.92
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7ca95903-473e-43bd-9c20-0b35d91c619f",
+          "correlation_id": "0e82a3ef-76ff-4911-ba66-211c664463fc",
+          "schema_version": 1
+        },
+        {
+          "id": "f2053b46-023b-491d-a21d-a35febe5b319",
+          "mode": "ON",
+          "clock": "monotonic",
+          "spans": [
+            {
+              "stage": "callback",
+              "start_ms": 0,
+              "duration_ms": 1013.9921740000136
+            }
+          ],
+          "device": "other",
+          "source": "debian",
+          "metrics": {
+            "callback_ms": 1013.99
+          },
+          "version": "unknown",
+          "complete": false,
+          "operation_id": "7ca95903-473e-43bd-9c20-0b35d91c619f",
+          "correlation_id": "0e82a3ef-76ff-4911-ba66-211c664463fc",
+          "schema_version": 1
+        }
+      ],
+      "ended_at": "2026-11-22T18:47:12.148474+00:00",
+      "started_at": "2026-11-22T18:47:07.734+00:00",
+      "accepted_at": "2026-11-22T18:47:10.051865+00:00",
+      "environment": "development",
+      "last_updated": "2026-11-22T18:47:14.363784+00:00",
+      "operation_id": "7ca95903-473e-43bd-9c20-0b35d91c619f",
+      "backend_route": "flespi",
+      "frontend_host": "vercel",
+      "callback_count": 2,
+      "correlation_id": "0e82a3ef-76ff-4911-ba66-211c664463fc",
+      "operation_type": "stage4.household.create",
+      "trace_completeness": "partial"
+    }
+  ]
+}

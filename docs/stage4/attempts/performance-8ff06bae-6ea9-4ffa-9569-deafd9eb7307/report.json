@@ -1,0 +1,14 @@
+{
+  "id": "8ff06bae-6ea9-4ffa-9569-deafd9eb7307",
+  "at": "2026-11-21T15:50:10.680Z",
+  "label": "before-auth-optimization",
+  "sha": "6c416f2a2248dba4cad6e154fe6cb5cc0785df67",
+  "scope": "actual original UI, experimental development Preview; own synthetic list; correlated browser and PostgreSQL timings, no fault injection",
+  "samples": [],
+  "loads": [],
+  "status": "FAIL",
+  "error": {
+    "name": "AssertionError",
+    "message": "Expected values to be strictly equal:\n\n401 !== 202\n"
+  }
+}

@@ -1,0 +1,10 @@
+SET ROLE shopping_stage2_owner;
+REVOKE UPDATE ON shopping.operations FROM shopping_stage2_runtime;
+REVOKE UPDATE ON shopping.shopping_history FROM shopping_stage2_runtime;
+GRANT UPDATE(version,deleted_at) ON shopping.shopping_history TO shopping_stage2_runtime;
+REVOKE UPDATE ON shopping.categories FROM shopping_stage2_runtime;
+GRANT UPDATE(name,icon,version,deleted_at) ON shopping.categories TO shopping_stage2_runtime;
+REVOKE UPDATE ON shopping.products FROM shopping_stage2_runtime;
+GRANT UPDATE(category_id,name,checked,quantity,display_order,usage_count,version,deleted_at) ON shopping.products TO shopping_stage2_runtime;
+ALTER DEFAULT PRIVILEGES IN SCHEMA shopping REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
+RESET ROLE;

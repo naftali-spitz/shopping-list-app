@@ -1,0 +1,17 @@
+{
+  "id": "fa3baa4b-9a2b-405c-ac13-caebefaf5723",
+  "at": "2026-11-21T21:12:27.540Z",
+  "mode": "arm-expiry",
+  "scope": "dedicated current Dev provider session for existing account; no global logout, reset or production write",
+  "checks": [
+    {
+      "name": "existing account fresh dedicated session verified before boundary",
+      "status": "PASS",
+      "session_id": "64621a7c-1c19-46fe-8279-51ccab244f72"
+    }
+  ],
+  "session_id": "64621a7c-1c19-46fe-8279-51ccab244f72",
+  "user_id": "130e8995-f628-4620-ad58-496049ca465a",
+  "arm": "private pending intent prepared; no gateway acceptance or business write",
+  "status": "PASS"
+}

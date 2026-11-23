@@ -1,0 +1,10 @@
+{
+  "id": "925b44c7-b058-46d0-a861-f3f5f389e952",
+  "at": "2026-11-21T15:50:43.230Z",
+  "project": "njomxqthjglqesxchlbm",
+  "http": 200,
+  "google_enabled": false,
+  "email_enabled": true,
+  "scope": "Read-only development public Auth provider flags, no configuration or account changes",
+  "status": "PASS"
+}

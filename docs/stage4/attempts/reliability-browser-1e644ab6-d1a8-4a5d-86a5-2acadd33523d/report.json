@@ -1,0 +1,841 @@
+{
+  "id": "1e644ab6-d1a8-4a5d-86a5-2acadd33523d",
+  "at": "2026-11-22T21:45:03.977Z",
+  "sha": "603daf7e0c48c8f9974b5202c57e8ba93f45ec2d",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "actual original UI; browser-only offline, refresh, duplicate request, concurrent quantity, stale snapshot and logout tests; no Debian/service faults",
+  "checks": [
+    {
+      "name": "two authenticated original app views receive real created/checked product",
+      "status": "PASS",
+      "category_id": "e3a506b7-352d-4191-a6ae-15d471e3c635",
+      "product_id": "6b95aca7-719b-4970-9f23-2e9f4ba971f0"
+    },
+    {
+      "name": "three immediate check taps preserve existing pending guard and produce one intended committed check",
+      "status": "PASS",
+      "operation_id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "committed_checked_updates": 1
+    }
+  ],
+  "operations": [
+    {
+      "id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "correlation_id": "af80f1e8-58cf-4993-9e6b-aa45896efead",
+      "type": "stage4.category.create",
+      "expected_version": 0
+    },
+    {
+      "id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "correlation_id": "9a7d761c-4221-43f6-be10-6885d9cffd76",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    },
+    {
+      "id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "correlation_id": "c2f7456c-3fc9-4c31-a01f-6f54e0f683a9",
+      "type": "stage4.product.update",
+      "expected_version": 1
+    },
+    {
+      "id": "ca4e0a65-0566-4c36-8d39-dc0ac6b9338f",
+      "correlation_id": "52df7bee-a43e-43d6-9081-fcb9d4d66dd8",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    },
+    {
+      "id": "045add2a-8edd-4f3e-bd09-333b32c177e1",
+      "correlation_id": "50c655fd-093d-439a-b289-1f2a6426a052",
+      "type": "stage4.product.update",
+      "expected_version": 1
+    }
+  ],
+  "requests": [
+    {
+      "at": "2026-11-22T21:45:14.264Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "5cdfec0e-c4a9-46ff-aa72-7a894d65a476",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:16.248Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "5cdfec0e-c4a9-46ff-aa72-7a894d65a476",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:18.059Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "5cdfec0e-c4a9-46ff-aa72-7a894d65a476",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:20.150Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "aa2425ae-8528-4b22-bf18-dd5150fc4a5c",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:21.375Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa2425ae-8528-4b22-bf18-dd5150fc4a5c",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:22.948Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa2425ae-8528-4b22-bf18-dd5150fc4a5c",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:26.923Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "ca2edd4a-d2c6-4b97-a928-d2e8b9c7d66d",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:28.347Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "ca2edd4a-d2c6-4b97-a928-d2e8b9c7d66d",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:29.761Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "ca2edd4a-d2c6-4b97-a928-d2e8b9c7d66d",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:30.398Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "715408f2-42fc-4994-8eaa-6040f82a3f0c",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:31.612Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "1cea7817-3a33-4f85-a427-c3bff0c316d9",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:31.615Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "715408f2-42fc-4994-8eaa-6040f82a3f0c",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:32.930Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1cea7817-3a33-4f85-a427-c3bff0c316d9",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:33.097Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "715408f2-42fc-4994-8eaa-6040f82a3f0c",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:34.376Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1cea7817-3a33-4f85-a427-c3bff0c316d9",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:38.024Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "type": "stage4.category.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:39.514Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:40.928Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "aa04372a-8708-4ba1-8fc7-2cfeaf3942d1",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:41.410Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "d843f1ea-2707-4359-a1ad-b790f0f2618a",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:42.153Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa04372a-8708-4ba1-8fc7-2cfeaf3942d1",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:42.278Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "d843f1ea-2707-4359-a1ad-b790f0f2618a",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:43.575Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "d2c06599-7e2f-4198-a2bd-720a2593a674",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:45:43.780Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "d843f1ea-2707-4359-a1ad-b790f0f2618a",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:44.929Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "aa04372a-8708-4ba1-8fc7-2cfeaf3942d1",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:46.993Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:48.796Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:50.201Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "cebf89d9-236c-45eb-8368-5b2220473565",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:50.224Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "18106157-ca05-4110-b24a-3566a82d3382",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:45:51.008Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "cebf89d9-236c-45eb-8368-5b2220473565",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:52.163Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "03206729-102e-416e-b899-f3ca59bf188d",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:52.430Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "cebf89d9-236c-45eb-8368-5b2220473565",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:52.934Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "03206729-102e-416e-b899-f3ca59bf188d",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:45:54.918Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:55.762Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "03206729-102e-416e-b899-f3ca59bf188d",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:45:57.186Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "5bffbd83-fcf7-4d2e-9827-17810d1db978",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:45:58.897Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "1076d8bb-33c1-4229-83e5-03b93f2fc53f",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:45:59.689Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1076d8bb-33c1-4229-83e5-03b93f2fc53f",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:04.761Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "1076d8bb-33c1-4229-83e5-03b93f2fc53f",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:46:05.641Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "0b091274-acac-4be0-a7c3-18acba568049",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:06.434Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "0b091274-acac-4be0-a7c3-18acba568049",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:08.885Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "ca4e0a65-0566-4c36-8d39-dc0ac6b9338f",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:09.812Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "0b091274-acac-4be0-a7c3-18acba568049",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:46:11.135Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "6c217093-fdb6-497c-950c-84cbb81007a6",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:11.232Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "ca4e0a65-0566-4c36-8d39-dc0ac6b9338f",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:46:11.945Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "6c217093-fdb6-497c-950c-84cbb81007a6",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:12.842Z",
+      "account": 0,
+      "action": "command",
+      "operation_id": "045add2a-8edd-4f3e-bd09-333b32c177e1",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:13.399Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "6c217093-fdb6-497c-950c-84cbb81007a6",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:46:14.342Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "045add2a-8edd-4f3e-bd09-333b32c177e1",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:15.765Z",
+      "account": 0,
+      "action": "status",
+      "operation_id": "045add2a-8edd-4f3e-bd09-333b32c177e1",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T21:46:19.817Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "9c908eab-334f-4d58-8232-6a1f8ce613dc",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:20.656Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "9c908eab-334f-4d58-8232-6a1f8ce613dc",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:22.066Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "9c908eab-334f-4d58-8232-6a1f8ce613dc",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:46:28.504Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "e91928c7-f54b-491a-af24-7627f80653d4",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:29.795Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "e91928c7-f54b-491a-af24-7627f80653d4",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:31.306Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "e91928c7-f54b-491a-af24-7627f80653d4",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:46:38.040Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "2de57f01-3cab-48c9-9404-4c15da53007d",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:38.893Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "2de57f01-3cab-48c9-9404-4c15da53007d",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:40.381Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "2de57f01-3cab-48c9-9404-4c15da53007d",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:46:46.855Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "27393bff-a9b2-436a-8570-59952e41cf76",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:47.677Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "27393bff-a9b2-436a-8570-59952e41cf76",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:49.138Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "27393bff-a9b2-436a-8570-59952e41cf76",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:46:55.578Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "d8f823ed-0465-4502-a693-2b32d0932486",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:46:56.427Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "d8f823ed-0465-4502-a693-2b32d0932486",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:46:57.803Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "d8f823ed-0465-4502-a693-2b32d0932486",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:47:04.274Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "9e08788a-3ef2-4a18-805d-f591fab9362c",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:47:05.101Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "9e08788a-3ef2-4a18-805d-f591fab9362c",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:47:06.548Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "9e08788a-3ef2-4a18-805d-f591fab9362c",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:47:13.394Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "b348c2a8-a11e-433f-9559-68a012bb82c6",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:47:14.588Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "b348c2a8-a11e-433f-9559-68a012bb82c6",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:47:15.976Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "b348c2a8-a11e-433f-9559-68a012bb82c6",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:47:22.397Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "0e732385-356d-4fde-a5bd-04d22c35547b",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:47:23.251Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "0e732385-356d-4fde-a5bd-04d22c35547b",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:47:24.670Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "0e732385-356d-4fde-a5bd-04d22c35547b",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:47:31.114Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "58f69c39-50e4-4553-9e49-107836ce1be5",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:47:32.347Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "58f69c39-50e4-4553-9e49-107836ce1be5",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:47:33.738Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "58f69c39-50e4-4553-9e49-107836ce1be5",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:47:40.226Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "55c84b6d-e4e6-4fab-873f-90ac0ad5d7bd",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:47:41.103Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "55c84b6d-e4e6-4fab-873f-90ac0ad5d7bd",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:47:42.813Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "55c84b6d-e4e6-4fab-873f-90ac0ad5d7bd",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:47:44.262Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "55c84b6d-e4e6-4fab-873f-90ac0ad5d7bd",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:47:51.392Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "5168a35d-49d8-4f50-b3b8-47a9f8c89ae6",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:47:52.301Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "5168a35d-49d8-4f50-b3b8-47a9f8c89ae6",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:47:53.777Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "5168a35d-49d8-4f50-b3b8-47a9f8c89ae6",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:48:01.679Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "e61f213d-74e9-4a09-b850-10d7273f7680",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:48:02.574Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "e61f213d-74e9-4a09-b850-10d7273f7680",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T21:48:04.152Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "e61f213d-74e9-4a09-b850-10d7273f7680",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T21:48:10.650Z",
+      "account": 1,
+      "action": "command",
+      "operation_id": "4313e641-7165-42fa-b3a7-c2d32c7d328f",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T21:48:12.050Z",
+      "account": 1,
+      "action": "status",
+      "operation_id": "4313e641-7165-42fa-b3a7-c2d32c7d328f",
+      "status": 200,
+      "state": "processing"
+    }
+  ],
+  "focused_cross_tab_continuation": true,
+  "deployment": {
+    "id": "dpl_EJhuBnSYCd89oUhsmi14ZbsAxJPX",
+    "url": "shopping-list-jolgxfd6c-0012ab-5576s-projects.vercel.app",
+    "sha": "603daf7e0c48c8f9974b5202c57e8ba93f45ec2d",
+    "git_ref": "feature/flespi-home-backend",
+    "state": "READY",
+    "target": null
+  },
+  "status": "FAIL",
+  "error": {
+    "name": "TimeoutError",
+    "message": "page.waitForFunction: Timeout 120000ms exceeded.",
+    "stack": "page.waitForFunction: Timeout 120000ms exceeded.\n    at persisted (/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage4-reliability-browser.mjs:72:14)\n    at operation (/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage4-reliability-browser.mjs:83:19)\n    at async file:///home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage4-reliability-browser.mjs:279:3"
+  },
+  "final_client_records": [
+    {
+      "id": "ca2edd4a-d2c6-4b97-a928-d2e8b9c7d66d",
+      "type": "stage4.household.list",
+      "state": "Saved",
+      "outcome": "snapshot"
+    }
+  ]
+}

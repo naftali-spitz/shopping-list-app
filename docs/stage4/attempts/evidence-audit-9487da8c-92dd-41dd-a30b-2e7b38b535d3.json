@@ -1,0 +1,11 @@
+{
+  "id": "9487da8c-92dd-41dd-a30b-2e7b38b535d3",
+  "at": "2026-11-22T16:24:46.203241+00:00",
+  "status": "PASS",
+  "files_scanned": 6,
+  "archives_expanded": 0,
+  "known_private_values_compared": 24,
+  "findings": [],
+  "scope": "changed/untracked Git paths; raw bytes and expanded ZIP/DOCX entries; no image OCR",
+  "original_checkout_env_loaded": false
+}

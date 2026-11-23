@@ -1,0 +1,7 @@
+{
+  "id": "0501ce89-d288-456e-85c0-d3d1d1b817fe",
+  "status": "FAIL",
+  "scope": "original develop browser benchmark harness failure; not an application acceptance report",
+  "error": "Unhandled response-wait rejection during sequential quantity benchmark prevented final JSON. Prior sample data only lived in memory and is unavailable. Authoritative follow-up read found owned product checked=true, quantity=3.",
+  "corrective_action": "Await response and optimistic expectations together, append each sample immediately, pace original UI quantities so asynchronous full-list refresh settles. No failure relabeled as passing."
+}

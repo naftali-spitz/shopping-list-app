@@ -1,0 +1,28 @@
+{
+  "id": "7c7c55b4-17d7-487c-a176-0256db9f7eb7",
+  "at": "2026-11-22T19:52:09.285Z",
+  "scope": "actual protected Preview callback and durable metadata adapter; existing committed result only",
+  "checks": [
+    {
+      "name": "duplicate callback through actual Preview remains idempotent",
+      "status": "PASS"
+    },
+    {
+      "name": "later conflicting signed terminal result cannot overwrite committed result",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Preview rejects stale signed callback",
+      "status": "PASS"
+    },
+    {
+      "name": "actual Preview rejects forged callback",
+      "status": "PASS"
+    },
+    {
+      "name": "authoritative committed result unchanged after duplicate, stale and conflicting attempts",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,48 @@
+{
+  "id": "08f727eb-8348-45db-aacf-16ef89046be1",
+  "at": "2026-11-20T12:14:01.323Z",
+  "scope": "actual isolated PostgreSQL counts for latest real-browser write and expiry; development service health and safety metadata",
+  "browser_report": "browser-ba940e4a-22bb-40d3-898e-8dce913fae8d.json",
+  "browser_operation": {
+    "operation_id": "658088ff-7337-49ae-9a9d-5a987a97bba7",
+    "correlation_id": "6479689c-7c3e-4811-8709-ff2e565abae7",
+    "product": {
+      "id": "42daa2b4-7f99-4af2-b36e-5798c34c367b",
+      "quantity": 2,
+      "version": 2,
+      "household_id": "577e1506-59f3-49ba-9b3f-9431d309c73a"
+    },
+    "counts": {
+      "ledger": 1,
+      "outbox": 1,
+      "products": 1,
+      "delivered": 1
+    }
+  },
+  "expired_operation": {
+    "operation_id": "3c7d5ad1-88c9-4dc6-aedb-8d9e7d49f608",
+    "record_id": "7295dc2b-d64e-4109-a3d2-2e24549ca5cb",
+    "durable_status": "expired",
+    "source": "actual development acceptance command payload, read through project-specific SQL",
+    "committed_effects": 0
+  },
+  "service_health": {
+    "pid": 1512380,
+    "at": "2026-11-20T12:14:00.999Z",
+    "connected": true,
+    "clock_healthy": true,
+    "database": "shopping_stage0",
+    "port": 55439,
+    "processed": 9
+  },
+  "stage2_service_active": true,
+  "fault_controls_disabled": true,
+  "production_safety": {
+    "audit_at": "2026-11-20T11:42:42.944779+00:00",
+    "production_deployment_unchanged": true,
+    "production_secret_metadata_preserved": true,
+    "production_values_read_or_compared": false,
+    "production_sql": false
+  },
+  "status": "PASS"
+}

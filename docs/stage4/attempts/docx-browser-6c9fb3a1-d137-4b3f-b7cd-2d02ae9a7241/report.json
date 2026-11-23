@@ -1,0 +1,169 @@
+{
+  "id": "6c9fb3a1-d137-4b3f-b7cd-2d02ae9a7241",
+  "at": "2026-11-21T21:17:31.504Z",
+  "harness_sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "scope": "actual original UI snapshot of300synthetic PostgreSQL products and80checked Hebrew DOCX export; setup fixture is SQL, not claimed browser CRUD",
+  "checks": [
+    {
+      "name": "unique verified-owner household/category created by normal commands; SQL-only synthetic fixture300products/80checked installed atomically",
+      "status": "PASS",
+      "household_create_id": "4f794a83-40ef-41d1-bffb-a308502af338",
+      "category_create_id": "b51dba4e-9174-4aab-a767-cc89446389f1",
+      "fixture_rows": 300,
+      "checked_rows": 80
+    },
+    {
+      "name": "actual authenticated original UI loads bounded authoritative300-product snapshot",
+      "status": "PASS",
+      "snapshot": {
+        "products": 300,
+        "bytes": 99794,
+        "household_revision": 3
+      }
+    },
+    {
+      "name": "actual UI80-item export commits history/checkedclear/usage exactly once and downloads4-column Hebrew quantities",
+      "status": "PASS",
+      "operation_id": "ba2231db-d4fe-41d7-9a20-9798decdf673",
+      "correlation_id": "af6b78a7-f921-4449-a245-b38c25936fb3",
+      "history_id": "c3152252-9fee-4554-9bca-7e3a6c768f78",
+      "counts": {
+        "total": 300,
+        "checked": 0,
+        "used": 80,
+        "ledger": 1,
+        "outbox": 1
+      },
+      "document": {
+        "file": "docs/stage4/attempts/docx-browser-6c9fb3a1-d137-4b3f-b7cd-2d02ae9a7241/browser-he-four-column.docx",
+        "columns": 4,
+        "landscape": true,
+        "table_visually_rtl": true,
+        "item_count": 80,
+        "cell_text_in_xml_order": [
+          [
+            "קניות לבדיקה",
+            "☐ מוצר בדיקה 001 ×3",
+            "☐ מוצר בדיקה 002",
+            "☐ מוצר בדיקה 003",
+            "☐ מוצר בדיקה 004",
+            "☐ מוצר בדיקה 005",
+            "☐ מוצר בדיקה 006",
+            "☐ מוצר בדיקה 007",
+            "☐ מוצר בדיקה 008",
+            "☐ מוצר בדיקה 009",
+            "☐ מוצר בדיקה 010",
+            "☐ מוצר בדיקה 011 ×3",
+            "☐ מוצר בדיקה 012",
+            "☐ מוצר בדיקה 013",
+            "☐ מוצר בדיקה 014",
+            "☐ מוצר בדיקה 015",
+            "☐ מוצר בדיקה 016",
+            "☐ מוצר בדיקה 017",
+            "☐ מוצר בדיקה 018",
+            "☐ מוצר בדיקה 019",
+            "☐ מוצר בדיקה 020",
+            "☐ מוצר בדיקה 021 ×3",
+            "☐ מוצר בדיקה 022",
+            "☐ מוצר בדיקה 023",
+            "☐ מוצר בדיקה 024",
+            ""
+          ],
+          [
+            "קניות לבדיקה - המשך",
+            "☐ מוצר בדיקה 025",
+            "☐ מוצר בדיקה 026",
+            "☐ מוצר בדיקה 027",
+            "☐ מוצר בדיקה 028",
+            "☐ מוצר בדיקה 029",
+            "☐ מוצר בדיקה 030",
+            "☐ מוצר בדיקה 031 ×3",
+            "☐ מוצר בדיקה 032",
+            "☐ מוצר בדיקה 033",
+            "☐ מוצר בדיקה 034",
+            "☐ מוצר בדיקה 035",
+            "☐ מוצר בדיקה 036",
+            "☐ מוצר בדיקה 037",
+            "☐ מוצר בדיקה 038",
+            "☐ מוצר בדיקה 039",
+            "☐ מוצר בדיקה 040",
+            "☐ מוצר בדיקה 041 ×3",
+            "☐ מוצר בדיקה 042",
+            "☐ מוצר בדיקה 043",
+            "☐ מוצר בדיקה 044",
+            "☐ מוצר בדיקה 045",
+            "☐ מוצר בדיקה 046",
+            "☐ מוצר בדיקה 047",
+            "☐ מוצר בדיקה 048",
+            ""
+          ],
+          [
+            "קניות לבדיקה - המשך",
+            "☐ מוצר בדיקה 049",
+            "☐ מוצר בדיקה 050",
+            "☐ מוצר בדיקה 051 ×3",
+            "☐ מוצר בדיקה 052",
+            "☐ מוצר בדיקה 053",
+            "☐ מוצר בדיקה 054",
+            "☐ מוצר בדיקה 055",
+            "☐ מוצר בדיקה 056",
+            "☐ מוצר בדיקה 057",
+            "☐ מוצר בדיקה 058",
+            "☐ מוצר בדיקה 059",
+            "☐ מוצר בדיקה 060",
+            "☐ מוצר בדיקה 061 ×3",
+            "☐ מוצר בדיקה 062",
+            "☐ מוצר בדיקה 063",
+            "☐ מוצר בדיקה 064",
+            "☐ מוצר בדיקה 065",
+            "☐ מוצר בדיקה 066",
+            "☐ מוצר בדיקה 067",
+            "☐ מוצר בדיקה 068",
+            "☐ מוצר בדיקה 069",
+            "☐ מוצר בדיקה 070",
+            "☐ מוצר בדיקה 071 ×3",
+            "☐ מוצר בדיקה 072",
+            ""
+          ],
+          [
+            "קניות לבדיקה - המשך",
+            "☐ מוצר בדיקה 073",
+            "☐ מוצר בדיקה 074",
+            "☐ מוצר בדיקה 075",
+            "☐ מוצר בדיקה 076",
+            "☐ מוצר בדיקה 077",
+            "☐ מוצר בדיקה 078",
+            "☐ מוצר בדיקה 079",
+            "☐ מוצר בדיקה 080",
+            ""
+          ]
+        ],
+        "title": "🛒 FutureCart רשימת קניות",
+        "physical_column_rendering_verified": false
+      }
+    },
+    {
+      "name": "refresh safely retrieves300retained products after export with checked states cleared",
+      "status": "PASS"
+    },
+    {
+      "name": "actual history Add Selected restores80products including quantity labels while retaining current quantities and usage",
+      "status": "PASS",
+      "operation_id": "a2d53cf7-f30e-4a39-af06-4793bdeb90d6",
+      "correlation_id": "df40c94a-707e-42db-b36f-99e48b7ea21d",
+      "counts": {
+        "checked": 80,
+        "used": 80,
+        "quantity3": 30
+      }
+    }
+  ],
+  "deployment": {
+    "id": "dpl_Hr7RToM69ob52HAz6e2rtA4upyD6",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+    "url": "shopping-list-321ljd788-0012ab-5576s-projects.vercel.app"
+  },
+  "household_id": "bad41dd8-ade9-4626-8796-6cd4c61be699",
+  "status": "PASS",
+  "docx": "docs/stage4/attempts/docx-browser-6c9fb3a1-d137-4b3f-b7cd-2d02ae9a7241/browser-he-four-column.docx"
+}

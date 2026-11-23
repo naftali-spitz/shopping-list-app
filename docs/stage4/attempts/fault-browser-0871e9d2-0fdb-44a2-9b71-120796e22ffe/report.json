@@ -1,0 +1,32 @@
+{
+  "id": "0871e9d2-0fdb-44a2-9b71-120796e22ffe",
+  "at": "2026-11-22T15:53:57.837Z",
+  "scope": "actual original-app browser adapter with bounded dedicated listener MQTT stream interruption and separately delayed HTTPS callback; no router/ISP/system firewall faults",
+  "checks": [
+    {
+      "name": "bounded8s actual owned MQTT stream interruption preserves pending then commits once",
+      "status": "PASS",
+      "operation_id": "fbb3b369-d964-4fe9-b5a5-6329311173c1",
+      "correlation_id": "e62f2a2b-57e0-47da-8112-ed9e9b9c6581"
+    },
+    {
+      "name": "actual PostgreSQL commit remains UI pending during22s callback refusal then Saved and same-ID retry has one effect",
+      "status": "PASS",
+      "operation_id": "4e959120-6f3e-489a-a570-9fb0a75e3ff7",
+      "correlation_id": "ebd242a0-c438-4782-bd46-ba27ad14321a",
+      "outbox": {
+        "attempts": 19,
+        "delivered_at": "2026-11-22T15:55:02.832Z"
+      }
+    }
+  ],
+  "harness_sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "deployment": {
+    "id": "dpl_Hr7RToM69ob52HAz6e2rtA4upyD6",
+    "url": "shopping-list-321ljd788-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+    "git_ref": "feature/flespi-home-backend"
+  },
+  "status": "PASS",
+  "faults_disabled": true
+}

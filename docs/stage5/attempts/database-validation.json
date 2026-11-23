@@ -1,0 +1,41 @@
+{
+  "project": "njomxqthjglqesxchlbm",
+  "production_access_or_writes": false,
+  "tests": [
+    {
+      "script": "../database-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: mode, derivation, idempotence, actor/household isolation, OFF, privileges, retention, business preservation"
+    },
+    {
+      "script": "../analytics-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: 250 operations across pages, duplicate evidence counted once, retry attribution, P50/P95/P99 guard, route separation, authorization"
+    },
+    {
+      "script": "../capacity-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: isolated capacity rejection leaves durable shopping acceptance intact; no successful persistence acknowledgement"
+    },
+    {
+      "script": "../read-outcomes-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: snapshot/found read outcomes counted as successful"
+    },
+    {
+      "script": "../archive-backfill-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: archive sums/counts across cleanup passes, post-OFF durable-header backfill, no business deletion"
+    },
+    {
+      "script": "../action-boundary-tests.sql",
+      "transaction": "BEGIN / ROLLBACK",
+      "result": "PASS: action-entry and legacy operation-creation latency distributions remain separate"
+    }
+  ],
+  "advisors": {
+    "new_monitoring_info": "Forced RLS with no client policies is intentional: private schema, no public usage/table grants, service-only invoker RPCs. Trigger definer has pg_catalog search path and revoked public execution.",
+    "preexisting_warnings": "Existing public household/session security-definer RPC and Auth password-protection advisories were observed and not changed by this task.",
+    "documentation": "https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy"
+  }
+}

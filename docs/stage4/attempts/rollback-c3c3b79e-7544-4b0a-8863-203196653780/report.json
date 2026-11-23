@@ -1,0 +1,36 @@
+{
+  "id": "c3c3b79e-7544-4b0a-8863-203196653780",
+  "at": "2026-11-22T16:07:13.100Z",
+  "scope": "actual feature Preview Stage4 flag off/on; original Supabase Dev UI and retained PostgreSQL outcomes; no production deploy or data change",
+  "checks": [
+    {
+      "name": "real app pending ID retained while PostgreSQL already committed",
+      "status": "PASS",
+      "operation_id": "670ba1b0-f00d-408e-bb18-f5b835c74233"
+    }
+  ],
+  "source_sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "pending_operation_id": "670ba1b0-f00d-408e-bb18-f5b835c74233",
+  "browser_paused_during_rebuild": true,
+  "disabled": {
+    "id": "dpl_FpTAT92e3XD34Xm6TX9ZAtdJVZWh",
+    "url": "https://shopping-list-1ah3ooozh-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896"
+  },
+  "alias_selection_verified": "supabase",
+  "status": "FAIL",
+  "error": {
+    "name": "TimeoutError",
+    "message": "locator.waitFor: Timeout 90000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'New category', exact: true }) to be visible\u001b[22m\n"
+  },
+  "emergency_restored": {
+    "id": "dpl_AghnqpKDgWYumSBRug7MQCFpoQGd",
+    "url": "https://shopping-list-1ojdtezc9-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896"
+  },
+  "emergency_restore": true,
+  "followup": {
+    "diagnostic_report": "../rollback-diagnostic-aa90f3e7-15a4-4de7-88d2-714dee87a36b/diagnostic.json",
+    "observation": "Fresh context on immutable disabled deployment loads original Supabase Dev cards/data with no page errors. Same-context reload after route removal also works against unchanged enabled alias. Failure remains scoped to in-place alias/backend transition; full rollback not yet demonstrated."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "renderer": "LibreOffice25.2.3.2 genuine DOCX->PDF->PNG; Microsoft Word itself not executed",
+  "review": "Corrected source Hebrew starts at right and proceeds left; title/summary/item lines align right. English remains left-to-right and left aligned. Quantities and checkboxes remain readable;80items fit on one A4 landscape page in4columns. Actual browser-downloaded1column DOCX also renders correctly.",
+  "hebrew_heading_x_points": {
+    "1": 747.75,
+    "3": 552.8,
+    "5": 357.85,
+    "7": 162.85
+  },
+  "english_heading_x_points": {
+    "1": 89.392,
+    "3": 284.342,
+    "5": 479.292,
+    "7": 674.292
+  },
+  "checks": [
+    {
+      "case": "he-four-column",
+      "status": "PASS",
+      "visual_image_inspected": true,
+      "pages": 1,
+      "landscape_A4": true
+    },
+    {
+      "case": "en-four-column",
+      "status": "PASS",
+      "visual_image_inspected": true,
+      "pages": 1,
+      "landscape_A4": true
+    },
+    {
+      "case": "he-small",
+      "status": "PASS",
+      "visual_image_inspected": true,
+      "pages": 1,
+      "landscape_A4": true
+    },
+    {
+      "case": "browser-export",
+      "status": "PASS",
+      "visual_image_inspected": true,
+      "pages": 1,
+      "landscape_A4": true
+    }
+  ],
+  "font_limit": "The existing shopping-cart title emoji has no glyph in this Linux fallback font; list text, Hebrew, quantities and checkbox glyphs render. No title text/emoji redesign was performed."
+}

@@ -1,0 +1,482 @@
+{
+  "id": "6f84864e-e86a-4701-b93f-e3c537eabbca",
+  "at": "2026-11-22T15:52:23.570Z",
+  "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "focused actual original UI search, missing product, quick add and custom drag ordering; development only",
+  "checks": [
+    {
+      "name": "category-local search filters products and A-Z sorting preserves names",
+      "status": "PASS"
+    },
+    {
+      "name": "actual custom drag persists PostgreSQL display order and survives reload",
+      "status": "PASS",
+      "operation_id": "6f452e27-38f9-4092-951f-f6d9e754b188",
+      "ordered": [
+        {
+          "name": "Zulu 6f84864e",
+          "display_order": 100
+        },
+        {
+          "name": "Alpha 6f84864e",
+          "display_order": null
+        },
+        {
+          "name": "Middle 6f84864e",
+          "display_order": null
+        }
+      ]
+    },
+    {
+      "name": "actual global search quick-add checks existing product with one authoritative effect",
+      "status": "PASS",
+      "operation_id": "ed527199-e855-472f-8137-ec4a9671e126"
+    },
+    {
+      "name": "actual unmatched global search creates checked product in selected category exactly once",
+      "status": "PASS",
+      "operation_id": "c9711f4a-984d-4d8f-b3c8-6aa809928c48",
+      "category_id": "06b713bf-b18a-4de6-94e0-328c68cc17ad"
+    }
+  ],
+  "operations": [
+    {
+      "id": "311fc0d6-2f08-4568-9406-18c768743bc8",
+      "correlation_id": "b558cdfe-be36-47cd-b25e-cbc93627e04c",
+      "type": "stage4.category.create",
+      "expected_version": 0
+    },
+    {
+      "id": "1f0051ed-5c9d-4411-abe9-78c174ea3806",
+      "correlation_id": "b46b6762-5572-4b64-9a12-d10d65ef4009",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    },
+    {
+      "id": "735bc6c3-5bc6-4473-95fe-62d39b2fc1ef",
+      "correlation_id": "58e5cac1-d56c-4b61-a69e-f7d4d275a96c",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    },
+    {
+      "id": "aeda757d-9dcb-44f4-946e-ec9bcd9a8285",
+      "correlation_id": "fcfd8dc5-bb52-41a7-bde3-b290371b419c",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    },
+    {
+      "id": "6f452e27-38f9-4092-951f-f6d9e754b188",
+      "correlation_id": "91895e77-76d5-45e9-a8e7-562f3102395e",
+      "type": "stage4.product.update",
+      "expected_version": 1
+    },
+    {
+      "id": "ed527199-e855-472f-8137-ec4a9671e126",
+      "correlation_id": "2e96682d-b1fe-4901-b54e-66961fe216da",
+      "type": "stage4.product.update",
+      "expected_version": 2
+    },
+    {
+      "id": "c9711f4a-984d-4d8f-b3c8-6aa809928c48",
+      "correlation_id": "dcee4067-b673-4aed-a6fa-33bda4f68b42",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    }
+  ],
+  "requests": [
+    {
+      "at": "2026-11-22T15:52:32.201Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:52:33.774Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:52:35.354Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:52:36.768Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:52:37.540Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:52:38.936Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:52:41.697Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.category.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:52:43.128Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:52:45.103Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:52:47.019Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:52:47.882Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:52:50.843Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:52:51.688Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:52:53.140Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:52:55.188Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:52:56.727Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:52:58.610Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:52:59.450Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:01.338Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:53:02.254Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:53:04.834Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:06.640Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:08.105Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:53:09.578Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:10.341Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:12.066Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:53:14.616Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:16.052Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:17.474Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:53:21.060Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:22.460Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:23.922Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:53:24.523Z",
+      "account": 0,
+      "action": "status",
+      "status": 404,
+      "error": "request_rejected"
+    },
+    {
+      "at": "2026-11-22T15:53:26.008Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:27.483Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:28.566Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:30.058Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:53:30.876Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:53:31.602Z",
+      "account": 0,
+      "action": "status",
+      "status": 404,
+      "error": "request_rejected"
+    },
+    {
+      "at": "2026-11-22T15:53:33.008Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:34.910Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:36.352Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:53:38.245Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:39.430Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:41.904Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:42.741Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-22T15:53:44.153Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-22T15:53:46.058Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-22T15:53:47.509Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-22T15:53:49.865Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    }
+  ],
+  "focused_cross_tab_continuation": false,
+  "deployment": {
+    "id": "dpl_Hr7RToM69ob52HAz6e2rtA4upyD6",
+    "url": "shopping-list-321ljd788-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+    "git_ref": "feature/flespi-home-backend",
+    "state": "READY",
+    "target": null
+  }
+}

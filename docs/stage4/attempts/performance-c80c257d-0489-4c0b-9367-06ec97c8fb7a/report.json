@@ -1,0 +1,477 @@
+{
+  "id": "c80c257d-0489-4c0b-9367-06ec97c8fb7a",
+  "at": "2026-11-22T21:34:57.879Z",
+  "label": "stage5-monitoring-ON",
+  "scope": "actual original UI, experimental development Preview; own synthetic list; correlated browser and PostgreSQL timings, no fault injection",
+  "samples": [
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 5590,
+      "automation_action_to_visible_ms": 700,
+      "kind": "category.create",
+      "operation_id": "f43a8efe-a520-4d2d-82d4-e294dacfff50",
+      "correlation_id": "799a3463-b3bd-40a3-a889-0c9466db607f",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 82,
+      "tap_to_api_acceptance_ms": 1925,
+      "tap_to_saved_ms": 4972.899999856949,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 283.5231520000016,
+        "mqtt_puback_ms": 93.5389739999955,
+        "authentication_ms": 687,
+        "durable_gateway_ms": 556,
+        "mqtt_ms": 379,
+        "handler_ms": 1624
+      },
+      "database_commit_at": "2026-11-22T21:35:23.860Z",
+      "outbox_created_at": "2026-11-22T21:35:23.860Z",
+      "outbox_delivered_at": "2026-11-22T21:35:25.406Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6894,
+      "automation_action_to_visible_ms": 709,
+      "kind": "product.create",
+      "operation_id": "b5febcc4-c0f3-4b45-a187-7ad544124e15",
+      "correlation_id": "27c366ce-62da-4d8f-a628-01e61aa5476b",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 87,
+      "tap_to_api_acceptance_ms": 3624,
+      "tap_to_saved_ms": 6273,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 285.42366400000174,
+        "mqtt_puback_ms": 93.85008499999822,
+        "authentication_ms": 259,
+        "durable_gateway_ms": 569,
+        "mqtt_ms": 382,
+        "handler_ms": 1211
+      },
+      "database_commit_at": "2026-11-22T21:35:31.644Z",
+      "outbox_created_at": "2026-11-22T21:35:31.644Z",
+      "outbox_delivered_at": "2026-11-22T21:35:33.063Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 7438,
+      "automation_action_to_visible_ms": 249,
+      "kind": "product.create",
+      "operation_id": "e8aeb1b9-eee7-4c18-b911-3aebf1b475cb",
+      "correlation_id": "0d1a898c-02a5-495c-ab58-b3e0ca98b18a",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 84,
+      "tap_to_api_acceptance_ms": 1589,
+      "tap_to_saved_ms": 7273.400000095367,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 322.2588790000009,
+        "mqtt_puback_ms": 93.28599899999972,
+        "authentication_ms": 240,
+        "durable_gateway_ms": 552,
+        "mqtt_ms": 417,
+        "handler_ms": 1211
+      },
+      "database_commit_at": "2026-11-22T21:35:36.010Z",
+      "outbox_created_at": "2026-11-22T21:35:36.010Z",
+      "outbox_delivered_at": "2026-11-22T21:35:37.085Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6176,
+      "automation_action_to_visible_ms": 251,
+      "kind": "product.create",
+      "operation_id": "2ae8a693-3611-4c65-a817-0eeaf841b8ea",
+      "correlation_id": "13168baa-b42b-4fc0-82aa-4a5c83d8c8aa",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 84,
+      "tap_to_api_acceptance_ms": 2600,
+      "tap_to_saved_ms": 6014.5,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 278.12598199999775,
+        "mqtt_puback_ms": 91.29785599999741,
+        "authentication_ms": 253,
+        "durable_gateway_ms": 533,
+        "mqtt_ms": 372,
+        "handler_ms": 1159
+      },
+      "database_commit_at": "2026-11-22T21:35:44.469Z",
+      "outbox_created_at": "2026-11-22T21:35:44.469Z",
+      "outbox_delivered_at": "2026-11-22T21:35:46.368Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6845,
+      "automation_action_to_visible_ms": 261,
+      "kind": "product.check",
+      "operation_id": "3c07d674-1328-4660-8113-103b4299dad6",
+      "correlation_id": "875ae8c1-198c-4bb9-974b-d310fcd4d4cd",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 87,
+      "tap_to_api_acceptance_ms": 4415,
+      "tap_to_saved_ms": 6676,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 271.827163000009,
+        "mqtt_puback_ms": 89.7901669999992,
+        "authentication_ms": 244,
+        "durable_gateway_ms": 500,
+        "mqtt_ms": 363,
+        "handler_ms": 1108
+      },
+      "database_commit_at": "2026-11-22T21:35:52.444Z",
+      "outbox_created_at": "2026-11-22T21:35:52.444Z",
+      "outbox_delivered_at": "2026-11-22T21:35:54.081Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 4997,
+      "automation_action_to_visible_ms": 281,
+      "kind": "product.uncheck",
+      "operation_id": "167f36af-0bce-468e-a78a-8aeb3b7c3694",
+      "correlation_id": "53c6d2e2-20a5-4aa0-9c03-a67c3da3a6c3",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 91,
+      "tap_to_api_acceptance_ms": 1831,
+      "tap_to_saved_ms": 4808.200000047684,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 273.1843829999998,
+        "mqtt_puback_ms": 90.44710200000554,
+        "authentication_ms": 638,
+        "durable_gateway_ms": 532,
+        "mqtt_ms": 366,
+        "handler_ms": 1537
+      },
+      "database_commit_at": "2026-11-22T21:35:56.798Z",
+      "outbox_created_at": "2026-11-22T21:35:56.798Z",
+      "outbox_delivered_at": "2026-11-22T21:35:58.306Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 8160,
+      "automation_action_to_visible_ms": 266,
+      "kind": "product.check",
+      "operation_id": "a9df55e2-2e9e-442d-ace7-91966da69784",
+      "correlation_id": "746f99e1-18b3-43d1-9eb2-e3159f748f3b",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 90,
+      "tap_to_api_acceptance_ms": 5625,
+      "tap_to_saved_ms": 7985.5,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 271.63137899999856,
+        "mqtt_puback_ms": 89.46424200000183,
+        "authentication_ms": 627,
+        "durable_gateway_ms": 539,
+        "mqtt_ms": 362,
+        "handler_ms": 1530
+      },
+      "database_commit_at": "2026-11-22T21:36:05.524Z",
+      "outbox_created_at": "2026-11-22T21:36:05.524Z",
+      "outbox_delivered_at": "2026-11-22T21:36:07.130Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 8341,
+      "automation_action_to_visible_ms": 274,
+      "kind": "product.uncheck",
+      "operation_id": "da62d02e-752b-4edd-aeaa-5558e6d04ee8",
+      "correlation_id": "ea5cbbd6-68f7-43ba-a28c-32ba6532b2b4",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 89,
+      "tap_to_api_acceptance_ms": 2065,
+      "tap_to_saved_ms": 8157.099999904633,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 286.46716300000844,
+        "mqtt_puback_ms": 93.52822799999558,
+        "authentication_ms": 647,
+        "durable_gateway_ms": 670,
+        "mqtt_ms": 387,
+        "handler_ms": 1706
+      },
+      "database_commit_at": "2026-11-22T21:36:10.218Z",
+      "outbox_created_at": "2026-11-22T21:36:10.218Z",
+      "outbox_delivered_at": "2026-11-22T21:36:11.365Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6045,
+      "automation_action_to_visible_ms": 266,
+      "kind": "product.check",
+      "operation_id": "360980bf-90dc-4e83-92d4-2564a373f449",
+      "correlation_id": "c0bdf54e-f01a-4a5b-b98d-02b3a9402285",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 89,
+      "tap_to_api_acceptance_ms": 2859,
+      "tap_to_saved_ms": 5869.400000095367,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 423.4915039999996,
+        "mqtt_puback_ms": 93.88565700000072,
+        "authentication_ms": 250,
+        "durable_gateway_ms": 548,
+        "mqtt_ms": 554,
+        "handler_ms": 1355
+      },
+      "database_commit_at": "2026-11-22T21:36:19.359Z",
+      "outbox_created_at": "2026-11-22T21:36:19.359Z",
+      "outbox_delivered_at": "2026-11-22T21:36:21.379Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 7149,
+      "automation_action_to_visible_ms": 263,
+      "kind": "product.uncheck",
+      "operation_id": "cf02c5fd-ccf3-40d4-b489-78ad37c11026",
+      "correlation_id": "0903ae6d-68de-42ea-9afa-9490a0cd57b1",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 89,
+      "tap_to_api_acceptance_ms": 4677,
+      "tap_to_saved_ms": 6978.300000190735,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 282.73522100000264,
+        "mqtt_puback_ms": 93.59491899999921,
+        "authentication_ms": 680,
+        "durable_gateway_ms": 553,
+        "mqtt_ms": 379,
+        "handler_ms": 1613
+      },
+      "database_commit_at": "2026-11-22T21:36:27.132Z",
+      "outbox_created_at": "2026-11-22T21:36:27.132Z",
+      "outbox_delivered_at": "2026-11-22T21:36:28.092Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 7977,
+      "automation_action_to_visible_ms": 177,
+      "kind": "product.check",
+      "operation_id": "0a434c12-555f-4df2-987a-8fc9aa366c17",
+      "correlation_id": "ddd22c8c-1dfe-471e-b947-5055a3aa5f7d",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 6,
+      "tap_to_api_acceptance_ms": 1891,
+      "tap_to_saved_ms": 7813.200000047684,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 278.438734000003,
+        "mqtt_puback_ms": 90.403495999999,
+        "authentication_ms": 674,
+        "durable_gateway_ms": 509,
+        "mqtt_ms": 372,
+        "handler_ms": 1556
+      },
+      "database_commit_at": "2026-11-22T21:36:31.574Z",
+      "outbox_created_at": "2026-11-22T21:36:31.574Z",
+      "outbox_delivered_at": "2026-11-22T21:36:33.282Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 5562,
+      "automation_action_to_visible_ms": 842,
+      "kind": "product.quantity",
+      "operation_id": "0d63d347-efd7-4f69-84f1-15a671b947f7",
+      "correlation_id": "21bfee58-3aae-409c-8c3b-c0ee772ddd14",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 48,
+      "tap_to_api_acceptance_ms": 1866,
+      "tap_to_saved_ms": 4768.899999856949,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 270.0357210000002,
+        "mqtt_puback_ms": 88.73277800000142,
+        "authentication_ms": 653,
+        "durable_gateway_ms": 529,
+        "mqtt_ms": 361,
+        "handler_ms": 1544
+      },
+      "database_commit_at": "2026-11-22T21:36:40.313Z",
+      "outbox_created_at": "2026-11-22T21:36:40.313Z",
+      "outbox_delivered_at": "2026-11-22T21:36:42.309Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 6834,
+      "automation_action_to_visible_ms": 88,
+      "kind": "product.quantity",
+      "operation_id": "19d6b184-dc2b-4dc3-a699-e5bfb1428d1c",
+      "correlation_id": "e4d3452e-bdfa-4bcd-bfe6-710c3982c199",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 41,
+      "tap_to_api_acceptance_ms": 1902,
+      "tap_to_saved_ms": 6788.400000095367,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 287.29292899999564,
+        "mqtt_puback_ms": 92.98032600000442,
+        "authentication_ms": 687,
+        "durable_gateway_ms": 539,
+        "mqtt_ms": 383,
+        "handler_ms": 1610
+      },
+      "database_commit_at": "2026-11-22T21:36:45.157Z",
+      "outbox_created_at": "2026-11-22T21:36:45.157Z",
+      "outbox_delivered_at": "2026-11-22T21:36:46.120Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    },
+    {
+      "measurement_start": "trusted DOM click",
+      "saved_boundary": "React Saved DOM and committed client storage",
+      "automation_action_to_saved_ms": 5781,
+      "automation_action_to_visible_ms": 88,
+      "kind": "product.quantity",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "context": "warm-browser-context",
+      "tap_to_visible_feedback_ms": 41,
+      "tap_to_api_acceptance_ms": 2808,
+      "tap_to_saved_ms": 5735.100000143051,
+      "api_status": "accepted_pending",
+      "api_timings": {
+        "mqtt_connect_ms": 287.3720390000017,
+        "mqtt_puback_ms": 94.70712900000217,
+        "authentication_ms": 251,
+        "durable_gateway_ms": 559,
+        "mqtt_ms": 386,
+        "handler_ms": 1197
+      },
+      "database_commit_at": "2026-11-22T21:36:52.929Z",
+      "outbox_created_at": "2026-11-22T21:36:52.929Z",
+      "outbox_delivered_at": "2026-11-22T21:36:54.363Z",
+      "callback_attempts": 1,
+      "clock_note": "Cross-host wall clocks not used for precise duration claims."
+    }
+  ],
+  "loads": [
+    {
+      "kind": "first-browser-context",
+      "navigation_to_ready_ms": 12940,
+      "cold_function_instance_known": false
+    },
+    {
+      "kind": "warm-browser-reload",
+      "navigation_to_ready_ms": 11424,
+      "cold_function_instance_known": false
+    }
+  ],
+  "harness_sha": "de51af84e99655538f12347be932da4f066624ed",
+  "deployment": {
+    "id": "dpl_GHMiX6HCdhpyrC1o88hKbpTzVGDi",
+    "sha": "4e0d4213315261e478e55c09cbc02c1ed38967e0",
+    "url": "shopping-list-r7nsg1egr-0012ab-5576s-projects.vercel.app"
+  },
+  "household_id": "69c78de5-5662-4ed9-b9f4-721847d4122e",
+  "network": {
+    "business": {
+      "requests": 73,
+      "bytes": 51541
+    },
+    "monitoring": {
+      "requests": 32,
+      "bytes": 39337
+    }
+  },
+  "browser_resources": {
+    "long_tasks": {
+      "count": 0,
+      "total_ms": 0
+    },
+    "cdp_metrics": [
+      {
+        "name": "ScriptDuration",
+        "value": 1.072871
+      },
+      {
+        "name": "TaskDuration",
+        "value": 3.822649
+      },
+      {
+        "name": "JSHeapUsedSize",
+        "value": 7982712
+      },
+      {
+        "name": "JSHeapTotalSize",
+        "value": 14295040
+      }
+    ]
+  },
+  "summary": {
+    "category.create": {
+      "n": 1,
+      "median_visible_feedback_ms": 82,
+      "median_api_acceptance_ms": 1925,
+      "median_saved_ms": 4972.899999856949,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.create": {
+      "n": 3,
+      "median_visible_feedback_ms": 84,
+      "median_api_acceptance_ms": 2600,
+      "median_saved_ms": 6273,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.check": {
+      "n": 4,
+      "median_visible_feedback_ms": 88,
+      "median_api_acceptance_ms": 3637,
+      "median_saved_ms": 7244.600000023842,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.uncheck": {
+      "n": 3,
+      "median_visible_feedback_ms": 89,
+      "median_api_acceptance_ms": 2065,
+      "median_saved_ms": 6978.300000190735,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    },
+    "product.quantity": {
+      "n": 3,
+      "median_visible_feedback_ms": 41,
+      "median_api_acceptance_ms": 1902,
+      "median_saved_ms": 5735.100000143051,
+      "tail_percentiles": "Not reported: exploratory small cohort"
+    }
+  },
+  "status": "PASS"
+}

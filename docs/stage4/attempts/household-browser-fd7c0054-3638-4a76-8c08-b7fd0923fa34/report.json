@@ -1,0 +1,27 @@
+{
+  "id": "fd7c0054-3638-4a76-8c08-b7fd0923fa34",
+  "at": "2026-11-21T15:52:55.790Z",
+  "harness_sha": "6c416f2a2248dba4cad6e154fe6cb5cc0785df67",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "actual original app household controls through protected Preview, real provider identity, flespi and isolated PostgreSQL; no service faults",
+  "checks": [
+    {
+      "name": "three existing password identities log into original application without provisioning",
+      "status": "PASS"
+    }
+  ],
+  "operations": [],
+  "deployment": {
+    "id": "dpl_59ZN9gJdbwmyhiiGqBdjgwVJQfMF",
+    "git_sha": "6c416f2a2248dba4cad6e154fe6cb5cc0785df67",
+    "git_ref": "feature/flespi-home-backend",
+    "url": "shopping-list-qkh0uvnmw-0012ab-5576s-projects.vercel.app",
+    "target": "preview",
+    "ready_state": "READY"
+  },
+  "status": "FAIL",
+  "error": {
+    "type": "Error",
+    "message": "Browser household assertion or selector failed; credential-bearing diagnostics omitted"
+  }
+}

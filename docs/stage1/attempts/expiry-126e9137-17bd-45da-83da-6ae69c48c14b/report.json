@@ -1,0 +1,10 @@
+{
+  "status": "FAIL",
+  "stage": 1,
+  "run_id": "126e9137-17bd-45da-83da-6ae69c48c14b",
+  "tested_at": "2026-11-20T03:38:36.234Z",
+  "checks": [],
+  "error_type": "Error",
+  "error_code": "EAI_AGAIN",
+  "note": "Credential-bearing exception suppressed."
+}

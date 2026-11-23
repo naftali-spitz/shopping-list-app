@@ -1,0 +1,290 @@
+{
+  "mode": "ON",
+  "outcome": "committed",
+  "records": [
+    {
+      "id": "b0e4d8c7-10f7-4100-8d50-d2afc52a24ea",
+      "mode": "ON",
+      "clock": "monotonic",
+      "spans": [
+        {
+          "stage": "listener_authentication",
+          "start_ms": 0,
+          "duration_ms": 334.4519159999909
+        },
+        {
+          "stage": "database",
+          "start_ms": 334.4519159999909,
+          "duration_ms": 7.304540999990422
+        },
+        {
+          "stage": "db_pool_wait",
+          "start_ms": 334.4519159999909,
+          "duration_ms": 0.059929999988526106
+        },
+        {
+          "stage": "household_lock_wait",
+          "start_ms": 334.9745889999904,
+          "duration_ms": 0.17900200001895428
+        },
+        {
+          "stage": "commit_confirmation",
+          "start_ms": 340.1216269999859,
+          "duration_ms": 1.6202420000336133
+        }
+      ],
+      "device": "other",
+      "source": "debian",
+      "metrics": {
+        "database_ms": 7.3,
+        "error_count": 0,
+        "db_pool_wait_ms": 0.06,
+        "commit_confirmation_ms": 1.62,
+        "household_lock_wait_ms": 0.18,
+        "listener_authentication_ms": 334.45
+      },
+      "version": "de51af84e99655538f12347be932da4f066624ed",
+      "complete": false,
+      "sequence": 164,
+      "session_id": "6250621a-aa5b-42f7-854e-b883ff59d61d",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "schema_version": 1,
+      "application_version": "0.1.0"
+    },
+    {
+      "id": "35585ad9-557e-475a-a0f5-1f80888ada74",
+      "mode": "ON",
+      "clock": "monotonic",
+      "spans": [
+        {
+          "stage": "server_validation",
+          "start_ms": 0,
+          "duration_ms": 0.5796499999705702
+        },
+        {
+          "stage": "gateway_progress",
+          "start_ms": 0.5796499999705702,
+          "duration_ms": 365.3918919999851
+        },
+        {
+          "stage": "listener_processing",
+          "start_ms": 0,
+          "duration_ms": 707.7771929999581
+        }
+      ],
+      "device": "other",
+      "source": "debian",
+      "metrics": {
+        "gateway_progress_ms": 365.39,
+        "mqtt_duplicate_count": 0,
+        "server_validation_ms": 0.58,
+        "listener_processing_ms": 707.78
+      },
+      "version": "de51af84e99655538f12347be932da4f066624ed",
+      "complete": false,
+      "sequence": 165,
+      "session_id": "6250621a-aa5b-42f7-854e-b883ff59d61d",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "schema_version": 1,
+      "application_version": "0.1.0"
+    },
+    {
+      "id": "1f05d786-80bb-46a1-b425-0d799b8191e3",
+      "mode": "ON",
+      "clock": "monotonic",
+      "spans": [
+        {
+          "stage": "callback",
+          "start_ms": 0,
+          "duration_ms": 823.785681999987
+        }
+      ],
+      "device": "other",
+      "source": "debian",
+      "metrics": {
+        "callback_ms": 823.78,
+        "error_count": 0
+      },
+      "version": "de51af84e99655538f12347be932da4f066624ed",
+      "complete": false,
+      "sequence": 166,
+      "session_id": "6250621a-aa5b-42f7-854e-b883ff59d61d",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "schema_version": 1,
+      "application_version": "0.1.0"
+    },
+    {
+      "id": "adc6a442-8882-4ab9-96e6-7064c8e4ec87",
+      "mode": "ON",
+      "clock": "monotonic",
+      "spans": [
+        {
+          "stage": "callback",
+          "start_ms": 0,
+          "duration_ms": 1056.5496730000013
+        }
+      ],
+      "device": "other",
+      "source": "debian",
+      "metrics": {
+        "callback_ms": 1056.55,
+        "error_count": 0
+      },
+      "version": "de51af84e99655538f12347be932da4f066624ed",
+      "complete": false,
+      "sequence": 167,
+      "session_id": "6250621a-aa5b-42f7-854e-b883ff59d61d",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "schema_version": 1,
+      "application_version": "0.1.0"
+    },
+    {
+      "id": "b2234006-bedf-4e3b-af24-fa81ac4191e3",
+      "mode": "ON",
+      "clock": "monotonic",
+      "spans": [],
+      "device": "other",
+      "source": "debian",
+      "metrics": {
+        "outbox_attempt_count": 1
+      },
+      "version": "de51af84e99655538f12347be932da4f066624ed",
+      "complete": false,
+      "sequence": 168,
+      "session_id": "6250621a-aa5b-42f7-854e-b883ff59d61d",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "schema_version": 1,
+      "application_version": "0.1.0"
+    },
+    {
+      "id": "4b57fb25-6abc-4da5-958d-a9416552d989",
+      "mode": "ON",
+      "clock": "monotonic",
+      "spans": [
+        {
+          "stage": "client_identity",
+          "start_ms": 0,
+          "duration_ms": 18.399999856948853
+        },
+        {
+          "stage": "operation_creation",
+          "start_ms": 18.399999856948853,
+          "duration_ms": 1.7000000476837158
+        },
+        {
+          "stage": "optimistic_notification",
+          "start_ms": 20.09999990463257,
+          "duration_ms": 0
+        },
+        {
+          "stage": "optimistic_frame",
+          "start_ms": 0,
+          "duration_ms": 63.59999990463257
+        },
+        {
+          "stage": "client_queue",
+          "start_ms": 20.09999990463257,
+          "duration_ms": 1358.2000000476837
+        },
+        {
+          "stage": "api_request",
+          "start_ms": 1379.3999998569489,
+          "duration_ms": 1428.6000001430511
+        },
+        {
+          "stage": "polling",
+          "start_ms": 3459,
+          "duration_ms": 764.5
+        },
+        {
+          "stage": "polling",
+          "start_ms": 4875.700000047684,
+          "duration_ms": 841
+        },
+        {
+          "stage": "client_apply",
+          "start_ms": 5716.700000047684,
+          "duration_ms": 0.09999990463256836
+        }
+      ],
+      "device": "desktop",
+      "source": "browser",
+      "metrics": {
+        "mqtt_ms": 386,
+        "poll_count": 2,
+        "polling_ms": 1605.5,
+        "error_count": 0,
+        "retry_count": 0,
+        "api_request_ms": 1428.6,
+        "mqtt_puback_ms": 94.71,
+        "action_saved_ms": 5718.4,
+        "client_apply_ms": 0.1,
+        "client_queue_ms": 1358.2,
+        "mqtt_connect_ms": 287.37,
+        "authentication_ms": 251,
+        "client_identity_ms": 18.4,
+        "durable_gateway_ms": 559,
+        "optimistic_frame_ms": 63.6,
+        "action_optimistic_ms": 63.6,
+        "operation_creation_ms": 1.7,
+        "optimistic_notification_ms": 0
+      },
+      "version": "4e0d4213315261e478e55c09cbc02c1ed38967e0",
+      "complete": false,
+      "sequence": 27,
+      "session_id": "610075ac-32b0-4aa6-a9aa-da56c49d6cc6",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "browser_state": "Saved",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "schema_version": 1,
+      "start_boundary": "home_action_entry",
+      "application_version": "0.1.0"
+    },
+    {
+      "id": "d64e64f4-a7a8-4cad-b8f8-83e87e38c8db",
+      "mode": "ON",
+      "clock": "monotonic",
+      "spans": [
+        {
+          "stage": "render_frame",
+          "start_ms": 5718.399999856949,
+          "duration_ms": 42
+        }
+      ],
+      "device": "other",
+      "source": "browser",
+      "metrics": {
+        "render_frame_ms": 42,
+        "action_saved_render_ms": 5760.4
+      },
+      "version": "4e0d4213315261e478e55c09cbc02c1ed38967e0",
+      "complete": false,
+      "sequence": 28,
+      "session_id": "610075ac-32b0-4aa6-a9aa-da56c49d6cc6",
+      "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+      "browser_state": "Saved",
+      "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+      "schema_version": 1,
+      "start_boundary": "home_action_entry",
+      "application_version": "0.1.0"
+    }
+  ],
+  "ended_at": "2026-11-22T21:36:53.473236+00:00",
+  "started_at": "2026-11-22T21:36:49.583+00:00",
+  "accepted_at": "2026-11-22T21:36:51.712688+00:00",
+  "environment": "development",
+  "last_updated": "2026-11-22T21:36:54.906055+00:00",
+  "operation_id": "393a58b7-92e7-4112-999d-e85683b85367",
+  "backend_route": "flespi",
+  "frontend_host": "vercel",
+  "callback_count": 2,
+  "correlation_id": "ad97283b-1732-413c-bef7-aa740925f34c",
+  "operation_type": "stage4.product.update",
+  "trace_completeness": "partial",
+  "clock_note": "action_* metrics start at home mutation entry before identity lookup; legacy tap_* metrics start at operation creation. These are distinct cohorts, not the physical pointer event; started_at is browser wall time; accepted_at/ended_at are gateway wall time. Cross-host subtraction is not exact latency. Use source-local monotonic durations; spans can overlap."
+}

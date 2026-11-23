@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "scope": "isolated local preflight cluster only; not boot/systemd readiness",
+  "version": "postgres (PostgreSQL) 17.12 (Debian 17.12-0+deb13u1)",
+  "host": "127.0.0.1",
+  "port": "55439",
+  "database": "shopping_stage0",
+  "role": "shopping_stage0_app",
+  "role_privileges": "f|f|f|f",
+  "tests": [
+    "transaction rollback",
+    "commit",
+    "create database denied",
+    "admin role denied",
+    "other database connection denied",
+    "custom-format backup",
+    "restore exact synthetic row",
+    "restart preserves commit",
+    "loopback-only configuration"
+  ],
+  "running_after_test": false
+}

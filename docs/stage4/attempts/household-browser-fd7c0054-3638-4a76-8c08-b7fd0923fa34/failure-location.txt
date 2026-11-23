@@ -1,0 +1,6 @@
+locator.fill: Unexpected token ":" while parsing css selector "ancestor::form". Did you mean to CSS.escape it?
+Call log:
+[2m  - waiting for internal:role=heading[name="Create household"s] >> ancestor::form >> internal:label="Household name"s[22m
+
+    at createHousehold (/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage4-household-browser.mjs:50:56)
+    at async file:///home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/scripts/stage4-household-browser.mjs:77:11

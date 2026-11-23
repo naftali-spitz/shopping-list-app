@@ -1,0 +1,14 @@
+{
+  "id": "dafa37c5-291e-441f-be1f-3d84f8af92fc",
+  "at": "2026-11-21T15:50:40.824Z",
+  "sha": "6c416f2a2248dba4cad6e154fe6cb5cc0785df67",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "actual original UI; browser-only offline, refresh, duplicate request, concurrent quantity, stale snapshot and logout tests; no Debian/service faults",
+  "checks": [],
+  "operations": [],
+  "status": "FAIL",
+  "error": {
+    "name": "TimeoutError",
+    "message": "locator.fill: Timeout 90000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Email', { exact: true })\u001b[22m\n"
+  }
+}

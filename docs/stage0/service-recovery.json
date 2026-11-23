@@ -1,0 +1,8 @@
+{
+  "scope": "dedicated dev unit only",
+  "crash_auto_restart": "PASS",
+  "committed_synthetic_row_preserved": true,
+  "loopback_port": 55439,
+  "linger_enabled": true,
+  "live_reboot_performed": false
+}

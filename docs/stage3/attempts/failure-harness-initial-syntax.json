@@ -1,0 +1,1 @@
+{"status":"FAIL","scope":"harness startup only; no tests executed","command":"node scripts/stage3-failures.mjs quick","error":"SyntaxError: Identifier op has already been declared","correction":"Renamed the independent bad-credential fixture variable; corrective rerun receives a separate report UUID."}

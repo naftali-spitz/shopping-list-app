@@ -1,0 +1,26 @@
+{
+  "id": "6005856b-6659-46bf-908a-1865fed8278f",
+  "at": "2026-11-20T13:03:18.624Z",
+  "target": "https://shopping-list-app-git-develop-0012ab-5576s-projects.vercel.app",
+  "source_sha": "88af18681659fe69b0f2ca3122bc308de563e54f",
+  "scope": "original Supabase Dev app at develop Preview, actual browser clicks and authoritative development PostgREST reads; no Debian/feature writes",
+  "samples": [],
+  "checks": [
+    {
+      "name": "authenticated original develop UI uses existing Dev identity/session",
+      "status": "PASS"
+    }
+  ],
+  "load_samples": [
+    {
+      "kind": "first-browser-context-load",
+      "navigation_to_app_ready_ms": 2602,
+      "cold_function_instance_known": false
+    }
+  ],
+  "status": "FAIL",
+  "error": {
+    "name": "Error",
+    "message": "locator.waitFor: Error: strict mode violation: getByRole('heading', { name: 'Stage4 baseline 6005856b', exact: true }).locator('..').locator('..').locator('..').getByText('Baseline 6005856b 1', { exact: true }) resolved to 2 elements:\n    1) <span dir=\"auto\" class=\"rounded-full border px-3 py-1 text-sm opacity-70 border-slate-200 bg-slate-100\">Baseline 6005856b 1</span> aka getByText('Baseline 6005856b').nth(1)\n    2) <span dir=\"auto\" class=\"min-w-0 truncate\">Baseline 6005856b 1</span> aka getByRole('button', { name: 'Baseline 6005856b 1 0x' })\n\nCall log:\n\u001b[2m  - waiting for getByRole('heading', { name: 'Stage4 baseline 6005856b', exact: true }).locator('..').locator('..').locator('..').getByText('Baseline 6005856b 1', { exact: true }) to be visible\u001b[22m\n"
+  }
+}

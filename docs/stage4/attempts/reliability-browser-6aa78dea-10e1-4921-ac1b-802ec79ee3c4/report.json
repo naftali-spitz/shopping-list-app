@@ -1,0 +1,1189 @@
+{
+  "id": "6aa78dea-10e1-4921-ac1b-802ec79ee3c4",
+  "at": "2026-11-21T15:58:31.381Z",
+  "sha": "5c3014949271d46a349a3b3b45f91d0a1061bf0f",
+  "preview": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "scope": "actual original UI; browser-only offline, refresh, duplicate request, concurrent quantity, stale snapshot and logout tests; no Debian/service faults",
+  "checks": [
+    {
+      "name": "two authenticated original app views receive real created/checked product",
+      "status": "PASS",
+      "category_id": "91239a4f-79d5-4c21-9805-a503a1d2f64d",
+      "product_id": "3106b22d-bac9-4bb8-bc07-a74758af5415"
+    },
+    {
+      "name": "three immediate check taps preserve existing pending guard and produce one intended committed check",
+      "status": "PASS",
+      "operation_id": "7710206c-6cb6-436b-8cb3-1eab97e45d48",
+      "committed_checked_updates": 1
+    },
+    {
+      "name": "offline quantity is optimistic and pending; reconnect commits original durable ID exactly once",
+      "status": "PASS",
+      "operation_id": "37afa267-6870-4b3b-948b-cf091cb26695"
+    },
+    {
+      "name": "same-ID retry after lost acknowledgement returns prior commit without another quantity increment",
+      "status": "PASS",
+      "operation_id": "37afa267-6870-4b3b-948b-cf091cb26695"
+    },
+    {
+      "name": "refresh preserves pending ID while committed result is delayed; retrieval recovers Saved",
+      "status": "PASS",
+      "operation_id": "1b41e2df-bf45-458a-b688-748fd7a01280",
+      "fault_scope": "owned browser status response only; actual callback not delayed"
+    },
+    {
+      "name": "two users at one product version produce one commit and one explicit conflict; views converge",
+      "status": "PASS",
+      "operations": [
+        {
+          "id": "924e63cf-22ef-41ce-aa12-2a42e8b15691",
+          "status": "committed"
+        },
+        {
+          "id": "8b510f57-10a0-488e-a20a-6aaec72dc3ab",
+          "status": "version_conflict"
+        }
+      ],
+      "product": {
+        "id": "3106b22d-bac9-4bb8-bc07-a74758af5415",
+        "name": "Reliable product 6aa78dea",
+        "quantity": 4,
+        "checked": true,
+        "version": 5,
+        "household_id": "577e1506-59f3-49ba-9b3f-9431d309c73a",
+        "deleted_at": null
+      }
+    },
+    {
+      "name": "delayed older full snapshot cannot revert newer authoritative household revision or quantity",
+      "status": "PASS",
+      "revision_before": 61,
+      "older_revision": "60"
+    },
+    {
+      "name": "three rapid quantity taps reserve intended sequence and commit exactly once each",
+      "status": "PASS",
+      "operations": [
+        {
+          "id": "577be4fd-653e-4ece-bf03-c145423fbb4d",
+          "quantity": 5,
+          "expected_version": 5
+        },
+        {
+          "id": "b0fa97ce-1032-47a8-92c1-c10d4a21621d",
+          "quantity": 6,
+          "expected_version": 6
+        },
+        {
+          "id": "3cffe60a-fd79-4d99-a568-2f21343d68d5",
+          "quantity": 7,
+          "expected_version": 7
+        }
+      ]
+    },
+    {
+      "name": "rapid uncheck and subsequent deliberate recheck preserve quantity and one effect per intent",
+      "status": "PASS",
+      "unchecked_id": "fdda1077-9cb9-40ad-979f-b0112178a312",
+      "rechecked_id": "c03dbea3-0698-4fdb-ada3-8cd4bffb39b1",
+      "product": {
+        "id": "3106b22d-bac9-4bb8-bc07-a74758af5415",
+        "name": "Reliable product 6aa78dea",
+        "quantity": 7,
+        "checked": true,
+        "version": 10,
+        "household_id": "577e1506-59f3-49ba-9b3f-9431d309c73a",
+        "deleted_at": null
+      }
+    }
+  ],
+  "operations": [
+    {
+      "id": "dc59173b-8ee0-4e02-9611-2009e2e3234c",
+      "correlation_id": "be4fc0b1-7d99-4c1a-b19f-8d10da3d8914",
+      "type": "stage4.category.create",
+      "expected_version": 0
+    },
+    {
+      "id": "e2388988-b5b1-448b-ade6-45b14b1d4e78",
+      "correlation_id": "223cd5d9-5fbb-4010-a315-5bd141debf9e",
+      "type": "stage4.product.create",
+      "expected_version": 0
+    },
+    {
+      "id": "7710206c-6cb6-436b-8cb3-1eab97e45d48",
+      "correlation_id": "c7bdda7b-0a29-46c8-8e06-b03e2a9394dd",
+      "type": "stage4.product.update",
+      "expected_version": 1
+    },
+    {
+      "id": "37afa267-6870-4b3b-948b-cf091cb26695",
+      "correlation_id": "e9b38c01-19b9-47df-b166-2e913d5c7ba4",
+      "type": "stage4.product.update"
+    },
+    {
+      "id": "1b41e2df-bf45-458a-b688-748fd7a01280",
+      "correlation_id": "879fb79a-c2b6-43ad-9aa7-4465011cd19e",
+      "type": "stage4.product.update",
+      "expected_version": 3
+    },
+    {
+      "id": "924e63cf-22ef-41ce-aa12-2a42e8b15691",
+      "correlation_id": "c817505a-6d2c-4d1f-bcc1-35803d303aa0",
+      "type": "stage4.product.update",
+      "expected_version": 4
+    },
+    {
+      "id": "8b510f57-10a0-488e-a20a-6aaec72dc3ab",
+      "correlation_id": "0ef97cf5-98ef-4aab-9e3d-9547c27909a2",
+      "type": "stage4.product.update",
+      "expected_version": 4
+    },
+    {
+      "id": "fdda1077-9cb9-40ad-979f-b0112178a312",
+      "correlation_id": "948a8546-f8b4-4b25-abbc-59c234da3b81",
+      "type": "stage4.product.update",
+      "expected_version": 8
+    },
+    {
+      "id": "c03dbea3-0698-4fdb-ada3-8cd4bffb39b1",
+      "correlation_id": "8d00dfde-ed6d-4f82-87e8-79ff9b9aad28",
+      "type": "stage4.product.update",
+      "expected_version": 9
+    }
+  ],
+  "requests": [
+    {
+      "at": "2026-11-21T15:58:35.752Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:58:37.365Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:58:39.398Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:58:41.947Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:58:43.724Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:58:45.362Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:58:50.616Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:58:52.239Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:58:52.333Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:58:53.292Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:58:53.874Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:58:54.906Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:58:56.171Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:58:56.541Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:58:57.143Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:58:58.764Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:02.033Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.category.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:03.866Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:04.850Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:05.670Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:06.677Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:06.865Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T15:59:07.882Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:08.318Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:10.980Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.create",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:12.625Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:59:14.241Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T15:59:15.696Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:16.119Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:16.648Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:59:17.155Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:18.350Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:19.599Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:20.741Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:22.324Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T15:59:24.131Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:25.134Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:25.592Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:26.091Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:27.227Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:27.769Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:59:29.384Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:31.924Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:33.518Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:59:35.332Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:36.341Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:36.598Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:37.580Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:37.957Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T15:59:38.997Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:39.213Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:59:40.951Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:45.056Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:47.806Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:48.760Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:48.798Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.household.list",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:50.422Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:59:50.470Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T15:59:52.059Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:52.131Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:53.299Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:55.145Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:56.189Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:58.207Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T15:59:59.304Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T15:59:59.691Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:01.591Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T16:00:02.054Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:09.140Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:09.502Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:10.534Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:12.205Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:13.823Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:16.452Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:17.610Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:19.740Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:21.073Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:22.534Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:22.833Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:24.483Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:25.509Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:26.561Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T16:00:27.341Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:29.215Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:29.511Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "version_conflict",
+      "result": "version_conflict"
+    },
+    {
+      "at": "2026-11-21T16:00:30.404Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:32.708Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:37.415Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:38.490Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:39.601Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:40.189Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:40.674Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:42.704Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:45.819Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:47.698Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:47.923Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:48.748Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:48.977Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:50.460Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T16:00:51.117Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:51.541Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:52.830Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:00:54.414Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:00:56.188Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:00:57.902Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T16:01:00.162Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:00.182Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:01.873Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:01:02.012Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:03.598Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:01:05.201Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:06.312Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:01:07.951Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T16:01:09.878Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:10.845Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:01:11.380Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:12.402Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:12.499Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:01:14.113Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:01:14.172Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:01:15.879Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:01:18.958Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:20.635Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:01:22.500Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:23.107Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:23.450Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:01:24.117Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:25.253Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T16:01:25.779Z",
+      "account": 1,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:01:26.275Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "snapshot",
+      "result": "snapshot"
+    },
+    {
+      "at": "2026-11-21T16:01:29.604Z",
+      "account": 0,
+      "action": "command",
+      "type": "stage4.product.update",
+      "status": 202,
+      "state": "accepted_pending"
+    },
+    {
+      "at": "2026-11-21T16:01:31.269Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "processing"
+    },
+    {
+      "at": "2026-11-21T16:01:32.862Z",
+      "account": 0,
+      "action": "status",
+      "status": 200,
+      "state": "committed",
+      "result": "committed"
+    },
+    {
+      "at": "2026-11-21T16:01:33.161Z",
+      "account": 1,
+      "action": "command",
+      "type": "stage4.snapshot",
+      "status": 202,
+      "state": "accepted_pending"
+    }
+  ],
+  "status": "FAIL",
+  "error": {
+    "name": "Error",
+    "message": "locator.click: Error: strict mode violation: getByRole('heading', { name: 'Reliability 6aa78dea', exact: true }) resolved to 2 elements:\n    1) <h3 dir=\"auto\" class=\"text-2xl font-semibold\">Reliability 6aa78dea</h3> aka locator('h3').filter({ hasText: 'Reliability 6aa78dea' })\n    2) <h2 dir=\"auto\" class=\"truncate text-3xl font-bold\">Reliability 6aa78dea</h2> aka locator('h2').filter({ hasText: 'Reliability 6aa78dea' })\n\nCall log:\n\u001b[2m  - waiting for getByRole('heading', { name: 'Reliability 6aa78dea', exact: true })\u001b[22m\n"
+  }
+}

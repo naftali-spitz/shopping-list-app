@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope": "development gateway deployment; no production or account changes",
+  "project_id": "njomxqthjglqesxchlbm",
+  "name": "shopping-stage3-gateway",
+  "version": 6,
+  "verify_jwt": false,
+  "ezbr_sha256": "aabd1ad9c8efbc92d951ace53e156eaae37ffaba0cd948286a8c107b15fe86a3",
+  "git_sha": "7ab774d2543f28a979e43f1d27ba4867dfe238aa",
+  "source_matches": true,
+  "source_sha256": {
+    "supabase/functions/shopping-stage3-gateway/index.ts": "c3963c2b526ad9a76c46de516c6dcea1f29a3333c86a55755993b046d6f1099b",
+    "integration/stage3/identity.mjs": "506d287832726e69f6c5a2a1e5bbfdcc90e05597baf78c089d71aa342e8a2968",
+    "integration/stage3/protocol.mjs": "f49d1760358752813deb19d6183900ed63286cb8496b2103be81e0fe6e445fb0",
+    "integration/shopping-contract.mjs": "4dbd4d4692507cfddcd69e7214dde4bda3c70795a4dd3e4f1539af5983962de0"
+  },
+  "authentication": "Existing signed command/callback/progress validation and current provider session verification preserved; independent provider reads overlap without cached admission."
+}

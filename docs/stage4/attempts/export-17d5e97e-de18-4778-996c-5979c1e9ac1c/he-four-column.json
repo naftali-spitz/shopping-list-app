@@ -1,0 +1,364 @@
+{
+  "categories": [
+    {
+      "name": "קטגוריה 1",
+      "items": [
+        {
+          "name": "מוצר 1-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 1-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 1-10",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "קטגוריה 2",
+      "items": [
+        {
+          "name": "מוצר 2-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 2-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 2-10",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "קטגוריה 3",
+      "items": [
+        {
+          "name": "מוצר 3-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 3-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 3-10",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "קטגוריה 4",
+      "items": [
+        {
+          "name": "מוצר 4-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 4-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 4-10",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "קטגוריה 5",
+      "items": [
+        {
+          "name": "מוצר 5-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 5-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 5-10",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "קטגוריה 6",
+      "items": [
+        {
+          "name": "מוצר 6-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 6-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 6-10",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "קטגוריה 7",
+      "items": [
+        {
+          "name": "מוצר 7-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 7-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 7-10",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "name": "קטגוריה 8",
+      "items": [
+        {
+          "name": "מוצר 8-1",
+          "quantity": 3
+        },
+        {
+          "name": "מוצר 8-2",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-3",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-4",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-5",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-6",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-7",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-8",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-9",
+          "quantity": 1
+        },
+        {
+          "name": "מוצר 8-10",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}

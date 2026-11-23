@@ -1,0 +1,42 @@
+{
+  "id": "bafea2ab-bc76-49ad-9120-6f928a571d56",
+  "at": "2026-11-22T16:02:38.396Z",
+  "scope": "actual feature Preview Stage4 flag off/on; original Supabase Dev UI and retained PostgreSQL outcomes; no production deploy or data change",
+  "checks": [
+    {
+      "name": "real app pending ID retained while PostgreSQL already committed",
+      "status": "PASS",
+      "operation_id": "4003cd83-e5f5-4096-84ef-8a60768ee995"
+    }
+  ],
+  "source_sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "pending_operation_id": "4003cd83-e5f5-4096-84ef-8a60768ee995",
+  "disabled": {
+    "id": "dpl_J1f2Ez6TZHCgLj7siT7f9cTjz8qN",
+    "url": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896"
+  },
+  "route_errors": [
+    "route.fetch: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - \u2192 POST https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app/api/stage3\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like G"
+  ],
+  "status": "FAIL",
+  "error": {
+    "name": "AssertionError",
+    "message": "Expected values to be strictly equal:\n\n1 !== 0\n"
+  },
+  "emergency_restored": {
+    "id": "dpl_CEDPAPRkGcUX7hHHGQckeeo6Ji6P",
+    "url": "https://shopping-list-no34q9hxn-0012ab-5576s-projects.vercel.app",
+    "sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896"
+  },
+  "emergency_restore": true,
+  "followup": {
+    "disabled_immutable_url_verified": "https://shopping-list-njhy5aa34-0012ab-5576s-projects.vercel.app",
+    "disabled_root_backend": "supabase",
+    "disabled_probe_http": 404,
+    "restored_root_backend": "home",
+    "restored_probe_http": 401,
+    "probe_scope": "unsigned stage4.probe command; no business effect",
+    "correction": "Pause owned browser page on about:blank before synchronous rebuild; retain same browser storage; verify alias server selection with bounded fresh requests before navigation."
+  }
+}

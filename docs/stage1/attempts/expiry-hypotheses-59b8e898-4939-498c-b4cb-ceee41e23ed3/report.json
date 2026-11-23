@@ -1,0 +1,442 @@
+{
+  "stage": 1,
+  "run_id": "59b8e898-4939-498c-b4cb-ceee41e23ed3",
+  "source_head": "ccb8ef3a7d193265c0af2dd31faa63cfb5fea357",
+  "started_at": "2026-11-20T05:28:13.070Z",
+  "status": "EXPECTATION_FAILURES",
+  "gate": "NO-GO",
+  "cases": [
+    {
+      "name": "clean-zero-control",
+      "requested_connect_expiry_seconds": 0,
+      "requested_disconnect_expiry_seconds": null,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": true,
+      "offline_ms": 5010,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": false,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": true
+    },
+    {
+      "name": "connect-2-disconnect-omitted",
+      "requested_connect_expiry_seconds": 2,
+      "requested_disconnect_expiry_seconds": null,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 5007,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": true,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": true,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": false
+    },
+    {
+      "name": "connect-2-disconnect-2",
+      "requested_connect_expiry_seconds": 2,
+      "requested_disconnect_expiry_seconds": 2,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 5004,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": true,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": true,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": false
+    },
+    {
+      "name": "connect-120-persistent-control",
+      "requested_connect_expiry_seconds": 120,
+      "requested_disconnect_expiry_seconds": null,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 5006,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": true,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": true,
+      "positive_control_delivered": true,
+      "expected_session_present": true,
+      "expectation_passed": true
+    },
+    {
+      "name": "connect-120-disconnect-2",
+      "requested_connect_expiry_seconds": 120,
+      "requested_disconnect_expiry_seconds": 2,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 5003,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": true,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": true,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": false
+    },
+    {
+      "name": "connect-2-disconnect-120",
+      "requested_connect_expiry_seconds": 2,
+      "requested_disconnect_expiry_seconds": 120,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 5007,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": true,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": true,
+      "positive_control_delivered": true,
+      "expected_session_present": true,
+      "expectation_passed": true
+    },
+    {
+      "name": "connect-120-disconnect-zero",
+      "requested_connect_expiry_seconds": 120,
+      "requested_disconnect_expiry_seconds": 0,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 5007,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": false,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": true
+    },
+    {
+      "name": "connect-2-abrupt-close",
+      "requested_connect_expiry_seconds": 2,
+      "requested_disconnect_expiry_seconds": null,
+      "abrupt_socket_loss": true,
+      "initial_clean_start": false,
+      "offline_ms": 5008,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": true,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": true,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": false
+    },
+    {
+      "name": "cleanup-90s",
+      "requested_connect_expiry_seconds": 2,
+      "requested_disconnect_expiry_seconds": 2,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 90052,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": true,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": true,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": false
+    },
+    {
+      "name": "cleanup-360s-untouched",
+      "requested_connect_expiry_seconds": 2,
+      "requested_disconnect_expiry_seconds": 2,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 360390,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": false,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": true
+    },
+    {
+      "name": "cleanup-360s-observed",
+      "requested_connect_expiry_seconds": 2,
+      "requested_disconnect_expiry_seconds": 2,
+      "abrupt_socket_loss": false,
+      "initial_clean_start": false,
+      "offline_ms": 361814,
+      "initial_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "reconnect_connack": {
+        "session_present": false,
+        "reason_code": 0,
+        "server_expiry_override_seconds": null
+      },
+      "queued_message_delivered": false,
+      "positive_control_delivered": true,
+      "expected_session_present": false,
+      "expectation_passed": true
+    }
+  ],
+  "metadata": [
+    {
+      "case": "cleanup-90s",
+      "offline_ms": 26,
+      "observed_at": "2026-11-20T05:28:14.227Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 7,
+      "observed_at": "2026-11-20T05:28:14.643Z",
+      "unavailable": true
+    },
+    {
+      "case": "clean-zero-control",
+      "offline_ms": 7,
+      "observed_at": "2026-11-20T05:28:15.479Z",
+      "unavailable": true
+    },
+    {
+      "case": "clean-zero-control",
+      "offline_ms": 5009,
+      "observed_at": "2026-11-20T05:28:20.480Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-disconnect-omitted",
+      "offline_ms": 6,
+      "observed_at": "2026-11-20T05:28:21.741Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-disconnect-omitted",
+      "offline_ms": 5007,
+      "observed_at": "2026-11-20T05:28:26.741Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-disconnect-2",
+      "offline_ms": 5,
+      "observed_at": "2026-11-20T05:28:27.992Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-disconnect-2",
+      "offline_ms": 5003,
+      "observed_at": "2026-11-20T05:28:32.989Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-120-persistent-control",
+      "offline_ms": 6,
+      "observed_at": "2026-11-20T05:28:34.252Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-120-persistent-control",
+      "offline_ms": 5006,
+      "observed_at": "2026-11-20T05:28:39.252Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-120-disconnect-2",
+      "offline_ms": 5,
+      "observed_at": "2026-11-20T05:28:40.505Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-120-disconnect-2",
+      "offline_ms": 5003,
+      "observed_at": "2026-11-20T05:28:45.503Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-disconnect-120",
+      "offline_ms": 5,
+      "observed_at": "2026-11-20T05:28:46.745Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-disconnect-120",
+      "offline_ms": 5006,
+      "observed_at": "2026-11-20T05:28:51.746Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-120-disconnect-zero",
+      "offline_ms": 2,
+      "observed_at": "2026-11-20T05:28:53.035Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-120-disconnect-zero",
+      "offline_ms": 5007,
+      "observed_at": "2026-11-20T05:28:58.040Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-abrupt-close",
+      "offline_ms": 5,
+      "observed_at": "2026-11-20T05:28:59.290Z",
+      "unavailable": true
+    },
+    {
+      "case": "connect-2-abrupt-close",
+      "offline_ms": 5007,
+      "observed_at": "2026-11-20T05:29:04.293Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-90s",
+      "offline_ms": 81034,
+      "observed_at": "2026-11-20T05:29:35.235Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 80603,
+      "observed_at": "2026-11-20T05:29:35.240Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-90s",
+      "offline_ms": 90051,
+      "observed_at": "2026-11-20T05:29:44.252Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 111546,
+      "observed_at": "2026-11-20T05:30:06.182Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 141575,
+      "observed_at": "2026-11-20T05:30:36.211Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 171609,
+      "observed_at": "2026-11-20T05:31:06.245Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 201644,
+      "observed_at": "2026-11-20T05:31:36.280Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 231677,
+      "observed_at": "2026-11-20T05:32:06.313Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 261710,
+      "observed_at": "2026-11-20T05:32:36.346Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 291741,
+      "observed_at": "2026-11-20T05:33:06.377Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 321777,
+      "observed_at": "2026-11-20T05:33:36.413Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 351808,
+      "observed_at": "2026-11-20T05:34:06.444Z",
+      "unavailable": true
+    },
+    {
+      "case": "cleanup-360s-observed",
+      "offline_ms": 361814,
+      "observed_at": "2026-11-20T05:34:16.450Z",
+      "unavailable": true
+    }
+  ],
+  "scope": "Own newly generated development sessions only; all messages QoS1/retain=false; no database effects.",
+  "completed_at": "2026-11-20T05:34:17.374Z"
+}

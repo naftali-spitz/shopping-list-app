@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-22T15:52:54.209482+00:00",
+  "repository": "naftali-spitz/shopping-list-app",
+  "worktree": "/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend",
+  "branch": "feature/flespi-home-backend",
+  "implementation_sha": "6f499ab85d888f1f523c39d6f1698f7ecb3a1896",
+  "base": "develop",
+  "draft_pr": 16,
+  "branch_protections": {
+    "main": {
+      "enforce_admins": true,
+      "required_approvals": 0,
+      "force_push": false,
+      "deletion": false
+    },
+    "develop": {
+      "enforce_admins": true,
+      "required_approvals": 0,
+      "force_push": false,
+      "deletion": false
+    }
+  },
+  "production_metadata_audit": "../../stage0/vercel-isolation.json",
+  "database": "127.0.0.1:55439/shopping_stage0",
+  "original_checkout_status_read_only": [
+    " M app/api/export-doc/route.ts",
+    "?? .worktrees/",
+    "?? shopping-list-2026-06-01 (2).docx",
+    "?? verification-exports/"
+  ],
+  "original_checkout_env_loaded": false,
+  "original_checkout_mutated": false,
+  "production_mutated": false,
+  "production_secret_values_compared": false,
+  "merge_performed": false,
+  "paid_resources_created": false,
+  "stage5_started": false
+}

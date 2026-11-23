@@ -1,0 +1,370 @@
+{
+  "id": "e7a39a82-617e-4165-ac82-85ba7027fea3",
+  "at": "2026-11-21T21:13:36.021Z",
+  "target": "https://shopping-list-app-git-develop-0012ab-5576s-projects.vercel.app",
+  "source_sha": "88af18681659fe69b0f2ca3122bc308de563e54f",
+  "scope": "original Supabase Dev app at develop Preview, actual browser clicks and authoritative development PostgREST reads; no Debian/feature writes",
+  "samples": [
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1657,
+      "tap_to_database_http_ack_ms": 1187,
+      "http_status": 201,
+      "record_id": "0011867d-bc32-4f1b-a7d3-3b6497d4ffe6"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1067,
+      "tap_to_database_http_ack_ms": 582,
+      "http_status": 201,
+      "record_id": "314d100a-d621-440d-83c4-9959f3f6f3e4"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1129,
+      "tap_to_database_http_ack_ms": 653,
+      "http_status": 201,
+      "record_id": "8f6f6fde-95c6-440e-81fe-54c358fea81b"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1190,
+      "tap_to_database_http_ack_ms": 748,
+      "http_status": 201,
+      "record_id": "a6deb29a-537f-4143-85e2-c8eea28a8a15"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1117,
+      "tap_to_database_http_ack_ms": 637,
+      "http_status": 201,
+      "record_id": "dbd66e31-2dcb-4ce9-80df-03a6a58011ee"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1183,
+      "tap_to_database_http_ack_ms": 694,
+      "http_status": 201,
+      "record_id": "8eb8f85a-b946-446a-bd56-b8bbea7f16f6"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1125,
+      "tap_to_database_http_ack_ms": 647,
+      "http_status": 201,
+      "record_id": "d4a30597-ae40-471a-b54f-ff43a988f6ac"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1193,
+      "tap_to_database_http_ack_ms": 694,
+      "http_status": 201,
+      "record_id": "74091fc9-31fe-479f-b036-92d0c1567c54"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1017,
+      "tap_to_database_http_ack_ms": 580,
+      "http_status": 201,
+      "record_id": "7d4c5bd8-8c57-4ee6-9466-e286fb89e45c"
+    },
+    {
+      "kind": "product.create",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 1028,
+      "tap_to_database_http_ack_ms": 578,
+      "http_status": 201,
+      "record_id": "1d696899-a3f4-4c59-82a6-79576ba2ac48"
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 370,
+      "tap_to_database_http_ack_ms": 725,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 215,
+      "tap_to_database_http_ack_ms": 577,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 461,
+      "tap_to_database_http_ack_ms": 947,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 225,
+      "tap_to_database_http_ack_ms": 572,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 307,
+      "tap_to_database_http_ack_ms": 646,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 444,
+      "tap_to_database_http_ack_ms": 761,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 323,
+      "tap_to_database_http_ack_ms": 656,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 302,
+      "tap_to_database_http_ack_ms": 634,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 358,
+      "tap_to_database_http_ack_ms": 709,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 250,
+      "tap_to_database_http_ack_ms": 592,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 316,
+      "tap_to_database_http_ack_ms": 659,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 230,
+      "tap_to_database_http_ack_ms": 583,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 299,
+      "tap_to_database_http_ack_ms": 627,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 232,
+      "tap_to_database_http_ack_ms": 573,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 305,
+      "tap_to_database_http_ack_ms": 647,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 267,
+      "tap_to_database_http_ack_ms": 605,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 287,
+      "tap_to_database_http_ack_ms": 631,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 286,
+      "tap_to_database_http_ack_ms": 640,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 337,
+      "tap_to_database_http_ack_ms": 684,
+      "http_status": 204
+    },
+    {
+      "kind": "product.uncheck",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 305,
+      "tap_to_database_http_ack_ms": 644,
+      "http_status": 204
+    },
+    {
+      "kind": "product.check",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 275,
+      "tap_to_database_http_ack_ms": 611,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 175,
+      "tap_to_database_http_ack_ms": 531,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 142,
+      "tap_to_database_http_ack_ms": 492,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 135,
+      "tap_to_database_http_ack_ms": 472,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 133,
+      "tap_to_database_http_ack_ms": 473,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 101,
+      "tap_to_database_http_ack_ms": 432,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 166,
+      "tap_to_database_http_ack_ms": 505,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 120,
+      "tap_to_database_http_ack_ms": 460,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 95,
+      "tap_to_database_http_ack_ms": 418,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 108,
+      "tap_to_database_http_ack_ms": 451,
+      "http_status": 204
+    },
+    {
+      "kind": "product.quantity",
+      "context": "warm-existing-browser-context",
+      "tap_to_visible_feedback_ms": 132,
+      "tap_to_database_http_ack_ms": 476,
+      "http_status": 204
+    }
+  ],
+  "checks": [
+    {
+      "name": "authenticated original develop UI uses existing Dev identity/session",
+      "status": "PASS"
+    },
+    {
+      "name": "10 actual original UI product creations persisted in Supabase Dev",
+      "status": "PASS",
+      "category": "Stage4 baseline e7a39a82",
+      "products": 10
+    },
+    {
+      "name": "10 check and 10 uncheck real UI operations persisted; no retries counted as extra taps",
+      "status": "PASS"
+    },
+    {
+      "name": "10 quantity edits match persisted Supabase Dev values",
+      "status": "PASS"
+    },
+    {
+      "name": "browser refresh retrieves checked/quantity state from original backend",
+      "status": "PASS"
+    }
+  ],
+  "load_samples": [
+    {
+      "kind": "first-browser-context-load",
+      "navigation_to_app_ready_ms": 2277,
+      "cold_function_instance_known": false
+    },
+    {
+      "kind": "warm-browser-reload",
+      "navigation_to_app_ready_ms": 1837,
+      "cold_function_instance_known": false
+    }
+  ],
+  "product_id": "0011867d-bc32-4f1b-a7d3-3b6497d4ffe6",
+  "summary": {
+    "product.create": {
+      "n": 10,
+      "median_visible_feedback_ms": 1127,
+      "median_database_http_ack_ms": 650,
+      "tail_percentiles": "not reported: small exploratory cohort"
+    },
+    "product.check": {
+      "n": 11,
+      "median_visible_feedback_ms": 316,
+      "median_database_http_ack_ms": 656,
+      "tail_percentiles": "not reported: small exploratory cohort"
+    },
+    "product.uncheck": {
+      "n": 10,
+      "median_visible_feedback_ms": 258.5,
+      "median_database_http_ack_ms": 598.5,
+      "tail_percentiles": "not reported: small exploratory cohort"
+    },
+    "product.quantity": {
+      "n": 10,
+      "median_visible_feedback_ms": 132.5,
+      "median_database_http_ack_ms": 472.5,
+      "tail_percentiles": "not reported: small exploratory cohort"
+    }
+  },
+  "status": "PASS"
+}

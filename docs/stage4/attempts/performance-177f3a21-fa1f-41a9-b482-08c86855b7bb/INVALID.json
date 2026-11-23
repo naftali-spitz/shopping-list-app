@@ -1,0 +1,5 @@
+{
+  "status": "INVALID",
+  "reason": "Intentionally interrupted to rotate development signing key following private-config output. Partial sample rows are not benchmark evidence.",
+  "related_overhead": "54d5079c-3f1f-4e90-97ab-68db0493dda6"
+}

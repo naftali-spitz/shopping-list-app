@@ -1,0 +1,234 @@
+{
+  "status": "PASS",
+  "stage": 0,
+  "account_id": 2617576,
+  "namespace": "shopping-poc/naf-stage0-041d4f122bdd",
+  "broker": "mqtts://mqtt.flespi.io:8883",
+  "mqtt_version": "5",
+  "qos": 1,
+  "response_timeout_ms": 12000,
+  "session_expiry_seconds_during_test": 60,
+  "auth": [
+    {
+      "role": "publisher",
+      "token_id": 114509462,
+      "account_id": 2617576,
+      "access_type": 2,
+      "expire": 1795719394,
+      "ttl": 0,
+      "acl": [
+        {
+          "actions": [
+            "publish"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/commands",
+          "uri": "mqtt"
+        },
+        {
+          "actions": [
+            "subscribe"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/results",
+          "uri": "mqtt"
+        }
+      ],
+      "administration_denied": true,
+      "browser_origin_denied": true
+    },
+    {
+      "role": "listener",
+      "token_id": 114509463,
+      "account_id": 2617576,
+      "access_type": 2,
+      "expire": 1795719394,
+      "ttl": 0,
+      "acl": [
+        {
+          "actions": [
+            "publish"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/results",
+          "uri": "mqtt"
+        },
+        {
+          "actions": [
+            "subscribe"
+          ],
+          "methods": [],
+          "topic": "shopping-poc/naf-stage0-041d4f122bdd/commands",
+          "uri": "mqtt"
+        }
+      ],
+      "administration_denied": true,
+      "browser_origin_denied": true
+    }
+  ],
+  "connections": [
+    {
+      "role": "publisher",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "listener",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "listener",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": true,
+      "maximum_qos": 1
+    },
+    {
+      "role": "auditor",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "publisher",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "publisher",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "publisher",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "listener",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "listener",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    },
+    {
+      "role": "listener",
+      "tls_verified": true,
+      "tls_protocol": "TLSv1.3",
+      "session_present": false,
+      "maximum_qos": 1
+    }
+  ],
+  "checks": [
+    {
+      "test": "three synthetic QoS1 request/response exchanges",
+      "passed": true,
+      "latencies_ms": [
+        148.3,
+        254.7,
+        2104
+      ],
+      "database_commit_claimed": false
+    },
+    {
+      "test": "planned reconnect resumes isolated session/subscription",
+      "passed": true
+    },
+    {
+      "test": "foreign namespace delivery filtered",
+      "role": "publisher",
+      "subscription_granted_qos": 1,
+      "independent_publication_confirmed": true,
+      "allowed_control_received": true,
+      "unauthorized_deliveries": 0,
+      "observation_after_control_ms": 1500,
+      "passed": true
+    },
+    {
+      "test": "wrong direction delivery filtered",
+      "role": "publisher",
+      "subscription_granted_qos": 1,
+      "independent_publication_confirmed": true,
+      "allowed_control_received": true,
+      "unauthorized_deliveries": 0,
+      "observation_after_control_ms": 1500,
+      "passed": true
+    },
+    {
+      "test": "foreign dev namespace publish denied",
+      "role": "publisher",
+      "action": "publish",
+      "broker_reason": 135,
+      "passed": true
+    },
+    {
+      "test": "wrong direction publish denied",
+      "role": "publisher",
+      "action": "publish",
+      "broker_reason": 135,
+      "passed": true
+    },
+    {
+      "test": "foreign namespace delivery filtered",
+      "role": "listener",
+      "subscription_granted_qos": 1,
+      "independent_publication_confirmed": true,
+      "allowed_control_received": true,
+      "unauthorized_deliveries": 0,
+      "observation_after_control_ms": 1500,
+      "passed": true
+    },
+    {
+      "test": "wrong direction delivery filtered",
+      "role": "listener",
+      "subscription_granted_qos": 1,
+      "independent_publication_confirmed": true,
+      "allowed_control_received": true,
+      "unauthorized_deliveries": 0,
+      "observation_after_control_ms": 1500,
+      "passed": true
+    },
+    {
+      "test": "foreign dev namespace publish denied",
+      "role": "listener",
+      "action": "publish",
+      "broker_reason": 135,
+      "passed": true
+    },
+    {
+      "test": "wrong direction publish denied",
+      "role": "listener",
+      "action": "publish",
+      "broker_reason": 135,
+      "passed": true
+    }
+  ],
+  "auditor_token_id": 114523424,
+  "auditor_expire": 1795135875,
+  "notes": [
+    "Synthetic transport only; no database writes or commit guarantee.",
+    "No load, offline backlog, replay or extended fault tests; those are Stage1.",
+    "Only new dev token IDs and unique client IDs used; no shared sessions/tokens changed.",
+    "Broker accepts forbidden topic subscriptions but ACL filters message delivery; positive independent publication and role controls verified."
+  ],
+  "tested_at": "2026-11-20T00:42:28.556Z"
+}

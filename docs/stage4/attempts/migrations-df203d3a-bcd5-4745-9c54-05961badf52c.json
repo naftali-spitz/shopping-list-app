@@ -1,0 +1,13 @@
+{
+  "id": "df203d3a-bcd5-4745-9c54-05961badf52c",
+  "at": "2026-11-20T12:59:30.538Z",
+  "scope": "additive isolated127.0.0.1:55439/shopping_stage0 migrations only; no fixture provisioning",
+  "migrations": [
+    {
+      "file": "005_stage4_household_lifecycle.sql",
+      "version": 5,
+      "checksum": "7dc3d71e306be5528fc121d257fb891a139d49667f41beac2e94cbaf4a8ca286"
+    }
+  ],
+  "status": "PASS"
+}

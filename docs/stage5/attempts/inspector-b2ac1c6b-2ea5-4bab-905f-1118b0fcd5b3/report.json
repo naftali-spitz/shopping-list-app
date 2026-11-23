@@ -1,0 +1,11 @@
+{
+  "id": "b2ac1c6b-2ea5-4bab-905f-1118b0fcd5b3",
+  "at": "2026-11-22T21:37:20.704Z",
+  "scope": "actual protected Dev Preview inspector; desktop and Android viewport emulation, not a physical Android device",
+  "checks": [
+    "desktop: PostgreSQL history loaded in fresh browser, trace detail, full trace JSON, redacted CSV/JSON range exports, viewport fit",
+    "aborted diagnostic requests do not prevent real committed Saved",
+    "android-rtl: PostgreSQL history loaded in fresh browser, trace detail, full trace JSON, redacted CSV/JSON range exports, viewport fit"
+  ],
+  "status": "PASS"
+}

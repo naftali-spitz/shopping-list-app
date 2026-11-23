@@ -1,0 +1,2 @@
+{"name":"two authenticated original app views receive real created/checked product","status":"PASS","category_id":"e3a506b7-352d-4191-a6ae-15d471e3c635","product_id":"6b95aca7-719b-4970-9f23-2e9f4ba971f0"}
+{"name":"three immediate check taps preserve existing pending guard and produce one intended committed check","status":"PASS","operation_id":"5bffbd83-fcf7-4d2e-9827-17810d1db978","committed_checked_updates":1}

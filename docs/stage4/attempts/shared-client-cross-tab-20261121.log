@@ -1,0 +1,24 @@
+✔ intent and queue persist before optimistic rendering; PUBACK never means Saved (24.579333ms)
+✔ rapid quantity intents reserve successive versions without changing IDs or payloads (4.436261ms)
+✔ stale snapshot and older commit cannot revert a newer authoritative record (2.673911ms)
+✔ pending refresh retries precisely the original intent after verified missing status (5.072841ms)
+✔ expired uncommitted intent fails only after authenticated lane reconciliation (4.80565ms)
+✔ storage failure refuses changes and logout preserves pending IDs without sending another identity (2.959308ms)
+✔ stage3 legacy and stage4 namespace share implementation without sharing queue writes (2.499753ms)
+✔ lost command acknowledgement retries the original immutable ID after verified missing acceptance (4.500767ms)
+✔ expired unresolved intent fails only after authenticated database operation.status says not_found (4.658718ms)
+✔ changed provider identity cannot issue or reconcile another users pending command (3.613597ms)
+✔ household-version operations reserve prior local mutations but read queries do not advance it (4.020116ms)
+✔ list export never returns cached pre-export history while its full authoritative effect is missing (3.210964ms)
+✔ terminal snapshot denial clears authority and rejects initial or refresh readers (3.476022ms)
+✔ same-user tabs preserve all unresolved IDs through interleaved writes and refresh (3.670244ms)
+✔ terminal storage event resolves another tabs waiter and cannot be overwritten by stale pending (5.724487ms)
+✔ changed per-operation storage intent fails closed and preserves the original index (2.945484ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 481.720393

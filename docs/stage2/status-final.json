@@ -1,0 +1,17 @@
+{
+  "health": {
+    "pid": 1419425,
+    "at": "2026-11-20T06:49:25.718Z",
+    "connected": true,
+    "clock_healthy": true,
+    "database": "shopping_stage0",
+    "port": 55439,
+    "processed": 0
+  },
+  "units": {
+    "shopping-list-stage2-backend.service": "active",
+    "shopping-list-stage0-postgres.service": "active",
+    "shopping-list-stage0-backup.timer": "active"
+  },
+  "listener_ports": "No inbound backend listener; PostgreSQL loopback55439 only"
+}

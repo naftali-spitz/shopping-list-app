@@ -1,0 +1,13 @@
+{
+  "id": "1d64997b-9024-480e-bb9d-d0dc94a803e2",
+  "at": "2026-11-20T13:04:48.560Z",
+  "scope": "additive isolated127.0.0.1:55439/shopping_stage0 migrations only; no fixture provisioning",
+  "migrations": [
+    {
+      "file": "007_stage4_starter_category_order.sql",
+      "version": 7,
+      "checksum": "366d0590b9d86439a9f2ffeab3e11a3b3cc75765182de540c6cec9718c359ff9"
+    }
+  ],
+  "status": "PASS"
+}

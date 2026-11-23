@@ -1,0 +1,87 @@
+{
+  "status": "FAIL",
+  "stage": 1,
+  "run_id": "d732a752-4504-4de0-9a65-fcd76e9036d6",
+  "checks": [
+    {
+      "test": "concurrent application duplicate requests",
+      "observed_at": "2026-11-20T01:03:31.246Z",
+      "passed": true,
+      "sent": 10,
+      "unique_synthetic_effects": 1,
+      "duplicate_results": 9,
+      "mitigation": "In-memory promise reserved before processing; production needs durable operation-ID uniqueness."
+    },
+    {
+      "test": "out-of-order application completion",
+      "observed_at": "2026-11-20T01:03:31.924Z",
+      "passed": true,
+      "received_order": [
+        2,
+        1
+      ],
+      "correlation_ids_preserved": true,
+      "mitigation": "Correlate operation IDs; use server versions/sequence rules for conflicting writes."
+    },
+    {
+      "test": "same-ID replay in one process lifetime",
+      "observed_at": "2026-11-20T01:03:32.264Z",
+      "passed": true,
+      "prior_quantity": 1,
+      "replay_quantity": 1,
+      "limitation": "Simulator returns prior result despite changed index; production must bind operation ID to canonical payload hash and reject conflicts."
+    },
+    {
+      "test": "lost application acknowledgment and retry after timeout",
+      "observed_at": "2026-11-20T01:03:33.266Z",
+      "passed": true,
+      "timeout_ms": 600,
+      "timed_out": true,
+      "same_id_retry_quantity": 4,
+      "broker_puback_was_successful": true,
+      "mitigation": "Broker ACK did not confirm processing/result. Retry same durable ID with bounded backoff."
+    },
+    {
+      "test": "listener process crash after synthetic effect, before result",
+      "observed_at": "2026-11-20T01:03:36.045Z",
+      "passed": true,
+      "own_child_pid": 1317350,
+      "signal": "SIGKILL",
+      "broker_session_resumed": true,
+      "quantity_before_crash": 5,
+      "quantity_after_restart_retry": 1,
+      "volatile_state_lost": true,
+      "database_commit": false,
+      "mitigation": "Transport recovers but in-memory dedup/effects do not survive. Stage2 must use transactional durable dedup/outbox."
+    },
+    {
+      "test": "actual QoS1 redelivery after withheld MQTT PUBACK and socket loss",
+      "observed_at": "2026-11-20T01:03:37.158Z",
+      "passed": true,
+      "session_present": true,
+      "deliveries": [
+        {
+          "duplicate_flag": false,
+          "message_id": 1
+        },
+        {
+          "duplicate_flag": true,
+          "message_id": 1
+        }
+      ],
+      "mitigation": "At-least-once delivery can duplicate effects. Never use MQTT packet IDs as durable business operation IDs."
+    },
+    {
+      "test": "broker-initiated disconnect on owned client-ID takeover",
+      "observed_at": "2026-11-20T01:03:38.646Z",
+      "passed": true,
+      "broker_reason": 142,
+      "old_connection_closed": true,
+      "new_session_present": true,
+      "mitigation": "Unique stable listener ownership; reconnect backoff and alerts. Shared broker restart is not authorized or simulated."
+    }
+  ],
+  "error_type": "AssertionError",
+  "error_code": "ERR_ASSERTION",
+  "notes": "Credential-bearing exception suppressed. Preserve completed checks and raw records; do not claim gate PASS."
+}

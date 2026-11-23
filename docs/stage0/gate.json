@@ -1,0 +1,10 @@
+{
+  "decision": "GO",
+  "issue": "NAF-160",
+  "completed_at": "2026-11-20T00:54:50.877Z",
+  "prerequisites": "NAF-149 through NAF-159: all Done",
+  "reviewed_commit": "b843df7e36ac877bbf9ed28e5e0f8addce3c61e2",
+  "ci": "https://github.com/naftali-spitz/shopping-list-app/actions/runs/44649418549/job/136000254980",
+  "scope": "Development-only Stage1; no production migration authorization",
+  "source": "https://linear.app/naftali/issue/NAF-160"
+}

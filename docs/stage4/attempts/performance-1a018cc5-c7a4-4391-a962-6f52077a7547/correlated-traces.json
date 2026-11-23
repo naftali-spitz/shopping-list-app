@@ -1,0 +1,1059 @@
+{
+  "scope": "same operation/correlation IDs; local monotonic DB/auth durations and cross-host timestamps separately labelled",
+  "vercel": [
+    {
+      "provider_timestamp": "2026-11-21T21:11:12.926Z",
+      "event": "stage3_callback",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "duplicate": true,
+      "delivery_ms": 959
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:12.576Z",
+      "event": "stage3_callback",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "duplicate": false,
+      "delivery_ms": 1365
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:10.406Z",
+      "event": "stage3_accepted",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "acceptance_ms": 1168,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 232,
+        "durable_gateway_ms": 562,
+        "mqtt_ms": 373,
+        "handler_ms": 1168
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:10.025Z",
+      "event": "stage3_publish",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "published_at_ms": 1795295470025
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:05.628Z",
+      "event": "stage3_callback",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "duplicate": true,
+      "delivery_ms": 663
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:04.722Z",
+      "event": "stage3_callback",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "duplicate": false,
+      "delivery_ms": 672
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:03.287Z",
+      "event": "stage3_accepted",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "acceptance_ms": 1191,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 247,
+        "durable_gateway_ms": 561,
+        "mqtt_ms": 382,
+        "handler_ms": 1191
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:02.905Z",
+      "event": "stage3_publish",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "published_at_ms": 1795295462905
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:01.918Z",
+      "event": "stage3_callback",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "duplicate": true,
+      "delivery_ms": 953
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:11:01.343Z",
+      "event": "stage3_callback",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "duplicate": false,
+      "delivery_ms": 1144
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:59.366Z",
+      "event": "stage3_accepted",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "acceptance_ms": 2098,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 657,
+        "durable_gateway_ms": 1056,
+        "mqtt_ms": 385,
+        "handler_ms": 2098
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:58.981Z",
+      "event": "stage3_publish",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "published_at_ms": 1795295458981
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:52.967Z",
+      "event": "stage3_callback",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "duplicate": true,
+      "delivery_ms": 1002
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:52.191Z",
+      "event": "stage3_callback",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "duplicate": false,
+      "delivery_ms": 1104
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:50.160Z",
+      "event": "stage3_accepted",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "acceptance_ms": 1570,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 668,
+        "durable_gateway_ms": 536,
+        "mqtt_ms": 365,
+        "handler_ms": 1570
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:49.794Z",
+      "event": "stage3_publish",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "published_at_ms": 1795295449793
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:47.643Z",
+      "event": "stage3_callback",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "duplicate": true,
+      "delivery_ms": 685
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:47.474Z",
+      "event": "stage3_callback",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "duplicate": false,
+      "delivery_ms": 1009
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:45.798Z",
+      "event": "stage3_accepted",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "acceptance_ms": 1586,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 686,
+        "durable_gateway_ms": 527,
+        "mqtt_ms": 371,
+        "handler_ms": 1586
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:45.427Z",
+      "event": "stage3_publish",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "published_at_ms": 1795295445427
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:40.226Z",
+      "event": "stage3_callback",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "duplicate": true,
+      "delivery_ms": 947
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:40.071Z",
+      "event": "stage3_callback",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "duplicate": true,
+      "delivery_ms": 1116
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:39.559Z",
+      "event": "stage3_callback",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "duplicate": false,
+      "delivery_ms": 1129
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:38.000Z",
+      "event": "stage3_accepted",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "acceptance_ms": 1962,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 642,
+        "durable_gateway_ms": 952,
+        "mqtt_ms": 366,
+        "handler_ms": 1962
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:37.633Z",
+      "event": "stage3_publish",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "published_at_ms": 1795295437633
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:35.477Z",
+      "event": "stage3_callback",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "duplicate": true,
+      "delivery_ms": 1526
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:34.860Z",
+      "event": "stage3_callback",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "duplicate": false,
+      "delivery_ms": 1461
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:32.623Z",
+      "event": "stage3_accepted",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "acceptance_ms": 1683,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 738,
+        "durable_gateway_ms": 568,
+        "mqtt_ms": 375,
+        "handler_ms": 1683
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:32.248Z",
+      "event": "stage3_publish",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "published_at_ms": 1795295432248
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:25.633Z",
+      "event": "stage3_callback",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "duplicate": true,
+      "delivery_ms": 1684
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:25.129Z",
+      "event": "stage3_callback",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "duplicate": true,
+      "delivery_ms": 879
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:24.390Z",
+      "event": "stage3_callback",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "duplicate": false,
+      "delivery_ms": 955
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:22.894Z",
+      "event": "stage3_accepted",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "acceptance_ms": 2079,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 699,
+        "durable_gateway_ms": 990,
+        "mqtt_ms": 389,
+        "handler_ms": 2079
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:22.505Z",
+      "event": "stage3_publish",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "published_at_ms": 1795295422505
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:15.524Z",
+      "event": "stage3_callback",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "duplicate": true,
+      "delivery_ms": 2345
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:15.265Z",
+      "event": "stage3_callback",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "duplicate": false,
+      "delivery_ms": 1320
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:12.405Z",
+      "event": "stage3_accepted",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "acceptance_ms": 2045,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 698,
+        "durable_gateway_ms": 971,
+        "mqtt_ms": 373,
+        "handler_ms": 2045
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:12.030Z",
+      "event": "stage3_publish",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "published_at_ms": 1795295412030
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:06.888Z",
+      "event": "stage3_callback",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "duplicate": true,
+      "delivery_ms": 941
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:05.997Z",
+      "event": "stage3_callback",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "duplicate": false,
+      "delivery_ms": 882
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:04.327Z",
+      "event": "stage3_accepted",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "acceptance_ms": 4079,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 653,
+        "durable_gateway_ms": 2851,
+        "mqtt_ms": 570,
+        "handler_ms": 4079
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:10:03.757Z",
+      "event": "stage3_publish",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "published_at_ms": 1795295403757
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:58.902Z",
+      "event": "stage3_callback",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "duplicate": true,
+      "delivery_ms": 958
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:57.786Z",
+      "event": "stage3_callback",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "duplicate": false,
+      "delivery_ms": 715
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:56.382Z",
+      "event": "stage3_accepted",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "acceptance_ms": 1126,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 285,
+        "durable_gateway_ms": 461,
+        "mqtt_ms": 379,
+        "handler_ms": 1126
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:56.003Z",
+      "event": "stage3_publish",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "published_at_ms": 1795295396003
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:51.211Z",
+      "event": "stage3_callback",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "duplicate": true,
+      "delivery_ms": 1610
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:51.001Z",
+      "event": "stage3_callback",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "duplicate": false,
+      "delivery_ms": 1063
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:48.947Z",
+      "event": "stage3_accepted",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "acceptance_ms": 1226,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 243,
+        "durable_gateway_ms": 603,
+        "mqtt_ms": 379,
+        "handler_ms": 1226
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:48.568Z",
+      "event": "stage3_publish",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "published_at_ms": 1795295388568
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:46.945Z",
+      "event": "stage3_callback",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "duplicate": true,
+      "delivery_ms": 1008
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:46.380Z",
+      "event": "stage3_callback",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "duplicate": false,
+      "delivery_ms": 662
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:44.890Z",
+      "event": "stage3_accepted",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "acceptance_ms": 1960,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 664,
+        "durable_gateway_ms": 912,
+        "mqtt_ms": 382,
+        "handler_ms": 1960
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:44.508Z",
+      "event": "stage3_publish",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "published_at_ms": 1795295384508
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:36.923Z",
+      "event": "stage3_callback",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "duplicate": true,
+      "delivery_ms": 988
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:36.790Z",
+      "event": "stage3_callback",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "duplicate": false,
+      "delivery_ms": 951
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:34.960Z",
+      "event": "stage3_accepted",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "acceptance_ms": 1520,
+      "transport": "puback",
+      "duplicate": false,
+      "timings": {
+        "authentication_ms": 247,
+        "durable_gateway_ms": 909,
+        "mqtt_ms": 363,
+        "handler_ms": 1520
+      }
+    },
+    {
+      "provider_timestamp": "2026-11-21T21:09:34.596Z",
+      "event": "stage3_publish",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "published_at_ms": 1795295374596
+    }
+  ],
+  "debian": [
+    {
+      "at": "2026-11-21T21:09:34.969Z",
+      "event": "stage3_received",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "received_ms": 1795295374969,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 298
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "authentication_ms": 353,
+      "database_ms": 7
+    },
+    {
+      "at": "2026-11-21T21:09:35.838Z",
+      "event": "operation_result",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 2526
+    },
+    {
+      "at": "2026-11-21T21:09:37.099Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "ff57f5be-b66c-44fd-bbb5-dce19a7058ae",
+      "correlation_id": "f4c147ef-8bfc-4e2c-8666-6d90fe89a9b7",
+      "attempt": 1,
+      "delivery_ms": 1164,
+      "age_since_result_ms": 1267
+    },
+    {
+      "at": "2026-11-21T21:09:44.883Z",
+      "event": "stage3_received",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "received_ms": 1795295384883,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 295
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "authentication_ms": 331,
+      "database_ms": 8
+    },
+    {
+      "at": "2026-11-21T21:09:45.717Z",
+      "event": "operation_result",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 5659
+    },
+    {
+      "at": "2026-11-21T21:09:47.081Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "617d94e2-c258-4446-ab89-ac08c7770a4e",
+      "correlation_id": "05932cae-4ceb-4998-bead-78772a1cfae4",
+      "attempt": 1,
+      "delivery_ms": 1144,
+      "age_since_result_ms": 1371
+    },
+    {
+      "at": "2026-11-21T21:09:48.940Z",
+      "event": "stage3_received",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "received_ms": 1795295388940,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 298
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "authentication_ms": 308,
+      "database_ms": 8
+    },
+    {
+      "at": "2026-11-21T21:09:49.601Z",
+      "event": "operation_result",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 2055
+    },
+    {
+      "at": "2026-11-21T21:09:51.188Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "f185dc7e-086e-4346-aa6f-4dfee04922ee",
+      "correlation_id": "b81d10df-2e08-417c-b6e6-90fd93751c74",
+      "attempt": 1,
+      "delivery_ms": 1250,
+      "age_since_result_ms": 1594
+    },
+    {
+      "at": "2026-11-21T21:09:56.392Z",
+      "event": "stage3_received",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "received_ms": 1795295396392,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 295
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "authentication_ms": 316,
+      "database_ms": 8
+    },
+    {
+      "at": "2026-11-21T21:09:57.069Z",
+      "event": "operation_result",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 4807
+    },
+    {
+      "at": "2026-11-21T21:09:59.082Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "4c58a75c-d751-4892-9757-b84928a063e2",
+      "correlation_id": "976b08a7-35a2-4ecb-9bf9-b008d82a37da",
+      "attempt": 1,
+      "delivery_ms": 1139,
+      "age_since_result_ms": 2021
+    },
+    {
+      "at": "2026-11-21T21:10:04.317Z",
+      "event": "stage3_received",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "received_ms": 1795295404317,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 295
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "authentication_ms": 365,
+      "database_ms": 8
+    },
+    {
+      "at": "2026-11-21T21:10:05.113Z",
+      "event": "operation_result",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 5026
+    },
+    {
+      "at": "2026-11-21T21:10:07.026Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "5b862ffc-d09c-47de-a5b8-3f288af26d3d",
+      "correlation_id": "5a7ced9b-8b5d-4e96-8a9d-781aa9c5aa6e",
+      "attempt": 1,
+      "delivery_ms": 1080,
+      "age_since_result_ms": 1920
+    },
+    {
+      "at": "2026-11-21T21:10:12.400Z",
+      "event": "stage3_received",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "received_ms": 1795295412400,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 296
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "authentication_ms": 366,
+      "database_ms": 8
+    },
+    {
+      "at": "2026-11-21T21:10:13.179Z",
+      "event": "operation_result",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 4145
+    },
+    {
+      "at": "2026-11-21T21:10:15.403Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "c9e18f91-33c1-4443-8633-b11245366a85",
+      "correlation_id": "aa3f06ee-fc6b-40ab-8524-d4dff28c24c5",
+      "attempt": 1,
+      "delivery_ms": 1457,
+      "age_since_result_ms": 2232
+    },
+    {
+      "at": "2026-11-21T21:10:22.887Z",
+      "event": "stage3_received",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "received_ms": 1795295422887,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 296
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "authentication_ms": 444,
+      "database_ms": 7
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "authentication_ms": 952,
+      "database_ms": 3
+    },
+    {
+      "at": "2026-11-21T21:10:24.250Z",
+      "event": "operation_result",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "status": "committed",
+      "replayed": true,
+      "command_age_ms": 4780
+    },
+    {
+      "at": "2026-11-21T21:10:24.612Z",
+      "event": "reconciled",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "status": "committed"
+    },
+    {
+      "at": "2026-11-21T21:10:25.771Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "9e1e40c4-786e-4a20-84ad-bbfff12c90b5",
+      "correlation_id": "74b3dcc5-75aa-4d99-a289-963676c72071",
+      "attempt": 1,
+      "delivery_ms": 1823,
+      "age_since_result_ms": 2344
+    },
+    {
+      "at": "2026-11-21T21:10:32.632Z",
+      "event": "stage3_received",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "received_ms": 1795295432632,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 294
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "authentication_ms": 331,
+      "database_ms": 7
+    },
+    {
+      "at": "2026-11-21T21:10:33.394Z",
+      "event": "operation_result",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 6719
+    },
+    {
+      "at": "2026-11-21T21:10:35.616Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "b4bed4b3-e029-4969-b9fa-e97340885a08",
+      "correlation_id": "01e345f4-0afd-47c9-a670-844e1735ee1e",
+      "attempt": 1,
+      "delivery_ms": 1665,
+      "age_since_result_ms": 2229
+    },
+    {
+      "at": "2026-11-21T21:10:37.998Z",
+      "event": "stage3_received",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "received_ms": 1795295437998,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 298
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "authentication_ms": 375,
+      "database_ms": 8
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "authentication_ms": 869,
+      "database_ms": 3
+    },
+    {
+      "at": "2026-11-21T21:10:39.278Z",
+      "event": "operation_result",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "status": "committed",
+      "replayed": true,
+      "command_age_ms": 3367
+    },
+    {
+      "at": "2026-11-21T21:10:39.705Z",
+      "event": "reconciled",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "status": "committed"
+    },
+    {
+      "at": "2026-11-21T21:10:40.212Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "f38a809a-d060-453d-be1a-6293f2673b9d",
+      "correlation_id": "e36d458f-28a9-4c03-ab0c-b34b94a8b23b",
+      "attempt": 1,
+      "delivery_ms": 1257,
+      "age_since_result_ms": 1790
+    },
+    {
+      "at": "2026-11-21T21:10:45.804Z",
+      "event": "stage3_received",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "received_ms": 1795295445804,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 294
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "authentication_ms": 319,
+      "database_ms": 7
+    },
+    {
+      "at": "2026-11-21T21:10:46.463Z",
+      "event": "operation_result",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 5794
+    },
+    {
+      "at": "2026-11-21T21:10:47.805Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "1c1b0647-6e3f-4689-a6fb-edc63d55b3ac",
+      "correlation_id": "93812ed6-a0a5-4178-b1e3-0fbd493cdf27",
+      "attempt": 1,
+      "delivery_ms": 849,
+      "age_since_result_ms": 1349
+    },
+    {
+      "at": "2026-11-21T21:10:50.159Z",
+      "event": "stage3_received",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "received_ms": 1795295450159,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 298
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "authentication_ms": 539,
+      "database_ms": 7
+    },
+    {
+      "at": "2026-11-21T21:10:51.086Z",
+      "event": "operation_result",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 2655
+    },
+    {
+      "at": "2026-11-21T21:10:53.130Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "9cfc449f-d4dc-4491-9b0c-44a6df769abe",
+      "correlation_id": "75f39a52-a5a6-49ad-8935-60169366951e",
+      "attempt": 1,
+      "delivery_ms": 1166,
+      "age_since_result_ms": 2050
+    },
+    {
+      "at": "2026-11-21T21:10:59.358Z",
+      "event": "stage3_received",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "received_ms": 1795295459358,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 297
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "authentication_ms": 450,
+      "database_ms": 6
+    },
+    {
+      "at": "2026-11-21T21:11:00.198Z",
+      "event": "operation_result",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 3081
+    },
+    {
+      "at": "2026-11-21T21:11:02.074Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "6e0665bd-df68-4660-89d4-85f0676fcf08",
+      "correlation_id": "f197fc98-9354-40a4-8c4a-fdeea6d1ef01",
+      "attempt": 1,
+      "delivery_ms": 1110,
+      "age_since_result_ms": 1882
+    },
+    {
+      "at": "2026-11-21T21:11:03.280Z",
+      "event": "stage3_received",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "received_ms": 1795295463280,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 298
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "authentication_ms": 339,
+      "database_ms": 7
+    },
+    {
+      "at": "2026-11-21T21:11:04.050Z",
+      "event": "operation_result",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 2105
+    },
+    {
+      "at": "2026-11-21T21:11:05.778Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "dcbb9eed-f103-4b83-9c1b-180faee17347",
+      "correlation_id": "1d54f2c9-c997-4d95-9866-97c8f3e57334",
+      "attempt": 1,
+      "delivery_ms": 813,
+      "age_since_result_ms": 1735
+    },
+    {
+      "at": "2026-11-21T21:11:10.401Z",
+      "event": "stage3_received",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "received_ms": 1795295470401,
+      "mqtt_duplicate": false,
+      "remaining_message_expiry_seconds": 297
+    },
+    {
+      "event": "stage3_database_trace",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "authentication_ms": 459,
+      "database_ms": 8
+    },
+    {
+      "at": "2026-11-21T21:11:11.210Z",
+      "event": "operation_result",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "status": "committed",
+      "replayed": false,
+      "command_age_ms": 3516
+    },
+    {
+      "at": "2026-11-21T21:11:13.067Z",
+      "event": "stage3_outbox_delivery",
+      "operation_id": "4805a4d1-3ce4-4ead-b2de-af383bc7ed67",
+      "correlation_id": "8a6eb20e-db73-4960-b4ff-046daf99e6e7",
+      "attempt": 1,
+      "delivery_ms": 1101,
+      "age_since_result_ms": 1865
+    }
+  ]
+}

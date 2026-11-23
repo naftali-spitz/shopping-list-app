@@ -1,0 +1,93 @@
+{
+  "id": "13cec058-02b6-4323-86d4-340df8df7c74",
+  "at": "2026-11-21T21:12:31.843Z",
+  "target": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+  "local_harness_head": "7ab774d2543f28a979e43f1d27ba4867dfe238aa",
+  "scope": "actual original app UI; real five-minute neveraccepted intent expiry during owned-browser offline only; no service faults or clock changes",
+  "checks": [
+    {
+      "name": "offline product creation persists original immutable ID and renders pending before any acceptance",
+      "status": "PASS",
+      "counts": {
+        "ledger": 0,
+        "products": 0
+      }
+    }
+  ],
+  "progress": [
+    {
+      "at": "2026-11-21T21:13:50.574Z",
+      "elapsed_offline_ms": 50012,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-21T21:14:40.586Z",
+      "elapsed_offline_ms": 100024,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-21T21:15:30.591Z",
+      "elapsed_offline_ms": 150029,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-21T21:16:20.603Z",
+      "elapsed_offline_ms": 200041,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-21T21:17:10.655Z",
+      "elapsed_offline_ms": 250093,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-21T21:18:00.705Z",
+      "elapsed_offline_ms": 300143,
+      "state": "Offline/pending",
+      "saved": false
+    },
+    {
+      "at": "2026-11-21T21:18:00.927Z",
+      "elapsed_offline_ms": 300365,
+      "state": "Offline/pending",
+      "saved": false
+    }
+  ],
+  "deployment": {
+    "id": "dpl_CgvwcpcbU9qR4tapyt384ygGUkoF",
+    "url": "shopping-list-7ak0je25e-0012ab-5576s-projects.vercel.app",
+    "sha": "7ab774d2543f28a979e43f1d27ba4867dfe238aa",
+    "git_ref": "feature/flespi-home-backend",
+    "state": "READY",
+    "target": null
+  },
+  "browser_assets": [
+    "/_next/static/chunks/0dgq26a5_oy.a.js",
+    "/_next/static/chunks/10u3y4bw1ayzs.js",
+    "/_next/static/chunks/0na3km2dz.8qk.js",
+    "/_next/static/chunks/turbopack-0pwt-s3xp.zlw.js",
+    "/_next/static/chunks/01xlw8hd842-c.js",
+    "/_next/static/chunks/0d3shmwh5_nmn.js",
+    "/_next/static/chunks/0focb.7ui.327.js",
+    "/_next/static/chunks/04ajfai64ymrz.js",
+    "/_next/static/chunks/03~yq9q893hmn.js",
+    "/_next-live/feedback/feedback.js",
+    "/_next/static/chunks/11qk_vpw_zwkf.js"
+  ],
+  "operation_id": "5288cff0-f80f-4162-8760-2c452d44d3f3",
+  "correlation_id": "e7a1482e-fc06-4f7b-91bf-300ded5a9c7a",
+  "product_id": "b0aea7be-73fb-4c27-9a62-6a5b9e86d6e3",
+  "intent_issued_ms": 1795295579325,
+  "intent_expires_ms": 1795295879325,
+  "elapsed_offline_ms": 300366,
+  "status": "FAIL",
+  "error": {
+    "name": "Error",
+    "message": "page.waitForFunction: Target page, context or browser has been closed"
+  }
+}

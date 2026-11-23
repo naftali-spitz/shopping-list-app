@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-22T21:28:06.769248+00:00",
+  "scope": "isolated development callback/telemetry signing key only",
+  "reason": "A compact private configuration was accidentally printed by an insufficiently strict shell filter during preflight status verification. Treat key as exposed.",
+  "actions": [
+    "Generated replacement Ed25519 key in owner-only runtime config; private value never printed",
+    "Removed old verification key from both Dev Edge functions; gateway v7 and monitoring v9 deployed",
+    "Updated only feature/flespi-home-backend Preview configuration, keeping all other variables intact",
+    "Scanned runtime files by deriving public keys: no revoked private key copies found",
+    "Interrupted active focused benchmark; retained FAIL/invalid attempt, excluded from performance comparison"
+  ],
+  "production_changes": false,
+  "rotation_commit": "de51af8",
+  "verification": "PASS: actual Preview callback replay/security 07e800a5 and authenticated monitoring/mode tests 80dbf712 after replacement deployment; new listener connected and clock healthy. Old private-key copies absent by public-key derivation scan.",
+  "gateway_edge_version": 7,
+  "monitoring_edge_version": 9
+}

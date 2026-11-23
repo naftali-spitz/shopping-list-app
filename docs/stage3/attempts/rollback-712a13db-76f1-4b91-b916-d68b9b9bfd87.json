@@ -1,0 +1,23 @@
+{
+  "id": "712a13db-76f1-4b91-b916-d68b9b9bfd87",
+  "at": "2026-11-20T11:28:37.495481+00:00",
+  "scope": "actual feature-branch Preview flag disable/re-enable and deployments; production excluded",
+  "checks": [],
+  "disabled": {
+    "url": "https://shopping-list-lnqoy1l72-0012ab-5576s-projects.vercel.app",
+    "deployment_id": "dpl_2XFvmX9VeR7m1u5vFH1TaSDkUcDS"
+  },
+  "status": "FAIL",
+  "error": {
+    "type": "AssertionError",
+    "message": ""
+  },
+  "restored": {
+    "url": "https://shopping-list-2ty0sm1me-0012ab-5576s-projects.vercel.app",
+    "deployment_id": "dpl_8ynpDApxn7TTtaaUC5cYxyPcgMiE"
+  },
+  "restore_error": {
+    "type": "AssertionError",
+    "message": ""
+  }
+}

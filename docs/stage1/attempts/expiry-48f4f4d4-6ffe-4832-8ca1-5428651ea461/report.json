@@ -1,0 +1,54 @@
+{
+  "status": "FAIL",
+  "stage": 1,
+  "run_id": "48f4f4d4-6ffe-4832-8ca1-5428651ea461",
+  "tested_at": "2026-11-20T03:44:10.405Z",
+  "checks": [
+    {
+      "test": "session retention / message TTL / signed deadline",
+      "passed": true,
+      "requested_session_expiry_seconds": 2,
+      "disconnect_properties": [
+        {
+          "sessionExpiryInterval": 2
+        }
+      ],
+      "offline_ms": 4430,
+      "session_present": true,
+      "stale_without_message_ttl_delivered": true,
+      "mqtt_message_ttl_seconds": 2,
+      "message_with_ttl_delivered": false,
+      "positive_control_delivered": true,
+      "signed_deadline_decision": {
+        "status": "expired",
+        "quantity": 0
+      },
+      "broker_expiry_expectation_passed": false,
+      "message_ttl_expectation_passed": true
+    },
+    {
+      "test": "session retention / message TTL / signed deadline",
+      "passed": true,
+      "requested_session_expiry_seconds": 2,
+      "disconnect_properties": [
+        {
+          "sessionExpiryInterval": 2
+        }
+      ],
+      "offline_ms": 70435,
+      "session_present": true,
+      "stale_without_message_ttl_delivered": true,
+      "mqtt_message_ttl_seconds": 2,
+      "message_with_ttl_delivered": false,
+      "positive_control_delivered": true,
+      "signed_deadline_decision": {
+        "status": "expired",
+        "quantity": 0
+      },
+      "broker_expiry_expectation_passed": false,
+      "message_ttl_expectation_passed": true
+    }
+  ],
+  "error_type": "Error",
+  "note": "Credential-bearing exception suppressed."
+}

@@ -1,3 +1,5 @@
+import { homeBackendEnabled } from "@/lib/backend/selection";
+import { subscribeToProducts } from "@/lib/realtime/products-channel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { buildShoppingExportCategories } from "@/hooks/use-shopping-export-doc";
@@ -79,12 +81,15 @@ export function useShoppingState({
   setCategories,
   onError,
 }: UseShoppingStateProps) {
+  const activeHistoryHousehold = useRef(householdId);
+  activeHistoryHousehold.current = householdId;
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [soundOn, setSoundOn] = useState(getInitialSoundOn);
   const [isLoading, setIsLoading] = useState(true);
   const [loadedHistoryHouseholdId, setLoadedHistoryHouseholdId] = useState<string | null>(null);
   const [checkedOverrides, setCheckedOverrides] = useState<CheckedOverrides>({});
   const pendingCheckedUpdatesRef = useRef<Set<string>>(new Set());
+  const pendingQuantitiesRef = useRef(new Map<string, number>());
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -102,8 +107,10 @@ export function useShoppingState({
 
       setIsLoading(true);
       const { data, error } = await fetchHistory(householdId);
+      if (activeHistoryHousehold.current !== householdId) return;
 
       if (error) {
+        if (homeBackendEnabled()) setHistory([]);
         console.error("Failed to load shopping history:", error);
         onError?.("טעינת היסטוריית הקניות נכשלה. נסה לרענן את הדף.");
       }
@@ -116,6 +123,20 @@ export function useShoppingState({
 
     void loadInitialData();
   }, [householdId, onError]);
+
+  useEffect(() => {
+    if (!householdId || !homeBackendEnabled()) return;
+    let cancelled = false;
+    const channel = subscribeToProducts(() => {
+      void fetchHistory(householdId).then(({ data, error }) => {
+        if (!cancelled) {
+          if (error) setHistory([]);
+          else if (data) setHistory(historyRowsToEntries(data));
+        }
+      });
+    }, householdId);
+    return () => { cancelled = true; channel.unsubscribe(); };
+  }, [householdId]);
 
   useEffect(() => {
     saveHistory(history);
@@ -212,7 +233,7 @@ export function useShoppingState({
       if (pendingCheckedUpdatesRef.current.has(productId)) return false;
 
       pendingCheckedUpdatesRef.current.add(productId);
-      setCheckedOverride(productId, nextChecked);
+      if (!homeBackendEnabled()) setCheckedOverride(productId, nextChecked);
 
       const { error } = await updateProductChecked(productId, nextChecked);
 
@@ -221,8 +242,10 @@ export function useShoppingState({
       if (error) {
         console.error("Failed to update product checked state:", error);
         onError?.("עדכון המוצר ברשימת הקניות נכשל.");
-        setCheckedOverride(productId, previousChecked);
-        window.setTimeout(() => clearCheckedOverride(productId), 400);
+        if (!homeBackendEnabled()) {
+          setCheckedOverride(productId, previousChecked);
+          window.setTimeout(() => clearCheckedOverride(productId), 400);
+        }
         await refreshCategories();
         return false;
       }
@@ -264,17 +287,19 @@ export function useShoppingState({
       if (!product) return;
 
       const nextQuantity = Math.max(1, quantity);
+      if (homeBackendEnabled()) pendingQuantitiesRef.current.set(productId, nextQuantity);
       if (nextQuantity === product.quantity) return;
 
       playSound("quantity");
-      optimisticQuantity(product.id, nextQuantity);
+      if (!homeBackendEnabled()) optimisticQuantity(product.id, nextQuantity);
 
       const { error } = await updateProductQuantity(product.id, nextQuantity);
 
+      if (pendingQuantitiesRef.current.get(productId) === nextQuantity) pendingQuantitiesRef.current.delete(productId);
       if (error) {
         console.error("Failed to update product quantity:", error);
         onError?.("עדכון הכמות נכשל.");
-        optimisticQuantity(product.id, product.quantity);
+        if (!homeBackendEnabled()) optimisticQuantity(product.id, product.quantity);
         await refreshCategories();
       }
     },
@@ -285,7 +310,7 @@ export function useShoppingState({
     (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
       if (!product) return;
-      void setProductQuantity(product.id, product.quantity + 1);
+      void setProductQuantity(product.id, (pendingQuantitiesRef.current.get(product.id) ?? product.quantity) + 1);
     },
     [allProducts, setProductQuantity]
   );
@@ -294,7 +319,7 @@ export function useShoppingState({
     (productId: string) => {
       const product = allProducts.find((p) => p.id === productId);
       if (!product || product.quantity <= 1) return;
-      void setProductQuantity(product.id, product.quantity - 1);
+      void setProductQuantity(product.id, (pendingQuantitiesRef.current.get(product.id) ?? product.quantity) - 1);
     },
     [allProducts, setProductQuantity]
   );

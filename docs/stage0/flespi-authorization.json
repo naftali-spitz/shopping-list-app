@@ -1,0 +1,39 @@
+{
+  "channel": "naf-stage0-041d4f122bdd",
+  "namespace": "shopping-poc/naf-stage0-041d4f122bdd",
+  "credentials_file": ".stage0-runtime/flespi-dev.json",
+  "publisher": {
+    "publish": [
+      "shopping-poc/naf-stage0-041d4f122bdd/commands"
+    ],
+    "subscribe": [
+      "shopping-poc/naf-stage0-041d4f122bdd/results"
+    ]
+  },
+  "listener": {
+    "publish": [
+      "shopping-poc/naf-stage0-041d4f122bdd/results"
+    ],
+    "subscribe": [
+      "shopping-poc/naf-stage0-041d4f122bdd/commands"
+    ]
+  },
+  "requirements": [
+    "Dedicated development-only ACL credentials",
+    "Deny other topics and non-MQTT APIs",
+    "Explicit expiry; no production/shared token changes",
+    "Store credentials only in private0600 local file; never chat or Linear"
+  ],
+  "state": "PASS: actual account, ACL, TLS, exchange/reconnect and negative delivery/publish tests verified",
+  "account_id": 2617576,
+  "publisher_token_id": 114509462,
+  "listener_token_id": 114509463,
+  "expire": 1795719394,
+  "ttl": 0,
+  "origins": [],
+  "evidence": [
+    "mqtt-preflight.json",
+    "flespi-limits.json"
+  ],
+  "rotation": "Renew only dedicated dev tokens before 2026-11-26T18:56:34Z; never change shared tokens"
+}

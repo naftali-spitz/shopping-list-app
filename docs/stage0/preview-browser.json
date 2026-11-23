@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "title": "FutureCart",
+  "body_excerpt": "Language\nעברית\nEnglish\nFutureCart\n\nSmart shopping list for the family\n\nChoose a language and sign in to continue.\n\nLogin with Google",
+  "page_errors": [],
+  "request_hosts": [
+    "shopping-list-app-git-develop-0012ab-5576s-projects.vercel.app",
+    "vercel.live"
+  ],
+  "blocked": [],
+  "scope": "anonymous read-only browser shell; no auth or mutation test"
+}

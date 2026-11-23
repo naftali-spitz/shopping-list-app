@@ -1,0 +1,141 @@
+{
+  "at": "2026-11-22T16:12:41.230Z",
+  "scope": "owned browser route lifecycle investigation; no business writes",
+  "responses": [
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://vercel.live",
+      "path": "/_next-live/feedback/feedback.js",
+      "status": 204
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://vercel.live",
+      "path": "/_next-live/feedback/feedback.js",
+      "status": 204
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 202
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/api/stage3",
+      "status": 200
+    },
+    {
+      "origin": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app",
+      "path": "/app-logo.svg",
+      "status": 200
+    }
+  ],
+  "errors": [
+    "Failed to read the 'localStorage' property from 'Window': Access is denied for this document."
+  ],
+  "text": "FutureCart\n\nSmart shopping companion\n\nConnected\n\nChoose category\nNew category\nContract evidence\nBrowser proof 57d7d2d7\nBrowser proof 32a26432\nRefresh proof 32a26432\nContract evidence\nNo products in this category\nContract evidence\nNo products in this category\nPreview integration\nNo products in this category\nPreview integration\nNo products in this category\nFault 8222cffa\nNo products in this category\nFault 7c49798f\nNo products in this category\nFault 7d81d1cb\nNo products in this category\nFault ad0beec4\nNo products in this category\nFault 023becc9\nNo products in this category\nFault 92358210\nNo products in this category\nFault c22e049a\nNo products in this category\nFault 844358a8\nNo products in this category\nFault 09a01430\nNo products in this category\nFault c790ddf4\nNo products in this category\nFault e91df0f1\nNo products in this category\nFault 8d4013f1\nNo products in this category\nFault 26d50f53\nNo products in this category\nFault 4dd2a344\nNo products in this category\nFault 6a2da4e5\nNo products in this category\nFault 8419eaee\nNo products in this category\nFault 06ca5fa1\nNo products in this category\nFault c61e6aea\nNo products in this category\nFault fbb8e0bd\nNo products in this category\nFault 903ef4ff\nRefresh proof ba940e4a\nBrowser proof ba940e4a\nTrace proof\nNo products in this category\nPublisher ACK loss proof\nNo products in this category\nPreview integration\nNo products in this category\nStage4 browser ba8f460d\nNo products in this category\nReliability 570f0888\nReliable product 570f0888\nReliability abcfe87c\nReliable product abcfe87c\nReliability 6aa78dea\nReliable product 6aa78dea\nExpiry 13cec058\nNo products in this category\nReliability b26c7b7d\nReliable product b26c7b7d\nReliability 30811735\nNo products in this category\nReliability 7516cf98\nTab product 7516cf98\nReliable product 7516cf98\nExpiry 3cc95db1\nNo products in this category\nReliability 5e212db7\nTab product 5e212db7\nReliable product 5e212db7\nParity 6f84864e\nMissing 6f84864e\nZulu 6f84864e\nMiddle 6f84864e\nShopping list\n9 products\nReliable product abcfe87c\n3\nReliable product 6aa78dea\n7\nReliable product b26c7b7d\n7\nTab product 7516cf98\n2\nReliable product 7516cf98\n2\nTab product 5e212db7\n2\nReliable product 5e212db7\n2\nMissing 6f84864e\n1\nAlpha 6f84864e\n1\nExport document",
+  "url": "https://shopping-list-app-git-feature-fles-b8db25-0012ab-5576s-projects.vercel.app/"
+}

@@ -1,0 +1,63 @@
+{
+  "id": "e977c762-6fc0-4cc9-8b4e-bcc12992839d",
+  "at": "2026-11-20T10:06:49.138Z",
+  "mode": "network",
+  "scope": "actual Vercel API, live broker, Debian PostgreSQL, authenticated callback/status; controlled owned-process/stream fault injection, no ISP/router outage",
+  "cases": [
+    {
+      "name": "5s interruption",
+      "status": "PASS",
+      "requested_seconds": 5,
+      "measured_until_confirmation_ms": 16266,
+      "recovery_from_unblock_ms": 11266,
+      "early_operation_id": "94f91de8-5af7-437f-be63-cfd39445d9d8",
+      "early_status": "committed",
+      "early_effect": 1,
+      "late_status": null,
+      "fresh_control": "committed",
+      "classification": "controlled owned MQTT TLS stream refusal plus paused HTTPS reconciliation/callback; real live broker and database, not ISP/router fault"
+    },
+    {
+      "name": "60s interruption",
+      "status": "PASS",
+      "requested_seconds": 60,
+      "measured_until_confirmation_ms": 72083,
+      "recovery_from_unblock_ms": 12079,
+      "early_operation_id": "7bab4ae8-9c9c-493a-96bf-349d78a95b72",
+      "early_status": "committed",
+      "early_effect": 1,
+      "late_status": null,
+      "fresh_control": "committed",
+      "classification": "controlled owned MQTT TLS stream refusal plus paused HTTPS reconciliation/callback; real live broker and database, not ISP/router fault"
+    },
+    {
+      "name": "290s interruption",
+      "status": "PASS",
+      "requested_seconds": 290,
+      "measured_until_confirmation_ms": 304098,
+      "recovery_from_unblock_ms": 14091,
+      "early_operation_id": "c5dd52e1-18fa-4683-83a5-9a55ef812aeb",
+      "early_status": "committed",
+      "early_effect": 1,
+      "late_status": null,
+      "fresh_control": "committed",
+      "classification": "controlled owned MQTT TLS stream refusal plus paused HTTPS reconciliation/callback; real live broker and database, not ISP/router fault"
+    },
+    {
+      "name": "480s interruption",
+      "status": "PASS",
+      "requested_seconds": 480,
+      "measured_until_confirmation_ms": 501134,
+      "recovery_from_unblock_ms": 21128,
+      "early_operation_id": "d26eb8af-1ede-40c4-b984-4ba7c7e70542",
+      "early_status": "expired",
+      "early_effect": 0,
+      "late_operation_id": "7d1239da-334c-417d-a07d-225db1a19f1d",
+      "late_status": "committed",
+      "fresh_control": "committed",
+      "classification": "controlled owned MQTT TLS stream refusal plus paused HTTPS reconciliation/callback; real live broker and database, not ISP/router fault"
+    }
+  ],
+  "postgres_pid_unchanged": true,
+  "status": "PASS"
+}

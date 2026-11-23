@@ -1,0 +1,35 @@
+{"status":"PASS","scope":"verified dev configuration only; Stage 0 remains NO-GO until all prerequisites pass","cwd":"/home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend","branch":"feature/flespi-home-backend","head":"0c6f5db24e4e52f2dcd1c82fe22c55c6e8e0c813","base":"88af18681659fe69b0f2ca3122bc308de563e54f","baseIsAncestor":true,"upstream":"origin/develop","repository":"naftali-spitz/shopping-list-app","envFiles":[".env.local"]}
+
+> shopping-list-app@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /home/naf-w/projects/self/shopping-list-app/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles:
+   * /home/naf-w/projects/self/shopping-list-app/.worktrees/flespi-home-backend/package-lock.json
+
+▲ Next.js 16.2.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.9s
+  Running TypeScript ...
+  Finished TypeScript in 3.3s ...
+  Collecting page data using 6 workers ...
+  Generating static pages using 6 workers (0/5) ...
+  Generating static pages using 6 workers (1/5)
+  Generating static pages using 6 workers (2/5)
+  Generating static pages using 6 workers (3/5)
+✓ Generating static pages using 6 workers (5/5) in 414ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+└ ƒ /api/export-doc
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
